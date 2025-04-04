@@ -1,12 +1,42 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
+ def node_require(script)
+   # Resolve script with node to allow for hoisting
+   require Pod::Executable.execute_command('node', ['-p',
+     "require.resolve(
+       '#{script}',
+       {paths: [process.argv[1]]},
+     )", __dir__]).strip
+ end
 
-platform :ios, min_ios_version_supported
+node_require('react-native/scripts/react_native_pods.rb')
+node_require('react-native-permissions/scripts/setup.rb')
+
+platform :ios, "15.1"
 prepare_react_native_project!
+
+# setup_permissions([
+#   # 'AppTrackingTransparency',
+#   # 'Bluetooth',
+#   # 'Calendars',
+#   # 'CalendarsWriteOnly',
+#   'Camera',
+#   # 'Contacts',
+#   # 'FaceID',
+#   # 'LocationAccuracy',
+#   # 'LocationAlways',
+#   # 'LocationWhenInUse',
+#   # 'MediaLibrary',
+#   # 'Microphone',
+#   # 'Motion',
+#   'Notifications',
+#   'PhotoLibrary',
+#   'PhotoLibraryAddOnly',
+#   'Notifications',
+#   # 'Reminders',
+#   # 'Siri',
+#   # 'SpeechRecognition',
+#   # 'StoreKit',
+# ])
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -16,12 +46,15 @@ end
 
 target 'CarYaar' do
   config = use_native_modules!
+  # use_frameworks!
 
   use_react_native!(
     :path => config[:reactNativePath],
+    :hermes_enabled => false,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
