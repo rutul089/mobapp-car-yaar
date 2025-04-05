@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import typography from './src/theme/typography';
-import OTPVerification from './src/components/OTPVerification';
+import RootNavigator from './src/navigation/RootNavigator';
 
 export default class App extends Component {
   constructor(props) {
@@ -10,18 +8,6 @@ export default class App extends Component {
   }
 
   render() {
-    return (
-      <SafeAreaView>
-        <View>
-          <OTPVerification
-            pinCount={4}
-            onOtpComplete={e => alert(e)}
-            containerStyle={{marginTop: 50}}
-            inputStyle={{}}
-            focusedInputStyle={{}}
-          />
-        </View>
-      </SafeAreaView>
-    );
+    return <RootNavigator />;
   }
 }

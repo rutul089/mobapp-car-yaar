@@ -1,10 +1,21 @@
 import React, {Component} from 'react';
 import Splash_Component from './Splash_Component';
+import {
+  navigate,
+  navigateAndSimpleReset,
+} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
-export default class index extends Component {
+class Splash extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      navigateAndSimpleReset(ScreenNames.Login);
+    }, 1500);
   }
 
   render() {
@@ -15,3 +26,5 @@ export default class index extends Component {
     );
   }
 }
+
+export default Splash;

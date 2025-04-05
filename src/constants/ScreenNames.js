@@ -1,27 +1,19 @@
 const ScreenNames = {
   // Auth
+  Splash: 'SplashScreen',
   Login: 'LoginScreen',
   OTP: 'OTPScreen',
 
   // Home
+  HomeTab: 'HomeTab',
   Home: 'HomeScreen',
-  Profile: 'ProfileScreen',
+  Applications: 'ApplicationsScreen',
+  Customer: 'CustomersScreen',
+  Vehicles: 'VehiclesScreen',
 
   // Others
   NotFound: 'NotFoundScreen',
-  Splash: 'SplashScreen',
+  Notification: 'NotificationScreen',
 };
 
 export default ScreenNames;
-
-{
-  /* <NavigationContainer>
-<Stack.Navigator initialRouteName={ScreenNames.Login}>
-  <Stack.Screen name={ScreenNames.Login} component={LoginScreen} />
-  <Stack.Screen name={ScreenNames.OTP} component={OTPScreen} />
-  <Stack.Screen name={ScreenNames.Home} component={HomeScreen} />
-  <Stack.Screen name={ScreenNames.Profile} component={ProfileScreen} />
-  <Stack.Screen name={ScreenNames.NotFound} component={NotFoundScreen} />
-</Stack.Navigator>
-</NavigationContainer> */
-}

@@ -2,9 +2,10 @@
 
 // Primary Theme Colors
 export const PrimaryColors = {
-  primary: '#052659', // Navy Blue
-  primaryLight: '#4468B0', // Light Navy
+  primary: '#1D95F0', // Navy Blue
+  primaryLight: '#3DADFF', // Light Navy
   primaryDark: '#021F40', // Darker Navy
+  primaryBlack: '#0E0F11',
 };
 
 // Accent Colors
@@ -25,6 +26,7 @@ export const NeutralColors = {
   gray600: '#4B5563',
   gray700: '#374151',
   gray800: '#1F2937',
+  gray900: '#222222',
 };
 
 // Status Colors
@@ -46,6 +48,7 @@ export const TextColors = {
   textPrimary: '#1E293B',
   textSecondary: '#64748B',
   textInverse: '#FFFFFF',
+  textLabel: '#828282',
 };
 
 // Combined Colors

@@ -37,6 +37,7 @@ const fontSizes = {
   h1: 32,
   h2: 24,
   h3: 20,
+  h4: 18,
   body: 16,
   small: 14,
   caption: 12,
@@ -74,7 +75,7 @@ const fontStyles = {
   },
   hankenGroteskSemiBold: {
     fontFamily: fonts.hankenGroteskSemiBold,
-    fontWeight: fontWeights.regular,
+    fontWeight: fontWeights.bold,
   },
   hankenGroteskThin: {
     fontFamily: fonts.hankenGroteskThin,
