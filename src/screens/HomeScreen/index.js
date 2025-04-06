@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Home_Component from './Home_Component';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {Alert} from 'react-native';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -28,7 +29,9 @@ class HomeScreen extends Component {
     });
   };
 
-  onPurchasePress = () => {};
+  onPurchasePress = () => {
+    navigate(ScreenNames.SearchView);
+  };
 
   onRefinancePress = () => {};
 

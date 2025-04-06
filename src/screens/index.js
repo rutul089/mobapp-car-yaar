@@ -11,3 +11,4 @@ export {default as CustomersScreen} from './CustomersScreen';
 
 // General Screens
 export {default as NotificationScreen} from './NotificationScreen';
+export {default as SearchScreen} from './SearchScreen';

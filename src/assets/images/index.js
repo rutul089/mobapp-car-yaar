@@ -23,4 +23,6 @@ export default {
   icApproved: require('./icApproved.png'),
   icRejected: require('./icRejected.png'),
   icPending: require('./icPending.png'),
+  arrow_down: require('./arrow_down.png'),
+  infoStatus: require('./infoStatus.png'),
 };

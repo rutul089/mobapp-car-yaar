@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Image, ScrollView, View} from 'react-native';
+import {Alert, Image, ScrollView, View} from 'react-native';
 import images from '../../assets/images';
 import {Pressable, SafeAreaWrapper, Spacing, Text} from '../../components';
 import {styles} from '../../styles/Home.style';
@@ -164,9 +164,19 @@ const Home_Component = ({
               Select Car Loan Type
             </Text>
             <View style={styles.loanTypeRow}>
-              {renderLoanType('Purchase', images.icPurchase)}
-              {renderLoanType('Refinance', images.icRefinance)}
-              {renderLoanType('Top Up', images.icTopUp)}
+              {renderLoanType(
+                'Purchase',
+                images.icPurchase,
+                null,
+                onPurchasePress,
+              )}
+              {renderLoanType(
+                'Refinance',
+                images.icRefinance,
+                null,
+                onRefinancePress,
+              )}
+              {renderLoanType('Top Up', images.icTopUp, null, onTopUpPress)}
             </View>
             <View style={styles.row}>
               {renderLoanType(

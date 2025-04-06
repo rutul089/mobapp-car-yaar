@@ -16,6 +16,12 @@ const getTextComputedStyles = type => {
     return styles.bodyText;
   } else if (type === 'large-header') {
     return styles.largeHeader;
+  } else if (type === 'label') {
+    return styles.label;
+  } else if (type === 'input') {
+    return styles.input;
+  } else if (type === 'status') {
+    return styles.status;
   } else {
     return styles.bodyText;
   }

@@ -25,4 +25,22 @@ export const styles = StyleSheet.create({
     fontWeight: theme.typography.fontWeights.extraBold,
     fontSize: theme.typography.fontSizes.h1,
   },
+  label: {
+    fontFamily: theme.typography.fonts.hankenGroteskRegular,
+    color: theme.colors.textLabel,
+    fontWeight: theme.typography.fontWeights.normal,
+    fontSize: theme.typography.fontSizes.small,
+  },
+  input: {
+    fontFamily: theme.typography.fonts.hankenGroteskMedium,
+    color: theme.colors.textPrimary,
+    fontWeight: theme.typography.fontWeights.medium,
+    fontSize: theme.typography.fontSizes.small,
+  },
+  status: {
+    fontFamily: theme.typography.fonts.hankenGroteskMedium,
+    color: theme.colors.success,
+    fontWeight: theme.typography.fontWeights.medium,
+    fontSize: theme.typography.fontSizes.small,
+  },
 });

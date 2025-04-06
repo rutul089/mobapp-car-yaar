@@ -41,14 +41,21 @@ export const StatusColors = {
 export const BackgroundColors = {
   background: '#F9FAFB',
   surface: '#FFFFFF',
+  lightGray: '#F9F9F9',
 };
 
 // Text Colors
 export const TextColors = {
   textPrimary: '#1E293B',
-  textSecondary: '#64748B',
+  textSecondary: '#828282',
   textInverse: '#FFFFFF',
   textLabel: '#828282',
+  placeHolder: '#828282',
+};
+
+export const statusColor = {
+  error: '#FF0000',
+  success: '#5FC52E',
 };
 
 // Combined Colors
@@ -59,6 +66,8 @@ const colors = {
   ...StatusColors,
   ...BackgroundColors,
   ...TextColors,
+  ...statusColor,
+  inputBorder: 'rgba(0, 0, 0, 0.12)',
 };
 
 export default colors;

@@ -24,6 +24,7 @@ import {
   LoginScreen,
   NotificationScreen,
   OTPVerification,
+  SearchScreen,
   SplashScreen,
   VehiclesScreen,
 } from '../screens';
@@ -223,6 +224,11 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.Notification}
               component={NotificationScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.SearchView}
+              component={SearchScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

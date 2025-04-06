@@ -14,6 +14,7 @@ const ScreenNames = {
   // Others
   NotFound: 'NotFoundScreen',
   Notification: 'NotificationScreen',
+  SearchView: 'SearchScreen',
 };
 
 export default ScreenNames;

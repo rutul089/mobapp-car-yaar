@@ -4,3 +4,4 @@ export {default as Spacing} from './Spacing';
 export {default as Pressable} from './Pressable';
 export {default as OTPVerification} from './OTPVerification';
 export {default as Header} from './Header';
+export {default as Input} from './Input/Input';
