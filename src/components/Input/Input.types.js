@@ -59,6 +59,7 @@
  * @property {string} [maxLength] - maxLength for the text.
  * @property {string} [placeholderTextColor] - Change place holder text color.
  * @property {string} [isAsButton] - Use as button.
+ * @property {string} [themeColor] - Change color of text
  * @property {() => void} [rightLabelPress] - Callback when right label is pressed.
  */
 

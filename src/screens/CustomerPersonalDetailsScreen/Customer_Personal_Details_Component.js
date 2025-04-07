@@ -11,6 +11,7 @@ import {
   Text,
   DropdownModal,
   Button,
+  FormFooterButtons,
 } from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import theme from '../../theme';
@@ -50,6 +51,7 @@ const Customer_Personal_Details_Component = ({
   onSelectIncomeSourceOption = () => {},
   onSelectBankOption = () => {},
   onNextPress,
+  saveAsDraftPress,
 }) => {
   const aadharRef = useRef(null);
   const applicantRef = useRef(null);
@@ -74,7 +76,6 @@ const Customer_Personal_Details_Component = ({
         subtitle="GJ 01 JR 0945"
         rightLabel="#ABC123213"
         showRightContent
-        rightLabelColor={'#F8A902'}
         onBackPress={() => goBack()}
       />
       <KeyboardAwareScrollView
@@ -328,20 +329,12 @@ const Customer_Personal_Details_Component = ({
             keyboardType="numbers-and-punctuation"
           />
         </Section>
-        <View style={styles.buttonRow}>
-          <Button
-            label={strings.btnSaveDraft}
-            variant="link"
-            buttonWrapper={styles.button}
-            // onPress={onSaveDraftPress}
-          />
-          <Button
-            label={strings.next}
-            style={styles.button}
-            buttonWrapper={styles.button}
-            onPress={onNextPress}
-          />
-        </View>
+        <FormFooterButtons
+          primaryButtonLabel={strings.btnSaveDraft}
+          secondaryButtonLabel={strings.next}
+          onPressPrimaryButton={saveAsDraftPress}
+          onPressSecondaryButton={onNextPress}
+        />
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={isOccupationModalVisible}
@@ -390,15 +383,6 @@ const styles = StyleSheet.create({
   },
   halfWidth: {
     width: '50%',
-  },
-  buttonRow: {
-    marginTop: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 4, // Small spacing between buttons
   },
 });
 

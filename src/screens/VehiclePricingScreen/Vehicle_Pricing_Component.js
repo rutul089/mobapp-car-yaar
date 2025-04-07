@@ -1,21 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
 import {
-  Header,
-  ImageUploadButton,
-  SafeAreaWrapper,
-  Text,
-  Input,
-  Spacing,
-  Button,
   AdditionalNotes,
   Card,
+  FormFooterButtons,
+  Header,
+  ImageUploadButton,
+  Input,
+  SafeAreaWrapper,
+  Spacing,
+  Text,
 } from '../../components';
 import strings from '../../locales/strings';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import theme from '../../theme';
-import {View, StyleSheet} from 'react-native';
-import images from '../../assets/images';
 
 const Vehicle_Pricing_Component = ({
   params,
@@ -74,40 +73,15 @@ const Vehicle_Pricing_Component = ({
           <Spacing size="md_lg" />
           <AdditionalNotes />
         </Card>
-        <View style={styles.buttonRow}>
-          <Button
-            label={strings.btnSaveDraft}
-            variant="link"
-            buttonWrapper={styles.button}
-            onPress={onSaveDraftPress}
-          />
-          <Button
-            label={strings.next}
-            style={styles.button}
-            buttonWrapper={styles.button}
-            onPress={onNextPress}
-          />
-        </View>
+        <FormFooterButtons
+          primaryButtonLabel={strings.btnSaveDraft}
+          secondaryButtonLabel={strings.next}
+          onPressPrimaryButton={onSaveDraftPress}
+          onPressSecondaryButton={onNextPress}
+        />
       </KeyboardAwareScrollView>
     </SafeAreaWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: 'black',
-    paddingBottom: theme.sizes.spacing.md,
-    paddingHorizontal: theme.sizes.padding,
-  },
-  buttonRow: {
-    marginTop: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 4, // Small spacing between buttons
-  },
-});
 
 export default Vehicle_Pricing_Component;

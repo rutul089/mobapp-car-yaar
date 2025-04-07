@@ -1,9 +1,8 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card, Spacing, Text} from '../../components';
-import theme from '../../theme';
 
-const DetailInfoCard = ({data, label}) => {
+const DetailInfoCard = ({data, label, isSemiBold}) => {
   return (
     <>
       {label && (
@@ -20,7 +19,8 @@ const DetailInfoCard = ({data, label}) => {
               {item.label}
             </Text>
             <Text
-              hankenGroteskMedium={true}
+              hankenGroteskMedium={!isSemiBold}
+              hankenGroteskSemiBold={isSemiBold}
               size={'small'}
               lineHeight={'small'}>
               {item.value}

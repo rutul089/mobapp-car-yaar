@@ -1,6 +1,12 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {Button, Header, SafeAreaWrapper, Spacing} from '../../components';
+import {
+  Button,
+  FormFooterButtons,
+  Header,
+  SafeAreaWrapper,
+  Spacing,
+} from '../../components';
 import strings from '../../locales/strings';
 import VehicleCard from './VehicleCard';
 import theme from '../../theme';
@@ -26,20 +32,12 @@ const Vehicle_Detail_Component = ({
             backgroundColor: theme.colors.background,
           }}>
           <DetailInfoCard data={vehicleInfo} />
-          <View style={styles.buttonRow}>
-            <Button
-              label={strings.btnSaveDraft}
-              variant="link"
-              buttonWrapper={styles.button}
-              onPress={onSaveDraftPress}
-            />
-            <Button
-              label={strings.next}
-              style={styles.button}
-              buttonWrapper={styles.button}
-              onPress={onNextPress}
-            />
-          </View>
+          <FormFooterButtons
+            primaryButtonLabel={strings.btnSaveDraft}
+            secondaryButtonLabel={strings.next}
+            onPressPrimaryButton={onSaveDraftPress}
+            onPressSecondaryButton={onNextPress}
+          />
         </View>
       </ScrollView>
     </SafeAreaWrapper>
@@ -51,15 +49,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     paddingVertical: theme.sizes.spacing.md,
     paddingHorizontal: theme.sizes.padding,
-  },
-  buttonRow: {
-    marginTop: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 4, // Small spacing between buttons
   },
 });
 

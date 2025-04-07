@@ -3,6 +3,7 @@ import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {
   Button,
+  FormFooterButtons,
   Header,
   SafeAreaWrapper,
   Spacing,
@@ -58,20 +59,12 @@ const Vehicle_Images_Component = ({
           </>
         }
         ListFooterComponent={
-          <View style={styles.buttonRow}>
-            <Button
-              label={strings.btnSaveDraft}
-              variant="link"
-              buttonWrapper={styles.button}
-              onPress={saveAsDraftPress}
-            />
-            <Button
-              label={strings.next}
-              style={styles.button}
-              buttonWrapper={styles.button}
-              onPress={onNextPress}
-            />
-          </View>
+          <FormFooterButtons
+            primaryButtonLabel={strings.btnSaveDraft}
+            secondaryButtonLabel={strings.next}
+            onPressPrimaryButton={saveAsDraftPress}
+            onPressSecondaryButton={onNextPress}
+          />
         }
       />
     </SafeAreaWrapper>

@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {customerCategory} from '../../constants/enums';
-import {goBack} from '../../navigation/NavigationUtils';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Customer_Detail_Component from './Customer_Detail_Component';
+import ScreenNames from '../../constants/ScreenNames';
 
 class CustomerDetailView extends Component {
   constructor(props) {
@@ -54,7 +55,10 @@ class CustomerDetailView extends Component {
     });
   };
 
-  onPressPrimaryButton = () => {};
+  onPressPrimaryButton = () => {
+    this.onCloseVerifyOTP();
+    navigate(ScreenNames.CustomerPersonalDetails);
+  };
 
   render() {
     const {mobileNumber, selectedIndividualType} = this.state;
@@ -72,6 +76,7 @@ class CustomerDetailView extends Component {
           onSendOTPPress={this.onSendOTPPress}
           showVerifyOTP={this.state.showVerifyOTP}
           onCloseVerifyOTP={this.onCloseVerifyOTP}
+          onPressPrimaryButton={this.onPressPrimaryButton}
         />
       </>
     );

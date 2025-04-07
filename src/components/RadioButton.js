@@ -4,9 +4,11 @@ import images from '../assets/images';
 import Text from './Text';
 import theme from '../theme';
 
-const RadioButton = ({label, selected, onPress}) => {
+const RadioButton = ({label, selected, onPress, marginBottom = 14}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.container, {marginBottom: marginBottom}]}>
       <Image
         source={selected ? images.radio_selected : images.radio_unselected}
         style={styles.radioIcon}
@@ -28,7 +30,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
   },
   radioIcon: {
     width: 20,

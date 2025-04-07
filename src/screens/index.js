@@ -19,3 +19,7 @@ export {default as VehiclePricingScreen} from './VehiclePricingScreen';
 export {default as CustomerDetailScreen} from './CustomerDetailScreen';
 export {default as CustomerPersonalDetailsScreen} from './CustomerPersonalDetailsScreen';
 export {default as LoanDocumentsScreen} from './LoanDocumentsScreen';
+export {default as LoanAmountScreen} from './LoanAmountScreen';
+export {default as CheckCIBILScreen} from './CheckCIBILScreen';
+export {default as CustomerEnvelopeScreen} from './CustomerEnvelopeScreen';
+export {default as LenderSelectionScreen} from './LenderSelectionScreen';

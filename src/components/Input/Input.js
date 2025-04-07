@@ -1,5 +1,11 @@
 import React from 'react';
-import {TextInput, TouchableOpacity, View, Image} from 'react-native';
+import {
+  TextInput,
+  TouchableOpacity,
+  View,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import {Text} from '..';
 import theme from '../../theme';
 import {styles} from '../../styles/Input.style';
@@ -109,8 +115,17 @@ const Input = React.forwardRef((props, ref) => {
     maxLength,
     placeholderTextColor,
     isAsButton = false,
+    themeColor,
   } = props;
   const [isFocused, setIsFocused] = React.useState(false);
+
+  const iInputStyle = StyleSheet.flatten([
+    styles.input,
+    {
+      color: themeColor ?? theme.colors.textPrimary,
+    },
+    inputStyles,
+  ]);
 
   const inputContainer = [
     {
@@ -184,7 +199,7 @@ const Input = React.forwardRef((props, ref) => {
           />
         )}
         {isAsDropdown || isAsButton ? (
-          <View style={[styles.input, inputStyles]}>
+          <View style={iInputStyle}>
             <Text
               type={'input'}
               style={dropdownItemStyle}
@@ -201,7 +216,7 @@ const Input = React.forwardRef((props, ref) => {
             value={value}
             editable={!isDisabled}
             keyboardType={keyboardType}
-            style={[styles.input, inputStyles]}
+            style={iInputStyle}
             placeholder={placeholder}
             placeholderTextColor={
               placeholderTextColor ?? theme.colors.placeHolder

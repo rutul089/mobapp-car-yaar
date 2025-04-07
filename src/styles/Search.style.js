@@ -11,5 +11,6 @@ export const styles = StyleSheet.create({
     color: theme.colors.textPrimary,
     fontSize: theme.typography.fontSizes.h4,
     textAlign: 'center',
+    ...theme.typography.fontStyles.hankenGroteskBold,
   },
 });

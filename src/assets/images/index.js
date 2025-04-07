@@ -45,4 +45,5 @@ export default {
   locationPin: require('./locationPin.png'),
   successCheck: require('./successCheck.png'),
   user: require('./user.png'),
+  verifiedIcon: require('./verifiedIcon.png'),
 };

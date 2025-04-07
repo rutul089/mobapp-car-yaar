@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
 import theme from '../../theme';
@@ -9,11 +10,13 @@ import {
   Spacing,
   Text,
   VehicleImageCard,
+  FormFooterButtons,
 } from '../../components';
 
 import strings from '../../locales/strings';
 
 import {styles} from '../../styles/Vehicle.Image.style';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const Loan_Documents_Component = ({
   params,
@@ -44,7 +47,7 @@ const Loan_Documents_Component = ({
         subtitle="GJ 01 JR 0945"
         rightLabel="#2ABC123"
         showRightContent={true}
-        rightLabelColor={'#F8A902'}
+        onBackPress={() => goBack()}
       />
       <FlatList
         data={imageSlots}
@@ -65,20 +68,12 @@ const Loan_Documents_Component = ({
           </>
         }
         ListFooterComponent={
-          <View style={styles.buttonRow}>
-            <Button
-              label={strings.btnSaveDraft}
-              variant="link"
-              buttonWrapper={styles.button}
-              onPress={saveAsDraftPress}
-            />
-            <Button
-              label={strings.next}
-              style={styles.button}
-              buttonWrapper={styles.button}
-              onPress={onNextPress}
-            />
-          </View>
+          <FormFooterButtons
+            primaryButtonLabel={strings.btnSaveDraft}
+            secondaryButtonLabel={strings.next}
+            onPressPrimaryButton={saveAsDraftPress}
+            onPressSecondaryButton={onNextPress}
+          />
         }
       />
     </SafeAreaWrapper>

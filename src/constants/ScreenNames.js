@@ -22,6 +22,10 @@ const ScreenNames = {
   CustomerDetail: 'CustomerDetailScreen',
   CustomerPersonalDetails: 'CustomerPersonalDetails',
   LoanDocument: 'LoanDocumentScreen',
+  LoanAmount: 'LoanAmountScreen',
+  CheckCIBIL: 'CheckCIBILScreen',
+  CustomerEnvelope: 'CustomerEnvelopeScreen',
+  LenderSelection: 'LenderSelectionScreen',
 };
 
 export default ScreenNames;

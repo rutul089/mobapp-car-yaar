@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import Loan_Documents_Component from './Loan_Documents_Component';
+import {navigate} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
 class LoanDocumentsScreen extends Component {
   constructor(props) {
@@ -14,7 +16,12 @@ class LoanDocumentsScreen extends Component {
       damageImg: null,
       rcBookImg: null,
     };
+    this.onNextPress = this.onNextPress.bind(this);
   }
+
+  onNextPress = () => {
+    navigate(ScreenNames.LoanAmount);
+  };
 
   render() {
     const {frontImg, rearImg, sideImg, interiorImg, damageImg, rcBookImg} =
@@ -55,7 +62,7 @@ class LoanDocumentsScreen extends Component {
           // onImagePress={this.onImagePress}
           // onDeletePress={this.onDeletePress}
           // saveAsDraftPress={this.saveAsDraftPress}
-          // onNextPress={this.onNextPress}
+          onNextPress={this.onNextPress}
           // onBackPress={this.onBackPress}
         />
       </>

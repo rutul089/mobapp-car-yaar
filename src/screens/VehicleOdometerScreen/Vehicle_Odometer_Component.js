@@ -1,21 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
 import {
+  Card,
+  FormFooterButtons,
   Header,
   ImageUploadButton,
-  SafeAreaWrapper,
-  Text,
   Input,
+  SafeAreaWrapper,
   Spacing,
-  Button,
-  Card,
+  Text,
 } from '../../components';
-import strings from '../../locales/strings';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import theme from '../../theme';
-import {View, StyleSheet} from 'react-native';
-import images from '../../assets/images';
 import DropdownModal from '../../components/DropdownModal';
+import strings from '../../locales/strings';
+import theme from '../../theme';
 
 const dropdownOptions = [
   {label: 'Option A', value: 'a'},
@@ -78,20 +77,12 @@ const Vehicle_Odometer_Component = ({
             onPress={() => setShowModal(true)}
           />
         </Card>
-        <View style={styles.buttonRow}>
-          <Button
-            label={strings.btnSaveDraft}
-            variant="link"
-            buttonWrapper={styles.button}
-            onPress={onSaveDraftPress}
-          />
-          <Button
-            label={strings.next}
-            style={styles.button}
-            buttonWrapper={styles.button}
-            onPress={onNextPress}
-          />
-        </View>
+        <FormFooterButtons
+          primaryButtonLabel={strings.btnSaveDraft}
+          secondaryButtonLabel={strings.next}
+          onPressPrimaryButton={onSaveDraftPress}
+          onPressSecondaryButton={onNextPress}
+        />
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={showModal}
@@ -104,22 +95,5 @@ const Vehicle_Odometer_Component = ({
     </SafeAreaWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: 'black',
-    paddingBottom: theme.sizes.spacing.md,
-    paddingHorizontal: theme.sizes.padding,
-  },
-  buttonRow: {
-    marginTop: 32,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 4, // Small spacing between buttons
-  },
-});
 
 export default Vehicle_Odometer_Component;

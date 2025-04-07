@@ -68,7 +68,7 @@ const Header = ({
           <Text
             hankenGroteskMedium={true}
             size={'small'}
-            color={rightLabelColor}
+            color={rightLabelColor ?? '#F8A902'}
             style={rightLabelStyle}>
             {rightLabel}
           </Text>
