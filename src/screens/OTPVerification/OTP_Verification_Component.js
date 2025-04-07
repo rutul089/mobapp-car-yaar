@@ -1,21 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
-  View,
-} from 'react-native';
+import {Image, KeyboardAvoidingView, Platform, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import images from '../../assets/images';
 import {
+  Button,
+  Card,
+  OTPVerification,
   Pressable,
   SafeAreaWrapper,
   Spacing,
   Text,
-  OTPVerification,
 } from '../../components';
+import strings from '../../locales/strings';
 import {styles} from '../../styles/OtpVerification.style';
 import theme from '../../theme';
 import typography from '../../theme/typography';
@@ -57,14 +54,14 @@ const OTP_Verification_Component = ({
                 hankenGroteskBold={true}
                 size={typography.fontSizes.h1}
                 color={theme.colors.black}>
-                OTP Verification
+                {strings.otpVerificationTittle}
               </Text>
               <Spacing />
               <Text
                 type={'helper-text'}
                 textAlign={'center'}
                 style={{width: '70%'}}>
-                Enter the 4 Digit Code you received in your mobile{' '}
+                {strings.verificationNote}
                 <Text
                   type={'helper-text'}
                   hankenGroteskBold={true}
@@ -73,11 +70,11 @@ const OTP_Verification_Component = ({
                 </Text>
               </Text>
               <Spacing size="xl" />
-              <View style={styles.card}>
+              <Card>
                 <OTPVerification onOtpComplete={onOtpComplete} />
                 <Spacing size={'xl'} />
                 <Text type={'helper-text'} textAlign={'center'}>
-                  Didn't get the OTP?
+                  {strings.didNotGetOTP}
                   <Text
                     onPress={resendOTP}
                     type={'helper-text'}
@@ -87,25 +84,8 @@ const OTP_Verification_Component = ({
                   </Text>
                 </Text>
                 <Spacing size={'xl'} />
-                <Pressable style={styles.button} onPress={validateOTP}>
-                  <LinearGradient
-                    useAngle
-                    colors={['#1D95F0', '#3DADFF']}
-                    locations={[0, 1]}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
-                    angle={109}
-                    style={styles.gradient}>
-                    <Text
-                      hankenGroteskExtraBold={true}
-                      color={'white'}
-                      lineHeight={theme.typography.lineHeights.button}
-                      size={theme.typography.fontSizes.button}>
-                      Validate Now!
-                    </Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
+                <Button onPress={validateOTP} label={strings.validateNow} />
+              </Card>
             </View>
           </View>
         </LinearGradient>

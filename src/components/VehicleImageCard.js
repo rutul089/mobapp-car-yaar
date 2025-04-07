@@ -1,12 +1,18 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {Text, Pressable} from '.';
+import {Text, Pressable, Card} from '.';
 import theme from '../theme';
 import images from '../assets/images';
 
 const VehicleImageCard = ({label, image, viewImage, onDeletePress}) => {
   return (
-    <View style={styles.card}>
+    <Card
+      style={styles.card}
+      padding={0}
+      cardContainerStyle={{
+        paddingHorizontal: 8,
+        paddingVertical: 12,
+      }}>
       <Text size={'small'}>{label}</Text>
       <Pressable style={styles.imageContainer} onPress={viewImage}>
         {image ? (
@@ -28,7 +34,7 @@ const VehicleImageCard = ({label, image, viewImage, onDeletePress}) => {
           />
         )}
       </Pressable>
-    </View>
+    </Card>
   );
 };
 
@@ -36,11 +42,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 12,
-    backgroundColor: 'white',
-    borderRadius: theme.sizes.borderRadius.card,
-    marginTop: 12,
+    marginBottom: 12,
   },
   imageContainer: {
     position: 'relative',

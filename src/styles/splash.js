@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   textWrapper: {
-    flexGrow: 1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

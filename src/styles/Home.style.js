@@ -50,13 +50,8 @@ export const styles = StyleSheet.create({
   },
   carTypeBox: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: theme.sizes.spacing.md,
-    borderRadius: theme.sizes.borderRadius.xxl,
     marginRight: 8,
-    // alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#fff',
+
     position: 'relative',
   },
   carTypeBoxSelected: {
@@ -90,7 +85,7 @@ export const styles = StyleSheet.create({
     width: '31%',
     backgroundColor: '#fff',
     padding: theme.sizes.spacing.md,
-    borderRadius: theme.sizes.borderRadius.lg,
+    borderRadius: theme.sizes.borderRadius.card,
   },
   loanIcon: {
     width: theme.sizes.icons.iconXXLarge,

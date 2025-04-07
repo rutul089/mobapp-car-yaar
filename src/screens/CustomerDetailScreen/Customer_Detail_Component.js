@@ -6,6 +6,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import images from '../../assets/images';
 import {
   Button,
+  Card,
   CommonModal,
   DropdownModal,
   Header,
@@ -65,14 +66,8 @@ const Customer_Detail_Component = ({
           padding: theme.sizes.padding,
         }}>
         <Text>{'Basic Details'}</Text>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.sizes.borderRadius.card,
-            padding: 16,
-            marginTop: 12,
-            marginBottom: 32,
-          }}>
+        <Spacing size="smd" />
+        <Card>
           <Text type={'label'}>Select Customer Category</Text>
           <View
             style={{
@@ -117,7 +112,8 @@ const Customer_Detail_Component = ({
             onChangeText={onChangeMobileNumber}
             maxLength={10}
           />
-        </View>
+        </Card>
+        <Spacing size="xl" />
         <Button label={'Send OTP'} onPress={onSendOTPPress} />
       </KeyboardAwareScrollView>
       <DropdownModal
@@ -154,8 +150,9 @@ const Customer_Detail_Component = ({
               </Text>
             </Text>
           </View>
+          <Spacing size={'md_lg'} />
           <OTPVerification />
-          <Spacing size={'md'} />
+          <Spacing size={'md_lg'} />
           <Text type={'helper-text'} textAlign={'center'}>
             Didn't get the OTP?
             <Text

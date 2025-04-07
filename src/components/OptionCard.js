@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: theme.sizes.spacing.md,
-    borderRadius: theme.sizes.borderRadius.xxl,
+    borderRadius: theme.sizes.borderRadius.card,
     marginRight: 8,
     // alignItems: 'center',
     borderWidth: 1,

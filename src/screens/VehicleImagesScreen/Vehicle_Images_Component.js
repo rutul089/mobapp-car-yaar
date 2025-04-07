@@ -5,6 +5,7 @@ import {
   Button,
   Header,
   SafeAreaWrapper,
+  Spacing,
   Text,
   VehicleImageCard,
 } from '../../components';
@@ -49,7 +50,12 @@ const Vehicle_Images_Component = ({
         keyExtractor={item => item.key}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        ListHeaderComponent={<Text>{strings.vehicleImage}</Text>}
+        ListHeaderComponent={
+          <>
+            <Text>{strings.vehicleImage}</Text>
+            <Spacing size="smd" />
+          </>
+        }
         ListFooterComponent={
           <View style={styles.buttonRow}>
             <Button

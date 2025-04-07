@@ -107,6 +107,7 @@ const Input = React.forwardRef((props, ref) => {
     showStatus,
     showStatusIcon,
     maxLength,
+    placeholderTextColor,
   } = props;
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -201,7 +202,9 @@ const Input = React.forwardRef((props, ref) => {
             keyboardType={keyboardType}
             style={[styles.input, inputStyles]}
             placeholder={placeholder}
-            placeholderTextColor={theme.colors.placeHolder}
+            placeholderTextColor={
+              placeholderTextColor ?? theme.colors.placeHolder
+            }
             onChangeText={onChangeText}
             onFocus={e => {
               handleFocus(true, onFocus ? () => onFocus(e) : () => {});

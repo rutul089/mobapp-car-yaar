@@ -204,7 +204,7 @@ export default class RootNavigator extends Component {
           onStateChange={this.onNavigationStateChange}>
           <Stack.Navigator
             key={'Navigator'}
-            initialRouteName={ScreenNames.HomeTab}
+            initialRouteName={ScreenNames.Splash}
             screenOptions={screenOptionsObject}>
             <Stack.Screen
               name={ScreenNames.Splash}

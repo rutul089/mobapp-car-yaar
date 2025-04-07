@@ -8,6 +8,7 @@ import {
   Input,
   Spacing,
   Button,
+  Card,
 } from '../../components';
 import strings from '../../locales/strings';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -47,13 +48,8 @@ const Vehicle_Odometer_Component = ({
           padding: theme.sizes.padding,
         }}>
         <Text>{strings.vehicleOdometerReading}</Text>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.sizes.borderRadius.card,
-            padding: 16,
-            marginTop: 12,
-          }}>
+        <Spacing size="smd" />
+        <Card>
           <ImageUploadButton
             label={strings.uploadOdometerReadingImage}
             btnLabel={strings.clickToCaptureOrUploadImage}
@@ -80,7 +76,7 @@ const Vehicle_Odometer_Component = ({
             // onPress={selectedVehicleCondition}
             onPress={() => setShowModal(true)}
           />
-        </View>
+        </Card>
         <View style={styles.buttonRow}>
           <Button
             label={strings.btnSaveDraft}

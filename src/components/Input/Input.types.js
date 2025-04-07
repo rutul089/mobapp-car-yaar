@@ -57,6 +57,7 @@
  * @property {string} [rightLabel] - Text label shown on the right side (e.g., 'Edit').
  * @property {string} [rightLabelColor] - Custom color for the right label text.
  * @property {string} [maxLength] - maxLength for the text.
+ * @property {string} [placeholderTextColor] - Change place holder text color.
  * @property {() => void} [rightLabelPress] - Callback when right label is pressed.
  */
 

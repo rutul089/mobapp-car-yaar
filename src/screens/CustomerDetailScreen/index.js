@@ -54,6 +54,8 @@ class CustomerDetailView extends Component {
     });
   };
 
+  onPressPrimaryButton = () => {};
+
   render() {
     const {mobileNumber, selectedIndividualType} = this.state;
     return (

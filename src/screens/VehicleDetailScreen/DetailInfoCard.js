@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Spacing, Text} from '../../components';
+import {Card, Spacing, Text} from '../../components';
 import theme from '../../theme';
 
 const DetailInfoCard = ({data, label}) => {
@@ -13,7 +13,7 @@ const DetailInfoCard = ({data, label}) => {
         </>
       )}
 
-      <View style={styles.container}>
+      <Card cardContainerStyle={styles.container}>
         {data.map((item, index) => (
           <View style={styles.itemContainer} key={index}>
             <Text type={'helper-text'} size={'caption'}>
@@ -27,7 +27,7 @@ const DetailInfoCard = ({data, label}) => {
             </Text>
           </View>
         ))}
-      </View>
+      </Card>
     </>
   );
 };
@@ -36,9 +36,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius: theme.sizes.borderRadius.card,
     justifyContent: 'space-between',
   },
   itemContainer: {

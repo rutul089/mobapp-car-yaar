@@ -13,3 +13,4 @@ export {default as RadioButton} from './RadioButton';
 export {default as OptionCard} from './OptionCard';
 export {default as DropdownModal} from './DropdownModal';
 export {default as CommonModal} from './CommonModal';
+export {default as Card} from './Card';

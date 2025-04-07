@@ -23,10 +23,10 @@ class Login extends Component {
 
   generateOTP = () => {
     const {mobileNumber} = this.state;
-    navigate(ScreenNames.HomeTab, {mobileNumber});
+    navigate(ScreenNames.OTP, {mobileNumber});
     if (validateMobileNumber(mobileNumber)) {
-      // navigate(ScreenNames.OTP, {mobileNumber});
-      navigate(ScreenNames.HomeTab, {mobileNumber});
+      navigate(ScreenNames.OTP, {mobileNumber});
+      // navigate(ScreenNames.HomeTab, {mobileNumber});
     } else {
       Alert.alert(
         '❌ Invalid Number',

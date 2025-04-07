@@ -9,6 +9,7 @@ import {
   Spacing,
   Button,
   AdditionalNotes,
+  Card,
 } from '../../components';
 import strings from '../../locales/strings';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -39,13 +40,8 @@ const Vehicle_Pricing_Component = ({
           padding: theme.sizes.padding,
         }}>
         <Text>{'Vehicle Pricing'}</Text>
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.sizes.borderRadius.card,
-            padding: 16,
-            marginTop: 12,
-          }}>
+        <Spacing size="smd" />
+        <Card>
           <Input
             label={'Estimated Price'}
             isLeftIconVisible
@@ -77,7 +73,7 @@ const Vehicle_Pricing_Component = ({
           />
           <Spacing size="md_lg" />
           <AdditionalNotes />
-        </View>
+        </Card>
         <View style={styles.buttonRow}>
           <Button
             label={strings.btnSaveDraft}

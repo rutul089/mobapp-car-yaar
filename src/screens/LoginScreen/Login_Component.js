@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {
   Image,
@@ -7,12 +8,21 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import {SafeAreaWrapper, Text, Spacing, Pressable} from '../../components';
+import {
+  SafeAreaWrapper,
+  Text,
+  Spacing,
+  Pressable,
+  Card,
+  Input,
+  Button,
+} from '../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from '../../styles/Login.style';
 import theme from '../../theme';
 import typography from '../../theme/typography';
 import images from '../../assets/images';
+import strings from '../../locales/strings';
 
 const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
   return (
@@ -29,25 +39,25 @@ const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
           angle={360}
           colors={['rgba(61, 173, 255, 0.48)', 'rgba(29, 149, 240, 0)']}>
           <View style={styles.container}>
-            <Text
-              hankenGroteskExtraBold={true}
-              size={28}
-              color={theme.colors.primary}>
-              CarYaar
-            </Text>
-            <Spacing size="md" />
-            <Text
-              hankenGroteskBold={true}
-              size={typography.fontSizes.h1}
-              color={theme.colors.black}>
-              Welcome Back!
-            </Text>
-            <Spacing />
-            <Text type={'helper-text'}>
-              Get Instant Approval on your Auto Loan
-            </Text>
+            <View style={{alignItems: 'center'}}>
+              <Text
+                hankenGroteskExtraBold={true}
+                size={28}
+                color={theme.colors.primary}>
+                CarYaar
+              </Text>
+              <Spacing size="md" />
+              <Text
+                hankenGroteskBold={true}
+                size={typography.fontSizes.h1}
+                color={theme.colors.black}>
+                {strings.welcomeBack}
+              </Text>
+              <Spacing />
+              <Text type={'helper-text'}>{strings.welcomeNote}</Text>
+            </View>
             <Spacing size="xl" />
-            <View style={styles.card}>
+            <Card noShadow={true}>
               <View style={styles.label}>
                 <Image
                   source={images.callOutline}
@@ -58,37 +68,21 @@ const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
                   type={'helper-text'}
                   color={theme.colors.primary}
                   lineHeight={typography.lineHeights.small}>
-                  Enter your Mobile Number
+                  {strings.enterMobile}
                 </Text>
               </View>
-              <TextInput
+              <Input
+                placeholder="98744 32092"
+                optionalLabelContainerStyles={{alignSelf: 'center'}}
+                inputStyles={styles.inputStyle}
                 value={mobileNumber}
                 onChangeText={setMobileNumber}
-                placeholder="98744 32092"
-                keyboardType="number-pad"
                 maxLength={10}
-                textAlign="center"
-                style={styles.input}
+                keyboardType="number-pad"
               />
-              <Pressable style={styles.button} onPress={generateOTP}>
-                <LinearGradient
-                  useAngle
-                  colors={['#1D95F0', '#3DADFF']}
-                  locations={[0, 1]}
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 0}}
-                  angle={109}
-                  style={styles.gradient}>
-                  <Text
-                    hankenGroteskExtraBold={true}
-                    color={'white'}
-                    lineHeight={theme.typography.lineHeights.button}
-                    size={theme.typography.fontSizes.button}>
-                    Generate OTP
-                  </Text>
-                </LinearGradient>
-              </Pressable>
-            </View>
+              <Spacing size="xl" />
+              <Button label={strings.generateOTP} onPress={generateOTP} />
+            </Card>
           </View>
         </LinearGradient>
       </KeyboardAvoidingView>

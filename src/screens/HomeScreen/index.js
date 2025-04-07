@@ -52,6 +52,7 @@ class HomeScreen extends Component {
           onInternalBTPress={this.onInternalBTPress}
           onExternalBTPress={this.onExternalBTPress}
           onNotificationPress={this.onNotificationPress}
+          selectedCarType={this.state.selectedCarType}
         />
       </>
     );

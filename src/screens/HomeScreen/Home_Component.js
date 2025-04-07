@@ -2,7 +2,14 @@
 import React from 'react';
 import {Alert, Image, ScrollView, View} from 'react-native';
 import images from '../../assets/images';
-import {Pressable, SafeAreaWrapper, Spacing, Text} from '../../components';
+import {
+  Card,
+  OptionCard,
+  Pressable,
+  SafeAreaWrapper,
+  Spacing,
+  Text,
+} from '../../components';
 import {styles} from '../../styles/Home.style';
 import theme from '../../theme';
 import {vehicleType} from '../../constants/enums';
@@ -16,9 +23,8 @@ const Home_Component = ({
   onExternalBTPress,
   onSelectedCarType,
   onNotificationPress,
+  selectedCarType,
 }) => {
-  const [selectedCarType, setSelectedCarType] = React.useState('used');
-
   const renderBox = (count, countColor, label) => {
     return (
       <View style={styles.statBox}>
@@ -40,33 +46,9 @@ const Home_Component = ({
     );
   };
 
-  const renderCarTypeButton = (type, label, icon) => {
-    const isSelected = selectedCarType === type;
-    return (
-      <Pressable
-        onPress={() => {
-          setSelectedCarType(type);
-          onSelectedCarType && onSelectedCarType(type);
-        }}
-        style={[styles.carTypeBox, isSelected && styles.carTypeBoxSelected]}>
-        <Image source={icon} style={styles.carTypeIcon} />
-        <Text hankenGroteskBold={isSelected}>{label}</Text>
-        {isSelected && (
-          <View style={styles.checkIcon}>
-            <Image
-              resizeMode="contain"
-              source={images.checkCircle}
-              style={styles.circleCheck}
-            />
-          </View>
-        )}
-      </Pressable>
-    );
-  };
-
   const renderLoanType = (label, icon, style, onPress) => {
     return (
-      <Pressable onPress={onPress} style={[styles.loanTypeItem, style]}>
+      <Card onPress={onPress} style={style}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Image source={icon} style={styles.loanIcon} />
           <Image source={images.arrow_right} style={{height: 20, width: 20}} />
@@ -75,7 +57,7 @@ const Home_Component = ({
         <Text hankenGroteskMedium={true} numberOfLines={1}>
           {label}
         </Text>
-      </Pressable>
+      </Card>
     );
   };
 
@@ -142,16 +124,20 @@ const Home_Component = ({
               Select Car Type
             </Text>
             <View style={styles.row}>
-              {renderCarTypeButton(
-                vehicleType.used,
-                'Used Vehicle',
-                images.usedVehicle,
-              )}
-              {renderCarTypeButton(
-                vehicleType.new,
-                'New Vehicle',
-                images.newVehicle,
-              )}
+              <OptionCard
+                type={vehicleType.used}
+                label={'Used Vehicle'}
+                icon={images.usedVehicle}
+                onSelectedOption={onSelectedCarType}
+                isSelected={selectedCarType === vehicleType.used}
+              />
+              <OptionCard
+                type={vehicleType.new}
+                label={'New Vehicle'}
+                icon={images.newVehicle}
+                onSelectedOption={onSelectedCarType}
+                isSelected={selectedCarType === vehicleType.new}
+              />
             </View>
           </>
           {/* Loan Type Selector */}

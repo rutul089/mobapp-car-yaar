@@ -1,4 +1,12 @@
 const strings = {
+  welcomeBack: 'Welcome Back',
+  welcomeNote: 'Get Instant Approval on your Auto Loan',
+  enterMobile: 'Enter your Mobile Number',
+  generateOTP: 'Generate OTP',
+  otpVerificationTittle: 'OTP Verification',
+  verificationNote: 'Enter the 4 Digit Code you received in your mobile ',
+  didNotGetOTP: "Didn't get the OTP?",
+  validateNow: 'Validate Now!',
   searchTitle: 'Search for Vehicle Number',
   vehicleNumberLabel: 'Vehicle Register Number',
   vehicleNotFound: 'Oh no! Vehicle not found',
