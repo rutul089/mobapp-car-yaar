@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Home_Component from './Home_Component';
-import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
-import {Alert} from 'react-native';
+import {navigate} from '../../navigation/NavigationUtils';
+import Home_Component from './Home_Component';
+import {connect} from 'react-redux';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -59,4 +59,11 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+const mapActionCreators = {};
+const mapStateToProps = state => {
+  return {
+    isInternetConnected: state.global.isInternetConnected,
+    isLoading: state.global.loading,
+  };
+};
+export default connect(mapStateToProps, mapActionCreators)(HomeScreen);
