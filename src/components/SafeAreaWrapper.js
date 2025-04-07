@@ -2,11 +2,12 @@
 import React from 'react';
 import {StatusBar, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import theme from '../theme';
 
 const SafeAreaWrapper = ({
   children,
-  statusBarColor = '#ffffff',
-  backgroundColor = '#ffffff',
+  statusBarColor = theme.colors.primaryBlack,
+  backgroundColor = theme.colors.background,
   barStyle = 'light-content',
   hideBottom = false,
 }) => {

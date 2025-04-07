@@ -80,7 +80,7 @@ const Home_Component = ({
   };
 
   return (
-    <SafeAreaWrapper hideBottom statusBarColor={theme.colors.primaryBlack}>
+    <SafeAreaWrapper hideBottom>
       <View style={styles.wrapper}>
         {/* Header */}
         <View style={styles.header}>

@@ -3,6 +3,7 @@ export const spacing = {
   sm: 8, // small
   smd: 12, // small-medium
   md: 16, // medium
+  md_lg: 20,
   lg: 24, // large
   xl: 32, // extra large
   xxl: 40, // double extra large
@@ -30,6 +31,7 @@ export const borderRadius = {
   xxl: 16, // Extra-extra large (rounded buttons, cards)
   xxxl: 18, // Very large or pill shape
   jumbo: 20, // For modals, cards, soft UI (NEW)
+  card: 12,
 };
 
 const sizes = {

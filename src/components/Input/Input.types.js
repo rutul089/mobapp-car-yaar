@@ -52,9 +52,11 @@
  * @property {string} [statusMsg] - Status message (e.g., validation, error, or success).
  * @property {string} [statusTextColor] - Overrides the default status message color.
  * @property {boolean} [showStatusIcon] - If true, renders an icon next to the status message.
+ * @property {boolean} [showStatus] - If true, then renders status.
  * @property {React.ReactNode} [statusIcon] - Icon/component to render with the status message.
  * @property {string} [rightLabel] - Text label shown on the right side (e.g., 'Edit').
  * @property {string} [rightLabelColor] - Custom color for the right label text.
+ * @property {string} [maxLength] - maxLength for the text.
  * @property {() => void} [rightLabelPress] - Callback when right label is pressed.
  */
 

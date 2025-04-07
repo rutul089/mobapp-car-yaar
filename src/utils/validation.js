@@ -8,3 +8,8 @@ export const validateMobileNumber = input => {
   const regex = /^\d{10}$/;
   return regex.test(input);
 };
+
+export const isValidAlphanumeric = value => {
+  const regex = /^[A-Za-z0-9]+$/;
+  return regex.test(value);
+};

@@ -15,6 +15,11 @@ const ScreenNames = {
   NotFound: 'NotFoundScreen',
   Notification: 'NotificationScreen',
   SearchView: 'SearchScreen',
+  VehicleDetail: 'VehicleDetailScreen',
+  VehicleImages: 'VehicleImages',
+  VehicleOdometer: 'VehicleOdometer',
+  VehiclePricing: 'VehiclePricing',
+  CustomerDetail: 'CustomerDetailScreen',
 };
 
 export default ScreenNames;

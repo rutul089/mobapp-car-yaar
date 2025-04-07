@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     padding: 16,
-    borderRadius: 12,
+    borderRadius: theme.sizes.borderRadius.card,
     alignItems: 'flex-start',
     shadowColor: '#000',
     shadowOpacity: 0.05,

@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: '80%',
     paddingRight: 5,
-    color: theme.colors.textSecondary,
+    color: theme.colors.textPrimary,
     fontSize: theme.typography.fontSizes.small,
     ...theme.typography.fontStyles.hankenGroteskSemiBold,
     //   top: Device.isAndroid() ? 0.8 : 0,
@@ -56,6 +56,7 @@ export const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     marginTop: 8, // or any spacing you need
+    alignItems: 'center',
   },
   statusIcon: {
     height: theme.sizes.icons.sm,

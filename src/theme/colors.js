@@ -39,7 +39,7 @@ export const StatusColors = {
 
 // Backgrounds & Surfaces
 export const BackgroundColors = {
-  background: '#F9FAFB',
+  background: '#F6F8FA',
   surface: '#FFFFFF',
   lightGray: '#F9F9F9',
 };
@@ -68,6 +68,9 @@ const colors = {
   ...TextColors,
   ...statusColor,
   inputBorder: 'rgba(0, 0, 0, 0.12)',
+  yellow: '#FFE100',
+  gray: '#6c6c6c',
+  lightGray1: '#dfe1e0',
 };
 
 export default colors;

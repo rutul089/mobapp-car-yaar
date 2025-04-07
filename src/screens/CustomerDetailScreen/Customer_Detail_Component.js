@@ -1,0 +1,174 @@
+/* eslint-disable react-native/no-inline-styles */
+
+import React from 'react';
+import {View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
+import {
+  Button,
+  CommonModal,
+  DropdownModal,
+  Header,
+  Input,
+  OptionCard,
+  OTPVerification,
+  SafeAreaWrapper,
+  Spacing,
+  Text,
+} from '../../components';
+import {customerCategory} from '../../constants/enums';
+import theme from '../../theme';
+
+const dropdownOptions = [
+  {label: 'Corporate', value: 'a'},
+  {label: 'Salaried', value: 'b'},
+  {label: 'Self-Employed', value: 'c'},
+  {label: 'Business Owner', value: 'c'},
+  {label: 'Freelancer', value: 'c'},
+  {label: 'Consultant', value: 'c'},
+  {label: 'Retired', value: 'c'},
+  {label: 'Unemployed', value: 'c'},
+];
+
+const Customer_Detail_Component = ({
+  onBackPress,
+  vehicleNumber,
+  onSelectedOption,
+  selectedOption,
+  mobileNumber,
+  onChangeMobileNumber,
+  individualType,
+  onChangeUserTypeOption,
+  onSendOTPPress,
+  showVerifyOTP,
+  onCloseVerifyOTP,
+  onPressPrimaryButton,
+}) => {
+  const [showModal, setShowModal] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState('');
+  return (
+    <SafeAreaWrapper>
+      <Header
+        title="Customer Details"
+        subtitle={vehicleNumber}
+        showRightContent
+        rightLabel="#ABC123"
+        rightLabelColor={'#F8A902'}
+        onBackPress={onBackPress}
+      />
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        contentContainerStyle={{
+          backgroundColor: theme.colors.background,
+          flexGrow: 1,
+          padding: theme.sizes.padding,
+        }}>
+        <Text>{'Basic Details'}</Text>
+        <View
+          style={{
+            backgroundColor: 'white',
+            borderRadius: theme.sizes.borderRadius.card,
+            padding: 16,
+            marginTop: 12,
+            marginBottom: 32,
+          }}>
+          <Text type={'label'}>Select Customer Category</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 10,
+            }}>
+            <OptionCard
+              label={'Individual'}
+              backgroundColor={theme.colors.background}
+              icon={images.userCircle}
+              type={customerCategory.individual}
+              onSelectedOption={onSelectedOption}
+              isSelected={selectedOption === customerCategory.individual}
+            />
+            <OptionCard
+              label={'Corporate'}
+              backgroundColor={theme.colors.background}
+              icon={images.corporate}
+              type={customerCategory.corporate}
+              onSelectedOption={onSelectedOption}
+              isSelected={selectedOption === customerCategory.corporate}
+            />
+          </View>
+          <Spacing size="md_lg" />
+          <Input
+            label={'Select Individual Type'}
+            isLeftIconVisible
+            leftIconName={images.userCircle}
+            isAsDropdown
+            value={individualType}
+            // onPress={selectedVehicleCondition}
+            onPress={() => setShowModal(true)}
+          />
+          <Spacing size="md_lg" />
+          <Input
+            label={'Customer Mobile Number'}
+            isLeftIconVisible
+            leftIconName={images.callOutline}
+            keyboardType="phone-pad"
+            value={mobileNumber}
+            onChangeText={onChangeMobileNumber}
+            maxLength={10}
+          />
+        </View>
+        <Button label={'Send OTP'} onPress={onSendOTPPress} />
+      </KeyboardAwareScrollView>
+      <DropdownModal
+        visible={showModal}
+        data={dropdownOptions}
+        selectedItem={selectedItem}
+        onSelect={(item, index) => {
+          setSelectedItem(item.label);
+          onChangeUserTypeOption && onChangeUserTypeOption(item, index);
+        }}
+        onClose={() => setShowModal(false)}
+        title="Select Other Document Type"
+      />
+      <CommonModal
+        isVisible={showVerifyOTP}
+        onModalHide={onCloseVerifyOTP}
+        primaryButtonLabel={'Confirm & Verify'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        onPressPrimaryButton={onPressPrimaryButton}
+        title="OTP Verification">
+        <>
+          <View style={{alignItems: 'center'}}>
+            <Text
+              type={'helper-text'}
+              textAlign={'center'}
+              style={{width: '70%'}}>
+              Enter the 4 Digit Code you received in your mobile{' '}
+              <Text
+                type={'helper-text'}
+                hankenGroteskBold={true}
+                color={theme.colors.primary}>
+                {'mobileNumber'}
+              </Text>
+            </Text>
+          </View>
+          <OTPVerification />
+          <Spacing size={'md'} />
+          <Text type={'helper-text'} textAlign={'center'}>
+            Didn't get the OTP?
+            <Text
+              // onPress={resendOTP}
+              type={'helper-text'}
+              hankenGroteskBold={true}
+              color={theme.colors.primary}>
+              {false ? ` Resend in ${0}s` : ' Resend'}
+            </Text>
+          </Text>
+        </>
+      </CommonModal>
+    </SafeAreaWrapper>
+  );
+};
+export default Customer_Detail_Component;

@@ -1,19 +1,42 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View} from 'react-native';
-import {Header, Input, SafeAreaWrapper} from '../../components';
+import {
+  Button,
+  Header,
+  Input,
+  SafeAreaWrapper,
+  Spacing,
+} from '../../components';
 import {styles} from '../../styles/Search.style';
 import theme from '../../theme';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import strings from '../../locales/strings';
+import images from '../../assets/images';
 
-const Search_Component = ({params, onBackPress}) => {
+const Search_Component = ({
+  params,
+  onBackPress,
+  onSearchVehicle,
+  onAddVehicle,
+  showAddVehicle,
+  vehicleNumber,
+  onVehicleNumberChange,
+  showError,
+  statusMsg,
+  showStatusIcon,
+}) => {
   return (
-    <SafeAreaWrapper
-      statusBarColor={theme.colors.primaryBlack}
-      backgroundColor={theme.colors.background}>
-      <Header title="Search Vehicle Number" onBackPress={onBackPress} />
-      <View style={styles.wrapper}>
+    <SafeAreaWrapper>
+      <Header title={strings.searchTitle} onBackPress={onBackPress} />
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.wrapper}
+        enableOnAndroid={true}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
         <Input
-          label={'Vehicle Register Number'}
+          label={strings.vehicleNumberLabel}
+          placeholder={strings.vehicleNumberLabel}
           optionalLabelContainerStyles={{alignSelf: 'center'}}
           labelStyles={{fontSize: theme.typography.fontSizes.body}}
           inputContainerBackgroundColor={'white'}
@@ -21,8 +44,27 @@ const Search_Component = ({params, onBackPress}) => {
           inputStyles={styles.inputStyle}
           returnKeyType="done"
           autoFocus
+          isError
+          statusMsg={statusMsg}
+          statusIcon={images.infoStatus}
+          showStatus={showError}
+          value={vehicleNumber}
+          onChangeText={onVehicleNumberChange}
+          showStatusIcon={showStatusIcon}
         />
-      </View>
+        <Spacing size="xl" />
+        <Button label={strings.searchButton} onPress={onSearchVehicle} />
+        {showAddVehicle ? (
+          <>
+            <Spacing size="md" />
+            <Button
+              label={strings.addVehicleButton}
+              variant="link"
+              onPress={onAddVehicle}
+            />
+          </>
+        ) : null}
+      </KeyboardAwareScrollView>
     </SafeAreaWrapper>
   );
 };

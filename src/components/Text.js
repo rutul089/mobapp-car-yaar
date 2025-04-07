@@ -83,7 +83,7 @@ const Text = ({
     fontSize: computedFontSize ?? theme.typography.fontSizes.body,
     color: color ?? theme.colors.textPrimary,
     fontWeight: computedFontWeight ?? undefined,
-    lineHeight: computeLineHeight,
+    lineHeight: computeLineHeight ?? theme.typography.lineHeights.body,
     textAlign: textAlign,
     margin: margin ?? 0,
   };

@@ -100,11 +100,13 @@ const Input = React.forwardRef((props, ref) => {
     optionalLabelContainerStyles,
     statusMsg,
     statusTextColor,
-    showStatusIcon,
     statusIcon,
     rightLabel,
     rightLabelColor,
     rightLabelPress,
+    showStatus,
+    showStatusIcon,
+    maxLength,
   } = props;
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -210,6 +212,7 @@ const Input = React.forwardRef((props, ref) => {
             onSubmitEditing={onSubmitEditing}
             focusable={true}
             returnKeyType={returnKeyType}
+            maxLength={maxLength}
             {...restProps}
           />
         )}
@@ -226,18 +229,7 @@ const Input = React.forwardRef((props, ref) => {
             </Text>
           </TouchableOpacity>
         )}
-        {(isRightIconVisible || isAsDropdown) && (
-          <RightIcon
-            onRightIconPress={onRightIconPress}
-            rightIcon={rightIcon}
-            isDisabled={rightIcnDisable}
-            rightIconStyle={rightIconStyle}
-            rightIconName={
-              isAsDropdown ? rightIconName ?? images.arrow_down : rightIconName
-            }
-            rightIconColor={rightIconColor}
-          />
-        )}
+
         {(isRightIconVisible || isAsDropdown) && (
           <RightIcon
             onRightIconPress={onRightIconPress}
@@ -251,7 +243,7 @@ const Input = React.forwardRef((props, ref) => {
           />
         )}
       </TouchableOpacity>
-      {statusMsg?.length > 0 && (
+      {statusMsg?.length > 0 && showStatus && (
         <View style={styles.statusContainer}>
           {showStatusIcon ? (
             <Image

@@ -18,9 +18,7 @@ const Notification_Component = ({
   };
 
   return (
-    <SafeAreaWrapper
-      statusBarColor={theme.colors.primaryBlack}
-      backgroundColor={theme.colors.background}>
+    <SafeAreaWrapper>
       <Header
         title="Notifications"
         showRightContent={true}

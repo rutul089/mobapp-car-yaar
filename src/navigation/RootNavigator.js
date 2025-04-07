@@ -27,6 +27,11 @@ import {
   SearchScreen,
   SplashScreen,
   VehiclesScreen,
+  VehicleDetailScreen,
+  VehicleImagesScreen,
+  VehicleOdometerScreen,
+  VehiclePricingScreen,
+  CustomerDetailScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -229,6 +234,31 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.SearchView}
               component={SearchScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.VehicleDetail}
+              component={VehicleDetailScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.VehicleImages}
+              component={VehicleImagesScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.VehicleOdometer}
+              component={VehicleOdometerScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.VehiclePricing}
+              component={VehiclePricingScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CustomerDetail}
+              component={CustomerDetailScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
