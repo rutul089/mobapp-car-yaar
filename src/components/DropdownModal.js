@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  Image,
-} from 'react-native';
+import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native';
 import Modal from 'react-native-modal';
-import Text from './Text';
 import images from '../assets/images';
-import Pressable from './Pressable';
 import Button from './Button/Button';
-import Spacing from './Spacing';
+import Pressable from './Pressable';
 import RadioButton from './RadioButton';
+import Spacing from './Spacing';
+import Text from './Text';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -36,7 +29,7 @@ const DropdownModal = ({
     customItem ? (
       customItem
     ) : (
-      <View style={{marginBottom: 10}}>
+      <>
         <RadioButton
           label={item.label}
           selected={selectedItem === item?.label}
@@ -45,15 +38,8 @@ const DropdownModal = ({
             onClose();
           }}
         />
-      </View>
-      //   <TouchableOpacity
-      //     style={styles.item}
-      //     onPress={() => {
-      //       onSelect(item);
-      //       onClose();
-      //     }}>
-      //     <Text style={styles.itemText}>{item.label}</Text>
-      //   </TouchableOpacity>
+        <Spacing size="sm" />
+      </>
     );
 
   return (

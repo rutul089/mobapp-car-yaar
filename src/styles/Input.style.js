@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     paddingRight: 5,
     color: theme.colors.textPrimary,
     fontSize: theme.typography.fontSizes.small,
-    ...theme.typography.fontStyles.hankenGroteskSemiBold,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
     //   top: Device.isAndroid() ? 0.8 : 0,
     //   textAlignVertical: 'bottom',
   },

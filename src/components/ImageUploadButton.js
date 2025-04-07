@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import images from '../assets/images';
 import {Pressable, Text} from './';
+import theme from '../theme';
 
 const ImageUploadButton = ({
   label,
@@ -9,9 +10,10 @@ const ImageUploadButton = ({
   onPress,
   handleImagePick,
   image,
+  wrapperStyle,
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, wrapperStyle]}>
       {label && <Text type={'helper-text'}>{label}</Text>}
 
       <Pressable style={styles.uploadBox} onPress={handleImagePick}>
@@ -20,7 +22,7 @@ const ImageUploadButton = ({
         ) : (
           <View style={styles.dashedWrapper}>
             <Image source={images.icUpload} style={styles.icon} />
-            <Text type={'helper-text'} size={'caption'}>
+            <Text type={'helper-text'} size={'caption'} textAlign={'center'}>
               {btnLabel}
             </Text>
           </View>
@@ -31,7 +33,9 @@ const ImageUploadButton = ({
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    // flex: 1,
+  },
   label: {
     fontSize: 16,
     fontWeight: '500',
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#F9F9F9',
     padding: 7,
-    marginTop: 8,
+    marginTop: theme.sizes.spacing.sm,
   },
   icon: {
     width: 28,

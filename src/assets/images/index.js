@@ -37,4 +37,12 @@ export default {
   radio_unselected: require('./radio_unselected.png'),
   corporate: require('./corporate.png'),
   userCircle: require('./userCircle.png'),
+  bank: require('./bank.png'),
+  businessSuitcase: require('./businessSuitcase.png'),
+  calendar: require('./calendar.png'),
+  email: require('./email.png'),
+  idCard: require('./idCard.png'),
+  locationPin: require('./locationPin.png'),
+  successCheck: require('./successCheck.png'),
+  user: require('./user.png'),
 };

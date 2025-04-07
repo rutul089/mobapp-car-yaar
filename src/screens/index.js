@@ -17,3 +17,5 @@ export {default as VehicleImagesScreen} from './VehicleImagesScreen';
 export {default as VehicleOdometerScreen} from './VehicleOdometerScreen';
 export {default as VehiclePricingScreen} from './VehiclePricingScreen';
 export {default as CustomerDetailScreen} from './CustomerDetailScreen';
+export {default as CustomerPersonalDetailsScreen} from './CustomerPersonalDetailsScreen';
+export {default as LoanDocumentsScreen} from './LoanDocumentsScreen';

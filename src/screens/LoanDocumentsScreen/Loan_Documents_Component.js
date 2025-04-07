@@ -1,5 +1,6 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+
+import theme from '../../theme';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {
   Button,
@@ -11,10 +12,10 @@ import {
 } from '../../components';
 
 import strings from '../../locales/strings';
-import theme from '../../theme';
+
 import {styles} from '../../styles/Vehicle.Image.style';
 
-const Vehicle_Images_Component = ({
+const Loan_Documents_Component = ({
   params,
   imageSlots,
   onDeletePress,
@@ -37,8 +38,14 @@ const Vehicle_Images_Component = ({
   };
 
   return (
-    <SafeAreaWrapper>
-      <Header title={strings.vehicleDetailTitle} onBackPress={onBackPress} />
+    <SafeAreaWrapper backgroundColor={theme.colors.background}>
+      <Header
+        title="Loan Documents"
+        subtitle="GJ 01 JR 0945"
+        rightLabel="#2ABC123"
+        showRightContent={true}
+        rightLabelColor={'#F8A902'}
+      />
       <FlatList
         data={imageSlots}
         contentContainerStyle={{
@@ -53,7 +60,7 @@ const Vehicle_Images_Component = ({
         columnWrapperStyle={styles.row}
         ListHeaderComponent={
           <>
-            <Text>{strings.vehicleImage}</Text>
+            <Text>{'Documents'}</Text>
             <Spacing size="smd" />
           </>
         }
@@ -78,4 +85,4 @@ const Vehicle_Images_Component = ({
   );
 };
 
-export default Vehicle_Images_Component;
+export default Loan_Documents_Component;

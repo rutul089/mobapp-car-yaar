@@ -72,6 +72,7 @@ const Vehicle_Odometer_Component = ({
             isLeftIconVisible
             leftIconName={images.usedVehicle}
             isAsDropdown
+            isRightIconVisible
             value={selectedItem}
             // onPress={selectedVehicleCondition}
             onPress={() => setShowModal(true)}

@@ -98,6 +98,7 @@ const Customer_Detail_Component = ({
             isLeftIconVisible
             leftIconName={images.userCircle}
             isAsDropdown
+            isRightIconVisible
             value={individualType}
             // onPress={selectedVehicleCondition}
             onPress={() => setShowModal(true)}

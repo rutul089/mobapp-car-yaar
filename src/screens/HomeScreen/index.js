@@ -33,7 +33,9 @@ class HomeScreen extends Component {
     navigate(ScreenNames.SearchView);
   };
 
-  onRefinancePress = () => {};
+  onRefinancePress = () => {
+    navigate(ScreenNames.CustomerPersonalDetails);
+  };
 
   onTopUpPress = () => {};
 

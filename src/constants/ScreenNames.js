@@ -20,6 +20,8 @@ const ScreenNames = {
   VehicleOdometer: 'VehicleOdometer',
   VehiclePricing: 'VehiclePricing',
   CustomerDetail: 'CustomerDetailScreen',
+  CustomerPersonalDetails: 'CustomerPersonalDetails',
+  LoanDocument: 'LoanDocumentScreen',
 };
 
 export default ScreenNames;

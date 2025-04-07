@@ -108,6 +108,7 @@ const Input = React.forwardRef((props, ref) => {
     showStatusIcon,
     maxLength,
     placeholderTextColor,
+    isAsButton = false,
   } = props;
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -137,7 +138,7 @@ const Input = React.forwardRef((props, ref) => {
     !disableFocusHandling && setIsFocused(focusState);
     callback();
   };
-
+  console.log(isDisabled || !isAsDropdown || !isAsButton);
   return (
     <View>
       <View
@@ -182,14 +183,14 @@ const Input = React.forwardRef((props, ref) => {
             leftIconColor={leftIconColor}
           />
         )}
-        {isAsDropdown ? (
+        {isAsDropdown || isAsButton ? (
           <View style={[styles.input, inputStyles]}>
             <Text
               type={'input'}
               style={dropdownItemStyle}
               ellipsizeMode={'tail'}
               numberOfLines={1}>
-              {value}
+              {value ?? placeholder}
             </Text>
           </View>
         ) : (
@@ -233,7 +234,7 @@ const Input = React.forwardRef((props, ref) => {
           </TouchableOpacity>
         )}
 
-        {(isRightIconVisible || isAsDropdown) && (
+        {isRightIconVisible && (
           <RightIcon
             onRightIconPress={onRightIconPress}
             rightIcon={rightIcon}

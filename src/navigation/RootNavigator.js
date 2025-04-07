@@ -32,6 +32,8 @@ import {
   VehicleOdometerScreen,
   VehiclePricingScreen,
   CustomerDetailScreen,
+  CustomerPersonalDetailsScreen,
+  LoanDocumentsScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -259,6 +261,16 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.CustomerDetail}
               component={CustomerDetailScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CustomerPersonalDetails}
+              component={CustomerPersonalDetailsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.LoanDocument}
+              component={LoanDocumentsScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
