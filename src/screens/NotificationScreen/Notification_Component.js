@@ -30,6 +30,7 @@ const Notification_Component = ({
       <FlatList
         data={dataList}
         keyExtractor={(_, index) => index.toString()}
+        bounces={false}
         renderItem={({item}) => (
           <NotificationCard
             description={item?.description}
@@ -49,7 +50,11 @@ const Notification_Component = ({
   );
 };
 const styles = StyleSheet.create({
-  listContent: {backgroundColor: theme.colors.background, paddingTop: 10},
+  listContent: {
+    backgroundColor: theme.colors.background,
+    padding: theme.sizes.padding,
+    // paddingBottom: 40,
+  },
 });
 
 export default Notification_Component;

@@ -1,11 +1,11 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {Pressable, Spacing, Text} from '../../components';
+import {Card, Pressable, Spacing, Text} from '../../components';
 import theme from '../../theme';
 
 const NotificationCard = ({description, imgSource, subTitle, isLatest}) => {
   return (
-    <Pressable style={styles.card}>
+    <Card cardContainerStyle={styles.card}>
       <View style={styles.iconContainer}>
         {isLatest ? <View style={styles.latestBadge} /> : null}
         <Image
@@ -28,22 +28,14 @@ const NotificationCard = ({description, imgSource, subTitle, isLatest}) => {
           {subTitle}
         </Text>
       </View>
-    </Pressable>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: theme.sizes.borderRadius.card,
-    alignItems: 'flex-start',
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
-    margin: 8,
+    marginTop: 10,
   },
   latestBadge: {
     height: 7,
