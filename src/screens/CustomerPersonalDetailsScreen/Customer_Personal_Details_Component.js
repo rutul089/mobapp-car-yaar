@@ -12,6 +12,7 @@ import {
   DropdownModal,
   Button,
   FormFooterButtons,
+  RadioGroupRow,
 } from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import theme from '../../theme';
@@ -150,18 +151,12 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
           />
           <Spacing size="md" />
-          <Text type={'label'}>Gender</Text>
-          <View style={styles.rowSpaceBetween}>
-            {genderOptions.map(item => (
-              <RadioBlock
-                key={item?.value}
-                label={item?.label}
-                isSelected={selectedGender === item?.value}
-                wrapperStyle={styles.flex}
-                onPress={() => onSelectedGender(item?.value)}
-              />
-            ))}
-          </View>
+          <RadioGroupRow
+            label={'Gender'}
+            options={genderOptions}
+            selectedValue={selectedGender}
+            onChange={onSelectedGender}
+          />
           <Spacing size="md" />
           <Input
             ref={fatherMotherRef}
@@ -287,18 +282,12 @@ const Customer_Personal_Details_Component = ({
             label="Account Number"
           />
           <Spacing size="md" />
-          <Text type={'label'}>Current Loan?</Text>
-          <View style={styles.rowSpaceBetween}>
-            {currentLoanOptions.map(item => (
-              <RadioBlock
-                key={item?.value}
-                label={item?.label}
-                isSelected={state.selectedLoanOption === item?.value}
-                wrapperStyle={styles.flex}
-                onPress={() => onSelectedLoanOption(item?.value)}
-              />
-            ))}
-          </View>
+          <RadioGroupRow
+            label={'Current Loan?'}
+            options={currentLoanOptions}
+            selectedValue={state.selectedLoanOption}
+            onChange={onSelectedLoanOption}
+          />
           <Spacing size="md" />
           <View style={styles.rowSpaceBetween}>
             <View style={styles.halfWidth}>

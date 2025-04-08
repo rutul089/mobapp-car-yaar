@@ -6,6 +6,7 @@ import {
   FormFooterButtons,
   Header,
   RadioBlock,
+  RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
@@ -36,19 +37,12 @@ const Vehicle_Hypothecation_Component = ({
         <Text>Is your car Hypothecated?</Text>
         <Spacing size="smd" />
         <Card>
-          <Text type={'label'}>Select answer</Text>
-          <View style={styles.rowSpaceBetween}>
-            {answerList &&
-              answerList.map(item => (
-                <RadioBlock
-                  key={item?.value}
-                  label={item?.label}
-                  isSelected={state.carHypoStatus === item?.value}
-                  wrapperStyle={styles.flex}
-                  onPress={() => onSelectedAnswer(item?.value)}
-                />
-              ))}
-          </View>
+          <RadioGroupRow
+            label={'Select answer'}
+            options={answerList}
+            selectedValue={state.carHypoStatus}
+            onChange={onSelectedAnswer}
+          />
         </Card>
         <FormFooterButtons
           primaryButtonLabel={strings.btnSaveDraft}
@@ -66,15 +60,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: theme.sizes.padding,
     backgroundColor: theme.colors.background,
-  },
-  flex: {
-    flex: 1,
-  },
-  rowSpaceBetween: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: theme.sizes.spacing.sm,
-    gap: 12,
   },
 });
 

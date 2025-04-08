@@ -1,19 +1,20 @@
 import React, {useRef} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
 import {
   Card,
   FormFooterButtons,
   Header,
   Input,
-  RadioBlock,
+  RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
 } from '../../components';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import theme from '../../theme';
-import images from '../../assets/images';
 import strings from '../../locales/strings';
+import theme from '../../theme';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const Finance_Details_Component = ({
   answerOption,
@@ -34,6 +35,7 @@ const Finance_Details_Component = ({
         subtitle="GJ 01 JR 0945"
         rightLabel="ABC123"
         showRightContent={true}
+        onBackPress={() => goBack()}
       />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
@@ -41,19 +43,12 @@ const Finance_Details_Component = ({
         <Text>Was this car financed?</Text>
         <Spacing size="smd" />
         <Card>
-          <Text type={'label'}>Select answer</Text>
-          <View style={styles.rowSpaceBetween}>
-            {answerOption &&
-              answerOption.map(item => (
-                <RadioBlock
-                  key={item?.value}
-                  label={item?.label}
-                  isSelected={state.selectedAnswer === item?.value}
-                  wrapperStyle={styles.flex}
-                  onPress={() => onSelectAnswer(item?.value)}
-                />
-              ))}
-          </View>
+          <RadioGroupRow
+            label={'Select answer'}
+            options={answerOption}
+            selectedValue={state.selectedAnswer}
+            onChange={onSelectAnswer}
+          />
           <Spacing size="md" />
           <Input
             leftIconName={images.bank}
@@ -128,15 +123,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: theme.sizes.padding,
     backgroundColor: theme.colors.background,
-  },
-  rowSpaceBetween: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: theme.sizes.spacing.sm,
-    gap: 12,
-  },
-  flex: {
-    flex: 1,
   },
 });
 
