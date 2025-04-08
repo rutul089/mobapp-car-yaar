@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import View_Loan_Details_Component from './View_Loan_Details_Component';
+import Thank_You_Component from './Thank_You_Component';
 import {
   navigate,
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 
-class ViewLoanDetailsScreen extends Component {
+class ThankYouScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.onBackToHomePress = this.onBackToHomePress.bind(this);
     this.onTrackLoanStatusPress = this.onTrackLoanStatusPress.bind(this);
-    this.onTackLoanApplication = this.onTackLoanApplication.bind(this);
   }
 
   componentDidMount() {}
@@ -26,12 +25,20 @@ class ViewLoanDetailsScreen extends Component {
     navigate(ScreenNames.TrackApplication);
   };
 
-  onTackLoanApplication = () => {};
-
   render() {
     return (
       <>
-        <View_Loan_Details_Component
+        <Thank_You_Component
+          loanDetails={[
+            {label: 'Lender Name', value: 'HDB Financial Services'},
+            {label: 'Interest Rate', value: '8.96%'},
+            {label: 'Loan Amount', value: '₹12,00,000'},
+            {label: 'Tenure', value: '60 Months'},
+            {label: 'EMI', value: '₹10,000'},
+            {label: 'Processing Fee', value: '₹1000 '},
+            {label: 'Principal Amount', value: '₹10,00,000'},
+            {label: 'Loan Type', value: 'Purchase'},
+          ]}
           customerDetail={[
             {label: 'Customer Name', value: 'Aayushman Nayak'},
             {label: 'Customer ID', value: '#968040'},
@@ -76,25 +83,17 @@ class ViewLoanDetailsScreen extends Component {
             {label: 'PUCC', value: 'Yes'},
             {label: 'Ownership', value: '2'},
           ]}
+          partnerDetail={[
+            {label: 'Partner ID', value: '0123'},
+            {label: 'Partner Name', value: 'Partner Name'},
+            {
+              label: 'Sales Executive Name',
+              value: 'Mahmood Butala',
+              full: true,
+            },
+          ]}
           onTrackLoanStatusPress={this.onTrackLoanStatusPress}
           onBackToHomePress={this.onBackToHomePress}
-          item={{
-            id: '1',
-            title: 'Bajaj Finserv',
-            interestRate: 10.25,
-            isEligible: true,
-            badge: 1,
-            image: 'https://i.pravatar.cc/150?img=3',
-            footerInfo: [
-              {label: 'Loan Amount', value: '₹12,00,000'},
-              {label: 'EMI', value: '₹10,000'},
-              {label: 'Principal Amount', value: '₹10,00,000'},
-              {label: 'Processing Fee', value: '₹1,000'},
-              {label: 'Tenure', value: '60 Months'},
-              {label: 'Loan Type', value: 'Purchase'},
-            ],
-          }}
-          onTackLoanApplication={this.onTackLoanApplication}
         />
       </>
     );
@@ -108,7 +107,4 @@ const mapStateToProps = state => {
     isLoading: state.global.loading,
   };
 };
-export default connect(
-  mapStateToProps,
-  mapActionCreators,
-)(ViewLoanDetailsScreen);
+export default connect(mapStateToProps, mapActionCreators)(ThankYouScreen);

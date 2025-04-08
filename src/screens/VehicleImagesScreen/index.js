@@ -3,6 +3,7 @@ import Vehicle_Images_Component from './Vehicle_Images_Component';
 import {pickImage} from '../../utils/imagePicker';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {pickDocument} from '../../utils/filePicker';
 
 class VehicleImagesScreen extends Component {
   constructor(props) {
@@ -36,14 +37,20 @@ class VehicleImagesScreen extends Component {
 
   handleSelectImage = async () => {
     try {
-      const image = await pickImage(); // set `true` for camera
-      if (image) {
-        console.log('Selected image:', image.uri);
-        // Do something with image.uri, image.fileName, etc.
-      }
-    } catch (error) {
-      console.error('Image picker error:', error);
+      const file = await pickDocument();
+      console.log('Selected image:', file);
+    } catch (e) {
+      console.log('Selected image:', e);
     }
+    // try {
+    //   const image = await pickImage(); // set `true` for camera
+    //   if (image) {
+    //     console.log('Selected image:', image.uri);
+    //     // Do something with image.uri, image.fileName, etc.
+    //   }
+    // } catch (error) {
+    //   console.error('Image picker error:', error);
+    // }
   };
 
   saveAsDraftPress = () => {};

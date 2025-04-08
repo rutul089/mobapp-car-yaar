@@ -21,3 +21,4 @@ export {default as CustomizeLoanCard} from './CustomizeLoanCard';
 export {default as RadioGroupRow} from './RadioGroupRow';
 export {default as ImageHeader} from './ImageHeader';
 export {default as LoanApplicationCardWrapper} from './LoanApplicationCardWrapper';
+export {default as TimelineItem} from './TimelineItem';

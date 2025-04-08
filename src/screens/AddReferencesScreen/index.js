@@ -14,7 +14,7 @@ class AddReferencesScreen extends Component {
   componentDidMount() {}
 
   onConfirmLoanPress = () => {
-    navigate(ScreenNames.ViewLoanDetail);
+    navigate(ScreenNames.ThankYouView);
   };
 
   render() {

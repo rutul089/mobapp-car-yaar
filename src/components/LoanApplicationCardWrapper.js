@@ -12,13 +12,17 @@ const LoanApplicationCardWrapper = ({
 }) => {
   return (
     <LinearGradient
-      colors={['#E8E8E8', '#E8E8E8']}
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 0}}
+      colors={['#F3696E', '#F8A902']}
+      start={{x: 0, y: 0.3}}
+      end={{x: 1, y: 1}}
       style={{borderRadius: theme.sizes.borderRadius.card}}>
       <View style={{padding: 5}}>
         <View style={styles.headerRow}>
-          <Text type={'caption'} hankenGroteskSemiBold lineHeight={'body'}>
+          <Text
+            type={'caption'}
+            hankenGroteskSemiBold
+            lineHeight={'body'}
+            color={'rgba(0, 0, 0, 0.36)'}>
             {`#${applicationNumber}`}
           </Text>
           <Text hankenGroteskSemiBold={true}>{status}</Text>

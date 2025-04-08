@@ -1,6 +1,6 @@
 // utils/filePicker.js
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import DocumentPicker from 'react-native-document-picker';
+import {pick, types} from '@react-native-documents/picker';
 
 export const pickImage = async (fromCamera = false) => {
   const options = {
@@ -23,14 +23,32 @@ export const pickImage = async (fromCamera = false) => {
   });
 };
 
+// export const pickDocument = async () => {
+//   try {
+//     const res = await DocumentPicker.pickSingle({
+//       type: [DocumentPicker.types.allFiles],
+//     });
+
+//     return res;
+//   } catch (err) {
+//     if (DocumentPicker.isCancel(err)) {
+//       return null;
+//     }
+//     throw err;
+//   }
+// };
+
 export const pickDocument = async () => {
   try {
-    const res = await DocumentPicker.pickSingle({
-      type: [DocumentPicker.types.allFiles],
+    const res = await pick({
+      allowMultiSelection: false,
+      // type: ['*/*'], // for all files
+      type: [types.pdf, types.docx, types.images],
     });
-    return res;
+
+    return res[0]; // since multi-selection is false, we only get one item
   } catch (err) {
-    if (DocumentPicker.isCancel(err)) {
+    if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
       return null;
     }
     throw err;

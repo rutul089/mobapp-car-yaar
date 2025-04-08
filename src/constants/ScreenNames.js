@@ -32,6 +32,10 @@ const ScreenNames = {
   VehicleHypothecation: 'VehicleHypothecationScreen',
   FinanceDetails: 'FinanceDetailsScreen',
   FinanceDocuments: 'FinanceDocumentsScreen',
+  ThankYouView: 'ThankYouScreen',
+  TrackApplication: 'TrackApplicationScreen',
+  CarFinanceDetails: 'CarFinanceDetailsScreen',
+  TopUpFinanceDocuments: 'TopUpFinanceDocumentsScreen',
 };
 
 export default ScreenNames;

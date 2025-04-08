@@ -14,7 +14,7 @@ import {
 import theme from '../../theme';
 import images from '../../assets/images';
 
-const Applications_Component = ({params, dummyList}) => {
+const Applications_Component = ({params, dummyList, onItemPress}) => {
   const renderItem = ({item}) => (
     <>
       <LoanApplicationCardWrapper
@@ -37,6 +37,7 @@ const Applications_Component = ({params, dummyList}) => {
           footerInfo={item.footerInfo}
           showBadge={false}
           logo={{uri: item.image}}
+          onItemPress={() => onItemPress && onItemPress(item)}
         />
       </LoanApplicationCardWrapper>
       <Spacing />

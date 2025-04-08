@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: theme.sizes.borderRadius.card,
-    elevation: 5,
+    elevation: 1,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: {width: 0, height: 2},

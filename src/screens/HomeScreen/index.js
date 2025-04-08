@@ -32,6 +32,7 @@ class HomeScreen extends Component {
   };
 
   onPurchasePress = () => {
+    this.props.selectedLoanType(loanType.purchase);
     navigate(ScreenNames.SearchView);
   };
 
@@ -43,9 +44,15 @@ class HomeScreen extends Component {
     //    loanType: state.global.selectedLoanType,
   };
 
-  onTopUpPress = () => {};
+  onTopUpPress = () => {
+    this.props.selectedLoanType(loanType.topUp);
+    navigate(ScreenNames.SearchView);
+  };
 
-  onInternalBTPress = () => {};
+  onInternalBTPress = () => {
+    this.props.selectedLoanType(loanType.internalBT);
+    navigate(ScreenNames.SearchView);
+  };
 
   onExternalBTPress = () => {};
 

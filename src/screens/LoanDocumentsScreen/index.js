@@ -24,6 +24,8 @@ class LoanDocumentsScreen extends Component {
     const {selectedLoanType} = this.props;
     if (selectedLoanType === loanType.refinance) {
       return navigate(ScreenNames.FinanceDetails);
+    } else if (selectedLoanType === loanType.topUp) {
+      return navigate(ScreenNames.CarFinanceDetails);
     } else {
       navigate(ScreenNames.LoanAmount);
     }

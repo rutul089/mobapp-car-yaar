@@ -14,7 +14,7 @@ class Splash extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      navigateAndSimpleReset(ScreenNames.HomeTab);
+      navigateAndSimpleReset(ScreenNames.Login);
     }, 1500);
   }
 

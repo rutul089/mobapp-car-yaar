@@ -44,6 +44,10 @@ import {
   VehicleHypothecationScreen,
   FinanceDetailsScreen,
   FinanceDocumentsScreen,
+  ThankYouScreen,
+  TrackApplicationScreen,
+  CarFinanceDetails,
+  TopUpFinanceDocuments,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -133,6 +137,7 @@ export default class RootNavigator extends Component {
               borderTopWidth: 2,
               borderTopColor: 'rgba(0, 0, 0, 0.08)',
               backgroundColor: 'white',
+              height: 60,
             },
             tabBarItemStyle: {
               padding: 0,
@@ -331,6 +336,26 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.FinanceDocuments}
               component={FinanceDocumentsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.ThankYouView}
+              component={ThankYouScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.TrackApplication}
+              component={TrackApplicationScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CarFinanceDetails}
+              component={CarFinanceDetails}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.TopUpFinanceDocuments}
+              component={TopUpFinanceDocuments}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

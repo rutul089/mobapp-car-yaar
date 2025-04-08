@@ -24,6 +24,13 @@ const FinanceCard = ({
   showButton = false,
   buttonLabel = '',
   onButtonPress,
+  wrapperColor,
+  infoWrapperColor,
+  textColor,
+  labelColor,
+  infoValueColor,
+  showError,
+  errorStats,
 }) => {
   const getBadgeWrapperColor = () => {
     switch (badge) {
@@ -55,7 +62,11 @@ const FinanceCard = ({
     <View style={styles.header}>
       <Image source={logo || images.placeholder_image} style={styles.logo} />
       <View style={styles.flex}>
-        <Text hankenGroteskMedium size="small" lineHeight="small">
+        <Text
+          hankenGroteskMedium
+          size="small"
+          lineHeight="small"
+          color={textColor}>
           {title}
         </Text>
         <View style={styles.interestRow}>
@@ -84,11 +95,17 @@ const FinanceCard = ({
   );
 
   const renderInfoBox = () => (
-    <View style={styles.footer}>
+    <View
+      style={[
+        styles.footer,
+        {backgroundColor: infoWrapperColor ?? theme.colors.background},
+      ]}>
       {footerInfo.map((item, index) => (
         <View style={styles.flexInfoBox} key={index}>
-          <Text type="caption">{item.label}</Text>
-          <Text hankenGroteskSemiBold size="small">
+          <Text type="caption" color={labelColor}>
+            {item.label}
+          </Text>
+          <Text hankenGroteskSemiBold size="small" color={infoValueColor}>
             {item.value}
           </Text>
         </View>
@@ -96,14 +113,35 @@ const FinanceCard = ({
     </View>
   );
 
+  const renderErrorStatus = () => {
+    return (
+      <View
+        style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
+        <Image
+          source={images.infoStatus}
+          style={{height: 20, width: 20, marginRight: 8}}
+        />
+        <Text
+          size={'small'}
+          hankenGroteskSemiBold={true}
+          color={theme.colors.error}>
+          {errorStats}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <Card
       cardContainerStyle={[
         styles.cardWrapper,
         cardStyle,
+        {backgroundColor: wrapperColor ?? theme.colors.white},
         noMargin && {marginTop: 0},
       ]}
       onPress={onItemPress}>
+      {showError && renderErrorStatus()}
+
       {renderHeader()}
 
       {showBadge && (
@@ -176,25 +214,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   eligibleIcon: {
-    height: 15,
+    height: 20,
     width: 15,
     marginRight: 5,
   },
   footer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
+    // justifyContent: 'space-between',
     marginTop: 12,
     backgroundColor: theme.colors.background,
     borderRadius: theme.sizes.borderRadius.md,
     padding: theme.sizes.spacing.smd,
   },
   flexInfoBox: {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 'auto',
-    minWidth: '30%',
+    // flexGrow: 1,
+    // flexShrink: 1,
+    // flexBasis: 'auto',
+    width: '33%',
     marginBottom: 12,
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
 });
 

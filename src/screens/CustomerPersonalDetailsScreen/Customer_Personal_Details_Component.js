@@ -365,13 +365,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: theme.sizes.spacing.sm,
-    gap: 12,
+    // gap: 12,
   },
   flex: {
     flex: 1,
   },
   halfWidth: {
-    width: '50%',
+    width: '47%',
   },
 });
 

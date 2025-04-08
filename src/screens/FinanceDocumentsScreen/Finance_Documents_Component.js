@@ -22,6 +22,8 @@ const Finance_Documents_Component = ({
   onNextPress,
   saveAsDraftPress,
   onBackPress,
+  handleSaveDraftPress,
+  handleNextStepPress,
 }) => {
   const renderImageItem = ({item}) => {
     return (
@@ -68,8 +70,8 @@ const Finance_Documents_Component = ({
           <FormFooterButtons
             primaryButtonLabel={strings.btnSaveDraft}
             secondaryButtonLabel={strings.next}
-            onPressPrimaryButton={saveAsDraftPress}
-            onPressSecondaryButton={onNextPress}
+            onPressPrimaryButton={handleSaveDraftPress}
+            onPressSecondaryButton={handleNextStepPress}
           />
         }
       />

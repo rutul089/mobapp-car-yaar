@@ -29,3 +29,7 @@ export {default as ViewLoanDetailsScreen} from './ViewLoanDetailsScreen';
 export {default as VehicleHypothecationScreen} from './VehicleHypothecationScreen';
 export {default as FinanceDetailsScreen} from './FinanceDetailsScreen';
 export {default as FinanceDocumentsScreen} from './FinanceDocumentsScreen';
+export {default as ThankYouScreen} from './ThankYouScreen';
+export {default as TrackApplicationScreen} from './TrackApplicationScreen';
+export {default as CarFinanceDetails} from './CarFinanceDetailsScreen';
+export {default as TopUpFinanceDocuments} from './TopUpFinanceDocumentsScreen';

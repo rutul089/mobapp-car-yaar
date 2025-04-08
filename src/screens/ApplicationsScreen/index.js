@@ -1,16 +1,24 @@
 import React, {Component} from 'react';
+import ScreenNames from '../../constants/ScreenNames';
+import {navigate} from '../../navigation/NavigationUtils';
 import Applications_Component from './Applications_Component';
 
 class ApplicationsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.onItemPress = this.onItemPress.bind(this);
   }
+
+  onItemPress = item => {
+    navigate(ScreenNames.ViewLoanDetail);
+  };
 
   render() {
     return (
       <>
         <Applications_Component
+          onItemPress={this.onItemPress}
           dummyList={[
             {
               id: '1',

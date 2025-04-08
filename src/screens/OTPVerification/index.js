@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, Alert} from 'react-native';
-import {getScreenParam, goBack} from '../../navigation/NavigationUtils';
+import {
+  getScreenParam,
+  goBack,
+  navigateAndSimpleReset,
+} from '../../navigation/NavigationUtils';
 import OTP_Verification_Component from './OTP_Verification_Component';
+import ScreenNames from '../../constants/ScreenNames';
 const timerValue = 30;
 
 class OTPVerification extends Component {
@@ -65,7 +70,9 @@ class OTPVerification extends Component {
     });
   };
 
-  handleVerify = () => {};
+  handleVerify = () => {
+    navigateAndSimpleReset(ScreenNames.HomeTab);
+  };
 
   render() {
     const {mobileNumber, timer, isResendDisabled} = this.state;

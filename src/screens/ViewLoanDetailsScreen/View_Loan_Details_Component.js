@@ -1,10 +1,18 @@
 import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
-import {Button, SafeAreaWrapper, Spacing, Text} from '../../components';
-import theme from '../../theme';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import images from '../../assets/images';
+import {
+  FinanceCard,
+  Header,
+  LoanApplicationCardWrapper,
+  SafeAreaWrapper,
+  Spacing,
+  Text,
+} from '../../components';
+import theme from '../../theme';
 import DetailInfoCard from '../VehicleDetailScreen/DetailInfoCard';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const View_Loan_Details_Component = ({
   params,
@@ -14,45 +22,54 @@ const View_Loan_Details_Component = ({
   partnerDetail,
   onTrackLoanStatusPress,
   onBackToHomePress,
+  item,
 }) => {
   return (
-    <SafeAreaWrapper
-      barStyle="dark-content"
-      backgroundColor={theme.colors.background}
-      statusBarColor={theme.colors.background}>
-      <KeyboardAwareScrollView style={styles.wrapper}>
-        <View style={{alignItems: 'center'}}>
-          <Image
-            resizeMode="contain"
-            source={images.verifiedIcon}
-            style={styles.verifiedIcon}
-          />
-          <Text size={'h2'} hankenGroteskBold={true}>
-            {'Thank You for Trusting Us!'}
-          </Text>
-          <Spacing size="sm" />
-          <Text type={'helper-text'}>
-            {'Loan applied at - 12 Feb 2025, 10:45 AM'}
-          </Text>
-          <Spacing size="sm" />
-          <Text type={'helper-text'}>
-            Application number -{' '}
-            <Text
-              size={'small'}
-              color={theme.colors.primaryBlack}
-              hankenGroteskSemiBold={true}>
-              #849363
-            </Text>
-          </Text>
+    <SafeAreaWrapper backgroundColor={theme.colors.background}>
+      <Header title="Loan Application Details" onBackPress={() => goBack()} />
+      <ScrollView bounces={false} contentContainerStyle={styles.wrapper}>
+        <View style={styles.headerWrapper}>
+          <LoanApplicationCardWrapper
+            status="APPLIED"
+            showApplicationNumber={true}
+            applicationNumber="849363">
+            <FinanceCard
+              title={item.title}
+              interestRate={item.interestRate}
+              isEligible={false}
+              noMargin
+              isWrapper
+              showRightIcon={false}
+              showButton
+              buttonLabel="Track Loan Application"
+              badge={false}
+              footerInfo={item.footerInfo}
+              showBadge={false}
+              logo={{uri: item.image}}
+              wrapperColor={theme.colors.gray900}
+              textColor={theme.colors.white}
+              infoValueColor={theme.colors.white}
+              infoWrapperColor={'#0E0F11'}
+              onButtonPress={onTrackLoanStatusPress}
+            />
+          </LoanApplicationCardWrapper>
         </View>
-        <Spacing size="md_lg" />
-        <View style={{backgroundColor: '#00000014', height: 1}} />
-        <Spacing size="md" />
-        <DetailInfoCard
-          label={'Loan Details'}
-          data={loanDetails}
-          isSemiBold={false}
-        />
+        <View style={{paddingHorizontal: theme.sizes.padding}}>
+          <Spacing size="md" />
+          <DetailInfoCard
+            label={'Customer Details'}
+            data={customerDetail}
+            isSemiBold={false}
+          />
+          <Spacing size="md" />
+          <DetailInfoCard
+            label={'Vehicle Details'}
+            data={vehicleDetail}
+            isSemiBold={false}
+          />
+        </View>
+      </ScrollView>
+      {/* <KeyboardAwareScrollView style={styles.wrapper}>
         <Spacing size="md" />
         <DetailInfoCard
           label={'Customer Details'}
@@ -65,32 +82,14 @@ const View_Loan_Details_Component = ({
           data={vehicleDetail}
           isSemiBold={false}
         />
-        <Spacing size="md" />
-        <DetailInfoCard
-          label={'CaarYaar Partner Details'}
-          data={partnerDetail}
-          isSemiBold={false}
-        />
-        <Spacing size="xl" />
-        <Button
-          label={'Track Your Loan Status'}
-          onPress={onTrackLoanStatusPress}
-        />
-        <Spacing size="md" />
-        <Button
-          variant="link"
-          label={'Back To Home'}
-          onPress={onBackToHomePress}
-        />
-        <Spacing size="md" />
-      </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView> */}
     </SafeAreaWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    padding: theme.sizes.padding,
+    paddingBottom: theme.sizes.padding,
     backgroundColor: theme.colors.background,
     flexGrow: 1,
   },
@@ -98,6 +97,11 @@ const styles = StyleSheet.create({
     height: 95,
     width: 95,
     marginBottom: 20,
+  },
+  headerWrapper: {
+    backgroundColor: theme.colors.primaryBlack,
+    padding: theme.sizes.padding,
+    paddingTop: 12,
   },
 });
 

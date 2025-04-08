@@ -13,3 +13,7 @@ export const isValidAlphanumeric = value => {
   const regex = /^[A-Za-z0-9]+$/;
   return regex.test(value);
 };
+
+export const isValidAmount = value => {
+  return /^\d{1,15}(\.\d{1,3})?$/.test(value);
+};
