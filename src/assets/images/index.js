@@ -46,4 +46,7 @@ export default {
   successCheck: require('./successCheck.png'),
   user: require('./user.png'),
   verifiedIcon: require('./verifiedIcon.png'),
+  filter: require('./filter.png'),
+  filterFill: require('./filterFill.png'),
+  relationship: require('./relationship.png'),
 };

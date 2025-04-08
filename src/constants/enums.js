@@ -17,3 +17,11 @@ export const currentLoanOptions = Object.freeze({
   yes: 'yes',
   no: 'no',
 });
+
+export const loanType = Object.freeze({
+  purchase: 1,
+  refinance: 2,
+  topUp: 3,
+  internalBT: 4,
+  externalBT: 5,
+});

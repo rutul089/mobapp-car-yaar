@@ -9,6 +9,7 @@ const initialState = {
   isError: false,
   notificationCount: 0,
   userProfile: {},
+  selectedLoanType: null,
 };
 
 const global = (state = initialState, action) => {
@@ -55,6 +56,8 @@ const global = (state = initialState, action) => {
       return {...state, isConvLoading: true};
     case types.API_LOADING_STOP_CON:
       return {...state, isConvLoading: false};
+    case types.SELECTED_LOAN_TYPE:
+      return {...state, selectedLoanType: action.payload};
 
     default:
       return state;

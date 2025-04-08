@@ -13,20 +13,26 @@ const DetailInfoCard = ({data, label, isSemiBold}) => {
       )}
 
       <Card cardContainerStyle={styles.container}>
-        {data.map((item, index) => (
-          <View style={styles.itemContainer} key={index}>
-            <Text type={'helper-text'} size={'caption'}>
-              {item.label}
-            </Text>
-            <Text
-              hankenGroteskMedium={!isSemiBold}
-              hankenGroteskSemiBold={isSemiBold}
-              size={'small'}
-              lineHeight={'small'}>
-              {item.value}
-            </Text>
-          </View>
-        ))}
+        {data &&
+          data.map((item, index) => (
+            <View
+              style={[
+                styles.itemContainer,
+                {width: item?.full ? '100%' : '47%'},
+              ]}
+              key={index}>
+              <Text type={'helper-text'} size={'caption'}>
+                {item.label}
+              </Text>
+              <Text
+                hankenGroteskMedium={!isSemiBold}
+                hankenGroteskSemiBold={isSemiBold}
+                size={'small'}
+                lineHeight={'small'}>
+                {item.value}
+              </Text>
+            </View>
+          ))}
       </Card>
     </>
   );

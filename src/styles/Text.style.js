@@ -43,4 +43,10 @@ export const styles = StyleSheet.create({
     fontWeight: theme.typography.fontWeights.medium,
     fontSize: theme.typography.fontSizes.small,
   },
+  captionText: {
+    fontFamily: theme.typography.fonts.hankenGroteskRegular,
+    color: theme.colors.textLabel,
+    fontWeight: theme.typography.fontWeights.normal,
+    fontSize: theme.typography.fontSizes.caption,
+  },
 });

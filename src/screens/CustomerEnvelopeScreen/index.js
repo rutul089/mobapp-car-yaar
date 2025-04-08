@@ -46,6 +46,7 @@ const mapStateToProps = state => {
   return {
     isInternetConnected: state.global.isInternetConnected,
     isLoading: state.global.loading,
+    loanType: state.global.selectedLoanType,
   };
 };
 export default connect(

@@ -3,6 +3,8 @@ import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import Home_Component from './Home_Component';
 import {connect} from 'react-redux';
+import {selectedLoanType} from '../../redux/actions';
+import {loanType} from '../../constants/enums';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -34,8 +36,11 @@ class HomeScreen extends Component {
   };
 
   onRefinancePress = () => {
+    this.props.selectedLoanType(loanType.refinance);
+    navigate(ScreenNames.SearchView);
     // navigate(ScreenNames.CustomerPersonalDetails);
-    navigate(ScreenNames.CustomerEnvelope);
+    // navigate(ScreenNames.CustomerEnvelope);
+    //    loanType: state.global.selectedLoanType,
   };
 
   onTopUpPress = () => {};
@@ -62,7 +67,7 @@ class HomeScreen extends Component {
   }
 }
 
-const mapActionCreators = {};
+const mapActionCreators = {selectedLoanType};
 const mapStateToProps = state => {
   return {
     isInternetConnected: state.global.isInternetConnected,

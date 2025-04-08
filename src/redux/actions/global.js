@@ -18,3 +18,8 @@ export const userProfile = userData => ({
   type: types.USER_PROFILE,
   payload: userData,
 });
+
+export const selectedLoanType = value => ({
+  type: types.SELECTED_LOAN_TYPE,
+  payload: value,
+});

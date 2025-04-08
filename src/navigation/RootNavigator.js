@@ -38,6 +38,12 @@ import {
   CheckCIBILScreen,
   CustomerEnvelopeScreen,
   LenderSelectionScreen,
+  LoanOfferDetailScreen,
+  AddReferencesScreen,
+  ViewLoanDetailsScreen,
+  VehicleHypothecationScreen,
+  FinanceDetailsScreen,
+  FinanceDocumentsScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -295,6 +301,36 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.LenderSelection}
               component={LenderSelectionScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.LoanOfferDetail}
+              component={LoanOfferDetailScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.AddReference}
+              component={AddReferencesScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.ViewLoanDetail}
+              component={ViewLoanDetailsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.VehicleHypothecation}
+              component={VehicleHypothecationScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.FinanceDetails}
+              component={FinanceDetailsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.FinanceDocuments}
+              component={FinanceDocumentsScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

@@ -26,6 +26,12 @@ const ScreenNames = {
   CheckCIBIL: 'CheckCIBILScreen',
   CustomerEnvelope: 'CustomerEnvelopeScreen',
   LenderSelection: 'LenderSelectionScreen',
+  LoanOfferDetail: 'LoanOfferDetailScreen',
+  AddReference: 'AddReferenceScreen',
+  ViewLoanDetail: 'ViewLoanDetailsScreen',
+  VehicleHypothecation: 'VehicleHypothecationScreen',
+  FinanceDetails: 'FinanceDetailsScreen',
+  FinanceDocuments: 'FinanceDocumentsScreen',
 };
 
 export default ScreenNames;

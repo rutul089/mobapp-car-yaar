@@ -22,6 +22,8 @@ const getTextComputedStyles = type => {
     return styles.input;
   } else if (type === 'status') {
     return styles.status;
+  } else if (type === 'caption') {
+    return styles.captionText;
   } else {
     return styles.bodyText;
   }

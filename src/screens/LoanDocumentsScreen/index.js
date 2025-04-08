@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Loan_Documents_Component from './Loan_Documents_Component';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {loanType} from '../../constants/enums';
 
 class LoanDocumentsScreen extends Component {
   constructor(props) {
@@ -20,7 +21,12 @@ class LoanDocumentsScreen extends Component {
   }
 
   onNextPress = () => {
-    navigate(ScreenNames.LoanAmount);
+    const {selectedLoanType} = this.props;
+    if (selectedLoanType === loanType.refinance) {
+      return navigate(ScreenNames.FinanceDetails);
+    } else {
+      navigate(ScreenNames.LoanAmount);
+    }
   };
 
   render() {
@@ -72,6 +78,8 @@ class LoanDocumentsScreen extends Component {
 
 const mapActionCreators = {};
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  selectedLoanType: state.global.selectedLoanType,
+});
 
 export default connect(mapStateToProps, mapActionCreators)(LoanDocumentsScreen);

@@ -1,112 +1,154 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import images from '../assets/images';
+import theme from '../theme';
+import {Card, Text} from '.';
 
-const FinanceCard = () => {
-  return (
-    <TouchableOpacity style={styles.card}>
-      <View style={styles.badge}>
-        <Text style={styles.badgeText}>Lowest Interest</Text>
-      </View>
+const FinanceCard = ({
+  title,
+  interestRate,
+  tenure,
+  emi,
+  processingFee,
+  badge,
+  logo,
+  cardStyle,
+  showBadge,
+  onItemPress,
+  statusImg = images.arrow_right,
+  noMargin,
+}) => {
+  const badgeWrapperColor = () => {
+    if (badge === 1) {
+      return '#DDEDF9';
+    } else if (badge === 2) {
+      return '#EFEEFF';
+    } else if (badge === 3) {
+      return '#EDFAEB';
+    } else {
+      return '#FEF0E8';
+    }
+  };
 
+  // Handle badge text color
+  const badgeValueColor = () => {
+    if (badge === 1) {
+      return '#1D95F0';
+    } else if (badge === 2) {
+      return '#696EFF';
+    } else if (badge === 3) {
+      return '#5FC52E';
+    } else {
+      return '#F3696E';
+    }
+  };
+
+  const renderHeader = () => {
+    return (
       <View style={styles.header}>
-        <Image
-          source={images.placeholder_image} // Replace with your local asset
-          style={styles.logo}
-        />
-        <View style={{flex: 1}}>
-          <Text style={styles.name}>Fortune Finance</Text>
-          <Text style={styles.rate}>8.96%</Text>
+        <Image source={images.placeholder_image} style={styles.logo} />
+        <View style={styles.flex}>
+          <Text hankenGroteskMedium={true} size={'small'} lineHeight={'small'}>
+            {title}
+          </Text>
+          <Text
+            hankenGroteskSemiBold={true}
+            size={'small'}
+            color={theme.colors.primary}>
+            {interestRate}%
+          </Text>
         </View>
-        <Text style={styles.arrow}>›</Text>
+        <Image source={statusImg} style={styles.arrow} />
       </View>
+    );
+  };
 
+  const renderInfoBox = () => {
+    return (
       <View style={styles.footer}>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Tenure</Text>
-          <Text style={styles.value}>60 Months</Text>
+        <View style={styles.flex}>
+          <Text type={'caption'}>Tenure</Text>
+          <Text hankenGroteskSemiBold={true} size={'small'}>
+            {tenure}
+          </Text>
         </View>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>EMI</Text>
-          <Text style={styles.value}>₹11,093</Text>
+        <View style={styles.flex}>
+          <Text type={'caption'}>EMI</Text>
+          <Text hankenGroteskSemiBold={true} size={'small'}>
+            ₹{emi}
+          </Text>
         </View>
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Processing Fee</Text>
-          <Text style={styles.value}>₹1,000</Text>
+        <View style={styles.flex}>
+          <Text type={'caption'} lineHeight={'small'}>
+            Processing Fee
+          </Text>
+          <Text hankenGroteskSemiBold={true} size={'small'}>
+            ₹{processingFee}
+          </Text>
         </View>
       </View>
-    </TouchableOpacity>
+    );
+  };
+
+  return (
+    <Card
+      cardContainerStyle={[
+        styles.cardWrapper,
+        cardStyle,
+        noMargin && {marginTop: 0},
+      ]}
+      onPress={onItemPress}>
+      {renderHeader()}
+      {showBadge ? (
+        <View style={[styles.badge, {backgroundColor: badgeWrapperColor()}]}>
+          <Text
+            hankenGroteskBold={true}
+            size={'caption'}
+            color={badgeValueColor()}>
+            Lowest Interest
+          </Text>
+        </View>
+      ) : null}
+      {renderInfoBox()}
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 16,
-    // marginHorizontal: 16,
-    marginTop: 16,
-    elevation: 2,
-    position: 'relative',
+  flex: {
+    flex: 1,
   },
+  cardWrapper: {marginTop: 19, padding: 12},
   badge: {
     position: 'absolute',
-    top: -12,
+    top: -8,
     left: -12,
     backgroundColor: '#E0ECFF',
-    paddingVertical: 4,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    borderTopLeftRadius: 12,
-    borderBottomRightRadius: 12,
-  },
-  badgeText: {
-    fontSize: 12,
-    color: '#3B82F6',
-    fontWeight: '600',
+    borderRadius: 90,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   logo: {
-    width: 48,
-    height: 48,
+    width: 90,
+    height: 45,
     borderRadius: 8,
     marginRight: 12,
   },
-  name: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-  },
-  rate: {
-    fontSize: 14,
-    color: '#3B82F6',
-    marginTop: 2,
-  },
   arrow: {
-    fontSize: 20,
-    color: '#9CA3AF',
-    marginLeft: 8,
+    height: theme.sizes.icons.smd,
+    width: theme.sizes.icons.smd,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
-  },
-  infoBox: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  label: {
-    color: '#9CA3AF',
-    fontSize: 12,
-    marginBottom: 2,
-  },
-  value: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#111827',
+    marginTop: 12,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.sizes.borderRadius.md,
+    padding: theme.sizes.spacing.smd,
   },
 });
 
