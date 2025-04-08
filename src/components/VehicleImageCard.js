@@ -4,10 +4,16 @@ import {Text, Pressable, Card} from '.';
 import theme from '../theme';
 import images from '../assets/images';
 
-const VehicleImageCard = ({label, image, viewImage, onDeletePress}) => {
+const VehicleImageCard = ({
+  label,
+  image,
+  viewImage,
+  onDeletePress,
+  cardWrapper,
+}) => {
   return (
     <Card
-      style={styles.card}
+      style={[styles.card, cardWrapper]}
       padding={0}
       cardContainerStyle={{
         paddingHorizontal: 8,

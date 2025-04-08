@@ -2,6 +2,7 @@ import React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import {FinanceCard, Header, SafeAreaWrapper, Text} from '../../components';
 import theme from '../../theme';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
   const financeData = [
@@ -49,7 +50,11 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
 
   return (
     <SafeAreaWrapper>
-      <Header title="Lender Selection" subtitle="GJ 01 JR 0945" />
+      <Header
+        title="Lender Selection"
+        subtitle="GJ 01 JR 0945"
+        onBackPress={() => goBack()}
+      />
       <FlatList
         data={financeData}
         bounces={false}

@@ -12,11 +12,16 @@ import {
 import theme from '../../theme';
 import images from '../../assets/images';
 import CustomizeLoanCard from '../../components/CustomizeLoanCard';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const Loan_Offer_Detail_Component = ({params, onProceedPress}) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header title="Loan Offer Details" subtitle="GJ 01 JR 0945" />
+      <Header
+        title="Loan Offer Details"
+        subtitle="GJ 01 JR 0945"
+        onBackPress={() => goBack()}
+      />
       <ScrollView contentContainerStyle={styles.wrapper}>
         <FinanceCard
           statusImg={images.successCheck}

@@ -12,6 +12,7 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import theme from '../../theme';
 import images from '../../assets/images';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const Section = ({title, children}) => {
   return (
@@ -31,6 +32,7 @@ const Add_References_Component = ({onConfirmLoanPress}) => {
         subtitle="GJ 01 JR 0945"
         rightLabel="ABC123"
         showRightContent={true}
+        onBackPress={() => goBack()}
       />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}

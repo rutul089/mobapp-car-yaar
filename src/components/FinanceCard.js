@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import images from '../assets/images';
@@ -17,6 +18,7 @@ const FinanceCard = ({
   onItemPress,
   statusImg = images.arrow_right,
   noMargin,
+  isEligible,
 }) => {
   const badgeWrapperColor = () => {
     if (badge === 1) {
@@ -51,12 +53,38 @@ const FinanceCard = ({
           <Text hankenGroteskMedium={true} size={'small'} lineHeight={'small'}>
             {title}
           </Text>
-          <Text
-            hankenGroteskSemiBold={true}
-            size={'small'}
-            color={theme.colors.primary}>
-            {interestRate}%
-          </Text>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <Text
+              hankenGroteskSemiBold={true}
+              size={'small'}
+              color={theme.colors.primary}>
+              {interestRate}%
+            </Text>
+            {isEligible ? (
+              <View
+                style={{
+                  marginLeft: 8,
+                  flexDirection: 'row',
+                  height: 20,
+                  backgroundColor: '#5FC52E',
+                  alignItems: 'center',
+                  borderRadius: 90,
+                  paddingHorizontal: 5,
+                }}>
+                <Image
+                  source={images.checkCircle}
+                  resizeMode="contain"
+                  style={{height: 15, width: 15, marginRight: 5}}
+                />
+                <Text
+                  type={'caption'}
+                  hankenGroteskSemiBold={true}
+                  color={theme.colors.primaryBlack}>
+                  Eligible for BT
+                </Text>
+              </View>
+            ) : null}
+          </View>
         </View>
         <Image source={statusImg} style={styles.arrow} />
       </View>
