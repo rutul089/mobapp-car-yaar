@@ -49,4 +49,5 @@ export default {
   filter: require('./filter.png'),
   filterFill: require('./filterFill.png'),
   relationship: require('./relationship.png'),
+  icSearch: require('./icSearch.png'),
 };

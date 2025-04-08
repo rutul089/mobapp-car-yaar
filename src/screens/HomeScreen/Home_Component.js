@@ -4,6 +4,7 @@ import {Alert, Image, ScrollView, View} from 'react-native';
 import images from '../../assets/images';
 import {
   Card,
+  ImageHeader,
   OptionCard,
   Pressable,
   SafeAreaWrapper,
@@ -65,28 +66,8 @@ const Home_Component = ({
     <SafeAreaWrapper hideBottom>
       <View style={styles.wrapper}>
         {/* Header */}
+        <ImageHeader onRightIconPress={onNotificationPress} />
         <View style={styles.header}>
-          {/* Profile Row */}
-          <View style={styles.profileRow}>
-            <Image
-              source={{uri: 'https://i.pravatar.cc/150?img=3'}}
-              style={styles.avatar}
-            />
-            <Text
-              hankenGroteskExtraBold={true}
-              size={28}
-              lineHeight={'h2'}
-              color={theme.colors.primary}>
-              CarYaar
-            </Text>
-            <Pressable style={styles.bell} onPress={onNotificationPress}>
-              <Image
-                source={images.notificationOutline}
-                style={{height: 24, width: 24}}
-              />
-            </Pressable>
-          </View>
-          <Spacing size="lg" />
           {/* User data */}
           <View style={styles.profileRow}>
             <Text

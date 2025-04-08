@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   header: {
     backgroundColor: theme.colors.primaryBlack,
     paddingHorizontal: theme.sizes.padding,
-    paddingVertical: theme.sizes.spacing.md,
+    paddingBlock: theme.sizes.spacing.smd,
   },
   scrollSection: {
     padding: theme.sizes.padding,

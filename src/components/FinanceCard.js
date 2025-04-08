@@ -3,7 +3,7 @@ import React from 'react';
 import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import images from '../assets/images';
 import theme from '../theme';
-import {Card, Text} from '.';
+import {Button, Card, Spacing, Text} from '.';
 
 const FinanceCard = ({
   title,
@@ -14,109 +14,87 @@ const FinanceCard = ({
   badge,
   logo,
   cardStyle,
-  showBadge,
+  showBadge = false,
   onItemPress,
   statusImg = images.arrow_right,
-  noMargin,
-  isEligible,
+  noMargin = false,
+  isEligible = false,
+  footerInfo = [],
+  showRightIcon = false,
+  showButton = false,
+  buttonLabel = '',
+  onButtonPress,
 }) => {
-  const badgeWrapperColor = () => {
-    if (badge === 1) {
-      return '#DDEDF9';
-    } else if (badge === 2) {
-      return '#EFEEFF';
-    } else if (badge === 3) {
-      return '#EDFAEB';
-    } else {
-      return '#FEF0E8';
+  const getBadgeWrapperColor = () => {
+    switch (badge) {
+      case 1:
+        return '#DDEDF9';
+      case 2:
+        return '#EFEEFF';
+      case 3:
+        return '#EDFAEB';
+      default:
+        return '#FEF0E8';
     }
   };
 
-  // Handle badge text color
-  const badgeValueColor = () => {
-    if (badge === 1) {
-      return '#1D95F0';
-    } else if (badge === 2) {
-      return '#696EFF';
-    } else if (badge === 3) {
-      return '#5FC52E';
-    } else {
-      return '#F3696E';
+  const getBadgeTextColor = () => {
+    switch (badge) {
+      case 1:
+        return '#1D95F0';
+      case 2:
+        return '#696EFF';
+      case 3:
+        return '#5FC52E';
+      default:
+        return '#F3696E';
     }
   };
 
-  const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <Image source={images.placeholder_image} style={styles.logo} />
-        <View style={styles.flex}>
-          <Text hankenGroteskMedium={true} size={'small'} lineHeight={'small'}>
-            {title}
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <Image source={logo || images.placeholder_image} style={styles.logo} />
+      <View style={styles.flex}>
+        <Text hankenGroteskMedium size="small" lineHeight="small">
+          {title}
+        </Text>
+        <View style={styles.interestRow}>
+          <Text hankenGroteskSemiBold size="small" color={theme.colors.primary}>
+            {interestRate}%
           </Text>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <Text
-              hankenGroteskSemiBold={true}
-              size={'small'}
-              color={theme.colors.primary}>
-              {interestRate}%
-            </Text>
-            {isEligible ? (
-              <View
-                style={{
-                  marginLeft: 8,
-                  flexDirection: 'row',
-                  height: 20,
-                  backgroundColor: '#5FC52E',
-                  alignItems: 'center',
-                  borderRadius: 90,
-                  paddingHorizontal: 5,
-                }}>
-                <Image
-                  source={images.checkCircle}
-                  resizeMode="contain"
-                  style={{height: 15, width: 15, marginRight: 5}}
-                />
-                <Text
-                  type={'caption'}
-                  hankenGroteskSemiBold={true}
-                  color={theme.colors.primaryBlack}>
-                  Eligible for BT
-                </Text>
-              </View>
-            ) : null}
-          </View>
+          {isEligible && (
+            <View style={styles.eligibleTag}>
+              <Image
+                source={images.checkCircle}
+                resizeMode="contain"
+                style={styles.eligibleIcon}
+              />
+              <Text
+                type="caption"
+                hankenGroteskSemiBold
+                color={theme.colors.primaryBlack}>
+                Eligible for BT
+              </Text>
+            </View>
+          )}
         </View>
-        <Image source={statusImg} style={styles.arrow} />
       </View>
-    );
-  };
+      {showRightIcon && <Image source={statusImg} style={styles.arrow} />}
+    </View>
+  );
 
-  const renderInfoBox = () => {
-    return (
-      <View style={styles.footer}>
-        <View style={styles.flex}>
-          <Text type={'caption'}>Tenure</Text>
-          <Text hankenGroteskSemiBold={true} size={'small'}>
-            {tenure}
+  const renderInfoBox = () => (
+    <View style={styles.footer}>
+      {footerInfo.map((item, index) => (
+        <View style={styles.flexInfoBox} key={index}>
+          <Text type="caption">{item.label}</Text>
+          <Text hankenGroteskSemiBold size="small">
+            {item.value}
           </Text>
         </View>
-        <View style={styles.flex}>
-          <Text type={'caption'}>EMI</Text>
-          <Text hankenGroteskSemiBold={true} size={'small'}>
-            ₹{emi}
-          </Text>
-        </View>
-        <View style={styles.flex}>
-          <Text type={'caption'} lineHeight={'small'}>
-            Processing Fee
-          </Text>
-          <Text hankenGroteskSemiBold={true} size={'small'}>
-            ₹{processingFee}
-          </Text>
-        </View>
-      </View>
-    );
-  };
+      ))}
+    </View>
+  );
 
   return (
     <Card
@@ -127,17 +105,28 @@ const FinanceCard = ({
       ]}
       onPress={onItemPress}>
       {renderHeader()}
-      {showBadge ? (
-        <View style={[styles.badge, {backgroundColor: badgeWrapperColor()}]}>
-          <Text
-            hankenGroteskBold={true}
-            size={'caption'}
-            color={badgeValueColor()}>
+
+      {showBadge && (
+        <View style={[styles.badge, {backgroundColor: getBadgeWrapperColor()}]}>
+          <Text hankenGroteskBold size="caption" color={getBadgeTextColor()}>
             Lowest Interest
           </Text>
         </View>
-      ) : null}
+      )}
+
       {renderInfoBox()}
+
+      {showButton && (
+        <>
+          <Spacing size="smd" />
+          <Button
+            variant="link"
+            size="small"
+            onPress={onButtonPress}
+            label={buttonLabel}
+          />
+        </>
+      )}
     </Card>
   );
 };
@@ -146,12 +135,14 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  cardWrapper: {marginTop: 19, padding: 12},
+  cardWrapper: {
+    marginTop: 19,
+    padding: 12,
+  },
   badge: {
     position: 'absolute',
     top: -8,
     left: -12,
-    backgroundColor: '#E0ECFF',
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 90,
@@ -170,13 +161,40 @@ const styles = StyleSheet.create({
     height: theme.sizes.icons.smd,
     width: theme.sizes.icons.smd,
   },
+  interestRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  eligibleTag: {
+    marginLeft: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 20,
+    backgroundColor: '#5FC52E',
+    borderRadius: 90,
+    paddingHorizontal: 5,
+  },
+  eligibleIcon: {
+    height: 15,
+    width: 15,
+    marginRight: 5,
+  },
   footer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginTop: 12,
     backgroundColor: theme.colors.background,
     borderRadius: theme.sizes.borderRadius.md,
     padding: theme.sizes.spacing.smd,
+  },
+  flexInfoBox: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 'auto',
+    minWidth: '30%',
+    marginBottom: 12,
   },
 });
 
