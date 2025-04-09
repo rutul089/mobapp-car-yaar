@@ -1,21 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Loan_Offer_Detail_Component from './Loan_Offer_Detail_Component';
+import Lender_Details_Component from './Lender_Details_Component';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 
-class LoanOfferDetailScreen extends Component {
+class index extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onProceedPress = this.onProceedPress.bind(this);
+    this.onHoldProceedPress = this.onHoldProceedPress.bind(this);
     this.onLoanOfferPress = this.onLoanOfferPress.bind(this);
   }
 
-  componentDidMount() {}
-
-  onProceedPress = () => {
-    navigate(ScreenNames.AddReference);
+  onHoldProceedPress = () => {
+    navigate(ScreenNames.LoanOfferDetail);
   };
 
   onLoanOfferPress = () => {
@@ -25,8 +23,8 @@ class LoanOfferDetailScreen extends Component {
   render() {
     return (
       <>
-        <Loan_Offer_Detail_Component
-          onProceedPress={this.onProceedPress}
+        <Lender_Details_Component
+          onHoldProceedPress={this.onHoldProceedPress}
           onLoanOfferPress={this.onLoanOfferPress}
         />
       </>
@@ -41,7 +39,4 @@ const mapStateToProps = state => {
     isLoading: state.global.loading,
   };
 };
-export default connect(
-  mapStateToProps,
-  mapActionCreators,
-)(LoanOfferDetailScreen);
+export default connect(mapStateToProps, mapActionCreators)(index);

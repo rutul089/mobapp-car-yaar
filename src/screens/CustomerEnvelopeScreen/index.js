@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Customer_Envelop_Component from './Customer_Envelop_Component';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {loanType} from '../../constants/enums';
 
 class CustomerEnvelopeScreen extends Component {
   constructor(props) {
@@ -14,7 +15,12 @@ class CustomerEnvelopeScreen extends Component {
   componentDidMount() {}
 
   onViewLenderPress = () => {
-    navigate(ScreenNames.LenderSelection);
+    const {selectedLoanType} = this.props;
+    if (selectedLoanType === loanType.internalBT) {
+      return navigate(ScreenNames.LenderDetails);
+    } else {
+      return navigate(ScreenNames.LenderSelection);
+    }
   };
 
   render() {
@@ -46,7 +52,7 @@ const mapStateToProps = state => {
   return {
     isInternetConnected: state.global.isInternetConnected,
     isLoading: state.global.loading,
-    loanType: state.global.selectedLoanType,
+    selectedLoanType: state.global.selectedLoanType,
   };
 };
 export default connect(

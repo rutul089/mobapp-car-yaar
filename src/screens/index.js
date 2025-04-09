@@ -33,3 +33,5 @@ export {default as ThankYouScreen} from './ThankYouScreen';
 export {default as TrackApplicationScreen} from './TrackApplicationScreen';
 export {default as CarFinanceDetails} from './CarFinanceDetailsScreen';
 export {default as TopUpFinanceDocuments} from './TopUpFinanceDocumentsScreen';
+export {default as LenderDetails} from './LenderDetailsScreen';
+export {default as CustomizeLoanOffer} from './CustomizeLoanOfferScreen';

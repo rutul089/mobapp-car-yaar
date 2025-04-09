@@ -22,3 +22,5 @@ export {default as RadioGroupRow} from './RadioGroupRow';
 export {default as ImageHeader} from './ImageHeader';
 export {default as LoanApplicationCardWrapper} from './LoanApplicationCardWrapper';
 export {default as TimelineItem} from './TimelineItem';
+export {default as BankCard} from './BankCard';
+export {default as RenderInfoBox} from './RenderInfoBox';

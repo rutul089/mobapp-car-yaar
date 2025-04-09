@@ -150,11 +150,13 @@ const Home_Component = ({
                 'Internal BT',
                 images.icInternalBT,
                 styles.carTypeBox,
+                onInternalBTPress,
               )}
               {renderLoanType(
                 'External BT',
                 images.icExternalBT,
                 styles.carTypeBox,
+                onExternalBTPress,
               )}
             </View>
           </>

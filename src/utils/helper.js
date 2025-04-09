@@ -1,5 +1,5 @@
-export const formatIndianNumber = value => {
-  const [intPart, decimalPart] = value.split('.');
+export const formatIndianNumber = (value, showSign = true) => {
+  const [intPart, decimalPart] = value?.toString().split('.');
   let cleaned = intPart.replace(/[^0-9]/g, '');
 
   if (!cleaned) {
@@ -14,7 +14,8 @@ export const formatIndianNumber = value => {
   const formatted =
     otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
 
-  return decimalPart ? `${formatted}.${decimalPart}` : formatted;
+  let formatAmount = decimalPart ? `${formatted}.${decimalPart}` : formatted;
+  return showSign ? `₹${formatAmount}` : formatAmount;
 };
 
 export const formatAmount = text => {

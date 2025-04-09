@@ -36,6 +36,8 @@ const ScreenNames = {
   TrackApplication: 'TrackApplicationScreen',
   CarFinanceDetails: 'CarFinanceDetailsScreen',
   TopUpFinanceDocuments: 'TopUpFinanceDocumentsScreen',
+  LenderDetails: 'LenderDetailsScreen',
+  CustomizeLoanOffer: 'CustomizeLoanOfferScreen',
 };
 
 export default ScreenNames;

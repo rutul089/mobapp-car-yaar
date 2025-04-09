@@ -13,8 +13,13 @@ import theme from '../../theme';
 import images from '../../assets/images';
 import CustomizeLoanCard from '../../components/CustomizeLoanCard';
 import {goBack} from '../../navigation/NavigationUtils';
+import {formatIndianNumber} from '../../utils/helper';
 
-const Loan_Offer_Detail_Component = ({params, onProceedPress}) => {
+const Loan_Offer_Detail_Component = ({
+  params,
+  onProceedPress,
+  onLoanOfferPress,
+}) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
@@ -31,6 +36,13 @@ const Loan_Offer_Detail_Component = ({params, onProceedPress}) => {
           emi={'11,093'}
           processingFee={'1,000'}
           noMargin
+          showRightIcon
+          footerInfo={[
+            {label: 'Tenure', value: '60 Month'},
+            {label: 'EMI', value: formatIndianNumber('75000.12')},
+            {label: 'Processing Fee', value: formatIndianNumber(5000)},
+          ]}
+          logo={images.hdfcImg}
         />
         <Spacing size="md" />
         <CustomizeLoanCard
@@ -38,6 +50,7 @@ const Loan_Offer_Detail_Component = ({params, onProceedPress}) => {
           description={
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
           }
+          onPress={onLoanOfferPress}
         />
         <Spacing size="xl" />
         <Button label={'Proceed'} onPress={onProceedPress} />

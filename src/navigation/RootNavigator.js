@@ -48,6 +48,8 @@ import {
   TrackApplicationScreen,
   CarFinanceDetails,
   TopUpFinanceDocuments,
+  LenderDetails,
+  CustomizeLoanOffer,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -125,7 +127,6 @@ export default class RootNavigator extends Component {
       <Tab.Navigator
         initialRouteName={ScreenNames.Home}
         screenOptions={props => {
-          console.log({props});
           return {
             headerShown: false,
             tabBarShowLabel: true,
@@ -137,7 +138,8 @@ export default class RootNavigator extends Component {
               borderTopWidth: 2,
               borderTopColor: 'rgba(0, 0, 0, 0.08)',
               backgroundColor: 'white',
-              height: 60,
+              minHeight: 60,
+              maxHeight: 90,
             },
             tabBarItemStyle: {
               padding: 0,
@@ -221,7 +223,7 @@ export default class RootNavigator extends Component {
           onStateChange={this.onNavigationStateChange}>
           <Stack.Navigator
             key={'Navigator'}
-            initialRouteName={ScreenNames.Splash}
+            initialRouteName={ScreenNames.HomeTab}
             screenOptions={screenOptionsObject}>
             <Stack.Screen
               name={ScreenNames.Splash}
@@ -356,6 +358,16 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.TopUpFinanceDocuments}
               component={TopUpFinanceDocuments}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.LenderDetails}
+              component={LenderDetails}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CustomizeLoanOffer}
+              component={CustomizeLoanOffer}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

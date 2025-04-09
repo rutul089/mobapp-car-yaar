@@ -3,7 +3,7 @@ import React from 'react';
 import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import images from '../assets/images';
 import theme from '../theme';
-import {Button, Card, Spacing, Text} from '.';
+import {Button, Card, Spacing, Text, RenderInfoBox} from '.';
 
 const FinanceCard = ({
   title,
@@ -94,25 +94,6 @@ const FinanceCard = ({
     </View>
   );
 
-  const renderInfoBox = () => (
-    <View
-      style={[
-        styles.footer,
-        {backgroundColor: infoWrapperColor ?? theme.colors.background},
-      ]}>
-      {footerInfo.map((item, index) => (
-        <View style={styles.flexInfoBox} key={index}>
-          <Text type="caption" color={labelColor}>
-            {item.label}
-          </Text>
-          <Text hankenGroteskSemiBold size="small" color={infoValueColor}>
-            {item.value}
-          </Text>
-        </View>
-      ))}
-    </View>
-  );
-
   const renderErrorStatus = () => {
     return (
       <View
@@ -152,7 +133,14 @@ const FinanceCard = ({
         </View>
       )}
 
-      {renderInfoBox()}
+      <Spacing size="smd" />
+
+      <RenderInfoBox
+        labelColor={labelColor}
+        infoValueColor={infoValueColor}
+        infoWrapperColor={infoWrapperColor}
+        footerInfo={footerInfo}
+      />
 
       {showButton && (
         <>
@@ -190,7 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 90,
+    width: 100,
     height: 45,
     borderRadius: 8,
     marginRight: 12,
@@ -217,26 +205,6 @@ const styles = StyleSheet.create({
     height: 20,
     width: 15,
     marginRight: 5,
-  },
-  footer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // justifyContent: 'space-between',
-    marginTop: 12,
-    backgroundColor: theme.colors.background,
-    borderRadius: theme.sizes.borderRadius.md,
-    padding: theme.sizes.spacing.smd,
-  },
-  flexInfoBox: {
-    // flexGrow: 1,
-    // flexShrink: 1,
-    // flexBasis: 'auto',
-    width: '33%',
-    marginBottom: 12,
-    // justifyContent: 'center',
-    // alignItems: 'center',
   },
 });
 

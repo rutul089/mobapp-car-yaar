@@ -50,4 +50,7 @@ export default {
   filterFill: require('./filterFill.png'),
   relationship: require('./relationship.png'),
   icSearch: require('./icSearch.png'),
+  hdfcImg: require('./hdfcImg.png'),
+  info: require('./info.png'),
+  percentage_circle: require('./percentage_circle.png'),
 };
