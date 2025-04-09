@@ -64,4 +64,5 @@ export default {
   icon_support: require('./icon_support.png'),
   icon_users: require('./icon_users.png'),
   icon_delete: require('./icon_delete.png'),
+  eye_open: require('./eye_open.png'),
 };

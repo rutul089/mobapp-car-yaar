@@ -134,8 +134,7 @@ const Customer_Detail_Component = ({
         primaryButtonLabel={'Confirm & Verify'}
         isScrollableContent={true}
         isPrimaryButtonVisible={true}
-        onPressPrimaryButton={onPressPrimaryButton}
-        title="OTP Verification">
+        onPressPrimaryButton={onPressPrimaryButton}>
         <>
           <View style={{alignItems: 'center'}}>
             <Text

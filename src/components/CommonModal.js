@@ -85,6 +85,11 @@ const CommonModal = ({
             </Pressable>
           )}
           <View style={iModalContentStyle}>
+            {title && (
+              <Text size={'h3'} hankenGroteskExtraBold={true}>
+                {title}
+              </Text>
+            )}
             {isScrollableContent ? (
               <ScrollView>{children}</ScrollView>
             ) : (
@@ -92,11 +97,12 @@ const CommonModal = ({
             )}
             {isPrimaryButtonVisible && (
               <>
-                <Spacing size="md" />
+                <Spacing size="md_lg" />
                 <Button
                   label={primaryButtonLabel}
                   onPress={onPressPrimaryButton}
                 />
+                <Spacing size="md" />
               </>
             )}
           </View>

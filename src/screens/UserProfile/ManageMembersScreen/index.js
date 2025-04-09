@@ -39,8 +39,16 @@ class ManageMemberScreen extends Component {
           avatar: 'https://i.pravatar.cc/150?img=15',
         },
       ],
+      isVisible: false,
+      fullName: '',
+      mobileNumber: '',
     };
     this.handleDeleteMemberPress = this.handleDeleteMemberPress.bind(this);
+    this.handleAddNewMemberPress = this.handleAddNewMemberPress.bind(this);
+    this.onModalHide = this.onModalHide.bind(this);
+    this.onPressPrimaryButton = this.onPressPrimaryButton.bind(this);
+    this.onChangeFullName = this.onChangeFullName.bind(this);
+    this.onChangeMobileNumber = this.onChangeMobileNumber.bind(this);
   }
 
   componentDidMount() {}
@@ -49,12 +57,51 @@ class ManageMemberScreen extends Component {
     Alert.alert(JSON.stringify(item));
   };
 
+  handleAddNewMemberPress = () => {
+    this.setState({
+      isVisible: true,
+    });
+  };
+
+  onModalHide = () => {
+    this.setState({
+      isVisible: false,
+    });
+  };
+
+  onPressPrimaryButton = () => {
+    const {mobileNumber, fullName} = this.state;
+
+    Alert.alert(mobileNumber + ' ' + fullName);
+  };
+
+  onChangeFullName = value => {
+    this.setState({
+      fullName: value,
+    });
+  };
+
+  onChangeMobileNumber = value => {
+    this.setState({
+      mobileNumber: value,
+    });
+  };
+
   render() {
+    const {mobileNumber, fullName} = this.state;
     return (
       <>
         <Manage_Members_Component
           handleDeleteMemberPress={this.handleDeleteMemberPress}
+          handleAddNewMemberPress={this.handleAddNewMemberPress}
           memberList={this.state.memberList}
+          isVisible={this.state.isVisible}
+          onModalHide={this.onModalHide}
+          onPressPrimaryButton={this.onPressPrimaryButton}
+          mobileNumber={mobileNumber}
+          fullName={fullName}
+          onChangeFullName={this.onChangeFullName}
+          onChangeMobileNumber={this.onChangeMobileNumber}
         />
       </>
     );

@@ -3,7 +3,9 @@ import {FlatList, View, StyleSheet, Image} from 'react-native';
 import {
   Button,
   Card,
+  CommonModal,
   Header,
+  Input,
   Pressable,
   SafeAreaWrapper,
   Spacing,
@@ -17,7 +19,17 @@ const Manage_Members_Component = ({
   handleAddNewMemberPress,
   handleDeleteMemberPress,
   memberList,
+  isVisible,
+  onCloseVerifyOTP,
+  onModalHide,
+  onPressPrimaryButton,
+  fullName,
+  mobileNumber,
+  onChangeFullName,
+  onChangeMobileNumber,
 }) => {
+  const [showModal, setShowModal] = React.useState(false);
+
   const renderItem = ({item, index}) => (
     <>
       <Card cardContainerStyle={styles.cardWrapper} padding={12}>
@@ -57,6 +69,30 @@ const Manage_Members_Component = ({
           </>
         }
       />
+      <CommonModal
+        isVisible={isVisible}
+        onModalHide={onModalHide}
+        primaryButtonLabel={'Send Invite'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        onPressPrimaryButton={onPressPrimaryButton}
+        title="Add New Member">
+        <View style={{paddingVertical: 15}}>
+          <Input
+            label="Full Name"
+            value={fullName}
+            onChangeText={onChangeFullName}
+          />
+          <Spacing size="lg" />
+          <Input
+            label="Mobile Number"
+            keyboardType="phone-pad"
+            value={mobileNumber}
+            onChangeText={onChangeMobileNumber}
+            maxLength={10}
+          />
+        </View>
+      </CommonModal>
     </SafeAreaWrapper>
   );
 };
