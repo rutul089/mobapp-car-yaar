@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flexGrow: 1,
     padding: theme.sizes.padding,
+    backgroundColor: theme.colors.background,
   },
   cibilWrapper: {
     minHeight: 80,

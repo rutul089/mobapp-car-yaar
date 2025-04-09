@@ -57,4 +57,11 @@ export default {
   carHistoryIcon: require('./carHistoryIcon.png'),
   loanAmountIcon: require('./loanAmountIcon.png'),
   viewIcon: require('./viewIcon.png'),
+  edit_user: require('./edit_user.png'),
+  icon_access: require('./icon_access.png'),
+  icon_help: require('./icon_help.png'),
+  icon_logout: require('./icon_logout.png'),
+  icon_support: require('./icon_support.png'),
+  icon_users: require('./icon_users.png'),
+  icon_delete: require('./icon_delete.png'),
 };

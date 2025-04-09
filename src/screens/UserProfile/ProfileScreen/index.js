@@ -1,27 +1,41 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Profile_Component from './Profile_Component';
+import {navigate} from '../../../navigation/NavigationUtils';
+import ScreenNames from '../../../constants/ScreenNames';
+import {Alert} from 'react-native';
 
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.handleCreateNewWallet = this.handleCreateNewWallet.bind(this);
-    this.handleImportWallet = this.handleImportWallet.bind(this);
+    this.onPressRightContent = this.onPressRightContent.bind(this);
+    this.handleMenuPress = this.handleMenuPress.bind(this);
   }
 
   componentDidMount() {}
 
-  handleCreateNewWallet = () => {};
+  onPressRightContent = () => {
+    navigate(ScreenNames.EditProfile);
+  };
 
-  handleImportWallet = () => {};
+  handleMenuPress = (index, item) => {
+    if (item.screenName === ScreenNames.Logout) {
+      return this.handleLogout();
+    }
+    navigate(item.screenName);
+  };
+
+  handleLogout = () => {
+    Alert.alert('Logout');
+  };
 
   render() {
     return (
       <>
         <Profile_Component
-          button1Press={this.handleCreateNewWallet}
-          button2Press={this.handleImportWallet}
+          onPressRightContent={this.onPressRightContent}
+          handleMenuPress={this.handleMenuPress}
         />
       </>
     );

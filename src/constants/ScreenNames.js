@@ -48,6 +48,7 @@ const ScreenNames = {
   ChangePassword: 'ChangePasswordScreen',
   FAQS: 'FAQScreen',
   ContactSupport: 'ContactSupportScreen',
+  Logout: 'logout',
 };
 
 export default ScreenNames;

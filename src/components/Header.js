@@ -24,6 +24,7 @@ const Header = ({
   isRightDisabled,
   showRightContent,
   onPressRightContent,
+  rightIconName,
   ...rest
 }) => {
   let _themedColor = themedColor ?? theme.colors.white;
@@ -65,13 +66,21 @@ const Header = ({
       </View>
       {showRightContent ? (
         <Pressable style={styles.rightContainer} onPress={onPressRightContent}>
-          <Text
-            hankenGroteskMedium={true}
-            size={'small'}
-            color={rightLabelColor ?? '#F8A902'}
-            style={rightLabelStyle}>
-            {rightLabel}
-          </Text>
+          {rightIconName ? (
+            <Image
+              resizeMode="contain"
+              source={rightIconName}
+              style={styles.rightIcon}
+            />
+          ) : (
+            <Text
+              hankenGroteskMedium={true}
+              size={'small'}
+              color={rightLabelColor ?? '#F8A902'}
+              style={rightLabelStyle}>
+              {rightLabel}
+            </Text>
+          )}
         </Pressable>
       ) : null}
     </View>
@@ -103,6 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
+  rightIcon: {height: theme.sizes.icons.md, width: theme.sizes.icons.md},
 });
 
 export default Header;
