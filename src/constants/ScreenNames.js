@@ -39,6 +39,9 @@ const ScreenNames = {
   LenderDetails: 'LenderDetailsScreen',
   CustomizeLoanOffer: 'CustomizeLoanOfferScreen',
   CustomerInfo: 'CustomerInfoScreen',
+  CustomerDocuments: 'CustomerDocumentsScreen',
+  CustomerFinancialDocs: 'CustomerFinancialDocsScreen',
+  MoreOnFinancial: 'MoreOnFinancialScreen',
 };
 
 export default ScreenNames;

@@ -4,13 +4,13 @@ import {navigate} from '../../navigation/NavigationUtils';
 import Home_Component from './Home_Component';
 import {connect} from 'react-redux';
 import {selectedLoanType} from '../../redux/actions';
-import {loanType} from '../../constants/enums';
+import {loanType, vehicleType} from '../../constants/enums';
 
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCarType: '',
+      selectedCarType: vehicleType.used,
     };
     this.onSelectedCarType = this.onSelectedCarType.bind(this);
     this.onPurchasePress = this.onPurchasePress.bind(this);

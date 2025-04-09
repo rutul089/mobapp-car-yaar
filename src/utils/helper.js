@@ -50,3 +50,27 @@ export const getStatusColor = status => {
       return theme.colors.textPrimary;
   }
 };
+
+export const isLastRow = (index, data, item) => {
+  const visibleItems = data.filter(d => !d.full); // half-width items
+  const totalHalf = visibleItems.length;
+
+  const lastIndex = data.length - 1;
+
+  // Case 1: Last item
+  if (index === lastIndex) {
+    return true;
+  }
+
+  // Case 2: Last two half-width items in even row
+  if (!item?.full && data[index + 1] && !data[index + 1].full) {
+    return index === lastIndex - 1;
+  }
+
+  // Case 3: Only one half-width item at the end
+  if (!item?.full && !data[index + 1]) {
+    return true;
+  }
+
+  return false;
+};

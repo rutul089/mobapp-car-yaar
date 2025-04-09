@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import {Text, Pressable, Card} from '.';
@@ -10,6 +11,7 @@ const VehicleImageCard = ({
   viewImage,
   onDeletePress,
   cardWrapper,
+  isView,
 }) => {
   return (
     <Card
@@ -28,9 +30,11 @@ const VehicleImageCard = ({
               style={styles.image}
               defaultSource={images.placeholder_image}
             />
-            <Pressable onPress={onDeletePress} style={styles.deleteIcon}>
-              <Image source={images.icDelete} style={styles.deleteIcon} />
-            </Pressable>
+            {!isView && (
+              <Pressable onPress={onDeletePress} style={styles.deleteIcon}>
+                <Image source={images.icDelete} style={styles.deleteIcon} />
+              </Pressable>
+            )}
           </>
         ) : (
           <Image
@@ -39,6 +43,7 @@ const VehicleImageCard = ({
             style={styles.uploadImage}
           />
         )}
+        {isView && <Image source={images.viewIcon} style={styles.viewIcon} />}
       </Pressable>
     </Card>
   );
@@ -47,14 +52,16 @@ const VehicleImageCard = ({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    margin: 6,
+    // margin:6,
+    marginHorizontal: 10,
+    marginLeft: 0,
     marginBottom: 12,
   },
   imageContainer: {
     position: 'relative',
     borderRadius: 8,
     overflow: 'hidden',
-    height: 100,
+    height: 115,
     backgroundColor: '#F9F9F9',
     justifyContent: 'center',
     alignItems: 'center',
@@ -65,7 +72,7 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
     borderRadius: 8,
-    padding: 5,
+    padding: 6,
   },
   deleteIcon: {
     position: 'absolute',
@@ -75,6 +82,11 @@ const styles = StyleSheet.create({
     width: 28,
   },
   uploadImage: {width: '100%', height: '100%'},
+  viewIcon: {
+    height: 28,
+    width: 28,
+    position: 'absolute',
+  },
 });
 
 export default VehicleImageCard;

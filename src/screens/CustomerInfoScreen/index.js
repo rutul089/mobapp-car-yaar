@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Customer_Info_Component from './Customer_Info_Component';
-import {getScreenParam} from '../../navigation/NavigationUtils';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import {formatIndianNumber} from '../../utils/helper';
 import {Alert} from 'react-native';
+import ScreenNames from '../../constants/ScreenNames';
 
 class CustomerInfoScreen extends Component {
   constructor(props) {
@@ -29,7 +30,9 @@ class CustomerInfoScreen extends Component {
     );
   }
 
-  onNextPress = () => {};
+  onNextPress = () => {
+    navigate(ScreenNames.CustomerDocuments);
+  };
 
   handleEditDetailPress = () => {
     Alert.alert('handleEditDetailPress');

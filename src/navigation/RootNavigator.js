@@ -51,6 +51,9 @@ import {
   LenderDetails,
   CustomizeLoanOffer,
   CustomerInfoScreen,
+  CustomerDocumentsScreen,
+  CustomerFinancialDocsScreen,
+  MoreOnFinancialScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -374,6 +377,21 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.CustomerInfo}
               component={CustomerInfoScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CustomerDocuments}
+              component={CustomerDocumentsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CustomerFinancialDocs}
+              component={CustomerFinancialDocsScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.MoreOnFinancial}
+              component={MoreOnFinancialScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

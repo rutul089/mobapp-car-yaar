@@ -56,4 +56,5 @@ export default {
   carOwnershipIcon: require('./carOwnershipIcon.png'),
   carHistoryIcon: require('./carHistoryIcon.png'),
   loanAmountIcon: require('./loanAmountIcon.png'),
+  viewIcon: require('./viewIcon.png'),
 };
