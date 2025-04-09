@@ -50,6 +50,7 @@ import {
   TopUpFinanceDocuments,
   LenderDetails,
   CustomizeLoanOffer,
+  CustomerInfoScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -368,6 +369,11 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.CustomizeLoanOffer}
               component={CustomizeLoanOffer}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.CustomerInfo}
+              component={CustomerInfoScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

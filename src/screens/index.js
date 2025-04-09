@@ -35,3 +35,4 @@ export {default as CarFinanceDetails} from './CarFinanceDetailsScreen';
 export {default as TopUpFinanceDocuments} from './TopUpFinanceDocumentsScreen';
 export {default as LenderDetails} from './LenderDetailsScreen';
 export {default as CustomizeLoanOffer} from './CustomizeLoanOfferScreen';
+export {default as CustomerInfoScreen} from './CustomerInfoScreen';

@@ -25,6 +25,9 @@ const Home_Component = ({
   onSelectedCarType,
   onNotificationPress,
   selectedCarType,
+  handleLoanOptionPress,
+  handleLeaseOptionPress,
+  handleSubscribeOptionPress,
 }) => {
   const renderBox = (count, countColor, label) => {
     return (
@@ -66,7 +69,10 @@ const Home_Component = ({
     <SafeAreaWrapper hideBottom>
       <View style={styles.wrapper}>
         {/* Header */}
-        <ImageHeader onRightIconPress={onNotificationPress} />
+        <ImageHeader
+          onRightIconPress={onNotificationPress}
+          hideSubHeader={true}
+        />
         <View style={styles.header}>
           {/* User data */}
           <View style={styles.profileRow}>
@@ -132,36 +138,61 @@ const Home_Component = ({
               color={theme.colors.textLabel}>
               Select Car Loan Type
             </Text>
-            <View style={styles.loanTypeRow}>
-              {renderLoanType(
-                'Purchase',
-                images.icPurchase,
-                null,
-                onPurchasePress,
-              )}
-              {renderLoanType(
-                'Refinance',
-                images.icRefinance,
-                null,
-                onRefinancePress,
-              )}
-              {renderLoanType('Top Up', images.icTopUp, null, onTopUpPress)}
-            </View>
-            <View style={styles.row}>
-              {renderLoanType(
-                'Internal BT',
-                images.icInternalBT,
-                styles.carTypeBox,
-                onInternalBTPress,
-              )}
-              <Spacing direction="x" size="md" />
-              {renderLoanType(
-                'External BT',
-                images.icExternalBT,
-                styles.carTypeBox,
-                onExternalBTPress,
-              )}
-            </View>
+            {selectedCarType === vehicleType.used ? (
+              <>
+                <View style={styles.loanTypeRow}>
+                  {renderLoanType(
+                    'Purchase',
+                    images.icPurchase,
+                    null,
+                    onPurchasePress,
+                  )}
+                  {renderLoanType(
+                    'Refinance',
+                    images.icRefinance,
+                    null,
+                    onRefinancePress,
+                  )}
+                  {renderLoanType('Top Up', images.icTopUp, null, onTopUpPress)}
+                </View>
+                <View style={styles.row}>
+                  {renderLoanType(
+                    'Internal BT',
+                    images.icInternalBT,
+                    styles.carTypeBox,
+                    onInternalBTPress,
+                  )}
+                  <Spacing direction="x" size="md" />
+                  {renderLoanType(
+                    'External BT',
+                    images.icExternalBT,
+                    styles.carTypeBox,
+                    onExternalBTPress,
+                  )}
+                </View>
+              </>
+            ) : (
+              <View style={styles.loanTypeRow}>
+                {renderLoanType(
+                  'Loan',
+                  images.loanAmountIcon,
+                  null,
+                  handleLoanOptionPress,
+                )}
+                {renderLoanType(
+                  'Lease',
+                  images.carOwnershipIcon,
+                  null,
+                  handleLeaseOptionPress,
+                )}
+                {renderLoanType(
+                  'Subscribe',
+                  images.carHistoryIcon,
+                  null,
+                  handleSubscribeOptionPress,
+                )}
+              </View>
+            )}
           </>
         </ScrollView>
       </View>

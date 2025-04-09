@@ -117,7 +117,6 @@ const Text = ({
             additionalComputedStyles,
             hankenGroteskBlack &&
               theme.typography.fontStyles.hankenGroteskBlack,
-            hankenGroteskBold && theme.typography.fontStyles.hankenGroteskBold,
             hankenGroteskExtraBold &&
               theme.typography.fontStyles.hankenGroteskExtraBold,
             hankenGroteskExtraLight &&
@@ -131,6 +130,7 @@ const Text = ({
             hankenGroteskSemiBold &&
               theme.typography.fontStyles.hankenGroteskSemiBold,
             hankenGroteskThin && theme.typography.fontStyles.hankenGroteskThin,
+            hankenGroteskBold && theme.typography.fontStyles.hankenGroteskBold,
             style,
           ]}>
           {children}

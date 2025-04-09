@@ -1222,7 +1222,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-document-picker (9.3.1):
+  - react-native-document-picker (10.1.2):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1689,7 +1689,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.17.2):
+  - RNReanimated (3.17.3):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1709,10 +1709,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.17.2)
-    - RNReanimated/worklets (= 3.17.2)
+    - RNReanimated/reanimated (= 3.17.3)
+    - RNReanimated/worklets (= 3.17.3)
     - Yoga
-  - RNReanimated/reanimated (3.17.2):
+  - RNReanimated/reanimated (3.17.3):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1732,9 +1732,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.17.2)
+    - RNReanimated/reanimated/apple (= 3.17.3)
     - Yoga
-  - RNReanimated/reanimated/apple (3.17.2):
+  - RNReanimated/reanimated/apple (3.17.3):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1755,7 +1755,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.17.2):
+  - RNReanimated/worklets (3.17.3):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1775,9 +1775,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 3.17.2)
+    - RNReanimated/worklets/apple (= 3.17.3)
     - Yoga
-  - RNReanimated/worklets/apple (3.17.2):
+  - RNReanimated/worklets/apple (3.17.3):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1893,7 +1893,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - "react-native-document-picker (from `../node_modules/@react-native-documents/picker`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2015,7 +2015,7 @@ EXTERNAL SOURCES:
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-document-picker:
-    :path: "../node_modules/react-native-document-picker"
+    :path: "../node_modules/@react-native-documents/picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
@@ -2130,7 +2130,7 @@ SPEC CHECKSUMS:
   React-logger: 763728cf4eebc9c5dc9bfc3649e22295784f69f3
   React-Mapbuffer: 63278529b5cf531a7eaf8fc71244fabb062ca90c
   React-microtasksnativemodule: 8eac9377da54b41703abb23e3781b9c413acfdc8
-  react-native-document-picker: d1cd480085a41df52b858b7e1259ef1fbdfa60f1
+  react-native-document-picker: 14da156de7e4cc77c759ccbc7b2a3683ebba42c8
   react-native-image-picker: e9eb27221896f0ecb00597ba575505f09acfb184
   react-native-safe-area-context: a85e546b9b22eac1102c53d25b6bfe616fbd4bc0
   React-NativeModulesApple: 83ea61c133a66d967bbd8abbb5bf3c2cdcd5ff25
@@ -2165,7 +2165,7 @@ SPEC CHECKSUMS:
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNGestureHandler: 67e44c1acc265b47274b39d9e091e1a66030704c
   RNPermissions: ddf6ce0d8bf47207f22956d7abb2293a2cffa781
-  RNReanimated: 4b25e0dfd959f8c4e6227424138abfd30c2fcc28
+  RNReanimated: 66ffc120d1016f90b41bdb416f4df5151c33c71e
   RNScreens: def10e0cbf0d0d5b542b1b058a6b86cd1817f889
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

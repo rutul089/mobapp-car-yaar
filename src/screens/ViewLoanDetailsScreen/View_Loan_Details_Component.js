@@ -5,7 +5,7 @@ import images from '../../assets/images';
 import {
   FinanceCard,
   Header,
-  LoanApplicationCardWrapper,
+  CardWrapper,
   SafeAreaWrapper,
   Spacing,
   Text,
@@ -29,7 +29,7 @@ const View_Loan_Details_Component = ({
       <Header title="Loan Application Details" onBackPress={() => goBack()} />
       <ScrollView bounces={false} contentContainerStyle={styles.wrapper}>
         <View style={styles.headerWrapper}>
-          <LoanApplicationCardWrapper
+          <CardWrapper
             status="APPLIED"
             showApplicationNumber={true}
             applicationNumber="849363">
@@ -52,7 +52,7 @@ const View_Loan_Details_Component = ({
               infoWrapperColor={'#0E0F11'}
               onButtonPress={onTrackLoanStatusPress}
             />
-          </LoanApplicationCardWrapper>
+          </CardWrapper>
         </View>
         <View style={{paddingHorizontal: theme.sizes.padding}}>
           <Spacing size="md" />

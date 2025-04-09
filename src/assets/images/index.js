@@ -53,4 +53,7 @@ export default {
   hdfcImg: require('./hdfcImg.png'),
   info: require('./info.png'),
   percentage_circle: require('./percentage_circle.png'),
+  carOwnershipIcon: require('./carOwnershipIcon.png'),
+  carHistoryIcon: require('./carHistoryIcon.png'),
+  loanAmountIcon: require('./loanAmountIcon.png'),
 };

@@ -19,6 +19,10 @@ class HomeScreen extends Component {
     this.onInternalBTPress = this.onInternalBTPress.bind(this);
     this.onExternalBTPress = this.onExternalBTPress.bind(this);
     this.onNotificationPress = this.onNotificationPress.bind(this);
+    this.handleLoanOptionPress = this.handleLoanOptionPress.bind(this);
+    this.handleLeaseOptionPress = this.handleLeaseOptionPress.bind(this);
+    this.handleSubscribeOptionPress =
+      this.handleSubscribeOptionPress.bind(this);
   }
 
   onNotificationPress = () => {
@@ -59,6 +63,12 @@ class HomeScreen extends Component {
     navigate(ScreenNames.SearchView);
   };
 
+  handleLoanOptionPress = () => {};
+
+  handleLeaseOptionPress = () => {};
+
+  handleSubscribeOptionPress = () => {};
+
   render() {
     return (
       <>
@@ -71,6 +81,9 @@ class HomeScreen extends Component {
           onExternalBTPress={this.onExternalBTPress}
           onNotificationPress={this.onNotificationPress}
           selectedCarType={this.state.selectedCarType}
+          handleLoanOptionPress={this.handleLoanOptionPress}
+          handleLeaseOptionPress={this.handleLeaseOptionPress}
+          handleSubscribeOptionPress={this.handleSubscribeOptionPress}
         />
       </>
     );

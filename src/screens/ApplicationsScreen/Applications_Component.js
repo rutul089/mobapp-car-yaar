@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Image, View, FlatList} from 'react-native';
 import {
@@ -9,7 +8,7 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-  LoanApplicationCardWrapper,
+  CardWrapper,
 } from '../../components';
 import theme from '../../theme';
 import images from '../../assets/images';
@@ -17,7 +16,7 @@ import images from '../../assets/images';
 const Applications_Component = ({params, dummyList, onItemPress}) => {
   const renderItem = ({item}) => (
     <>
-      <LoanApplicationCardWrapper
+      <CardWrapper
         status="APPLIED"
         showApplicationNumber={true}
         applicationNumber="849363">
@@ -39,47 +38,16 @@ const Applications_Component = ({params, dummyList, onItemPress}) => {
           logo={{uri: item.image}}
           onItemPress={() => onItemPress && onItemPress(item)}
         />
-      </LoanApplicationCardWrapper>
+      </CardWrapper>
       <Spacing />
     </>
   );
   return (
     <SafeAreaWrapper hideBottom>
-      <ImageHeader />
-      <View
-        style={{
-          backgroundColor: theme.colors.primaryBlack,
-          paddingHorizontal: theme.sizes.padding,
-          paddingBottom: theme.sizes.padding,
-          paddingTop: 12,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <Text hankenGroteskExtraBold={true} color={'white'} size={'h2'}>
-            Loan Applications
-          </Text>
-          <Pressable>
-            <Image
-              resizeMode={'contain'}
-              source={images.filter}
-              style={{height: 24, width: 24}}
-            />
-          </Pressable>
-        </View>
-        <Spacing size="md" />
-        <Input
-          leftIconName={images.icSearch}
-          isLeftIconVisible
-          inputContainerBackgroundColor={'#222222'}
-          inputContainerBackgroundColorFocused={'#222222'}
-          themeColor={theme.colors.textSecondary}
-          placeholder="Search by application number..."
-        />
-      </View>
+      <ImageHeader
+        subTittle={'Loan Application'}
+        searchPlaceHolder={'Search by application id'}
+      />
       <FlatList
         data={dummyList}
         keyExtractor={(item, index) => index.toString()}

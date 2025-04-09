@@ -38,6 +38,7 @@ const ScreenNames = {
   TopUpFinanceDocuments: 'TopUpFinanceDocumentsScreen',
   LenderDetails: 'LenderDetailsScreen',
   CustomizeLoanOffer: 'CustomizeLoanOfferScreen',
+  CustomerInfo: 'CustomerInfoScreen',
 };
 
 export default ScreenNames;
