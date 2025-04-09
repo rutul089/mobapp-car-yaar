@@ -1,17 +1,17 @@
 import React from 'react';
-import {FlatList, StyleSheet, Text} from 'react-native';
+import {FlatList, Text} from 'react-native';
 import {
   Button,
+  DetailInfoCard,
   Header,
   SafeAreaWrapper,
   Spacing,
   VehicleImageCard,
 } from '../../components';
+import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {styles} from '../../styles/Vehicle.Image.style';
 import theme from '../../theme';
-import DetailInfoCard from '../VehicleDetailScreen/DetailInfoCard';
-import strings from '../../locales/strings';
 
 const Customer_Financial_Docs_Component = ({
   documentList,

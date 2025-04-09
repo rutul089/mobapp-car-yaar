@@ -4,6 +4,8 @@ import {View, StyleSheet, Image} from 'react-native';
 import theme from '../theme';
 import {Text, Pressable, Input, Spacing} from './';
 import images from '../assets/images';
+import {navigate} from '../navigation/NavigationUtils';
+import ScreenNames from '../constants/ScreenNames';
 
 const ImageHeader = ({
   leftIconName,
@@ -32,7 +34,9 @@ const ImageHeader = ({
             color={theme.colors.primary}>
             CarYaar
           </Text>
-          <Pressable style={styles.bell} onPress={onRightIconPress}>
+          <Pressable
+            style={styles.bell}
+            onPress={() => navigate(ScreenNames.Notification)}>
             <Image
               source={images.notificationOutline}
               style={{height: 24, width: 24}}

@@ -8,9 +8,9 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
+  DetailInfoCard,
 } from '../../components';
 import theme from '../../theme';
-import DetailInfoCard from '../VehicleDetailScreen/DetailInfoCard';
 
 const Customer_Envelop_Component = ({
   vehicleDetails,

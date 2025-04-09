@@ -29,7 +29,7 @@ const RenderInfoBox = ({
             rowIndex !== rows.length - 1 && {marginBottom: 10},
           ]}>
           {row.map((item, index) => (
-            <View key={index} style={styles.flexInfoBox}>
+            <View key={index} style={[styles.flexInfoBox, item?.style]}>
               <Text type="caption" color={labelColor}>
                 {item.label}
               </Text>
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   },
   flexInfoBox: {
     flex: 1,
-    // paddingHorizontal: 4,
   },
 });
 

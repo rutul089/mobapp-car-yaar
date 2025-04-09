@@ -1,17 +1,15 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {
+  CardWrapper,
+  DetailInfoCard,
   FinanceCard,
   Header,
-  CardWrapper,
   SafeAreaWrapper,
   Spacing,
-  Text,
 } from '../../components';
 import theme from '../../theme';
-import DetailInfoCard from '../VehicleDetailScreen/DetailInfoCard';
+
 import {goBack} from '../../navigation/NavigationUtils';
 
 const View_Loan_Details_Component = ({

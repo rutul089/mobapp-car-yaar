@@ -1,10 +1,15 @@
 import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
-import {Button, SafeAreaWrapper, Spacing, Text} from '../../components';
-import theme from '../../theme';
+import {Image, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import images from '../../assets/images';
-import DetailInfoCard from '../VehicleDetailScreen/DetailInfoCard';
+import {
+  Button,
+  DetailInfoCard,
+  SafeAreaWrapper,
+  Spacing,
+  Text,
+} from '../../components';
+import theme from '../../theme';
 
 const Thank_You_Component = ({
   params,

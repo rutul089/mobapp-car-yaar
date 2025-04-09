@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card, Pressable, Spacing, Text} from '../../components';
-import theme from '../../theme';
-import {isLastRow} from '../../utils/helper';
+import {Card, Pressable, Spacing, Text} from './';
+import theme from '../theme';
+import {isLastRow} from '../utils/helper';
 
 const DetailInfoCard = ({data = [], label, isSemiBold, children}) => {
   return (

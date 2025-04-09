@@ -26,3 +26,5 @@ export {default as BankCard} from './BankCard';
 export {default as RenderInfoBox} from './RenderInfoBox';
 export {default as CustomerCard} from './CustomerCard';
 export {default as GroupWrapper} from './GroupWrapper';
+export {default as VehicleCard} from './VehicleCard';
+export {default as DetailInfoCard} from './DetailInfoCard';

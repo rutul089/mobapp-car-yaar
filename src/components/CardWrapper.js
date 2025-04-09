@@ -30,18 +30,24 @@ const CardWrapper = ({
         activeOpacity={1}
         onPress={onWrapperClick}>
         <View style={styles.headerRow}>
-          <Text
-            size={'small'}
-            hankenGroteskExtraBold={true}
-            lineHeight={'body'}
-            color={statusColor}>
-            {`${applicationNumber}`}
-          </Text>
-          {showRightArrow ? (
-            <Image source={rightIconName} style={styles.iconStyle} />
-          ) : (
-            <Text hankenGroteskSemiBold={true}>{status}</Text>
-          )}
+          <View style={{flex: 1}}>
+            {applicationNumber && (
+              <Text
+                size={'small'}
+                hankenGroteskExtraBold={true}
+                lineHeight={'body'}
+                color={statusColor}>
+                {`${applicationNumber}`}
+              </Text>
+            )}
+          </View>
+          <View style={{flex: 1, alignItems: 'flex-end'}}>
+            {showRightArrow ? (
+              <Image source={rightIconName} style={styles.iconStyle} />
+            ) : (
+              <Text hankenGroteskSemiBold={true}>{status}</Text>
+            )}
+          </View>
         </View>
         {children}
       </Pressable>

@@ -4,12 +4,13 @@ import {
   Button,
   CardWrapper,
   CustomerCard,
+  DetailInfoCard,
   Header,
   SafeAreaWrapper,
   Spacing,
 } from '../../components';
 import theme from '../../theme';
-import DetailInfoCard from '../VehicleDetailScreen/DetailInfoCard';
+
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 

@@ -12,6 +12,7 @@ import {styles} from '../../styles/Vehicle.Image.style';
 import theme from '../../theme';
 import strings from '../../locales/strings';
 import ImageViewing from 'react-native-image-viewing';
+import {goBack} from '../../navigation/NavigationUtils';
 const images = [
   {uri: 'https://placekitten.com/800/600'},
   {uri: 'https://placekitten.com/800/600'},
@@ -43,6 +44,7 @@ const Customer_Documents_Component = ({
         title="Customer Documents"
         rightLabel="_#ABC123"
         showRightContent={true}
+        onBackPress={() => goBack()}
       />
       <FlatList
         data={customerList}
