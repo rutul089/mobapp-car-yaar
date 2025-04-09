@@ -42,6 +42,12 @@ const ScreenNames = {
   CustomerDocuments: 'CustomerDocumentsScreen',
   CustomerFinancialDocs: 'CustomerFinancialDocsScreen',
   MoreOnFinancial: 'MoreOnFinancialScreen',
+  UserProfile: 'ProfileScreen',
+  EditProfile: 'EditProfileScreen',
+  ManageMember: 'ManageMembersScreen',
+  ChangePassword: 'ChangePasswordScreen',
+  FAQS: 'FAQScreen',
+  ContactSupport: 'ContactSupportScreen',
 };
 
 export default ScreenNames;

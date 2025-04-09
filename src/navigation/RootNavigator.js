@@ -54,6 +54,12 @@ import {
   CustomerDocumentsScreen,
   CustomerFinancialDocsScreen,
   MoreOnFinancialScreen,
+  ProfileScreen,
+  EditProfileScreen,
+  ManageMembersScreen,
+  ChangePasswordScreen,
+  FAQScreen,
+  ContactSupportScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -392,6 +398,36 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.MoreOnFinancial}
               component={MoreOnFinancialScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.UserProfile}
+              component={ProfileScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.EditProfile}
+              component={EditProfileScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.ManageMember}
+              component={ManageMembersScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.ChangePassword}
+              component={ChangePasswordScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.FAQS}
+              component={FAQScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.ContactSupport}
+              component={ContactSupportScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

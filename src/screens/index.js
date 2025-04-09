@@ -39,3 +39,11 @@ export {default as CustomerInfoScreen} from './CustomerInfoScreen';
 export {default as CustomerDocumentsScreen} from './CustomerDocumentsScreen';
 export {default as CustomerFinancialDocsScreen} from './CustomerFinancialDocsScreen';
 export {default as MoreOnFinancialScreen} from './MoreOnFinancialScreen';
+
+//UserProfile
+export {default as ProfileScreen} from './UserProfile/ProfileScreen';
+export {default as ChangePasswordScreen} from './UserProfile/ChangePasswordScreen';
+export {default as EditProfileScreen} from './UserProfile/EditProfileScreen';
+export {default as ManageMembersScreen} from './UserProfile/ManageMembersScreen';
+export {default as FAQScreen} from './UserProfile/FAQScreen';
+export {default as ContactSupportScreen} from './UserProfile/ContactSupportScreen';

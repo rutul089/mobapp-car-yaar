@@ -21,7 +21,7 @@ const ImageHeader = ({
       <View style={styles.header}>
         {/* Profile Row */}
         <View style={styles.profileRow}>
-          <Pressable onPress={onLeftIconPress}>
+          <Pressable onPress={() => navigate(ScreenNames.UserProfile)}>
             <Image
               source={{uri: 'https://i.pravatar.cc/150?img=3'}}
               style={styles.avatar}
