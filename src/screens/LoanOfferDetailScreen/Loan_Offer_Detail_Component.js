@@ -37,6 +37,7 @@ const Loan_Offer_Detail_Component = ({
           processingFee={'1,000'}
           noMargin
           showRightIcon
+          showNewBreakDown={true}
           footerInfo={[
             {label: 'Tenure', value: '60 Month'},
             {label: 'EMI', value: formatIndianNumber('75000.12')},

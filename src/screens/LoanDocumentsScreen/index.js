@@ -26,7 +26,8 @@ class LoanDocumentsScreen extends Component {
       return navigate(ScreenNames.FinanceDetails);
     } else if (
       selectedLoanType === loanType.topUp ||
-      selectedLoanType === loanType.internalBT
+      selectedLoanType === loanType.internalBT ||
+      selectedLoanType === loanType.externalBT
     ) {
       return navigate(ScreenNames.CarFinanceDetails);
     } else {

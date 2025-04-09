@@ -31,6 +31,7 @@ const FinanceCard = ({
   infoValueColor,
   showError,
   errorStats,
+  showNewBreakDown,
 }) => {
   const getBadgeWrapperColor = () => {
     switch (badge) {
@@ -141,6 +142,29 @@ const FinanceCard = ({
         infoWrapperColor={infoWrapperColor}
         footerInfo={footerInfo}
       />
+
+      {showNewBreakDown && (
+        <>
+          <Spacing size="smd" />
+
+          <View
+            style={{
+              flex: 1,
+              borderRadius: 12,
+              minHeight: 45,
+              backgroundColor: '#6EEE8740',
+              justifyContent: 'center',
+              paddingHorizontal: 12,
+            }}>
+            <Text type="caption">
+              (1.2 × 10,00,000) - 6,00,000 - 10,000 ={' '}
+              <Text hankenGroteskBold={true} color={'#5FC52E'}>
+                5,90,000
+              </Text>
+            </Text>
+          </View>
+        </>
+      )}
 
       {showButton && (
         <>

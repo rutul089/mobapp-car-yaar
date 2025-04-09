@@ -54,7 +54,10 @@ class HomeScreen extends Component {
     navigate(ScreenNames.SearchView);
   };
 
-  onExternalBTPress = () => {};
+  onExternalBTPress = () => {
+    this.props.selectedLoanType(loanType.externalBT);
+    navigate(ScreenNames.SearchView);
+  };
 
   render() {
     return (

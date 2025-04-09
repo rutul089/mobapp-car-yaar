@@ -62,7 +62,7 @@ const Lender_Details_Component = ({onHoldProceedPress}) => {
               flex: 1,
               borderRadius: 12,
               height: 56,
-              backgroundColor: '#6EEE8780',
+              backgroundColor: '#6EEE8740',
               justifyContent: 'center',
               alignItems: 'center',
             }}>

@@ -42,7 +42,7 @@ const Finance_Documents_Component = ({
   return (
     <SafeAreaWrapper>
       <Header
-        title="Finance Details"
+        title="Finance Documents"
         subtitle="GJ 01 JR 0945"
         rightLabel="ABC123"
         showRightContent={true}

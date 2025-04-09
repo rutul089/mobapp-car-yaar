@@ -50,8 +50,7 @@ export const styles = StyleSheet.create({
   },
   carTypeBox: {
     flex: 1,
-    marginRight: 8,
-
+    // marginRight: 8,
     position: 'relative',
   },
   carTypeBoxSelected: {

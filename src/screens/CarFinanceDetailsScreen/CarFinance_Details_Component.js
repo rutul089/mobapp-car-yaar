@@ -13,6 +13,7 @@ import {
 } from '../../components';
 import theme from '../../theme';
 import strings from '../../locales/strings';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const CarFinance_Details_Component = ({
   handleSaveDraftPress,
@@ -20,7 +21,11 @@ const CarFinance_Details_Component = ({
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header title="Loan Documents" subtitle="GJ 01 JR 0945" />
+      <Header
+        title="Car Finance Details"
+        subtitle="GJ 01 JR 0945"
+        onBackPress={() => goBack()}
+      />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
         bounces={false}>

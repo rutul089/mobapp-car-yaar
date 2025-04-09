@@ -49,7 +49,7 @@ const Home_Component = ({
 
   const renderLoanType = (label, icon, style, onPress) => {
     return (
-      <Card onPress={onPress} style={style}>
+      <Card onPress={onPress} style={style} noShadow={true}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Image source={icon} style={styles.loanIcon} />
           <Image source={images.arrow_right} style={{height: 20, width: 20}} />
@@ -91,7 +91,9 @@ const Home_Component = ({
             {renderBox(2, '#696EFF', 'Vehicles\nOnboarded')}
           </View>
         </View>
-        <ScrollView contentContainerStyle={styles.scrollSection}>
+        <ScrollView
+          contentContainerStyle={styles.scrollSection}
+          showsVerticalScrollIndicator={false}>
           {/* Car Type Selector */}
           <>
             <Text size={'h4'} lineHeight={'body'} hankenGroteskSemiBold={true}>
@@ -152,6 +154,7 @@ const Home_Component = ({
                 styles.carTypeBox,
                 onInternalBTPress,
               )}
+              <Spacing direction="x" size="md" />
               {renderLoanType(
                 'External BT',
                 images.icExternalBT,
