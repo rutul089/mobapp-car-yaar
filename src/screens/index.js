@@ -47,3 +47,6 @@ export {default as EditProfileScreen} from './UserProfile/EditProfileScreen';
 export {default as ManageMembersScreen} from './UserProfile/ManageMembersScreen';
 export {default as FAQScreen} from './UserProfile/FAQScreen';
 export {default as ContactSupportScreen} from './UserProfile/ContactSupportScreen';
+export {default as NewLoanCustomerOtpScreen} from './NewVehicleFlow/NewLoanCustomerOtpScreen';
+export {default as SelectVehicleScreen} from './NewVehicleFlow/SelectVehicleScreen';
+export {default as ProformaInvoiceScreen} from './NewVehicleFlow/ProformaInvoiceScreen';

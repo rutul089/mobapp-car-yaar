@@ -60,6 +60,9 @@ import {
   ChangePasswordScreen,
   FAQScreen,
   ContactSupportScreen,
+  NewLoanCustomerOtpScreen,
+  SelectVehicleScreen,
+  ProformaInvoiceScreen,
 } from '../screens';
 import theme from '../theme';
 import {navigationRef} from './NavigationUtils';
@@ -428,6 +431,21 @@ export default class RootNavigator extends Component {
             <Stack.Screen
               name={ScreenNames.ContactSupport}
               component={ContactSupportScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.NewLoanCustomerOtp}
+              component={NewLoanCustomerOtpScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.SelectVehicle}
+              component={SelectVehicleScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={ScreenNames.ProformaInvoice}
+              component={ProformaInvoiceScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

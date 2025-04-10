@@ -63,11 +63,18 @@ class HomeScreen extends Component {
     navigate(ScreenNames.SearchView);
   };
 
-  handleLoanOptionPress = () => {};
+  handleLoanOptionPress = () => {
+    this.props.selectedLoanType(loanType.loan);
+    navigate(ScreenNames.NewLoanCustomerOtp);
+  };
 
-  handleLeaseOptionPress = () => {};
+  handleLeaseOptionPress = () => {
+    this.props.selectedLoanType(loanType.lease);
+  };
 
-  handleSubscribeOptionPress = () => {};
+  handleSubscribeOptionPress = () => {
+    this.props.selectedLoanType(loanType.subscribe);
+  };
 
   render() {
     return (

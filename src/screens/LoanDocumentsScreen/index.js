@@ -30,6 +30,8 @@ class LoanDocumentsScreen extends Component {
       selectedLoanType === loanType.externalBT
     ) {
       return navigate(ScreenNames.CarFinanceDetails);
+    } else if (selectedLoanType === loanType.loan) {
+      return navigate(ScreenNames.CheckCIBIL);
     } else {
       navigate(ScreenNames.LoanAmount);
     }

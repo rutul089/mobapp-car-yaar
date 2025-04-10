@@ -21,7 +21,7 @@ const screenHeight = Dimensions.get('window').height;
 
 const CommonModal = ({
   isVisible,
-  title = 'Modal Title',
+  title = '',
   showCloseIcon = true,
   children,
   isPrimaryButtonVisible = false,
@@ -86,9 +86,15 @@ const CommonModal = ({
           )}
           <View style={iModalContentStyle}>
             {title && (
-              <Text size={'h3'} hankenGroteskExtraBold={true}>
-                {title}
-              </Text>
+              <>
+                <Text
+                  size={'h3'}
+                  hankenGroteskExtraBold={true}
+                  textAlign={'center'}>
+                  {title}
+                </Text>
+                <Spacing size="sm" />
+              </>
             )}
             {isScrollableContent ? (
               <ScrollView>{children}</ScrollView>

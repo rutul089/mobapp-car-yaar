@@ -34,7 +34,6 @@ class CheckCIBILScreen extends Component {
   };
 
   render() {
-    console.log(this.state.isOTPSend);
     return (
       <>
         <CheckCIBIL_Component

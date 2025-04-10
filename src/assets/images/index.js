@@ -65,4 +65,8 @@ export default {
   icon_users: require('./icon_users.png'),
   icon_delete: require('./icon_delete.png'),
   eye_open: require('./eye_open.png'),
+  eye_close: require('./eye_close.png'),
+  arrow_up: require('./arrow_up.png'),
+  edit_profile: require('./edit_profile.png'),
+  ic_delete: require('./ic_delete.png'),
 };

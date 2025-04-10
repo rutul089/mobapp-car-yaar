@@ -24,4 +24,7 @@ export const loanType = Object.freeze({
   topUp: 3,
   internalBT: 4,
   externalBT: 5,
+  loan: 6,
+  lease: 7,
+  subscribe: 8,
 });

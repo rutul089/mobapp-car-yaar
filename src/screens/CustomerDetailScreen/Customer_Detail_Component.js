@@ -17,7 +17,7 @@ import {
   Spacing,
   Text,
 } from '../../components';
-import {customerCategory} from '../../constants/enums';
+import {customerCategory, loanType} from '../../constants/enums';
 import theme from '../../theme';
 
 const dropdownOptions = [
@@ -44,6 +44,9 @@ const Customer_Detail_Component = ({
   showVerifyOTP,
   onCloseVerifyOTP,
   onPressPrimaryButton,
+  selectedLoanType,
+  btnLabel,
+  onProceedPress,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState('');
@@ -103,19 +106,27 @@ const Customer_Detail_Component = ({
             // onPress={selectedVehicleCondition}
             onPress={() => setShowModal(true)}
           />
-          <Spacing size="md_lg" />
-          <Input
-            label={'Customer Mobile Number'}
-            isLeftIconVisible
-            leftIconName={images.callOutline}
-            keyboardType="phone-pad"
-            value={mobileNumber}
-            onChangeText={onChangeMobileNumber}
-            maxLength={10}
-          />
+          {selectedLoanType === loanType.loan ? null : (
+            <>
+              <Spacing size="md_lg" />
+              <Input
+                label={'Customer Mobile Number'}
+                isLeftIconVisible
+                leftIconName={images.callOutline}
+                keyboardType="phone-pad"
+                value={mobileNumber}
+                onChangeText={onChangeMobileNumber}
+                maxLength={10}
+              />
+            </>
+          )}
         </Card>
         <Spacing size="xl" />
-        <Button label={'Send OTP'} onPress={onSendOTPPress} />
+        {selectedLoanType === loanType.loan ? (
+          <Button label={'Proceed'} onPress={onProceedPress} />
+        ) : (
+          <Button label={'Send OTP'} onPress={onSendOTPPress} />
+        )}
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={showModal}
@@ -156,7 +167,6 @@ const Customer_Detail_Component = ({
           <Text type={'helper-text'} textAlign={'center'}>
             Didn't get the OTP?
             <Text
-              // onPress={resendOTP}
               type={'helper-text'}
               hankenGroteskBold={true}
               color={theme.colors.primary}>

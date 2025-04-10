@@ -90,7 +90,6 @@ export const hex2rgba = (hex: any, alpha = 1) => {
   }
 };
 
-
 export function computeSize(size: string, type?: any) {
   if (typeof size === 'number') {
     return size;

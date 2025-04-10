@@ -37,14 +37,27 @@ const RightIcon = ({
   rightIconStyle,
   rightIconName,
   rightIconColor,
+  setSecureTextInput,
+  secureTextEntry,
+  isPasswordInput,
 }) => {
   return (
     <TouchableOpacity
-      onPress={onRightIconPress}
+      onPress={() =>
+        isPasswordInput
+          ? setSecureTextInput(!secureTextEntry)
+          : onRightIconPress
+      }
       disabled={isDisabled}
       style={[styles.searchIconStyle, rightIconStyle]}>
       {rightIcon ? (
         rightIcon
+      ) : isPasswordInput ? (
+        <Image
+          source={secureTextEntry ? images.eye_open : images.eye_close}
+          resizeMode="contain"
+          style={[styles.iconStyle, {tintColor: rightIconColor}]}
+        />
       ) : (
         <Image
           source={rightIconName}
@@ -78,7 +91,6 @@ const Input = React.forwardRef((props, ref) => {
     inputStyles,
     value,
     dropdownItemStyle,
-    secureTextEntry,
     keyboardType = 'default',
     placeholder,
     onChangeText,
@@ -116,8 +128,10 @@ const Input = React.forwardRef((props, ref) => {
     placeholderTextColor,
     isAsButton = false,
     themeColor,
+    isPasswordInput,
   } = props;
   const [isFocused, setIsFocused] = React.useState(false);
+  const [secureTextEntry, setSecureTextInput] = React.useState(isPasswordInput);
 
   const iInputStyle = StyleSheet.flatten([
     styles.input,
@@ -153,7 +167,7 @@ const Input = React.forwardRef((props, ref) => {
     !disableFocusHandling && setIsFocused(focusState);
     callback();
   };
-  console.log(isDisabled || !isAsDropdown || !isAsButton);
+
   return (
     <View>
       <View
@@ -259,10 +273,13 @@ const Input = React.forwardRef((props, ref) => {
               isAsDropdown ? rightIconName ?? images.arrow_down : rightIconName
             }
             rightIconColor={rightIconColor}
+            setSecureTextInput={setSecureTextInput}
+            secureTextEntry={secureTextEntry}
+            isPasswordInput={isPasswordInput}
           />
         )}
       </TouchableOpacity>
-      {statusMsg?.length > 0 && showStatus && (
+      {statusMsg?.length > 0 && (showStatus || isError) && (
         <View style={styles.statusContainer}>
           {showStatusIcon ? (
             <Image

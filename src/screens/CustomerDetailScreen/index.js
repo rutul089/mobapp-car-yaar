@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {customerCategory} from '../../constants/enums';
+import {customerCategory, loanType} from '../../constants/enums';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Customer_Detail_Component from './Customer_Detail_Component';
 import ScreenNames from '../../constants/ScreenNames';
+import {connect} from 'react-redux';
 
 class CustomerDetailView extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class CustomerDetailView extends Component {
     this.onSendOTPPress = this.onSendOTPPress.bind(this);
     this.onCloseVerifyOTP = this.onCloseVerifyOTP.bind(this);
     this.onPressPrimaryButton = this.onPressPrimaryButton.bind(this);
+    this.onProceedPress = this.onProceedPress.bind(this);
   }
 
   onBackPress = () => {
@@ -60,8 +62,13 @@ class CustomerDetailView extends Component {
     navigate(ScreenNames.CustomerPersonalDetails);
   };
 
+  onProceedPress = () => {
+    navigate(ScreenNames.CustomerPersonalDetails);
+  };
+
   render() {
     const {mobileNumber, selectedIndividualType} = this.state;
+    const {selectedLoanType} = this.props;
     return (
       <>
         <Customer_Detail_Component
@@ -77,10 +84,20 @@ class CustomerDetailView extends Component {
           showVerifyOTP={this.state.showVerifyOTP}
           onCloseVerifyOTP={this.onCloseVerifyOTP}
           onPressPrimaryButton={this.onPressPrimaryButton}
+          selectedLoanType={selectedLoanType}
+          onProceedPress={this.onProceedPress}
         />
       </>
     );
   }
 }
 
-export default CustomerDetailView;
+const mapActionCreators = {};
+const mapStateToProps = state => {
+  return {
+    isInternetConnected: state.global.isInternetConnected,
+    isLoading: state.global.loading,
+    selectedLoanType: state.global.selectedLoanType,
+  };
+};
+export default connect(mapStateToProps, mapActionCreators)(CustomerDetailView);

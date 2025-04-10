@@ -6,23 +6,17 @@ class EditProfileScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.handleCreateNewWallet = this.handleCreateNewWallet.bind(this);
-    this.handleImportWallet = this.handleImportWallet.bind(this);
+    this.handleSavePress = this.handleSavePress.bind(this);
   }
 
   componentDidMount() {}
 
-  handleCreateNewWallet = () => {};
-
-  handleImportWallet = () => {};
+  handleSavePress = () => {};
 
   render() {
     return (
       <>
-        <Edit_Profile_Component
-          button1Press={this.handleCreateNewWallet}
-          button2Press={this.handleImportWallet}
-        />
+        <Edit_Profile_Component handleSavePress={this.handleSavePress} />
       </>
     );
   }

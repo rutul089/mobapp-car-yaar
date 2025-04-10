@@ -24,9 +24,9 @@ const Change_Password_Component = ({params}) => {
             label="Old Password"
             leftIconName={images.icon_access}
             isLeftIconVisible
-            secureTextEntry={true}
             rightIconName={images.eye_open}
             isRightIconVisible
+            isPasswordInput
           />
           <Spacing size="md" />
           <Input
@@ -36,14 +36,15 @@ const Change_Password_Component = ({params}) => {
             rightIconName={images.eye_open}
             isRightIconVisible
             onRightIconPress={() => Alert.alert('tet')}
-            secureTextEntry={true}
+            isPasswordInput
+            _secureTextEntry={true}
           />
           <Spacing size="md" />
           <Input
             label="Confirm New Password"
             leftIconName={images.icon_access}
             isLeftIconVisible
-            secureTextEntry={true}
+            isPasswordInput={true}
             rightIconName={images.eye_open}
             isRightIconVisible
           />
