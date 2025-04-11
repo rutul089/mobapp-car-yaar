@@ -29,3 +29,5 @@ export {default as GroupWrapper} from './GroupWrapper';
 export {default as VehicleCard} from './VehicleCard';
 export {default as DetailInfoCard} from './DetailInfoCard';
 export {default as CurrencySlider} from './CurrencySlider';
+export {default as NetworkStatus} from './NetworkStatus';
+export {default as NetworkStatusBanner} from './NetworkStatusBanner';

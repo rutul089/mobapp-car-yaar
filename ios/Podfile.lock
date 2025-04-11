@@ -1264,6 +1264,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-netinfo (11.4.1):
+    - React-Core
   - react-native-safe-area-context (5.3.0):
     - DoubleConversion
     - glog
@@ -1874,6 +1876,7 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - "react-native-document-picker (from `../node_modules/@react-native-documents/picker`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1996,6 +1999,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-documents/picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-NativeModulesApple:
@@ -2108,6 +2113,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 8eac9377da54b41703abb23e3781b9c413acfdc8
   react-native-document-picker: 14da156de7e4cc77c759ccbc7b2a3683ebba42c8
   react-native-image-picker: e9eb27221896f0ecb00597ba575505f09acfb184
+  react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-safe-area-context: a85e546b9b22eac1102c53d25b6bfe616fbd4bc0
   React-NativeModulesApple: 83ea61c133a66d967bbd8abbb5bf3c2cdcd5ff25
   React-perflogger: 5f8fa36a8e168fb355efe72099efe77213bc2ac6

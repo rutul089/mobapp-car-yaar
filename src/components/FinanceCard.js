@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   interestRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
+    // marginTop: 4,
   },
   eligibleTag: {
     marginLeft: 8,

@@ -69,4 +69,5 @@ export default {
   arrow_up: require('./arrow_up.png'),
   edit_profile: require('./edit_profile.png'),
   ic_delete: require('./ic_delete.png'),
+  noInternet: require('./noInternet.png'),
 };
