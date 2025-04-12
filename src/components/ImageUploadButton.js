@@ -1,8 +1,27 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  View,
+  ViewStyle,
+  ImageStyle,
+  ImageSourcePropType,
+} from 'react-native';
 import images from '../assets/images';
 import {Pressable, Text} from './';
 import theme from '../theme';
+
+type ImageUploadButtonProps = {
+  label?: string,
+  btnLabel: string,
+  onPress?: () => void,
+  handleImagePick: () => void,
+  image?: string,
+  wrapperStyle?: ViewStyle,
+  uploadBoxStyle?: ViewStyle,
+  imageStyle?: ImageStyle,
+  previewHeight?: number,
+};
 
 const ImageUploadButton = ({
   label,
@@ -11,18 +30,30 @@ const ImageUploadButton = ({
   handleImagePick,
   image,
   wrapperStyle,
-}) => {
+  uploadBoxStyle,
+  imageStyle,
+  previewHeight = 90,
+}: ImageUploadButtonProps) => {
   return (
     <View style={[styles.container, wrapperStyle]}>
-      {label && <Text type={'helper-text'}>{label}</Text>}
+      {label ? (
+        <Text type="helper-text" style={styles.label}>
+          {label}
+        </Text>
+      ) : null}
 
-      <Pressable style={styles.uploadBox} onPress={handleImagePick}>
+      <Pressable
+        style={[styles.uploadBox, uploadBoxStyle]}
+        onPress={handleImagePick}>
         {image ? (
-          <Image source={{uri: image}} style={styles.imagePreview} />
+          <Image
+            source={{uri: image}}
+            style={[styles.imagePreview, {height: previewHeight}, imageStyle]}
+          />
         ) : (
-          <View style={styles.dashedWrapper}>
+          <View style={[styles.dashedWrapper, {height: previewHeight}]}>
             <Image source={images.icUpload} style={styles.icon} />
-            <Text type={'helper-text'} size={'caption'} textAlign={'center'}>
+            <Text type="helper-text" size="caption" textAlign="center">
               {btnLabel}
             </Text>
           </View>
@@ -33,14 +64,10 @@ const ImageUploadButton = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
+  container: {},
   label: {
-    fontSize: 16,
-    fontWeight: '500',
     marginBottom: 8,
-    color: '#333',
+    color: theme.colors.textPrimary,
   },
   uploadBox: {
     borderRadius: 12,
@@ -48,28 +75,25 @@ const styles = StyleSheet.create({
     padding: 7,
     marginTop: theme.sizes.spacing.sm,
   },
-  icon: {
-    width: 28,
-    height: 28,
-    marginBottom: 8,
-  },
-
-  imagePreview: {
-    width: '100%',
-    height: 90,
-    borderRadius: 8,
-    resizeMode: 'cover',
-  },
   dashedWrapper: {
     borderWidth: 1.5,
     borderStyle: 'dashed',
     borderColor: '#5DB4F2',
     borderRadius: 12,
-    height: 90,
     backgroundColor: '#E9F4FD',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  imagePreview: {
+    width: '100%',
+    borderRadius: 8,
+    resizeMode: 'cover',
+  },
+  icon: {
+    width: 28,
+    height: 28,
+    marginBottom: 8,
+  },
 });
 
-export default ImageUploadButton;
+export default React.memo(ImageUploadButton);

@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   label: {
     flexDirection: 'row',

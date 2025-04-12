@@ -51,6 +51,7 @@ const OTP_Verification_Component = ({
             <View style={styles.container}>
               <Spacing size="md" />
               <Text
+                textAlign={'center'}
                 hankenGroteskBold={true}
                 size={typography.fontSizes.h1}
                 color={theme.colors.black}>
@@ -60,7 +61,7 @@ const OTP_Verification_Component = ({
               <Text
                 type={'helper-text'}
                 textAlign={'center'}
-                style={{width: '70%'}}>
+                style={{width: '70%', alignSelf: 'center'}}>
                 {strings.verificationNote}
                 <Text
                   type={'helper-text'}

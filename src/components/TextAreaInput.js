@@ -3,23 +3,37 @@ import {View, TextInput, StyleSheet} from 'react-native';
 import Text from './Text';
 import theme from '../theme';
 
-const AdditionalNotes = ({value, onChangeText, placeholder}) => {
+const TextAreaInput = ({
+  value,
+  onChangeText,
+  placeholder = 'Type here...',
+  label = 'label',
+  optionalText = 'optional',
+  numberOfLines = 4,
+  style,
+  ...rest
+}) => {
   return (
-    <View style={styles.container}>
-      <Text type={'label'}>
-        Additional Notes{' '}
-        <Text size={'caption'} color={'#82828299'}>
-          (Optional)
+    <View style={[styles.container, style]}>
+      {!!label && (
+        <Text type="label">
+          {label}{' '}
+          {!!optionalText && (
+            <Text size="caption" color="#82828299">
+              {optionalText}
+            </Text>
+          )}
         </Text>
-      </Text>
+      )}
       <TextInput
         style={styles.textArea}
         placeholder={placeholder}
-        multiline={true}
-        numberOfLines={4}
+        multiline
+        numberOfLines={numberOfLines}
         textAlignVertical="top"
         value={value}
         onChangeText={onChangeText}
+        {...rest}
       />
     </View>
   );
@@ -27,16 +41,6 @@ const AdditionalNotes = ({value, onChangeText, placeholder}) => {
 
 const styles = StyleSheet.create({
   container: {},
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
-  },
-  optional: {
-    fontWeight: '400',
-    color: '#888',
-  },
   textArea: {
     borderWidth: 1,
     borderColor: theme.colors.inputBorder,
@@ -54,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdditionalNotes;
+export default TextAreaInput;

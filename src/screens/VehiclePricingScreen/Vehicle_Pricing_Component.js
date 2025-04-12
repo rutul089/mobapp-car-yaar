@@ -3,7 +3,7 @@ import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import images from '../../assets/images';
 import {
-  AdditionalNotes,
+  TextAreaInput,
   Card,
   FormFooterButtons,
   Header,
@@ -12,6 +12,7 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
+  GroupWrapper,
 } from '../../components';
 import strings from '../../locales/strings';
 import theme from '../../theme';
@@ -38,9 +39,7 @@ const Vehicle_Pricing_Component = ({
           flexGrow: 1,
           padding: theme.sizes.padding,
         }}>
-        <Text>{'Vehicle Pricing'}</Text>
-        <Spacing size="smd" />
-        <Card>
+        <GroupWrapper title="Vehicle Pricing">
           <Input
             label={'Estimated Price'}
             isLeftIconVisible
@@ -71,8 +70,8 @@ const Vehicle_Pricing_Component = ({
             btnLabel={'Click to Upload Value Report PDF'}
           />
           <Spacing size="md_lg" />
-          <AdditionalNotes />
-        </Card>
+          <TextAreaInput label="Additional Notes" optionalText="(optional)" />
+        </GroupWrapper>
         <FormFooterButtons
           primaryButtonLabel={strings.btnSaveDraft}
           secondaryButtonLabel={strings.next}

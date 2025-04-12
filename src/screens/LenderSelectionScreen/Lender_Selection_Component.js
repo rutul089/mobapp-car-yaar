@@ -75,9 +75,18 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
 
   const renderItem = ({item}) => (
     <FinanceCard
-      {...item}
-      showRightIcon
+      bankName={item.title}
+      interestRate={item.interestRate}
+      showRightArrow
+      logo={item.logo}
+      showBadge={item.badge}
+      badgeLevel={item.badge}
+      footerData={item.footerInfo}
       onItemPress={() => onItemPress(item)}
+      showBreakdown
+      breakdownExpression={'(1.2 × 10,00,000) - 6,00,000 - 10,000'}
+      breakdownValue={1.2 * 1000000 - 600000 - 10000}
+      onPress={() => onItemPress(item)}
     />
   );
 

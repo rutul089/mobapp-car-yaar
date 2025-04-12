@@ -1,9 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
 import {
   Button,
-  Card,
+  GroupWrapper,
   Header,
   Input,
   OTPVerification,
@@ -11,10 +13,8 @@ import {
   Spacing,
   Text,
 } from '../../components';
-import theme from '../../theme';
 import {goBack} from '../../navigation/NavigationUtils';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+import theme from '../../theme';
 
 const CheckCIBIL_Component = ({
   params,
@@ -37,9 +37,7 @@ const CheckCIBIL_Component = ({
       <KeyboardAwareScrollView
         bounces={false}
         contentContainerStyle={styles.wrapper}>
-        <Text>Verify Your CIBIL Score</Text>
-        <Spacing size="smd" />
-        <Card>
+        <GroupWrapper title="Verify Your CIBIL Score">
           <Input
             isLeftIconVisible
             leftIconName={images.callOutline}
@@ -72,7 +70,7 @@ const CheckCIBIL_Component = ({
               </Text>
             </>
           ) : null}
-        </Card>
+        </GroupWrapper>
         <Spacing size="xl" />
         {!isOtpSend ? (
           <Button label={'Send OTP'} onPress={onSendOTP} />

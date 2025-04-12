@@ -42,7 +42,6 @@ const Vehicle_Detail_Component = ({
               buttonLabel={'Refresh Details'}
             />
           </CardWrapper>
-          {/* <VehicleCard /> */}
         </View>
         <View
           bounces={false}

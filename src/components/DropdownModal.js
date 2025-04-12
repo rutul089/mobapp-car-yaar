@@ -1,12 +1,16 @@
 import React from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Modal from 'react-native-modal';
+import {Pressable, RadioButton, Spacing, Text} from '.';
 import images from '../assets/images';
-import Button from './Button/Button';
-import Pressable from './Pressable';
-import RadioButton from './RadioButton';
-import Spacing from './Spacing';
-import Text from './Text';
+import theme from '../theme';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -18,29 +22,53 @@ const DropdownModal = ({
   onClose,
   title = 'Select Option',
   showCloseIcon = true,
-  buttonPress,
-  buttonLabel,
-  showPrimaryButton,
-  primaryButtonText,
-  primaryButtonPress,
-  customItem,
+  customItemRenderer,
+  showPrimaryButton = false,
+  primaryButtonText = '',
+  onPrimaryPress,
+  showSecondaryButton = false,
+  secondaryButtonText = '',
+  onSecondaryPress,
+  containerStyle,
+  keyValue = 'label',
+}: {
+  visible: boolean,
+  data: {label: string, [key: string]: any}[],
+  selectedItem: string,
+  onSelect: (item: any, index: number) => void,
+  onClose: () => void,
+  title?: string,
+  showCloseIcon?: boolean,
+  customItemRenderer?: (item: any, index: number) => React.ReactNode,
+  showPrimaryButton?: boolean,
+  primaryButtonText?: string,
+  onPrimaryPress?: () => void,
+  showSecondaryButton?: boolean,
+  secondaryButtonText?: string,
+  keyValue?: string,
+  onSecondaryPress?: () => void,
+  containerStyle?: ViewStyle,
 }) => {
-  const renderItem = ({item, index}) =>
-    customItem ? (
-      customItem
-    ) : (
+  const renderItem = ({item, index}) => {
+    const label = item[keyValue];
+    if (customItemRenderer) {
+      return customItemRenderer(item, index);
+    }
+
+    return (
       <>
         <RadioButton
-          label={item.label}
-          selected={selectedItem === item?.label}
+          label={label}
+          selected={selectedItem === label}
           onPress={() => {
             onSelect(item, index);
             onClose();
           }}
+          marginBottom={theme.sizes.spacing.md}
         />
-        <Spacing size="sm" />
       </>
     );
+  };
 
   return (
     <Modal
@@ -48,8 +76,8 @@ const DropdownModal = ({
       onBackdropPress={onClose}
       onBackButtonPress={onClose}
       style={styles.modal}>
-      <View style={styles.container}>
-        {showCloseIcon ? (
+      <View style={[styles.container, containerStyle]}>
+        {showCloseIcon && (
           <Pressable onPress={onClose} style={styles.closeBtn}>
             <Image
               source={images.closeRound}
@@ -57,25 +85,40 @@ const DropdownModal = ({
               resizeMode="contain"
             />
           </Pressable>
-        ) : null}
+        )}
 
-        <Text hankenGroteskBold={true} size={'h3'}>
+        <Text hankenGroteskBold size="h3">
           {title}
         </Text>
+
         <Spacing size="md" />
+
         <FlatList
           data={data}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          //   contentContainerStyle={{paddingVertical: 200}}
-          style={{maxHeight: screenHeight * 0.4}}
+          keyExtractor={(_, index) => index}
+          style={styles.list}
         />
-        {showPrimaryButton ? (
+
+        {showPrimaryButton && (
           <>
             <Spacing size="md" />
-            <Button label={primaryButtonText} onPress={primaryButtonPress} />
+            <Button label={primaryButtonText} onPress={onPrimaryPress} />
+            <Spacing size="md" />
           </>
-        ) : null}
+        )}
+
+        {showSecondaryButton && (
+          <>
+            <Spacing size="md" />
+            <Button
+              label={secondaryButtonText}
+              variant="link"
+              onPress={onSecondaryPress}
+            />
+            <Spacing size="md" />
+          </>
+        )}
       </View>
     </Modal>
   );
@@ -91,14 +134,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 24,
-    // paddingTop: 20,
-    // paddingBottom: 30,
     paddingHorizontal: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '60%',
   },
-
   closeBtn: {
     position: 'absolute',
     top: -50,
@@ -106,10 +146,11 @@ const styles = StyleSheet.create({
     padding: 6,
     zIndex: 1,
   },
-  item: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+  closeImg: {
+    height: 32,
+    width: 32,
   },
-  closeImg: {height: 32, width: 32},
+  list: {
+    maxHeight: screenHeight * 0.4,
+  },
 });

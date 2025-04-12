@@ -115,17 +115,17 @@ const Home_Component = ({
             </Text>
             <View style={styles.row}>
               <OptionCard
-                type={vehicleType.used}
+                value={vehicleType.used}
                 label={'Used Vehicle'}
                 icon={images.usedVehicle}
-                onSelectedOption={onSelectedCarType}
+                onSelect={onSelectedCarType}
                 isSelected={selectedCarType === vehicleType.used}
               />
               <OptionCard
-                type={vehicleType.new}
+                value={vehicleType.new}
                 label={'New Vehicle'}
                 icon={images.newVehicle}
-                onSelectedOption={onSelectedCarType}
+                onSelect={onSelectedCarType}
                 isSelected={selectedCarType === vehicleType.new}
               />
             </View>

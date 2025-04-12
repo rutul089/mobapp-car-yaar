@@ -8,7 +8,7 @@ export {default as Input} from './Input/Input';
 export {default as Button} from './Button/Button';
 export {default as VehicleImageCard} from './VehicleImageCard';
 export {default as ImageUploadButton} from './ImageUploadButton';
-export {default as AdditionalNotes} from './AdditionalNotes';
+export {default as TextAreaInput} from './TextAreaInput';
 export {default as RadioButton} from './RadioButton';
 export {default as OptionCard} from './OptionCard';
 export {default as DropdownModal} from './DropdownModal';

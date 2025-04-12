@@ -1,14 +1,29 @@
 import React from 'react';
+import {View} from 'react-native';
+import {Card, Spacing, Text} from './';
 
-import {Text, Spacing, Card} from './';
-
-const GroupWrapper = ({title, children}) => {
+/**
+ * @param {{
+ *   title: string,
+ *   children: React.ReactNode,
+ *   containerStyle?: object,
+ *   titleStyle?: object,
+ *   cardStyle?: object,
+ * }} props
+ */
+const GroupWrapper = ({
+  title,
+  children,
+  containerStyle,
+  titleStyle,
+  cardStyle,
+}) => {
   return (
-    <>
-      <Text>{title}</Text>
+    <View style={containerStyle}>
+      <Text style={[titleStyle]}>{title}</Text>
       <Spacing size="smd" />
-      <Card>{children}</Card>
-    </>
+      <Card style={cardStyle}>{children}</Card>
+    </View>
   );
 };
 

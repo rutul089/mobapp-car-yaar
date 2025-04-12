@@ -1,25 +1,25 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import images from '../../assets/images';
 import {
   Button,
   FinanceCard,
   Header,
-  Pressable,
   SafeAreaWrapper,
   Spacing,
-  Text,
 } from '../../components';
-import theme from '../../theme';
-import images from '../../assets/images';
 import CustomizeLoanCard from '../../components/CustomizeLoanCard';
 import {goBack} from '../../navigation/NavigationUtils';
+import theme from '../../theme';
 import {formatIndianNumber} from '../../utils/helper';
 
 const Loan_Offer_Detail_Component = ({
   params,
   onProceedPress,
   onLoanOfferPress,
+  loanDetail,
 }) => {
+  console.log({loanDetail123: loanDetail});
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
@@ -29,20 +29,20 @@ const Loan_Offer_Detail_Component = ({
       />
       <ScrollView contentContainerStyle={styles.wrapper}>
         <FinanceCard
-          statusImg={images.successCheck}
-          title={'HDFC Bank'}
-          interestRate={'8.96'}
-          tenure={'60 Months'}
-          emi={'11,093'}
-          processingFee={'1,000'}
+          // statusImg={images.successCheck}
+          bankName={loanDetail.title}
+          interestRate={loanDetail.interestRate}
           noMargin
-          showRightIcon
-          showNewBreakDown={true}
-          footerInfo={[
+          showRightArrow
+          // rightIcon={images.successCheck}
+          showBreakdown
+          footerData={[
             {label: 'Tenure', value: '60 Month'},
             {label: 'EMI', value: formatIndianNumber('75000.12')},
             {label: 'Processing Fee', value: formatIndianNumber(5000)},
           ]}
+          breakdownExpression={'(1.2 x 10,00,000) - 6,00,000 - 10,000 ='}
+          breakdownValue={'5,90,000'}
           logo={images.hdfcImg}
         />
         <Spacing size="md" />

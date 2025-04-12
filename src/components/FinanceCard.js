@@ -1,80 +1,71 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+import {Button, Card, RenderInfoBox, Spacing, Text} from '.';
 import images from '../assets/images';
 import theme from '../theme';
-import {Button, Card, Spacing, Text, RenderInfoBox} from '.';
 
 const FinanceCard = ({
-  title,
+  bankName,
   interestRate,
   tenure,
   emi,
   processingFee,
-  badge,
-  logo,
+  badgeLevel,
+  logo = images.placeholder_image,
   cardStyle,
   showBadge = false,
-  onItemPress,
-  statusImg = images.arrow_right,
-  noMargin = false,
-  isEligible = false,
-  footerInfo = [],
-  showRightIcon = false,
-  showButton = false,
-  buttonLabel = '',
-  onButtonPress,
-  wrapperColor,
+  onPress,
+  rightIcon = images.arrow_right,
+  hideTopMargin = false,
+  isEligibleForBT = false,
+  footerData = [],
+  showRightArrow = false,
+  showCTAButton = false, //Call To Action Button
+  ctaLabel = '',
+  onCTAPress,
+  wrapperColor = theme.colors.white,
   infoWrapperColor,
   textColor,
   labelColor,
   infoValueColor,
-  showError,
-  errorStats,
-  showNewBreakDown,
+  showError = false,
+  errorMessage,
+  showBreakdown = false,
+  breakdownExpression,
+  breakdownValue,
 }) => {
-  const getBadgeWrapperColor = () => {
-    switch (badge) {
+  const getBadgeColors = level => {
+    switch (level) {
       case 1:
-        return '#DDEDF9';
+        return {bg: '#DDEDF9', text: '#1D95F0'};
       case 2:
-        return '#EFEEFF';
+        return {bg: '#EFEEFF', text: '#696EFF'};
       case 3:
-        return '#EDFAEB';
+        return {bg: '#EDFAEB', text: '#5FC52E'};
       default:
-        return '#FEF0E8';
+        return {bg: '#FEF0E8', text: '#F3696E'};
     }
   };
 
-  const getBadgeTextColor = () => {
-    switch (badge) {
-      case 1:
-        return '#1D95F0';
-      case 2:
-        return '#696EFF';
-      case 3:
-        return '#5FC52E';
-      default:
-        return '#F3696E';
-    }
-  };
+  const {bg: badgeBg, text: badgeText} = getBadgeColors(badgeLevel);
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Image source={logo || images.placeholder_image} style={styles.logo} />
+      <Image source={logo} style={styles.logo} />
       <View style={styles.flex}>
         <Text
           hankenGroteskMedium
           size="small"
           lineHeight="small"
           color={textColor}>
-          {title}
+          {bankName}
         </Text>
         <View style={styles.interestRow}>
           <Text hankenGroteskSemiBold size="small" color={theme.colors.primary}>
             {interestRate}%
           </Text>
-          {isEligible && (
+          {isEligibleForBT && (
             <View style={styles.eligibleTag}>
               <Image
                 source={images.checkCircle}
@@ -91,44 +82,35 @@ const FinanceCard = ({
           )}
         </View>
       </View>
-      {showRightIcon && <Image source={statusImg} style={styles.arrow} />}
+      {showRightArrow && <Image source={rightIcon} style={styles.arrow} />}
     </View>
   );
 
-  const renderErrorStatus = () => {
-    return (
-      <View
-        style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
-        <Image
-          source={images.infoStatus}
-          style={{height: 20, width: 20, marginRight: 8}}
-        />
-        <Text
-          size={'small'}
-          hankenGroteskSemiBold={true}
-          color={theme.colors.error}>
-          {errorStats}
-        </Text>
-      </View>
-    );
-  };
+  const renderErrorMessage = () => (
+    <View style={styles.errorWrapper}>
+      <Image source={images.infoStatus} style={styles.errorIcon} />
+      <Text size="small" hankenGroteskSemiBold color={theme.colors.error}>
+        {errorMessage}
+      </Text>
+    </View>
+  );
 
   return (
     <Card
       cardContainerStyle={[
         styles.cardWrapper,
         cardStyle,
-        {backgroundColor: wrapperColor ?? theme.colors.white},
-        noMargin && {marginTop: 0},
+        {backgroundColor: wrapperColor},
+        hideTopMargin && {marginTop: 0},
       ]}
-      onPress={onItemPress}>
-      {showError && renderErrorStatus()}
+      onPress={onPress}>
+      {showError && renderErrorMessage()}
 
       {renderHeader()}
 
       {showBadge && (
-        <View style={[styles.badge, {backgroundColor: getBadgeWrapperColor()}]}>
-          <Text hankenGroteskBold size="caption" color={getBadgeTextColor()}>
+        <View style={[styles.badge, {backgroundColor: badgeBg}]}>
+          <Text hankenGroteskBold size="caption" color={badgeText}>
             Lowest Interest
           </Text>
         </View>
@@ -136,44 +118,37 @@ const FinanceCard = ({
 
       <Spacing size="smd" />
 
-      <RenderInfoBox
-        labelColor={labelColor}
-        infoValueColor={infoValueColor}
-        infoWrapperColor={infoWrapperColor}
-        footerInfo={footerInfo}
-      />
+      {footerData && (
+        <RenderInfoBox
+          labelColor={labelColor}
+          infoValueColor={infoValueColor}
+          infoWrapperColor={infoWrapperColor}
+          footerInfo={footerData}
+        />
+      )}
 
-      {showNewBreakDown && (
+      {showBreakdown && (
         <>
           <Spacing size="smd" />
-
-          <View
-            style={{
-              flex: 1,
-              borderRadius: 12,
-              minHeight: 45,
-              backgroundColor: '#6EEE8740',
-              justifyContent: 'center',
-              paddingHorizontal: 12,
-            }}>
-            <Text type="caption">
-              (1.2 × 10,00,000) - 6,00,000 - 10,000 ={' '}
-              <Text hankenGroteskBold={true} color={'#5FC52E'}>
-                5,90,000
+          <View style={styles.breakdownBox}>
+            <Text type="caption" lineHeight={16}>
+              {breakdownExpression} ={' '}
+              <Text hankenGroteskBold color="#5FC52E" lineHeight={20}>
+                {breakdownValue}
               </Text>
             </Text>
           </View>
         </>
       )}
 
-      {showButton && (
+      {showCTAButton && (
         <>
           <Spacing size="smd" />
           <Button
             variant="link"
             size="small"
-            onPress={onButtonPress}
-            label={buttonLabel}
+            onPress={onCTAPress}
+            label={ctaLabel}
           />
         </>
       )}
@@ -214,7 +189,6 @@ const styles = StyleSheet.create({
   interestRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    // marginTop: 4,
   },
   eligibleTag: {
     marginLeft: 8,
@@ -229,6 +203,25 @@ const styles = StyleSheet.create({
     height: 20,
     width: 15,
     marginRight: 5,
+  },
+  errorWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  errorIcon: {
+    height: 20,
+    width: 20,
+    marginRight: 8,
+  },
+  breakdownBox: {
+    flex: 1,
+    borderRadius: 12,
+    minHeight: 45,
+    backgroundColor: '#6EEE8740',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
   },
 });
 

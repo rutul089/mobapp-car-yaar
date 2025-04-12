@@ -5,6 +5,7 @@ import images from '../../assets/images';
 import {
   Card,
   FormFooterButtons,
+  GroupWrapper,
   Header,
   ImageUploadButton,
   Input,
@@ -46,9 +47,7 @@ const Vehicle_Odometer_Component = ({
           flex: 1,
           padding: theme.sizes.padding,
         }}>
-        <Text>{strings.vehicleOdometerReading}</Text>
-        <Spacing size="smd" />
-        <Card>
+        <GroupWrapper title={strings.vehicleOdometerReading}>
           <ImageUploadButton
             label={strings.uploadOdometerReadingImage}
             btnLabel={strings.clickToCaptureOrUploadImage}
@@ -76,7 +75,7 @@ const Vehicle_Odometer_Component = ({
             // onPress={selectedVehicleCondition}
             onPress={() => setShowModal(true)}
           />
-        </Card>
+        </GroupWrapper>
         <FormFooterButtons
           primaryButtonLabel={strings.btnSaveDraft}
           secondaryButtonLabel={strings.next}

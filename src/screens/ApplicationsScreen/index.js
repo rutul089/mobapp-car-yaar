@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import Applications_Component from './Applications_Component';
+import {formatIndianNumber} from '../../utils/helper';
 
 class ApplicationsScreen extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class ApplicationsScreen extends Component {
   }
 
   onItemPress = item => {
-    navigate(ScreenNames.ViewLoanDetail);
+    console.log({item});
+    navigate(ScreenNames.ViewLoanDetail, {params: item});
   };
 
   render() {
@@ -21,43 +23,64 @@ class ApplicationsScreen extends Component {
           onItemPress={this.onItemPress}
           dummyList={[
             {
-              id: '1',
-              title: 'Bajaj Finserv',
-              interestRate: 10.25,
+              id: '#1023',
+              title: 'HDFC Bank',
+              interestRate: 10.2,
               isEligible: true,
               badge: 1,
-              image: 'https://i.pravatar.cc/150?img=3',
+              image: 'https://i.pravatar.cc/150?img=1',
               footerInfo: [
-                {label: 'Tenure', value: '24M'},
-                {label: 'EMI', value: '₹5,450'},
-                {label: 'Processing Fee', value: '₹750'},
+                {label: 'EMI', value: formatIndianNumber(41000)},
+                {label: 'Tenure', value: '48 Months'},
+                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
               ],
+              status: 'Draft',
+              type: 1,
             },
             {
-              id: '2',
-              title: 'HDFC Bank',
-              image: 'https://i.pravatar.cc/150?img=3',
-              interestRate: 11.5,
+              id: '#2047',
+              title: 'Axis Bank',
+              interestRate: 9.5,
               isEligible: false,
               badge: 2,
+              image: 'https://i.pravatar.cc/150?img=2',
               footerInfo: [
-                {label: 'Tenure', value: '12M'},
-                {label: 'EMI', value: '₹6,300'},
-                {label: 'Processing Fee', value: '₹500'},
+                {label: 'EMI', value: formatIndianNumber(39000)},
+                {label: 'Tenure', value: '24 Months'},
+                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
               ],
+              status: 'lender approved',
+              type: 3,
             },
             {
-              id: '3',
+              id: '#3561',
+              title: 'SBI',
+              interestRate: 11.0,
+              isEligible: true,
+              badge: 5,
+              image: 'https://img.icons8.com/ios-filled/100/bank.png',
+              footerInfo: [
+                {label: 'EMI', value: formatIndianNumber(39000)},
+                {label: 'Tenure', value: '60 Months'},
+                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
+              ],
+              status: 'Applied',
+              type: 2,
+            },
+            {
+              id: '#4892',
               title: 'ICICI',
               interestRate: 9.8,
               isEligible: true,
               badge: 3,
               image: 'https://i.pravatar.cc/150?img=3',
               footerInfo: [
-                {label: 'Tenure', value: '36M'},
-                {label: 'EMI', value: '₹4,200'},
-                {label: 'Processing Fee', value: '₹600'},
+                {label: 'EMI', value: formatIndianNumber(39000)},
+                {label: 'Tenure', value: '36 Months'},
+                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
               ],
+              status: 'on hold',
+              type: 4,
             },
           ]}
         />

@@ -1,35 +1,59 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 import Text from './Text';
 import RadioBlock from './RadioBlock';
 
+export type RadioOption = {
+  label: string,
+  value: string | number,
+};
+
+type RenderItemProps = {
+  item: RadioOption,
+  isSelected: boolean,
+  onPress: () => void,
+};
+
+type RadioGroupRowProps = {
+  label?: string,
+  options: RadioOption[],
+  selectedValue: string | number,
+  onChange: (value: string | number) => void,
+  renderItem?: (props: RenderItemProps) => React.ReactNode,
+  containerStyle?: ViewStyle,
+};
+
 const RadioGroupRow = ({
   label,
-  options = [],
+  options,
   selectedValue,
   onChange,
   renderItem,
   containerStyle,
-}) => {
+}: RadioGroupRowProps) => {
   return (
     <View style={containerStyle}>
-      {label && <Text type="label">{label}</Text>}
+      {label ? <Text type="label">{label}</Text> : null}
       <View style={styles.row}>
-        {options.map(item => {
-          const isSelected = selectedValue === item.value;
-          const onPress = () => onChange(item.value);
+        {options.map(option => {
+          const isSelected = selectedValue === option.value;
+          const handlePress = () => onChange(option.value);
 
-          if (renderItem) {
-            return renderItem({item, isSelected, onPress});
-          }
-
-          return (
+          return renderItem ? (
+            <React.Fragment key={option.value.toString()}>
+              {renderItem({
+                item: option,
+                isSelected,
+                onPress: handlePress,
+              })}
+            </React.Fragment>
+          ) : (
             <RadioBlock
-              key={item.value}
-              label={item.label}
+              key={option.value.toString()}
+              label={option.label}
               isSelected={isSelected}
+              onPress={handlePress}
               wrapperStyle={styles.flex}
-              onPress={onPress}
             />
           );
         })}
@@ -50,20 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RadioGroupRow;
-
-{
-  /* <RadioGroupRow
-  label="Select answer"
-  options={answerOption}
-  selectedValue={state.selectedAnswer}
-  onChange={onSelectAnswer}
-  renderItem={({item, isSelected, onPress}) => (
-    <CustomRadioCard
-      title={item.label}
-      selected={isSelected}
-      onPress={onPress}
-    />
-  )}
-/> */
-}
+export default React.memo(RadioGroupRow);

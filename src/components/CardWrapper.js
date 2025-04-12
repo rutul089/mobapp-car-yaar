@@ -1,51 +1,51 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {Pressable, Text} from '.';
 import LinearGradient from 'react-native-linear-gradient';
+import {Pressable, Text} from '.';
 import theme from '../theme';
 import images from '../assets/images';
 
 const CardWrapper = ({
+  leftText,
+  showLeftText = true,
   status,
-  applicationNumber,
-  showApplicationNumber = true,
   children,
   gradientColors = ['#E8E8E8', '#E8E8E8'],
-  locations = [1, 1],
-  statusColor = 'rgba(0, 0, 0, 0.36)',
-  showRightArrow,
-  rightIconName = images.arrow_right,
-  onWrapperClick,
+  gradientStops = [1, 1],
+  statusTextColor = 'rgba(0, 0, 0, 0.36)',
+  showTrailingIcon = false,
+  trailingIconSource = images.arrow_right,
+  onPress,
 }) => {
   return (
     <LinearGradient
       colors={gradientColors}
       start={{x: 0, y: 0}}
       end={{x: 1, y: 1}}
-      locations={locations}
-      style={{borderRadius: theme.sizes.borderRadius.card}}>
-      <Pressable
-        style={{padding: 5}}
-        activeOpacity={1}
-        onPress={onWrapperClick}>
+      locations={gradientStops}
+      style={styles.gradientContainer}>
+      <Pressable style={styles.wrapper} activeOpacity={1} onPress={onPress}>
         <View style={styles.headerRow}>
-          <View style={{flex: 1}}>
-            {applicationNumber && (
+          <View style={styles.flex}>
+            {showLeftText && leftText && (
               <Text
-                size={'small'}
-                hankenGroteskExtraBold={true}
-                lineHeight={'body'}
-                color={statusColor}>
-                {`${applicationNumber}`}
+                size="small"
+                hankenGroteskExtraBold
+                lineHeight="body"
+                color={statusTextColor}>
+                {leftText}
               </Text>
             )}
           </View>
-          <View style={{flex: 1, alignItems: 'flex-end'}}>
-            {showRightArrow ? (
-              <Image source={rightIconName} style={styles.iconStyle} />
+          <View style={[styles.flex, styles.alignEnd]}>
+            {showTrailingIcon ? (
+              <Image source={trailingIconSource} style={styles.iconStyle} />
             ) : (
-              <Text hankenGroteskSemiBold={true}>{status}</Text>
+              status && (
+                <Text hankenGroteskSemiBold size="small">
+                  {status}
+                </Text>
+              )
             )}
           </View>
         </View>
@@ -56,6 +56,9 @@ const CardWrapper = ({
 };
 
 const styles = StyleSheet.create({
+  gradientContainer: {
+    borderRadius: theme.sizes.borderRadius.card,
+  },
   wrapper: {
     padding: 5,
   },
@@ -70,6 +73,12 @@ const styles = StyleSheet.create({
     height: theme.sizes.icons.smd,
     width: theme.sizes.icons.smd,
   },
+  flex: {
+    flex: 1,
+  },
+  alignEnd: {
+    alignItems: 'flex-end',
+  },
 });
 
-export default CardWrapper;
+export default React.memo(CardWrapper);

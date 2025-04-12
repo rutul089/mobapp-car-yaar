@@ -1,6 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View, ViewStyle, TextStyle} from 'react-native';
 import {Pressable, Text} from '.';
 import theme from '../theme';
 import images from '../assets/images';
@@ -14,24 +13,46 @@ const Header = ({
   titleStyle = {},
   subtitleStyle = {},
   rightLabelStyle = {},
-  backIcon = '←',
-  backIconStyle = {},
   themedColor,
   iconColor,
-  backgroundColor,
-  hideBorder,
   rightLabelColor,
-  isRightDisabled,
-  showRightContent,
+  backgroundColor,
+  hideBorder = false,
+  isRightDisabled = false,
+  showRightContent = false,
   onPressRightContent,
   rightIconName,
-  ...rest
+}: {
+  title?: string,
+  subtitle?: string,
+  rightLabel?: string,
+  onBackPress?: () => void,
+  containerStyle?: ViewStyle,
+  titleStyle?: TextStyle,
+  subtitleStyle?: TextStyle,
+  rightLabelStyle?: TextStyle,
+  themedColor?: string,
+  iconColor?: string,
+  rightLabelColor?: string,
+  backgroundColor?: string,
+  hideBorder?: boolean,
+  isRightDisabled?: boolean,
+  showRightContent?: boolean,
+  onPressRightContent?: () => void,
+  rightIconName?: any, // You can use ImageSourcePropType if you're strict
 }) => {
-  let _themedColor = themedColor ?? theme.colors.white;
+  const _themedColor = themedColor ?? theme.colors.white;
   const _iconColor = iconColor ?? theme.colors.textLabel;
+  const _containerStyle = [
+    styles.container,
+    containerStyle,
+    backgroundColor && {backgroundColor},
+    {height: subtitle ? 72 : 64},
+    hideBorder && {borderBottomWidth: 0},
+  ];
+
   return (
-    <View
-      style={[styles.container, containerStyle, {height: subtitle ? 72 : 64}]}>
+    <View style={_containerStyle}>
       <View style={styles.leftContainer}>
         <Pressable onPress={onBackPress} style={styles.backIconContainer}>
           <Image
@@ -46,17 +67,17 @@ const Header = ({
 
         <View style={styles.titleBlock}>
           <Text
-            hankenGroteskExtraBold={true}
+            hankenGroteskExtraBold
             color={_themedColor}
-            size={'h3'}
+            size="h3"
             numberOfLines={1}
             style={titleStyle}>
             {title}
           </Text>
           {subtitle ? (
             <Text
-              size={'small'}
-              hankenGroteskSemiBold={true}
+              size="small"
+              hankenGroteskSemiBold
               color={theme.colors.textLabel}
               style={subtitleStyle}>
               {subtitle}
@@ -64,8 +85,12 @@ const Header = ({
           ) : null}
         </View>
       </View>
-      {showRightContent ? (
-        <Pressable style={styles.rightContainer} onPress={onPressRightContent}>
+
+      {showRightContent && (
+        <Pressable
+          style={styles.rightContainer}
+          onPress={onPressRightContent}
+          disabled={isRightDisabled}>
           {rightIconName ? (
             <Image
               resizeMode="contain"
@@ -74,15 +99,15 @@ const Header = ({
             />
           ) : (
             <Text
-              hankenGroteskMedium={true}
-              size={'small'}
+              hankenGroteskMedium
+              size="small"
               color={rightLabelColor ?? '#F8A902'}
               style={rightLabelStyle}>
               {rightLabel}
             </Text>
           )}
         </Pressable>
-      ) : null}
+      )}
     </View>
   );
 };
@@ -94,6 +119,8 @@ const styles = StyleSheet.create({
     paddingVertical: theme.sizes.spacing.smd,
     flexDirection: 'row',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.borderLight,
   },
   leftContainer: {
     flexDirection: 'row',
@@ -112,7 +139,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
-  rightIcon: {height: theme.sizes.icons.md, width: theme.sizes.icons.md},
+  rightIcon: {
+    height: theme.sizes.icons.md,
+    width: theme.sizes.icons.md,
+  },
 });
 
 export default Header;

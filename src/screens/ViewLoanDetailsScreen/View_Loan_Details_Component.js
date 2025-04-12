@@ -11,6 +11,7 @@ import {
 import theme from '../../theme';
 
 import {goBack} from '../../navigation/NavigationUtils';
+import {getGradientColorsLoan} from '../../utils/helper';
 
 const View_Loan_Details_Component = ({
   params,
@@ -21,6 +22,7 @@ const View_Loan_Details_Component = ({
   onTrackLoanStatusPress,
   onBackToHomePress,
   item,
+  loanDetail,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -28,27 +30,26 @@ const View_Loan_Details_Component = ({
       <ScrollView bounces={false} contentContainerStyle={styles.wrapper}>
         <View style={styles.headerWrapper}>
           <CardWrapper
-            status="APPLIED"
+            status={loanDetail?.status?.toUpperCase()}
             showApplicationNumber={true}
-            applicationNumber="849363">
+            showLeftText
+            gradientColors={getGradientColorsLoan(loanDetail.type)}
+            leftText={loanDetail?.id}>
             <FinanceCard
-              title={item.title}
-              interestRate={item.interestRate}
-              isEligible={false}
-              noMargin
-              isWrapper
-              showRightIcon={false}
-              showButton
-              buttonLabel="Track Loan Application"
-              badge={false}
-              footerInfo={item.footerInfo}
-              showBadge={false}
-              logo={{uri: item.image}}
+              bankName={loanDetail.title}
+              interestRate={loanDetail.interestRate}
+              hideTopMargin
+              showCTAButton
+              ctaLabel="Track Loan Application"
+              footerData={item.footerInfo}
+              logo={{uri: loanDetail.image}}
               wrapperColor={theme.colors.gray900}
               textColor={theme.colors.white}
               infoValueColor={theme.colors.white}
               infoWrapperColor={'#0E0F11'}
-              onButtonPress={onTrackLoanStatusPress}
+              onCTAPress={onTrackLoanStatusPress}
+              showError={loanDetail.type === 4} // 4 is type of hold
+              errorStats={'Extra documents required'}
             />
           </CardWrapper>
         </View>

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import View_Loan_Details_Component from './View_Loan_Details_Component';
 import {
+  getScreenParam,
   navigate,
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
@@ -10,13 +11,26 @@ import ScreenNames from '../../constants/ScreenNames';
 class ViewLoanDetailsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loanDetail: {},
+    };
     this.onBackToHomePress = this.onBackToHomePress.bind(this);
     this.onTrackLoanStatusPress = this.onTrackLoanStatusPress.bind(this);
     this.onTackLoanApplication = this.onTackLoanApplication.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    let route = this.props.route;
+    let loanDetail = getScreenParam(route, 'params');
+    this.setState(
+      {
+        loanDetail,
+      },
+      () => {
+        console.log({loanDetail: this.state.loanDetail});
+      },
+    );
+  }
 
   onBackToHomePress = () => {
     navigateAndSimpleReset(ScreenNames.HomeTab);
@@ -32,6 +46,7 @@ class ViewLoanDetailsScreen extends Component {
     return (
       <>
         <View_Loan_Details_Component
+          loanDetail={this.state.loanDetail}
           customerDetail={[
             {label: 'Customer Name', value: 'Aayushman Nayak'},
             {label: 'Customer ID', value: '#968040'},

@@ -14,7 +14,8 @@ class LenderSelection extends Component {
   componentDidMount() {}
 
   onItemPress = item => {
-    navigate(ScreenNames.LoanOfferDetail);
+    console.log({item});
+    navigate(ScreenNames.LoanOfferDetail, {params: item});
   };
 
   render() {

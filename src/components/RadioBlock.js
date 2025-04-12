@@ -1,22 +1,49 @@
 import React from 'react';
-import {Image, StyleSheet} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  ViewStyle,
+  ImageStyle,
+  StyleProp,
+} from 'react-native';
 import {Pressable, Text} from '.';
 import images from '../assets/images';
 import theme from '../theme';
 
-const RadioBlock = ({label, isSelected, onPress, wrapperStyle}) => {
+type RadioBlockProps = {
+  label: string,
+  isSelected?: boolean,
+  onPress: () => void,
+  wrapperStyle?: StyleProp<ViewStyle>,
+  iconStyle?: StyleProp<ImageStyle>,
+  selectedIcon?: any,
+  unselectedIcon?: any,
+  textProps?: React.ComponentProps<typeof Text>,
+};
+
+const RadioBlock = ({
+  label,
+  isSelected = false,
+  onPress,
+  wrapperStyle,
+  iconStyle,
+  selectedIcon = images.radio_selected,
+  unselectedIcon = images.radio_unselected,
+  textProps,
+}: RadioBlockProps) => {
   return (
     <Pressable
       style={[styles.block, isSelected && styles.blockSelected, wrapperStyle]}
       onPress={onPress}>
       <Image
-        source={isSelected ? images.radio_selected : images.radio_unselected}
-        style={styles.radioIcon}
+        source={isSelected ? selectedIcon : unselectedIcon}
+        style={[styles.radioIcon, iconStyle]}
       />
       <Text
-        size={'small'}
+        size="small"
         hankenGroteskMedium={isSelected}
-        color={isSelected ? theme.colors.black : theme.colors.textSecondary}>
+        color={isSelected ? theme.colors.black : theme.colors.textSecondary}
+        {...textProps}>
         {label}
       </Text>
     </Pressable>
@@ -36,21 +63,12 @@ const styles = StyleSheet.create({
   },
   blockSelected: {
     borderColor: theme.colors.primary,
-    // backgroundColor: '#fff',
   },
   radioIcon: {
     width: 20,
     height: 20,
     marginRight: 8,
   },
-  label: {
-    color: '#777',
-    fontSize: 16,
-  },
-  labelSelected: {
-    color: '#000',
-    fontWeight: '600',
-  },
 });
 
-export default RadioBlock;
+export default React.memo(RadioBlock);

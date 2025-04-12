@@ -1,28 +1,17 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {
-  Header,
-  SafeAreaWrapper,
-  Card,
-  Text,
-  Spacing,
-  Input,
-  Button,
-} from '../../components';
+import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import theme from '../../theme';
 import images from '../../assets/images';
+import {
+  Button,
+  GroupWrapper,
+  Header,
+  Input,
+  SafeAreaWrapper,
+  Spacing,
+} from '../../components';
 import {goBack} from '../../navigation/NavigationUtils';
-
-const Section = ({title, children}) => {
-  return (
-    <View>
-      <Text>{title}</Text>
-      <Spacing size="smd" />
-      <Card>{children}</Card>
-    </View>
-  );
-};
+import theme from '../../theme';
 
 const Add_References_Component = ({onConfirmLoanPress}) => {
   return (
@@ -37,7 +26,7 @@ const Add_References_Component = ({onConfirmLoanPress}) => {
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
         bounces={false}>
-        <Section title={'Home Verification'}>
+        <GroupWrapper title={'Home Verification'}>
           <Input
             placeholder=""
             isLeftIconVisible
@@ -80,9 +69,9 @@ const Add_References_Component = ({onConfirmLoanPress}) => {
             label={'Pincode'}
             rightLabel={'Jodhpur'}
           />
-        </Section>
+        </GroupWrapper>
         <Spacing size="md" />
-        <Section title={'Office Verification'}>
+        <GroupWrapper title={'Office Verification'}>
           <Input
             placeholder=""
             isLeftIconVisible
@@ -125,7 +114,7 @@ const Add_References_Component = ({onConfirmLoanPress}) => {
             label={'Pincode'}
             rightLabel={'Jodhpur'}
           />
-        </Section>
+        </GroupWrapper>
         <Spacing size="xl" />
         <Button
           label={'Confirm & Apply for Loan'}

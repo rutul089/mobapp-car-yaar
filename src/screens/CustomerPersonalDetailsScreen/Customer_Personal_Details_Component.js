@@ -1,35 +1,22 @@
 import React, {useRef} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
 import {
-  Card,
+  DropdownModal,
+  FormFooterButtons,
+  GroupWrapper,
   Header,
   ImageUploadButton,
   Input,
-  RadioBlock,
+  RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
-  DropdownModal,
-  Button,
-  FormFooterButtons,
-  RadioGroupRow,
 } from '../../components';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import theme from '../../theme';
-import images from '../../assets/images';
-import {gender} from '../../constants/enums';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
-
-const Section = ({title, children}) => {
-  return (
-    <View>
-      <Text>{title}</Text>
-      <Spacing size="smd" />
-      <Card>{children}</Card>
-    </View>
-  );
-};
+import theme from '../../theme';
 
 const Customer_Personal_Details_Component = ({
   selectedGender,
@@ -210,7 +197,7 @@ const Customer_Personal_Details_Component = ({
         bounces={false}
         contentContainerStyle={styles.wrapper}>
         {/* Personal Details */}
-        <Section title={'Personal Details'}>
+        <GroupWrapper title={'Personal Details'}>
           <ImageUploadButton
             label={'Applicant Photo'}
             btnLabel={'Click to Upload Photo'}
@@ -361,10 +348,10 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             onSubmitEditing={() => focusNext('monthlyIncome')}
           />
-        </Section>
+        </GroupWrapper>
         {/* Professional Details */}
         <Spacing size="lg" />
-        <Section title={'Professional Details'}>
+        <GroupWrapper title={'Professional Details'}>
           <Input
             placeholder="Select Occupation"
             isLeftIconVisible
@@ -399,10 +386,10 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             onSubmitEditing={() => focusNext('accountNumber')}
           />
-        </Section>
+        </GroupWrapper>
         {/* Bank Details */}
         <Spacing size="lg" />
-        <Section title={'Bank Details'}>
+        <GroupWrapper title={'Bank Details'}>
           <Input
             placeholder="Select Bank Option"
             isLeftIconVisible
@@ -478,7 +465,7 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeMonthlyBankBalance}
             isError
           />
-        </Section>
+        </GroupWrapper>
         <FormFooterButtons
           primaryButtonLabel={strings.btnSaveDraft}
           secondaryButtonLabel={strings.next}

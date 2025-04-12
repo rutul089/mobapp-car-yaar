@@ -1,40 +1,75 @@
 import React from 'react';
+import {
+  Image,
+  StyleSheet,
+  View,
+  ViewStyle,
+  ImageStyle,
+  TextStyle,
+  ImageSourcePropType,
+} from 'react-native';
 import {Pressable, Text} from './';
-import {Image, View, StyleSheet} from 'react-native';
 import images from '../assets/images';
 import theme from '../theme';
 
+type OptionCardProps = {
+  value: string,
+  label: string,
+  icon: ImageSourcePropType,
+  isSelected?: boolean,
+  onSelect?: (value: string) => void,
+  backgroundColor?: string,
+  selectedBackgroundColor?: string,
+  containerStyle?: ViewStyle,
+  iconStyle?: ImageStyle,
+  labelStyle?: TextStyle,
+  showCheckIcon?: boolean,
+  textProps?: React.ComponentProps<typeof Text>,
+};
+
 const OptionCard = ({
-  type,
+  value,
   label,
   icon,
+  isSelected = false,
+  onSelect,
   backgroundColor = '#FFF',
   selectedBackgroundColor = '#E0F2FE',
-  onSelectedOption,
-  isSelected,
-}) => {
+  containerStyle,
+  iconStyle,
+  labelStyle,
+  showCheckIcon = true,
+  textProps,
+}: OptionCardProps) => {
+  const handlePress = () => {
+    onSelect?.(value);
+  };
+
+  const cardDynamicStyle = {
+    backgroundColor: isSelected ? selectedBackgroundColor : backgroundColor,
+    borderColor: isSelected ? theme.colors.primary : backgroundColor,
+    borderWidth: isSelected ? 2 : 1,
+  };
+
   return (
     <Pressable
-      onPress={() => {
-        onSelectedOption && onSelectedOption(type);
-      }}
-      style={[
-        styles.carTypeBox,
-        isSelected && styles.carTypeBoxSelected,
-        {
-          backgroundColor: isSelected
-            ? selectedBackgroundColor
-            : backgroundColor,
-        },
-      ]}>
-      <Image source={icon} style={styles.carTypeIcon} />
-      <Text hankenGroteskBold={isSelected}>{label}</Text>
-      {isSelected && (
+      onPress={handlePress}
+      style={[styles.card, cardDynamicStyle, containerStyle]}>
+      <Image source={icon} style={[styles.icon, iconStyle]} />
+      <Text
+        hankenGroteskBold={isSelected}
+        style={labelStyle}
+        color={theme.colors.textPrimary}
+        {...textProps}>
+        {label}
+      </Text>
+
+      {isSelected && showCheckIcon && (
         <View style={styles.checkIcon}>
           <Image
-            resizeMode="contain"
             source={images.checkCircle}
-            style={styles.circleCheck}
+            style={styles.checkImage}
+            resizeMode="contain"
           />
         </View>
       )}
@@ -43,23 +78,16 @@ const OptionCard = ({
 };
 
 const styles = StyleSheet.create({
-  carTypeBox: {
+  card: {
     flex: 1,
-    backgroundColor: '#fff',
     padding: theme.sizes.spacing.md,
     borderRadius: theme.sizes.borderRadius.card,
     marginRight: 8,
-    // alignItems: 'center',
     borderWidth: 1,
     borderColor: '#fff',
     position: 'relative',
   },
-  carTypeBoxSelected: {
-    backgroundColor: '#E0F2FE',
-    borderColor: '#007BFF',
-    borderWidth: 2,
-  },
-  carTypeIcon: {
+  icon: {
     width: theme.sizes.icons.lg,
     height: theme.sizes.icons.lg,
     marginBottom: 8,
@@ -68,14 +96,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#007BFF',
+    backgroundColor: theme.colors.primary,
     width: theme.sizes.icons.smd,
     height: theme.sizes.icons.smd,
     borderRadius: theme.sizes.borderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  circleCheck: {height: theme.sizes.icons.md, width: theme.sizes.icons.md},
+  checkImage: {
+    width: theme.sizes.icons.md,
+    height: theme.sizes.icons.md,
+  },
 });
 
-export default OptionCard;
+export default React.memo(OptionCard);

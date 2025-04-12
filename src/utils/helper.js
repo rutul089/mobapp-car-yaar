@@ -74,3 +74,18 @@ export const isLastRow = (index, data, item) => {
 
   return false;
 };
+
+export const getGradientColorsLoan = status => {
+  switch (status) {
+    case 1:
+      return ['#E8E8E8', '#E8E8E8'];
+    case 2:
+      return ['#F8A902', '#F3696E'];
+    case 3:
+      return ['#6EEE87', '#5FC52E'];
+    case 4:
+      return ['#FF5B5E', '#B60003'];
+    default:
+      return ['#E8E8E8', '#E8E8E8'];
+  }
+};

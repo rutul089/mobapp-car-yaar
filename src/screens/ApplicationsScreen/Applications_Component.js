@@ -1,45 +1,39 @@
 import React from 'react';
-import {Image, View, FlatList} from 'react-native';
+import {FlatList} from 'react-native';
 import {
+  CardWrapper,
   FinanceCard,
   ImageHeader,
-  Input,
-  Pressable,
   SafeAreaWrapper,
   Spacing,
-  Text,
-  CardWrapper,
 } from '../../components';
 import theme from '../../theme';
-import images from '../../assets/images';
+import {getGradientColorsLoan} from '../../utils/helper';
 
 const Applications_Component = ({params, dummyList, onItemPress}) => {
   const renderItem = ({item}) => (
     <>
       <CardWrapper
-        status="APPLIED"
+        status={item?.status?.toUpperCase()}
         showApplicationNumber={true}
-        applicationNumber="849363">
+        showLeftText
+        gradientColors={getGradientColorsLoan(item.type)}
+        leftText={item?.id}>
         <FinanceCard
-          title={item.title}
+          bankName={item.title}
           interestRate={item.interestRate}
-          isEligible={false}
-          tenure="60 Months"
-          emi="11,093"
-          processingFee="1,000"
-          noMargin
-          isWrapper
-          showRightIcon={true}
-          showButton
-          buttonLabel="Track Loan Application"
-          badge={false}
-          footerInfo={item.footerInfo}
+          hideTopMargin
+          showRightArrow
+          ctaLabel="Track Loan Application"
+          onCTAPress={() => {}}
+          footerData={item.footerInfo}
           showBadge={false}
           logo={{uri: item.image}}
-          onItemPress={() => onItemPress && onItemPress(item)}
+          showCTAButton
+          onPress={() => onItemPress && onItemPress(item)}
         />
       </CardWrapper>
-      <Spacing />
+      <Spacing size="md" />
     </>
   );
   return (

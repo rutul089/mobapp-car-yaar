@@ -9,6 +9,7 @@ import {
   Card,
   CommonModal,
   DropdownModal,
+  GroupWrapper,
   Header,
   Input,
   OptionCard,
@@ -69,9 +70,7 @@ const Customer_Detail_Component = ({
           flexGrow: 1,
           padding: theme.sizes.padding,
         }}>
-        <Text>{'Basic Details'}</Text>
-        <Spacing size="smd" />
-        <Card>
+        <GroupWrapper title="Basic Details">
           <Text type={'label'}>Select Customer Category</Text>
           <View
             style={{
@@ -83,16 +82,16 @@ const Customer_Detail_Component = ({
               label={'Individual'}
               backgroundColor={theme.colors.background}
               icon={images.userCircle}
-              type={customerCategory.individual}
-              onSelectedOption={onSelectedOption}
+              value={customerCategory.individual}
+              onSelect={onSelectedOption}
               isSelected={selectedOption === customerCategory.individual}
             />
             <OptionCard
               label={'Corporate'}
               backgroundColor={theme.colors.background}
               icon={images.corporate}
-              type={customerCategory.corporate}
-              onSelectedOption={onSelectedOption}
+              value={customerCategory.corporate}
+              onSelect={onSelectedOption}
               isSelected={selectedOption === customerCategory.corporate}
             />
           </View>
@@ -121,7 +120,7 @@ const Customer_Detail_Component = ({
               />
             </>
           )}
-        </Card>
+        </GroupWrapper>
         <Spacing size="xl" />
         {selectedLoanType === loanType.loan ? (
           <Button label={'Proceed'} onPress={onProceedPress} />
@@ -146,43 +145,6 @@ const Customer_Detail_Component = ({
         onPressPrimaryButton={onPressPrimaryButton}
         mobileNumber="+91-9876543210"
       />
-      {/* <CommonModal
-        title={'OTP Verification'}
-        isVisible={showVerifyOTP}
-        onModalHide={onCloseVerifyOTP}
-        primaryButtonLabel={'Confirm & Verify'}
-        isScrollableContent={true}
-        isPrimaryButtonVisible={true}
-        onPressPrimaryButton={onPressPrimaryButton}>
-        <>
-          <View style={{alignItems: 'center'}}>
-            <Text
-              type={'helper-text'}
-              textAlign={'center'}
-              style={{width: '70%'}}>
-              Enter the 4 Digit Code you received in your mobile{' '}
-              <Text
-                type={'helper-text'}
-                hankenGroteskBold={true}
-                color={theme.colors.primary}>
-                {'mobileNumber'}
-              </Text>
-            </Text>
-          </View>
-          <Spacing size={'md_lg'} />
-          <OTPVerification />
-          <Spacing size={'md_lg'} />
-          <Text type={'helper-text'} textAlign={'center'}>
-            Didn't get the OTP?
-            <Text
-              type={'helper-text'}
-              hankenGroteskBold={true}
-              color={theme.colors.primary}>
-              {false ? ` Resend in ${0}s` : ' Resend'}
-            </Text>
-          </Text>
-        </>
-      </CommonModal> */}
     </SafeAreaWrapper>
   );
 };

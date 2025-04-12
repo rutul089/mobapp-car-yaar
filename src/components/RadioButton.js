@@ -1,30 +1,65 @@
 import React from 'react';
-import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  Image,
+  ImageStyle,
+  StyleSheet,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import images from '../assets/images';
-import Text from './Text';
 import theme from '../theme';
+import Text from './Text';
 
-const RadioButton = ({label, selected, onPress, marginBottom}) => {
+type RadioButtonProps = {
+  label: string,
+  selected?: boolean,
+  onPress: () => void,
+  containerStyle?: ViewStyle,
+  iconStyle?: ImageStyle,
+  labelStyle?: TextStyle,
+  selectedIcon?: any,
+  unselectedIcon?: any,
+  marginBottom?: number,
+};
+
+const RadioButton = ({
+  label,
+  selected = false,
+  onPress,
+  containerStyle,
+  iconStyle,
+  labelStyle,
+  selectedIcon = images.radio_selected,
+  unselectedIcon = images.radio_unselected,
+  marginBottom,
+}: RadioButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.container, {marginBottom: marginBottom ?? 12}]}>
+      style={[
+        styles.container,
+        {marginBottom: marginBottom ?? theme.sizes.spacing.smd},
+        containerStyle,
+      ]}>
       <Image
-        source={selected ? images.radio_selected : images.radio_unselected}
-        style={styles.radioIcon}
+        source={selected ? selectedIcon : unselectedIcon}
+        style={[styles.radioIcon, iconStyle]}
+        resizeMode="contain"
       />
       <Text
-        hankenGroteskMedium={true}
-        size={'small'}
-        lineHeight={'small'}
-        color={selected ? 'black' : theme.colors.textSecondary}>
+        hankenGroteskMedium
+        size="small"
+        lineHeight="small"
+        color={selected ? theme.colors.black : theme.colors.textSecondary}
+        style={labelStyle}>
         {label}
       </Text>
     </TouchableOpacity>
   );
 };
 
-export default RadioButton;
+export default React.memo(RadioButton);
 
 const styles = StyleSheet.create({
   container: {
@@ -35,10 +70,5 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 8,
-    resizeMode: 'contain',
-  },
-  label: {
-    fontSize: 16,
-    color: '#333',
   },
 });

@@ -24,9 +24,9 @@ const Vehicles_Component = ({vehicleData, onWrapperClick}) => {
         renderItem={({item}) => (
           <>
             <CardWrapper
-              onWrapperClick={() => onWrapperClick && onWrapperClick(item)}
-              applicationNumber={item?.status}
-              showRightArrow={true}
+              onPress={() => onWrapperClick && onWrapperClick(item)}
+              leftText={item?.status}
+              showTrailingIcon
               statusColor={getStatusColor(item.status)}
               gradientColors={getGradientColors(item.status)}>
               <VehicleCard
