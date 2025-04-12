@@ -30,6 +30,7 @@ const Search_Component = ({
     <SafeAreaWrapper>
       <Header title={strings.searchTitle} onBackPress={onBackPress} />
       <KeyboardAwareScrollView
+        bounces={false}
         contentContainerStyle={styles.wrapper}
         enableOnAndroid={true}
         keyboardShouldPersistTaps="handled"

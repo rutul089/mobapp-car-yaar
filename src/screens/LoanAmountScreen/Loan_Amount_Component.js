@@ -24,7 +24,7 @@ const Loan_Amount_Component = ({onSaveDraftPress, onNextButtonPress}) => {
         showRightContent={true}
         onBackPress={() => goBack()}
       />
-      <KeyboardAwareScrollView style={styles.wrapper}>
+      <KeyboardAwareScrollView bounces={false} style={styles.wrapper}>
         <Text>What is the desired Loan Amount?</Text>
         <Spacing size="xs" />
         <Text type={'label'} size={'caption'}>

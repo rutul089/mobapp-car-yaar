@@ -1,188 +1,196 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {Card, Header, SafeAreaWrapper, Spacing, Text} from '../../components';
+import theme from '../../theme';
 
 const steps = [
-  {
-    title: 'Vehicle onboarding',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Customer onboarding',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Lender selection',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Credit - Document verification & approval',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Lender submission',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Lender approval',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'DO released',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Ops verifies the DO',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Loan disbursement',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Collection of RC & other docs by PDA',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'RTO charge calculation',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Customer agrees to the RTO charges',
-    date: '12 Jan 2025, 3:30 PM',
-    completed: true,
-  },
-  {
-    title: 'Ops ledgers all the invoices',
-    completed: false,
-  },
-  {
-    title: 'Finance team transfers the amount',
-    completed: false,
-  },
-  {
-    title: 'RC transfer is complete',
-    completed: false,
-  },
-  {
-    title: 'Ops verifies the RC transfer & approves',
-    completed: false,
-  },
-  {
-    title: 'Held back amount is now released',
-    completed: false,
-  },
-  {
-    title: 'Finance marks the ticket as closed',
-    completed: false,
-    isFinal: true,
-  },
+  'Vehicle onboarding',
+  'Customer onboarding',
+  'Lender selection',
+  'Credit - Document verification & approval',
+  'Lender submission',
+  'Lender approval',
+  'DO released',
+  'Ops verifies the DO',
+  'Loan disbursement',
+  'Collection of RC & other docs by PDA',
+  'RTO charge calculation',
+  'Customer agrees to the RTO charges',
+  'Ops ledgers all the invoices',
+  'Finance team transfers the amount',
+  'RC transfer is complete',
+  'Ops verifies the RC transfer & approves',
+  'Held back amount is now released',
+  'Finance marks the ticket as closed',
 ];
 
-const StepItem = ({item, isLast}) => {
-  return (
-    <View style={styles.stepRow}>
-      <View style={styles.iconContainer}>
-        <View style={[styles.dot, item.completed && styles.dotCompleted]}>
-          {item.completed && (
-            <View style={{height: 20, width: 20, backgroundColor: 'red'}} />
-          )}
-        </View>
-        {!isLast && <View style={styles.line} />}
-      </View>
-      <View style={styles.content}>
-        <Text style={[styles.title, item.completed && styles.titleCompleted]}>
-          {item.title}
-        </Text>
-        {item.date && <Text style={styles.date}>{item.date}</Text>}
-      </View>
-    </View>
-  );
-};
+const completedCount = 12;
 
-const LoanTrackingScreen = () => {
+export default function LoanTrackingScreen({navigation}) {
+  const handleStepPress = (step, index) => {
+    // navigation.navigate('StepDetail', { step, index });
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>
-        Tracking ID <Text style={{color: '#F8A902'}}>#LA0001</Text>
-      </Text>
-      <FlatList
-        data={steps}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-          <StepItem item={item} isLast={index === steps.length - 1} />
-        )}
-        contentContainerStyle={{paddingBottom: 32}}
-      />
-    </View>
+    <SafeAreaWrapper backgroundColor={theme.colors.background}>
+      <Header title="Loan Application Tracking" />
+      <View
+        style={{
+          padding: theme.sizes.padding,
+        }}>
+        <Text style={styles.trackingId}>
+          Tracking ID <Text style={styles.id}>#LA0001</Text>
+        </Text>
+        <Spacing size="md" />
+        <Card padding={0} cardContainerStyle={{height: '93%'}}>
+          <ScrollView
+            contentContainerStyle={styles.scroll}
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.timeline}>
+              {steps.map((step, index) => {
+                const completed = index < completedCount;
+                const isLast = index === steps.length - 1;
+
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleStepPress(step, index)}
+                    activeOpacity={0.7}>
+                    <View
+                      style={[
+                        styles.stepContainer,
+                        !isLast && styles.stepContainerBorder,
+                      ]}>
+                      <View style={styles.markerWrapper}>
+                        <View
+                          style={[
+                            styles.circle,
+                            completed
+                              ? styles.circleCompleted
+                              : styles.circlePending,
+                          ]}
+                        />
+                        {!isLast && (
+                          <View
+                            style={[
+                              styles.verticalLine,
+                              completed
+                                ? styles.lineCompleted
+                                : styles.linePending,
+                            ]}
+                          />
+                        )}
+                      </View>
+
+                      <View style={styles.textContainer}>
+                        <Text
+                          style={[
+                            styles.stepText,
+                            completed ? styles.textDone : styles.textPending,
+                            isLast && !completed && styles.finalNote,
+                          ]}>
+                          {step}
+                        </Text>
+                        {completed && (
+                          <Text style={styles.timestamp}>
+                            12 Jan 2025, 3:30 PM
+                          </Text>
+                        )}
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </ScrollView>
+        </Card>
+        <Spacing size="xl" />
+      </View>
+    </SafeAreaWrapper>
   );
-};
+}
+
+const CIRCLE_SIZE = 14;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 16,
-  },
-  header: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 16,
-    color: '#000',
-  },
-  stepRow: {
+  container: {flex: 1, backgroundColor: '#fff'},
+  header: {backgroundColor: '#000', padding: 16},
+  title: {color: '#fff', fontSize: 18, fontWeight: '600'},
+  id: {color: '#FFA500'},
+  scroll: {flexGrow: 1, padding: 12},
+  timeline: {paddingLeft: 0},
+
+  stepContainer: {
     flexDirection: 'row',
+    marginBottom: 32,
     alignItems: 'flex-start',
-    marginBottom: 24,
   },
-  iconContainer: {
-    alignItems: 'center',
+
+  markerWrapper: {
     width: 30,
-  },
-  dot: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#ccc',
-    justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
-  dotCompleted: {
-    backgroundColor: '#3498db',
+
+  circle: {
+    width: CIRCLE_SIZE,
+    height: CIRCLE_SIZE,
+    borderRadius: CIRCLE_SIZE / 2,
+    borderWidth: 2,
   },
-  line: {
+
+  circleCompleted: {
+    borderColor: '#0ea5e9',
+    backgroundColor: '#0ea5e9',
+  },
+
+  circlePending: {
+    borderColor: '#d1d5db',
+    backgroundColor: '#fff',
+  },
+
+  verticalLine: {
+    position: 'absolute',
+    top: CIRCLE_SIZE + 2,
     width: 2,
-    flex: 1,
-    backgroundColor: '#ccc',
-    marginTop: 2,
+    height: 55,
   },
-  content: {
-    flex: 1,
-    paddingLeft: 12,
+
+  lineCompleted: {
+    backgroundColor: '#0ea5e9',
   },
-  title: {
-    fontSize: 14,
-    color: '#999',
+
+  linePending: {
+    backgroundColor: '#d1d5db',
+  },
+
+  textContainer: {
+    marginLeft: 12,
+    flex: 1,
+  },
+
+  stepText: {
+    fontSize: 15,
     fontWeight: '500',
   },
-  titleCompleted: {
-    color: '#000',
-  },
-  date: {
+
+  textDone: {color: '#000'},
+  textPending: {color: '#9ca3af'},
+  timestamp: {
     fontSize: 12,
-    color: '#666',
-    marginTop: 2,
+    color: '#6b7280',
+    marginTop: 4,
+  },
+
+  finalNote: {
+    fontSize: 14,
+    color: '#16a34a',
+    marginTop: 4,
+  },
+  stepContainerBorder: {
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#e5e7eb',
+    // paddingBottom: 20,
   },
 });
-
-export default LoanTrackingScreen;

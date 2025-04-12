@@ -1,28 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {Image, KeyboardAvoidingView, Platform, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import images from '../../assets/images';
 import {
-  Image,
-  KeyboardAvoidingView,
-  View,
-  TextInput,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
-import {
-  SafeAreaWrapper,
-  Text,
-  Spacing,
-  Pressable,
+  Button,
   Card,
   Input,
-  Button,
+  SafeAreaWrapper,
+  Spacing,
+  Text,
 } from '../../components';
-import LinearGradient from 'react-native-linear-gradient';
+import strings from '../../locales/strings';
 import {styles} from '../../styles/Login.style';
 import theme from '../../theme';
 import typography from '../../theme/typography';
-import images from '../../assets/images';
-import strings from '../../locales/strings';
 
 const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
   return (

@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.12)',
     textAlign: 'center',
     fontSize: typography.fontSizes.h2,
-    marginHorizontal: 10,
+    marginRight: 15,
     backgroundColor: '#f9f9f9',
   },
   otpFocused: {

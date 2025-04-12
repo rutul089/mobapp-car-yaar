@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   listContent: {
     backgroundColor: theme.colors.background,
     padding: theme.sizes.padding,
+    flexGrow: 1,
     // paddingBottom: 40,
   },
 });

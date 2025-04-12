@@ -19,6 +19,7 @@ import {
 } from '../../components';
 import {customerCategory, loanType} from '../../constants/enums';
 import theme from '../../theme';
+import OTPModal from '../../components/OTPModal';
 
 const dropdownOptions = [
   {label: 'Corporate', value: 'a'},
@@ -139,7 +140,14 @@ const Customer_Detail_Component = ({
         onClose={() => setShowModal(false)}
         title="Select Other Document Type"
       />
-      <CommonModal
+      <OTPModal
+        isVisible={showVerifyOTP}
+        onModalHide={onCloseVerifyOTP}
+        onPressPrimaryButton={onPressPrimaryButton}
+        mobileNumber="+91-9876543210"
+      />
+      {/* <CommonModal
+        title={'OTP Verification'}
         isVisible={showVerifyOTP}
         onModalHide={onCloseVerifyOTP}
         primaryButtonLabel={'Confirm & Verify'}
@@ -174,7 +182,7 @@ const Customer_Detail_Component = ({
             </Text>
           </Text>
         </>
-      </CommonModal>
+      </CommonModal> */}
     </SafeAreaWrapper>
   );
 };

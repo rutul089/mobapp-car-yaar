@@ -58,8 +58,8 @@ const CheckCIBIL_Component = ({
             <>
               <Spacing size="md_lg" />
               <Text type={'label'}>Enter OTP</Text>
-              <OTPVerification containerStyle={{left: -10, marginTop: 6}} />
-              <Spacing size={'sm'} />
+              <OTPVerification containerStyle={{left: '-9%', marginTop: 9}} />
+              <Spacing size={'smd'} />
               <Text type={'helper-text'} textAlign={'center'}>
                 Didn't get the OTP?
                 <Text

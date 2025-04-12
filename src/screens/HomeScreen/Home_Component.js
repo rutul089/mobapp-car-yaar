@@ -52,7 +52,7 @@ const Home_Component = ({
 
   const renderLoanType = (label, icon, style, onPress) => {
     return (
-      <Card onPress={onPress} style={style} noShadow={true}>
+      <Card onPress={onPress} style={[{width: '32%'}, style]} noShadow={true}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Image source={icon} style={styles.loanIcon} />
           <Image source={images.arrow_right} style={{height: 20, width: 20}} />
@@ -98,6 +98,7 @@ const Home_Component = ({
           </View>
         </View>
         <ScrollView
+          bounces={false}
           contentContainerStyle={styles.scrollSection}
           showsVerticalScrollIndicator={false}>
           {/* Car Type Selector */}

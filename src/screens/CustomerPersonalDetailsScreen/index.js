@@ -72,9 +72,15 @@ class CustomerPersonalDetails extends Component {
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
     this.onSelectBankOption = this.onSelectBankOption.bind(this);
+    this.onChangeMonthlyIncome = this.onChangeMonthlyIncome.bind(this);
     this.onSelectIncomeSourceOption =
       this.onSelectIncomeSourceOption.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
+    this.onChangeAccountNumber = this.onChangeAccountNumber.bind(this);
+    this.onChangeCurrentEMI = this.onChangeCurrentEMI.bind(this);
+    this.onChangeMaxEMIAfford = this.onChangeMaxEMIAfford.bind(this);
+    this.onChangeMonthlyBankBalance =
+      this.onChangeMonthlyBankBalance.bind(this);
   }
 
   onFormChange = (key, value, callback) => {
@@ -138,6 +144,23 @@ class CustomerPersonalDetails extends Component {
     this.onFormChange('bankName', value);
   };
 
+  onChangeMonthlyIncome = (value, index) => {
+    this.onFormChange('monthlyIncome', value);
+  };
+
+  onChangeAccountNumber = (value, index) => {
+    this.onFormChange('accountNumber', value);
+  };
+  onChangeCurrentEMI = (value, index) => {
+    this.onFormChange('currentEMI', value);
+  };
+  onChangeMaxEMIAfford = (value, index) => {
+    this.onFormChange('maxEMIAfford', value);
+  };
+  onChangeMonthlyBankBalance = (value, index) => {
+    this.onFormChange('monthlyBankBalance', value);
+  };
+
   onNextPress = () => {
     navigate(ScreenNames.LoanDocument);
   };
@@ -171,6 +194,11 @@ class CustomerPersonalDetails extends Component {
           onSelectedOccupation={this.onSelectedOccupation}
           onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
           onSelectBankOption={this.onSelectBankOption}
+          onChangeMonthlyIncome={this.onChangeMonthlyIncome}
+          onChangeAccountNumber={this.onChangeAccountNumber}
+          onChangeCurrentEMI={this.onChangeCurrentEMI}
+          onChangeMaxEMIAfford={this.onChangeMaxEMIAfford}
+          onChangeMonthlyBankBalance={this.onChangeMonthlyBankBalance}
           onNextPress={this.onNextPress}
         />
       </>

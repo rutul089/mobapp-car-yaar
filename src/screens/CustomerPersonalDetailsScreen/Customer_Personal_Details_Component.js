@@ -45,6 +45,11 @@ const Customer_Personal_Details_Component = ({
   onChangeEmail,
   onChangeCurrentAddress,
   onChangeCurrentPincode,
+  onChangeMonthlyIncome,
+  onChangeAccountNumber,
+  onChangeCurrentEMI,
+  onChangeMaxEMIAfford,
+  onChangeMonthlyBankBalance,
   onChangeDob,
   currentLoanOptions,
   onSelectedLoanOption = () => {},
@@ -54,21 +59,140 @@ const Customer_Personal_Details_Component = ({
   onNextPress,
   saveAsDraftPress,
 }) => {
-  const aadharRef = useRef(null);
-  const applicantRef = useRef(null);
-  const mobileRef = useRef(null);
-  const fatherMotherRef = useRef(null);
-  const spouseRef = useRef(null);
-  const emailRef = useRef(null);
-  const dobRef = useRef(null);
-  const addressRef = useRef(null);
-  const pincodeRef = useRef(null);
+  const [errors, setErrors] = React.useState({});
+
+  const refs = {
+    panCard: useRef(null),
+    aadhar: useRef(null),
+    applicant: useRef(null),
+    mobile: useRef(null),
+    fatherMother: useRef(null),
+    spouse: useRef(null),
+    email: useRef(null),
+    dob: useRef(null),
+    address: useRef(null),
+    pincode: useRef(null),
+    monthlyIncome: useRef(null),
+    accountNumber: useRef(null),
+    currentEMI: useRef(null),
+    maxEMIAfford: useRef(null),
+    monthlyBankBalance: useRef(null),
+  };
+
+  const focusNext = key => {
+    refs[key]?.current?.focus();
+  };
 
   const [isOccupationModalVisible, setIsOccupationModalVisible] =
     React.useState(false);
   const [showIncomeSourceModal, setShowIncomeSourceModal] =
     React.useState(false);
   const [showBankOptionModal, setShowBankOptionModal] = React.useState(false);
+
+  const validateFields = () => {
+    const errors = {};
+
+    // PERSONAL DETAILS
+    if (!state.panCardNumber?.trim()) {
+      errors.panCardNumber = 'PAN card number is required';
+    }
+
+    if (!/^\d{12}$/.test(state.aadharNumber)) {
+      errors.aadharNumber = 'Aadhar number must be 12 digits';
+    }
+
+    if (!state.applicantName?.trim()) {
+      errors.applicantName = 'Applicant name is required';
+    }
+
+    if (!/^\d{10}$/.test(state.mobileNumber)) {
+      errors.mobileNumber = 'Enter a valid 10-digit mobile number';
+    }
+
+    if (!state.fatherMotherName?.trim()) {
+      errors.fatherMotherName = 'This field is required';
+    }
+
+    // Spouse name is optional
+
+    if (state.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)) {
+      errors.email = 'Enter a valid email';
+    }
+
+    if (!state.dob) {
+      errors.dob = 'Date of birth is required';
+    }
+
+    if (!state.currentAddress?.trim()) {
+      errors.currentAddress = 'Address is required';
+    }
+
+    if (!/^\d{6}$/.test(state.currentPincode)) {
+      errors.currentPincode = 'Enter a valid 6-digit pincode';
+    }
+
+    if (!selectedGender) {
+      errors.gender = 'Please select gender';
+    }
+
+    // PROFESSIONAL DETAILS
+    if (!state.occupation?.label) {
+      errors.occupation = 'Occupation is required';
+    }
+
+    if (!state.incomeSource?.label) {
+      errors.incomeSource = 'Income source is required';
+    }
+
+    if (!state.monthlyIncome || isNaN(state.monthlyIncome)) {
+      errors.monthlyIncome = 'Enter a valid monthly income';
+    }
+
+    // BANK DETAILS
+    if (!state.bankName?.label) {
+      errors.bankName = 'Bank name is required';
+    }
+
+    if (!state.accountNumber || state.accountNumber.length < 6) {
+      errors.accountNumber = 'Enter a valid account number';
+    }
+
+    if (
+      state.currentEMI &&
+      (isNaN(state.currentEMI) || Number(state.currentEMI) < 0)
+    ) {
+      errors.currentEMI = 'Enter a valid EMI amount';
+    }
+
+    if (
+      !state.maxEMIAfford ||
+      isNaN(state.maxEMIAfford) ||
+      Number(state.maxEMIAfford) <= 0
+    ) {
+      errors.maxEMIAfford = 'Enter max EMI you can afford';
+    }
+
+    if (
+      !state.monthlyBankBalance ||
+      isNaN(state.monthlyBankBalance) ||
+      Number(state.monthlyBankBalance) <= 0
+    ) {
+      errors.monthlyBankBalance = 'Enter valid bank balance';
+    }
+
+    return errors;
+  };
+
+  const handleNext = () => {
+    const validationErrors = validateFields();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // No errors, continue
+    onNextPress();
+  };
 
   return (
     <SafeAreaWrapper>
@@ -80,6 +204,9 @@ const Customer_Personal_Details_Component = ({
         onBackPress={() => goBack()}
       />
       <KeyboardAwareScrollView
+        enableOnAndroid
+        extraScrollHeight={100} // adjust if needed
+        keyboardShouldPersistTaps="handled"
         bounces={false}
         contentContainerStyle={styles.wrapper}>
         {/* Personal Details */}
@@ -101,6 +228,7 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangePanCardNumber}
             value={state.panCardNumber}
             returnKeyType="next"
+            ref={refs.panCard}
           />
           <Spacing size="md" />
           <Text type={'label'}>Aadhar Card</Text>
@@ -116,6 +244,7 @@ const Customer_Personal_Details_Component = ({
           </View>
           <Spacing size="md" />
           <Input
+            ref={refs.aadhar}
             placeholder="8752 7580 9001"
             isLeftIconVisible
             leftIconName={images.idCard}
@@ -125,10 +254,13 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeAadharNumber}
             value={state.aadharNumber}
             returnKeyType="next"
+            isError={!!errors.aadharNumber}
+            showStatus
+            statusMsg={errors.aadharNumber}
           />
           <Spacing size="md" />
           <Input
-            ref={applicantRef}
+            ref={refs.applicant}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.user}
@@ -136,11 +268,11 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeApplicantName}
             value={state.applicantName}
             returnKeyType="next"
-            onSubmitEditing={() => mobileRef.current.focus()}
+            onSubmitEditing={() => focusNext('mobile')}
           />
           <Spacing size="md" />
           <Input
-            ref={mobileRef}
+            ref={refs.mobile}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.callOutline}
@@ -149,6 +281,7 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangemobileNumber}
             value={state.mobileNumber}
             returnKeyType="next"
+            onSubmitEditing={() => focusNext('fatherMother')}
           />
           <Spacing size="md" />
           <RadioGroupRow
@@ -159,7 +292,7 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
-            ref={fatherMotherRef}
+            ref={refs.fatherMother}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.user}
@@ -167,11 +300,11 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeFatherMotherName}
             value={state.fatherMotherName}
             returnKeyType="next"
-            onSubmitEditing={() => spouseRef?.current.focus()}
+            onSubmitEditing={() => focusNext('spouse')}
           />
           <Spacing size="md" />
           <Input
-            ref={spouseRef}
+            ref={refs.spouse}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.user}
@@ -179,11 +312,11 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeSpouseName}
             value={state.spouseName}
             returnKeyType="next"
-            onSubmitEditing={() => emailRef.current.focus()}
+            onSubmitEditing={() => focusNext('email')}
           />
           <Spacing size="md" />
           <Input
-            ref={emailRef}
+            ref={refs.email}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.email}
@@ -192,7 +325,7 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeEmail}
             value={state.email}
             returnKeyType="next"
-            onSubmitEditing={() => addressRef.current.focus()}
+            onSubmitEditing={() => focusNext('address')}
           />
           <Spacing size="md" />
           <Input
@@ -205,7 +338,7 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
-            ref={addressRef}
+            ref={refs.address}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.locationPin}
@@ -213,11 +346,11 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeCurrentAddress}
             value={state.currentAddress}
             returnKeyType="next"
-            onSubmitEditing={() => pincodeRef.current.focus()}
+            onSubmitEditing={() => focusNext('pincode')}
           />
           <Spacing size="md" />
           <Input
-            ref={pincodeRef}
+            ref={refs.pincode}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.locationPin}
@@ -226,11 +359,12 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeCurrentPincode}
             value={state.currentPincode}
             returnKeyType="next"
+            onSubmitEditing={() => focusNext('monthlyIncome')}
           />
         </Section>
         {/* Professional Details */}
         <Spacing size="lg" />
-        <Section title={'Personal Details'}>
+        <Section title={'Professional Details'}>
           <Input
             placeholder="Select Occupation"
             isLeftIconVisible
@@ -254,11 +388,16 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
+            ref={refs.monthlyIncome}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.icRupee}
-            value={state.panCardNumber}
+            value={state.monthlyIncome}
             label="Monthly Income"
+            onChangeText={onChangeMonthlyIncome}
+            keyboardType="decimal-pad"
+            returnKeyType="next"
+            onSubmitEditing={() => focusNext('accountNumber')}
           />
         </Section>
         {/* Bank Details */}
@@ -276,10 +415,16 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
+            ref={refs.accountNumber}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.bank}
             label="Account Number"
+            keyboardType="numeric"
+            returnKeyType="next"
+            value={state.accountNumber}
+            onSubmitEditing={() => focusNext('currentEMI')}
+            onChangeText={onChangeAccountNumber}
           />
           <Spacing size="md" />
           <RadioGroupRow
@@ -292,30 +437,46 @@ const Customer_Personal_Details_Component = ({
           <View style={styles.rowSpaceBetween}>
             <View style={styles.halfWidth}>
               <Input
+                ref={refs.currentEMI}
                 placeholder=""
                 isLeftIconVisible
                 leftIconName={images.icRupee}
                 label="Current EMI"
-                keyboardType="numbers-and-punctuation"
+                keyboardType="decimal-pad"
+                value={state.currentEMI}
+                returnKeyType="next"
+                onSubmitEditing={() => focusNext('maxEMIAfford')}
+                onChangeText={onChangeCurrentEMI}
               />
             </View>
             <View style={styles.halfWidth}>
               <Input
+                ref={refs.maxEMIAfford}
                 placeholder=""
                 isLeftIconVisible
                 leftIconName={images.icRupee}
                 label="Max EMI Afford"
-                keyboardType="numbers-and-punctuation"
+                keyboardType="decimal-pad"
+                value={state.maxEMIAfford}
+                returnKeyType="next"
+                onSubmitEditing={() => focusNext('monthlyBankBalance')}
+                onChangeText={onChangeMaxEMIAfford}
               />
             </View>
           </View>
           <Spacing size="md" />
           <Input
             placeholder=""
+            ref={refs.monthlyBankBalance}
             isLeftIconVisible
             leftIconName={images.icRupee}
             label="Average Monthly Bank Balance"
-            keyboardType="numbers-and-punctuation"
+            keyboardType="decimal-pad"
+            value={state.monthlyBankBalance}
+            returnKeyType="done"
+            onSubmitEditing={onNextPress}
+            onChangeText={onChangeMonthlyBankBalance}
+            isError
           />
         </Section>
         <FormFooterButtons
