@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@caryaar/components/*": ["../carryar-components/src/*"]
+    }
+  },
+  "include": ["."]
+}

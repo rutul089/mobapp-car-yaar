@@ -6,30 +6,33 @@ import images from '../../assets/images';
 import {
   Button,
   Card,
-  Input,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 import strings from '../../locales/strings';
 import {styles} from '../../styles/Login.style';
-import theme from '../../theme';
-import typography from '../../theme/typography';
+import Input from '../../components/Input/Input';
 
-const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
+const Login_Component = ({
+  params,
+  mobileNumber,
+  setMobileNumber,
+  generateOTP,
+  isError,
+}) => {
   return (
     <SafeAreaWrapper
       barStyle="dark-content"
-      statusBarColor="rgba(29, 149, 240, 0)"
-      backgroundColor={'rgba(61, 173, 255, 0.48)'}>
+      statusBarColor={theme.colors.authGradient[0]}
+      backgroundColor={theme.colors.authGradient[1]}>
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <LinearGradient
           style={styles.wrapper}
-          useAngle
-          angle={360}
-          colors={['rgba(61, 173, 255, 0.48)', 'rgba(29, 149, 240, 0)']}>
+          colors={theme.colors.authGradient}>
           <View style={styles.container}>
             <View style={{alignItems: 'center'}}>
               <Text
@@ -41,7 +44,7 @@ const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
               <Spacing size="md" />
               <Text
                 hankenGroteskBold={true}
-                size={typography.fontSizes.h1}
+                size={theme.typography.fontSizes.h1}
                 color={theme.colors.black}>
                 {strings.welcomeBack}
               </Text>
@@ -59,7 +62,7 @@ const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
                 <Text
                   type={'helper-text'}
                   color={theme.colors.primary}
-                  lineHeight={typography.lineHeights.small}>
+                  lineHeight={theme.typography.lineHeights.small}>
                   {strings.enterMobile}
                 </Text>
               </View>
@@ -71,6 +74,8 @@ const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
                 onChangeText={setMobileNumber}
                 maxLength={10}
                 keyboardType="number-pad"
+                isError={isError}
+                statusMsg={'Please enter a valid mobile number.'}
               />
               <Spacing size="xl" />
               <Button label={strings.generateOTP} onPress={generateOTP} />
@@ -82,4 +87,4 @@ const LoginScreen = ({params, mobileNumber, setMobileNumber, generateOTP}) => {
   );
 };
 
-export default LoginScreen;
+export default Login_Component;

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, Alert} from 'react-native';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
 import OTP_Verification_Component from './OTP_Verification_Component';
-import ScreenNames from '../../constants/ScreenNames';
 const timerValue = 30;
 
 class OTPVerification extends Component {
@@ -17,6 +16,7 @@ class OTPVerification extends Component {
       timer: timerValue,
       isResendDisabled: true,
       otp: '',
+      isError: false,
     };
     this.interval = null;
     this.resendOTP = this.resendOTP.bind(this);
@@ -65,13 +65,28 @@ class OTPVerification extends Component {
   };
 
   onOtpComplete = value => {
-    this.setState({
-      otp: value,
-    });
+    this.setState(
+      {
+        otp: value,
+      },
+      () => {
+        this.handleVerify();
+      },
+    );
   };
 
   handleVerify = () => {
-    navigateAndSimpleReset(ScreenNames.HomeTab);
+    const {otp} = this.state;
+    console.log('OTP', otp);
+    console.log('OTP', otp === 4);
+
+    if (otp.length === 4) {
+      return navigateAndSimpleReset(ScreenNames.HomeTab);
+    } else {
+      this.setState({
+        isError: true,
+      });
+    }
   };
 
   render() {
@@ -86,6 +101,8 @@ class OTPVerification extends Component {
           validateOTP={this.handleVerify}
           onOtpComplete={this.onOtpComplete}
           onBackPress={this.onBackPress}
+          isError={this.state.isError}
+          errorMessage="Please enter valid OTP"
         />
       </>
     );

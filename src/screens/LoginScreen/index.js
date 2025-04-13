@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import Login_Component from './Login_Component';
-import {validateMobileNumber} from '../../utils/validation';
-import {Alert} from 'react-native';
-import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {navigate} from '../../navigation/NavigationUtils';
+import {validateMobileNumber} from '../../utils/validation';
+import Login_Component from './Login_Component';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mobileNumber: '',
+      isError: false,
     };
     this.setMobileNumber = this.setMobileNumber.bind(this);
     this.generateOTP = this.generateOTP.bind(this);
@@ -18,21 +18,18 @@ class Login extends Component {
   setMobileNumber = value => {
     this.setState({
       mobileNumber: value,
+      isError: false,
     });
   };
 
   generateOTP = () => {
     const {mobileNumber} = this.state;
-    navigate(ScreenNames.OTP, {mobileNumber});
-    if (validateMobileNumber(mobileNumber)) {
-      navigate(ScreenNames.OTP, {mobileNumber});
-      // navigate(ScreenNames.HomeTab, {mobileNumber});
-    } else {
-      Alert.alert(
-        '❌ Invalid Number',
-        'Please enter a valid 10-digit mobile number.',
-      );
+
+    if (!validateMobileNumber(mobileNumber)) {
+      this.setState({isError: true});
+      return;
     }
+    navigate(ScreenNames.OTP, {mobileNumber});
   };
 
   render() {
@@ -43,6 +40,7 @@ class Login extends Component {
           mobileNumber={mobileNumber}
           setMobileNumber={this.setMobileNumber}
           generateOTP={this.generateOTP}
+          isError={this.state.isError}
         />
       </>
     );
