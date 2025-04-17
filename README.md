@@ -1,98 +1,141 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 mobapp-car-yaar
 
-# Getting Started
+A React Native mobile application project for **Car Yaar** — a car trading platform. This app uses a custom UI component library called `caryaar-mobile-components` for consistent and reusable UI elements.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 📂 Project Structure
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+mobapp-car-yaar/
+├── src/
+│   ├── api/                 # API services and utility functions
+│   ├── assets/              # Images and fonts
+│   ├── components/          # Custom components specific to this project
+│   ├── constants/           # Constants, enums, and screen names
+│   ├── navigation/          # Navigation setup
+│   ├── redux/               # State management code
+│   ├── screens/             # All the app screens
+│   ├── styles/              # Common styles for screens
+│   ├── theme/               # Colors, sizes, and font styles
+│   ├── utils/               # Common utility functions
+├── App.js                   # Main app entry point
+├── metro.config.js
+├── package.json
+├── README.md
+└── ...
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## 📦 Dependencies
 
-### Android
+- **React Native** 0.78.2
+- **React** 19.0.0
+- **React Navigation**
+  - @react-navigation/native 7.1.5
+  - @react-navigation/stack 7.2.9
+  - @react-navigation/bottom-tabs 7.3.9
+- **Redux & State Management**
+  - redux 5.0.1
+  - react-redux 9.2.0
+  - redux-thunk 3.1.0
+  - redux-logger 3.0.6
+  - redux-persist 6.0.0
+- **Networking**
+  - axios 1.8.4
+  - @react-native-community/netinfo 11.4.1
+- **UI & UX**
+  - react-native-fast-image 8.6.3
+  - react-native-image-picker 8.2.0
+  - react-native-image-viewing 0.2.2
+  - react-native-linear-gradient 2.8.3
+  - react-native-modal 14.0.0-rc.1
+  - react-native-step-indicator 1.0.3
+  - react-native-keyboard-aware-scroll-view 0.9.5
+  - react-native-safe-area-context 5.3.0
+  - react-native-screens 3.29.0
+  - react-native-gesture-handler 2.19.0
+  - react-native-reanimated 3.15.1
+- **Utilities**
+  - lodash 4.17.21
+  - moment 2.30.1
+  - prop-types 15.8.1
+- **Permissions**
+  - react-native-permissions 5.3.0
+- **File & Document Handling**
+  - @react-native-async-storage/async-storage 2.1.2
+  - @react-native-documents/picker 10.1.2
+- **Custom UI Library**
+  - @caryaar/components (linked locally via ../caryaar-mobile-components)
 
-```sh
-# Using npm
-npm run android
+---
 
-# OR using Yarn
-yarn android
+## 📥 How to Set Up and Run the Project
+
+### 1️⃣ Clone the Project
+
+```bash
+git clone https://github.com/your-org/mobapp-car-yaar.git
+cd mobapp-car-yaar
 ```
 
-### iOS
+### 2️⃣ Install Dependencies
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```bash
+npm install
+# or
+yarn install
 ```
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
+## 🎨 Install and Link Custom UI Library
+
+The app depends on a custom UI library called **caryaar-mobile-components**.
+
+### 1️⃣ Clone the UI Library Repository
+
+```bash
+git clone https://github.com/your-org/caryaar-mobile-components.git
+cd caryaar-mobile-components
+npm install
+npm run build    # if applicable
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### 2️⃣ Link the Library to Your Project
 
-```sh
-# Using npm
-npm run ios
+Go back to the `mobapp-car-yaar` root directory:
 
-# OR using Yarn
-yarn ios
+```bash
+npm install ../caryaar-mobile-components
+# or
+yarn add ../caryaar-mobile-components
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+Make sure the relative path is correct based on where the `caryaar-mobile-components` folder is located.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+---
 
-## Step 3: Modify your app
+## 🚀 Run the App
 
-Now that you have successfully run the app, let's make changes!
+After everything is set up:
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+```bash
+npx react-native run-android
+# or
+npx react-native run-ios
+```
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+For Metro bundler, in a separate terminal:
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+```bash
+npx react-native start
+```
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+## 📝 Notes
 
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-# mobapp-car-yaar
+- Ensure both `mobapp-car-yaar` and `caryaar-mobile-components` are on the same directory level (or adjust the install path accordingly).
+- Any updates to the `caryaar-mobile-components` library should be rebuilt and re-installed in the project.

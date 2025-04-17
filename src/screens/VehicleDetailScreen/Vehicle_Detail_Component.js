@@ -64,7 +64,7 @@ const Vehicle_Detail_Component = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: 'black',
+    backgroundColor: theme.colors.primaryBlack,
     paddingVertical: theme.sizes.spacing.md,
     paddingHorizontal: theme.sizes.padding,
   },

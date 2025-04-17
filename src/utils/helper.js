@@ -77,13 +77,13 @@ export const isLastRow = (index, data, item) => {
 
 export const getGradientColorsLoan = status => {
   switch (status) {
-    case 1:
+    case 1: //Draft
       return ['#E8E8E8', '#E8E8E8'];
-    case 2:
+    case 2: //Applied
       return ['#F8A902', '#F3696E'];
-    case 3:
+    case 3: //lender approved
       return ['#6EEE87', '#5FC52E'];
-    case 4:
+    case 4: //on hold
       return ['#FF5B5E', '#B60003'];
     default:
       return ['#E8E8E8', '#E8E8E8'];
