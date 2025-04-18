@@ -1,16 +1,18 @@
-import React from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-import images from '../../assets/images';
+
 import {
   Button,
+  CustomizeLoanCard,
   FinanceCard,
   Header,
+  images,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
-import CustomizeLoanCard from '../../components/CustomizeLoanCard';
+  theme,
+} from '@caryaar/components';
+
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
+
 import {formatIndianNumber} from '../../utils/helper';
 
 const Loan_Offer_Detail_Component = ({
@@ -29,12 +31,12 @@ const Loan_Offer_Detail_Component = ({
       />
       <ScrollView contentContainerStyle={styles.wrapper}>
         <FinanceCard
-          // statusImg={images.successCheck}
+          statusImg={images.successCheck}
           bankName={loanDetail.title}
           interestRate={loanDetail.interestRate}
           noMargin
           showRightArrow
-          // rightIcon={images.successCheck}
+          rightIcon={images.successCheck}
           showBreakdown
           footerData={[
             {label: 'Tenure', value: '60 Month'},

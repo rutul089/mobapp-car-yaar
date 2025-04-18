@@ -1,10 +1,7 @@
-import React, {Component} from 'react';
-import Splash_Component from './Splash_Component';
-import {
-  navigate,
-  navigateAndSimpleReset,
-} from '../../navigation/NavigationUtils';
+import {Component} from 'react';
 import ScreenNames from '../../constants/ScreenNames';
+import {navigateAndSimpleReset} from '../../navigation/NavigationUtils';
+import Splash_Component from './Splash_Component';
 
 class Splash extends Component {
   constructor(props) {

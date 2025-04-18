@@ -1,19 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {Alert, Image, ScrollView, View} from 'react-native';
-import images from '../../assets/images';
+import {Image, ScrollView, View} from 'react-native';
+
 import {
   Card,
   ImageHeader,
+  images,
   OptionCard,
-  Pressable,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
-import {styles} from '../../styles/Home.style';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
 import {vehicleType} from '../../constants/enums';
+import {styles} from '../../styles/Home.style';
 
 const Home_Component = ({
   params,

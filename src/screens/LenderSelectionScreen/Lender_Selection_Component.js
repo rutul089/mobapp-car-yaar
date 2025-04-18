@@ -1,10 +1,16 @@
 import React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
-import {FinanceCard, Header, SafeAreaWrapper, Text} from '../../components';
-import theme from '../../theme';
+import {
+  FinanceCard,
+  Header,
+  SafeAreaWrapper,
+  Text,
+  images,
+  theme,
+} from '@caryaar/components';
+
 import {goBack} from '../../navigation/NavigationUtils';
 import {formatIndianNumber} from '../../utils/helper';
-import images from '../../assets/images';
 
 const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
   const financeData = [

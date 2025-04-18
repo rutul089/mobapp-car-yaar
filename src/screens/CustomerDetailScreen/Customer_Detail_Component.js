@@ -6,21 +6,18 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import images from '../../assets/images';
 import {
   Button,
-  Card,
-  CommonModal,
   DropdownModal,
   GroupWrapper,
   Header,
   Input,
   OptionCard,
-  OTPVerification,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
-import {customerCategory, loanType} from '../../constants/enums';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
 import OTPModal from '../../components/OTPModal';
+import {customerCategory, loanType} from '../../constants/enums';
 
 const dropdownOptions = [
   {label: 'Corporate', value: 'a'},

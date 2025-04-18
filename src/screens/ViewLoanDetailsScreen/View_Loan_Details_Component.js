@@ -1,5 +1,3 @@
-import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
 import {
   CardWrapper,
   DetailInfoCard,
@@ -7,8 +5,9 @@ import {
   Header,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
 import {goBack} from '../../navigation/NavigationUtils';
 import {getGradientColorsLoan} from '../../utils/helper';
@@ -26,13 +25,18 @@ const View_Loan_Details_Component = ({
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header title="Loan Application Details" onBackPress={() => goBack()} />
+      <Header
+        title="Loan Application Details"
+        onBackPress={() => goBack()}
+        hideBorder
+      />
       <ScrollView bounces={false} contentContainerStyle={styles.wrapper}>
         <View style={styles.headerWrapper}>
           <CardWrapper
             status={loanDetail?.status?.toUpperCase()}
             showApplicationNumber={true}
             showLeftText
+            isStatusBold
             gradientColors={getGradientColorsLoan(loanDetail.type)}
             leftText={loanDetail?.id}>
             <FinanceCard
@@ -49,7 +53,7 @@ const View_Loan_Details_Component = ({
               infoWrapperColor={'#0E0F11'}
               onCTAPress={onTrackLoanStatusPress}
               showError={loanDetail.type === 4} // 4 is type of hold
-              errorStats={'Extra documents required'}
+              errorMessage={'Extra documents required'}
             />
           </CardWrapper>
         </View>
@@ -68,20 +72,6 @@ const View_Loan_Details_Component = ({
           />
         </View>
       </ScrollView>
-      {/* <KeyboardAwareScrollView style={styles.wrapper}>
-        <Spacing size="md" />
-        <DetailInfoCard
-          label={'Customer Details'}
-          data={customerDetail}
-          isSemiBold={false}
-        />
-        <Spacing size="md" />
-        <DetailInfoCard
-          label={'Vehicle Details'}
-          data={vehicleDetail}
-          isSemiBold={false}
-        />
-      </KeyboardAwareScrollView> */}
     </SafeAreaWrapper>
   );
 };

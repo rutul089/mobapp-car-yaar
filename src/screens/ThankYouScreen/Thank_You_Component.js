@@ -1,15 +1,15 @@
-import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+
 import {
   Button,
   DetailInfoCard,
+  images,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
 
 const Thank_You_Component = ({
   params,

@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@caryaar/components": "../caryaar-mobile-components",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-native-documents/picker": "^10.1.2",
@@ -33,13 +34,13 @@
     "react-native-reanimated": "^3.15.1",
     "react-native-safe-area-context": "^5.3.0",
     "react-native-screens": "^3.29.0",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-step-indicator": "^1.0.3",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^3.1.0",
-    "@caryaar/components": "../caryaar-mobile-components"
+    "redux-thunk": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

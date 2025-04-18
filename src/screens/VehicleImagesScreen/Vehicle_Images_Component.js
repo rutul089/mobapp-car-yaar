@@ -1,18 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList} from 'react-native';
 import {
-  Button,
   FormFooterButtons,
   Header,
   SafeAreaWrapper,
   Spacing,
   Text,
   VehicleImageCard,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 
 import strings from '../../locales/strings';
-import theme from '../../theme';
 import {styles} from '../../styles/Vehicle.Image.style';
 
 const Vehicle_Images_Component = ({
@@ -29,9 +27,14 @@ const Vehicle_Images_Component = ({
       <>
         <VehicleImageCard
           label={item?.label}
-          image={item?.image}
+          imagesList={[
+            'https://i.pravatar.cc/150?img=3',
+            'https://i.pravatar.cc/150?img=3',
+          ]}
+          image={'https://i.pravatar.cc/150?img=3'}
           onDeletePress={() => onDeletePress && onDeletePress(item)}
           viewImage={() => onImagePress && onImagePress(item)}
+          isView={false}
         />
       </>
     );

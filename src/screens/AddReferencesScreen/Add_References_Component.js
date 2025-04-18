@@ -1,17 +1,17 @@
-import React from 'react';
 import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+
 import {
   Button,
   GroupWrapper,
   Header,
+  images,
   Input,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
 
 const Add_References_Component = ({onConfirmLoanPress}) => {
   return (

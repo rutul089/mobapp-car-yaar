@@ -14,7 +14,7 @@ class Vehicles extends Component {
           vehicleDetail: 'Vitara Brezza | VDI | GY',
           plateNumber: 'GJ 01 WN 5054',
           status: 'SAVED',
-          logo: 'https://s3-alpha-sig.figma.com/img/dc01/6a77/dd25896e1075506aa8034c732bbf7198?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=eTZ3MhrIqljjgXn61-htsdXM99lnKLeVR8d1YPWbAc1d0syyssb3kQ-M2NALIqTQGPRO548Aqxsj9Boh293pavrlkmAOI3F8WwV1Uh5lYkIpd5H5QyALyQtvzzYbBwrGy7zQ8~6OLfon29ZPTzdjAjSyz7J7gKbOw3YKcW35xSB5VCunUZOHqBBUUABV41yYmKJLhbk86vA8sys6Fxvc6AWBqb32yW~ZV19ABKCdL9if7IkiyusZ9I~PZgAa3MDxCm5MbGIoro3kl~rgj10x0iB1eE~YBMWaX9EStY991EJOl5MIJ7oA8ASQxLj3-215Xt1qItu6efXcyMQTwgdkPA__',
+          logo: 'https://i.pravatar.cc/150',
           footerInfo: [
             {
               label: 'Mfg Year',
@@ -38,7 +38,7 @@ class Vehicles extends Component {
           vehicleDetail: 'i20 Sportz | Petrol',
           plateNumber: 'MH 12 AB 1234',
           status: 'DRAFT',
-          logo: 'https://s3-alpha-sig.figma.com/img/dc01/6a77/dd25896e1075506aa8034c732bbf7198?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=eTZ3MhrIqljjgXn61-htsdXM99lnKLeVR8d1YPWbAc1d0syyssb3kQ-M2NALIqTQGPRO548Aqxsj9Boh293pavrlkmAOI3F8WwV1Uh5lYkIpd5H5QyALyQtvzzYbBwrGy7zQ8~6OLfon29ZPTzdjAjSyz7J7gKbOw3YKcW35xSB5VCunUZOHqBBUUABV41yYmKJLhbk86vA8sys6Fxvc6AWBqb32yW~ZV19ABKCdL9if7IkiyusZ9I~PZgAa3MDxCm5MbGIoro3kl~rgj10x0iB1eE~YBMWaX9EStY991EJOl5MIJ7oA8ASQxLj3-215Xt1qItu6efXcyMQTwgdkPA__',
+          logo: 'https://i.pravatar.cc/150',
           footerInfo: [
             {
               label: 'Mfg Year',
@@ -62,7 +62,7 @@ class Vehicles extends Component {
           vehicleDetail: 'Nexon EV | XZ+',
           plateNumber: 'DL 09 CD 5678',
           status: 'SAVED',
-          logo: 'https://s3-alpha-sig.figma.com/img/dc01/6a77/dd25896e1075506aa8034c732bbf7198?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=eTZ3MhrIqljjgXn61-htsdXM99lnKLeVR8d1YPWbAc1d0syyssb3kQ-M2NALIqTQGPRO548Aqxsj9Boh293pavrlkmAOI3F8WwV1Uh5lYkIpd5H5QyALyQtvzzYbBwrGy7zQ8~6OLfon29ZPTzdjAjSyz7J7gKbOw3YKcW35xSB5VCunUZOHqBBUUABV41yYmKJLhbk86vA8sys6Fxvc6AWBqb32yW~ZV19ABKCdL9if7IkiyusZ9I~PZgAa3MDxCm5MbGIoro3kl~rgj10x0iB1eE~YBMWaX9EStY991EJOl5MIJ7oA8ASQxLj3-215Xt1qItu6efXcyMQTwgdkPA__',
+          logo: 'https://i.pravatar.cc/150',
           footerInfo: [
             {
               label: 'Mfg Year',
@@ -86,7 +86,6 @@ class Vehicles extends Component {
           vehicleDetail: 'City ZX | CVT',
           plateNumber: 'KA 03 EF 7890',
           status: 'DRAFT',
-          logo: 'https://s3-alpha-sig.figma.com/img/dc01/6a77/dd25896e1075506aa8034c732bbf7198?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=eTZ3MhrIqljjgXn61-htsdXM99lnKLeVR8d1YPWbAc1d0syyssb3kQ-M2NALIqTQGPRO548Aqxsj9Boh293pavrlkmAOI3F8WwV1Uh5lYkIpd5H5QyALyQtvzzYbBwrGy7zQ8~6OLfon29ZPTzdjAjSyz7J7gKbOw3YKcW35xSB5VCunUZOHqBBUUABV41yYmKJLhbk86vA8sys6Fxvc6AWBqb32yW~ZV19ABKCdL9if7IkiyusZ9I~PZgAa3MDxCm5MbGIoro3kl~rgj10x0iB1eE~YBMWaX9EStY991EJOl5MIJ7oA8ASQxLj3-215Xt1qItu6efXcyMQTwgdkPA__',
           footerInfo: [
             {
               label: 'Mfg Year',

@@ -1,22 +1,23 @@
 import React, {useRef} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+
 import {
   DropdownModal,
   FormFooterButtons,
   GroupWrapper,
   Header,
+  images,
   ImageUploadButton,
   Input,
   RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
 
 const Customer_Personal_Details_Component = ({
   selectedGender,
@@ -222,11 +223,11 @@ const Customer_Personal_Details_Component = ({
           <View style={styles.rowSpaceBetween}>
             <ImageUploadButton
               btnLabel={'Click to Upload Front Side Photo'}
-              wrapperStyle={styles.flex}
+              wrapperStyle={styles.halfWidth}
             />
             <ImageUploadButton
               btnLabel={'Click to Upload Back Side Photo'}
-              wrapperStyle={styles.flex}
+              wrapperStyle={styles.halfWidth}
             />
           </View>
           <Spacing size="md" />
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
   rowSpaceBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: theme.sizes.spacing.sm,
+    // marginTop: theme.sizes.spacing.sm,
     // gap: 12,
   },
   flex: {

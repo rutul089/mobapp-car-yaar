@@ -1,5 +1,3 @@
-import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
 import {
   CardWrapper,
   DetailInfoCard,
@@ -7,9 +5,10 @@ import {
   Header,
   SafeAreaWrapper,
   VehicleCard,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import strings from '../../locales/strings';
-import theme from '../../theme';
 
 const Vehicle_Detail_Component = ({
   onBackPress,
@@ -23,8 +22,10 @@ const Vehicle_Detail_Component = ({
       <ScrollView bounces={false}>
         <View style={styles.wrapper}>
           <CardWrapper
-            applicationNumber={'DRAFT'}
+            showLeftText
+            leftText={'DRAFT'}
             status={'PRIVATE'}
+            statusTextColor={'black'}
             gradientColors={['#FFFFFF', '#FFFFFF']}>
             <VehicleCard
               noMargin

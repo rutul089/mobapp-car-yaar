@@ -1,20 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
 import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+
 import {
   Button,
   GroupWrapper,
   Header,
+  images,
   Input,
   OTPVerification,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
 
 const CheckCIBIL_Component = ({
   params,
@@ -50,7 +50,7 @@ const CheckCIBIL_Component = ({
             onChangeText={handleMobileNumberInput}
             value={state.mobileNumber}
             statusMsg="OTP Sent Successfully!"
-            showStatus
+            showStatus={false}
           />
           {isOtpSend ? (
             <>

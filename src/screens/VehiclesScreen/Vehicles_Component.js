@@ -1,14 +1,13 @@
-import React from 'react';
-import {FlatList, View, StyleSheet} from 'react-native';
 import {
-  VehicleCard,
+  CardWrapper,
   ImageHeader,
   SafeAreaWrapper,
-  CardWrapper,
   Spacing,
-} from '../../components';
+  theme,
+  VehicleCard,
+} from '@caryaar/components';
+import {FlatList, StyleSheet} from 'react-native';
 import {getGradientColors, getStatusColor} from '../../utils/helper';
-import theme from '../../theme';
 
 const Vehicles_Component = ({vehicleData, onWrapperClick}) => {
   return (

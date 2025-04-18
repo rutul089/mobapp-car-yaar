@@ -1,9 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
 import {
-  Card,
+  DropdownModal,
   FormFooterButtons,
   GroupWrapper,
   Header,
@@ -11,11 +8,12 @@ import {
   Input,
   SafeAreaWrapper,
   Spacing,
-  Text,
-} from '../../components';
-import DropdownModal from '../../components/DropdownModal';
+  theme,
+  images,
+} from '@caryaar/components';
+import React from 'react';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
-import theme from '../../theme';
 
 const dropdownOptions = [
   {label: 'Option A', value: 'a'},

@@ -1,16 +1,16 @@
-import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import images from '../../assets/images';
+
 import {
   Button,
   Card,
+  DetailInfoCard,
   RadioButton,
   SafeAreaWrapper,
   Spacing,
   Text,
-  DetailInfoCard,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+  images,
+} from '@caryaar/components';
 
 const Customer_Envelop_Component = ({
   vehicleDetails,

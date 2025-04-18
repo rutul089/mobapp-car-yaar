@@ -12,6 +12,7 @@ const VehicleImageCard = ({
   onDeletePress,
   cardWrapper,
   isView,
+  imagesList,
 }) => {
   return (
     <Card
@@ -26,7 +27,7 @@ const VehicleImageCard = ({
         {image ? (
           <>
             <Image
-              source={{uri: image}}
+              source={{uri: imagesList?.[0]}}
               style={styles.image}
               defaultSource={images.placeholder_image}
             />

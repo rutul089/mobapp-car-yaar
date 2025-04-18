@@ -6,8 +6,8 @@ import {
   ImageHeader,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
 import {getGradientColorsLoan} from '../../utils/helper';
 
 const Applications_Component = ({params, dummyList, onItemPress}) => {
@@ -17,6 +17,7 @@ const Applications_Component = ({params, dummyList, onItemPress}) => {
         status={item?.status?.toUpperCase()}
         showApplicationNumber={true}
         showLeftText
+        isStatusBold={true}
         gradientColors={getGradientColorsLoan(item.type)}
         leftText={item?.id}>
         <FinanceCard

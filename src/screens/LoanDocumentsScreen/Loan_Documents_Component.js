@@ -1,22 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
 
-import theme from '../../theme';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList} from 'react-native';
 import {
-  Button,
+  FormFooterButtons,
   Header,
   SafeAreaWrapper,
   Spacing,
   Text,
   VehicleImageCard,
-  FormFooterButtons,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 
 import strings from '../../locales/strings';
 
-import {styles} from '../../styles/Vehicle.Image.style';
 import {goBack} from '../../navigation/NavigationUtils';
+import {styles} from '../../styles/Vehicle.Image.style';
 
 const Loan_Documents_Component = ({
   params,
@@ -35,6 +33,8 @@ const Loan_Documents_Component = ({
           image={item?.image}
           onDeletePress={() => onDeletePress && onDeletePress(item)}
           viewImage={() => onImagePress && onImagePress(item)}
+          btnLabel={'Click to Upload\nImage or PDF'}
+          cardWrapper={{width: '47%', flex: 0}}
         />
       </>
     );

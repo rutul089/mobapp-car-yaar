@@ -2,7 +2,6 @@
 import React from 'react';
 import {Image, KeyboardAvoidingView, Platform, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import images from '../../assets/images';
 import {
   Button,
   Card,
@@ -10,10 +9,11 @@ import {
   Spacing,
   Text,
   theme,
+  Input,
+  images,
 } from '@caryaar/components';
 import strings from '../../locales/strings';
 import {styles} from '../../styles/Login.style';
-import Input from '../../components/Input/Input';
 
 const Login_Component = ({
   params,

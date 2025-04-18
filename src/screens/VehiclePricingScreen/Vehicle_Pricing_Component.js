@@ -1,21 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+
 import {
-  TextAreaInput,
-  Card,
   FormFooterButtons,
+  GroupWrapper,
   Header,
   ImageUploadButton,
   Input,
   SafeAreaWrapper,
   Spacing,
-  Text,
-  GroupWrapper,
-} from '../../components';
+  TextAreaInput,
+  theme,
+  images,
+} from '@caryaar/components';
 import strings from '../../locales/strings';
-import theme from '../../theme';
 
 const Vehicle_Pricing_Component = ({
   params,
@@ -30,7 +28,12 @@ const Vehicle_Pricing_Component = ({
 }) => {
   return (
     <SafeAreaWrapper>
-      <Header title={strings.vehicleDetailTitle} onBackPress={onBackPress} />
+      <Header
+        title={strings.vehicleDetailTitle}
+        onBackPress={onBackPress}
+        showRightContent
+        rightLabel={'_12312'}
+      />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
@@ -49,15 +52,7 @@ const Vehicle_Pricing_Component = ({
           />
           <Spacing size="md_lg" />
           <Input
-            label={'Sale Price'}
-            isLeftIconVisible
-            leftIconName={images.icRupee}
-            value={odometerValue}
-            onChangeText={handleOdometerChange}
-          />
-          <Spacing size="md_lg" />
-          <Input
-            label={'True Value Price'}
+            label={'Dealer Valuation Price'}
             isLeftIconVisible
             leftIconName={images.icRupee}
             value={odometerValue}

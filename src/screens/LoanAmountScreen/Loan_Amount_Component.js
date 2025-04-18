@@ -9,9 +9,9 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
 import strings from '../../locales/strings';
 
 const Loan_Amount_Component = ({onSaveDraftPress, onNextButtonPress}) => {
