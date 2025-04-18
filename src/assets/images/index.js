@@ -70,4 +70,5 @@ export default {
   edit_profile: require('./edit_profile.png'),
   ic_delete: require('./ic_delete.png'),
   noInternet: require('./noInternet.png'),
+  moneyCycleIcon: require('./moneyCycleIcon.png'),
 };

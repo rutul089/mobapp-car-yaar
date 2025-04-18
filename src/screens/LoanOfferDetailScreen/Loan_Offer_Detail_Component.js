@@ -1,18 +1,21 @@
-import {ScrollView, StyleSheet} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {ScrollView, StyleSheet, View} from 'react-native';
 
 import {
   Button,
-  CustomizeLoanCard,
+  CardWithActionButton,
   FinanceCard,
   Header,
   images,
   SafeAreaWrapper,
   Spacing,
+  Text,
   theme,
 } from '@caryaar/components';
 
 import {goBack} from '../../navigation/NavigationUtils';
 
+import {Col, Grid, Row} from 'react-native-easy-grid';
 import {formatIndianNumber} from '../../utils/helper';
 
 const Loan_Offer_Detail_Component = ({
@@ -20,7 +23,34 @@ const Loan_Offer_Detail_Component = ({
   onProceedPress,
   onLoanOfferPress,
   loanDetail = {},
+  emiData,
 }) => {
+  const renderCellHeader = (value, style) => {
+    return (
+      <View style={[styles.tableHeaderStyle, style]}>
+        <Text type={'caption'} hankenGroteskMedium>
+          {value}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderRow = (value, index, style) => {
+    return (
+      <Row
+        key={value}
+        style={[
+          styles.tableHeaderStyle,
+          {
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            backgroundColor: 'white',
+          },
+        ]}>
+        <Text size="caption">{value}</Text>
+      </Row>
+    );
+  };
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
@@ -29,11 +59,25 @@ const Loan_Offer_Detail_Component = ({
         onBackPress={() => goBack()}
       />
       <ScrollView contentContainerStyle={styles.wrapper}>
+        <CardWithActionButton
+          buttonLabel={'Apply Now'}
+          description={
+            'Based on your eligibility, HDB Financial Services offers a balance transfer with an LTV of up to 120%'
+          }
+          onPress={onLoanOfferPress}
+          wrapperBgColor={'#e5f4e7'}
+          btnBgColor={'#60ca39'}
+          themeColor={'black'}
+          showButton
+          arrowIcon={images.arrow_right}
+          icon={images.moneyCycleIcon}
+        />
+        <Spacing size="md" />
         <FinanceCard
           statusImg={images.successCheck}
           bankName={loanDetail?.title}
           interestRate={loanDetail?.interestRate}
-          noMargin
+          hideTopMargin
           showRightArrow
           rightIcon={images.successCheck}
           showBreakdown
@@ -47,13 +91,76 @@ const Loan_Offer_Detail_Component = ({
           logo={images.hdfcImg}
         />
         <Spacing size="md" />
-        <CustomizeLoanCard
-          bannerLabel={'Customize Loan Offer'}
-          description={
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-          }
+        <CardWithActionButton
+          description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+          icon={images.filterFill}
+          buttonLabel="Customize Loan Offer"
+          arrowIcon={images.arrow_right}
           onPress={onLoanOfferPress}
         />
+        <Spacing size="xl" />
+        <View style={styles.rowWrapper}>
+          <Text>Tentative EMI Payment</Text>
+          <Text size={'small'} hankenGroteskBold color={'#F8A902'}>
+            #ABC123
+          </Text>
+        </View>
+        <Spacing size="md" />
+        <View style={styles.tableContainer}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              flexGrow: 1,
+            }}>
+            <Grid>
+              <Col>
+                {renderCellHeader('S.No.')}
+                {emiData.map((rowData, index) => renderRow(rowData.sno, index))}
+              </Col>
+            </Grid>
+            <Grid>
+              <Col>
+                {renderCellHeader('Opn.Bal.')}
+                {emiData.map((rowData, index) =>
+                  renderRow(formatIndianNumber(rowData.opening, index)),
+                )}
+              </Col>
+            </Grid>
+            <Grid>
+              <Col>
+                {renderCellHeader('EMI')}
+                {emiData.map((rowData, index) =>
+                  renderRow(formatIndianNumber(rowData.emi, index)),
+                )}
+              </Col>
+            </Grid>
+            <Grid>
+              <Col>
+                {renderCellHeader('Principal')}
+                {emiData.map((rowData, index) =>
+                  renderRow(formatIndianNumber(rowData.principal, index)),
+                )}
+              </Col>
+            </Grid>
+            <Grid>
+              <Col>
+                {renderCellHeader('Interest')}
+                {emiData.map((rowData, index) =>
+                  renderRow(formatIndianNumber(rowData.interest, index)),
+                )}
+              </Col>
+            </Grid>
+            <Grid>
+              <Col>
+                {renderCellHeader('O/S Bal.')}
+                {emiData.map((rowData, index) =>
+                  renderRow(formatIndianNumber(rowData.os, index)),
+                )}
+              </Col>
+            </Grid>
+          </ScrollView>
+        </View>
         <Spacing size="xl" />
         <Button label={'Proceed'} onPress={onProceedPress} />
       </ScrollView>
@@ -66,6 +173,24 @@ const styles = StyleSheet.create({
     padding: theme.sizes.padding,
     flexGrow: 1,
     backgroundColor: theme.colors.background,
+  },
+  rowWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  tableHeaderStyle: {
+    height: 35,
+    backgroundColor: '#F2F2F2',
+    justifyContent: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#00000008',
+    paddingHorizontal: 15,
+  },
+  tableContainer: {
+    borderRadius: theme.sizes.borderRadius.card,
+    overflow: 'hidden', // important — clips child borders inside rounded parent
+    backgroundColor: 'white',
   },
 });
 
