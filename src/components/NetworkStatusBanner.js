@@ -7,8 +7,7 @@ import {
   View,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import images from '../assets/images';
-import Text from './Text';
+import {Text, images} from '@caryaar/components';
 
 const NetworkStatusBanner = () => {
   const [isConnected, setIsConnected] = useState(true);

@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import CommonModal from './CommonModal';
-import OTPVerification from './OTPVerification';
-import Spacing from './Spacing';
-import Text from './Text';
-import theme from '../theme';
+import {
+  CommonModal,
+  OTPVerification,
+  Spacing,
+  Text,
+  theme,
+} from '@caryaar/components';
 
 const OTPModal = ({
   isVisible,
