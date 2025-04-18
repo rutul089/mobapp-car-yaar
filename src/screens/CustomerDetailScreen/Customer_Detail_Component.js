@@ -3,12 +3,13 @@
 import React from 'react';
 import {View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
+
 import {
   Button,
   DropdownModal,
   GroupWrapper,
   Header,
+  images,
   Input,
   OptionCard,
   SafeAreaWrapper,

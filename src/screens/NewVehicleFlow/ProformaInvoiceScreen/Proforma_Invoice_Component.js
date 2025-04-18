@@ -1,21 +1,21 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../../assets/images';
+
 import {
+  Button,
   Card,
+  CurrencySlider,
   Header,
+  images,
+  ImageUploadButton,
   Input,
   SafeAreaWrapper,
   Spacing,
   Text,
-  CurrencySlider,
-  ImageUploadButton,
-  Button,
-} from '../../../components';
+  theme,
+} from '@caryaar/components';
 import {goBack} from '../../../navigation/NavigationUtils';
-import theme from '../../../theme';
-import {formatAmount, formatIndianNumber} from '../../../utils/helper';
 
 const Proforma_Invoice_Component = ({
   button1Press,
@@ -32,6 +32,7 @@ const Proforma_Invoice_Component = ({
 }) => {
   const [amount, setAmount] = React.useState(500000);
   const [tenure, setTenure] = React.useState(24);
+  const [isEditing, setIsEditing] = React.useState(false);
 
   const invoiceDetail = () => {
     return (
@@ -138,6 +139,8 @@ const Proforma_Invoice_Component = ({
               labelEnd={'₹72,90,000'}
               labelStart={'₹0'}
               step={10000}
+              onSlidingStart={() => console.log('onSlidingStart')}
+              onSlidingComplete={() => console.log('onSlidingComplete')}
             />
             <Spacing size="smd" />
             <Input
@@ -169,11 +172,15 @@ const Proforma_Invoice_Component = ({
               isLeftIconVisible={true}
               leftIconName={images.icRupee}
               onChangeText={v => {
-                setTenure(v);
+                const numericValue = v.replace(/\D/g, '');
+                setTenure(numericValue);
                 console.log(v);
               }}
-              value={tenure}
+              value={isEditing ? tenure + '' : `${tenure} Months`}
               keyboardType="number-pad"
+              onFocus={() => setIsEditing(true)}
+              onBlur={() => setIsEditing(false)}
+              // rightLabel="Months"
             />
             <Spacing size="md" />
             <ImageUploadButton

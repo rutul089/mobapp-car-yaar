@@ -1,20 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {ScrollView, View, StyleSheet, Image} from 'react-native';
 import {
+  BankCard,
+  Button,
+  Card,
   Header,
   SafeAreaWrapper,
-  Text,
-  BankCard,
   Spacing,
-  Card,
-  Button,
-} from '../../components';
+  Text,
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
-import {formatIndianNumber} from '../../utils/helper';
+
 import images from '../../assets/images';
-import LinearGradient from 'react-native-linear-gradient';
+import {formatIndianNumber} from '../../utils/helper';
 
 const Lender_Details_Component = ({onHoldProceedPress}) => {
   const result = 1.2 * 1000000 - 600000 - 10000; // 590000

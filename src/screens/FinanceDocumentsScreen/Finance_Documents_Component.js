@@ -1,6 +1,4 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {FlatList} from 'react-native';
 import {
   FormFooterButtons,
   Header,
@@ -8,11 +6,13 @@ import {
   Spacing,
   Text,
   VehicleImageCard,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {FlatList} from 'react-native';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {styles} from '../../styles/Vehicle.Image.style';
-import theme from '../../theme';
 
 const Finance_Documents_Component = ({
   params,
@@ -34,6 +34,7 @@ const Finance_Documents_Component = ({
           onDeletePress={() => onDeletePress && onDeletePress(item)}
           viewImage={() => onImagePress && onImagePress(item)}
           cardWrapper={{width: '45%', flex: 0}}
+          btnLabel={'Click to Upload\nImage or PDF'}
         />
       </>
     );

@@ -73,6 +73,7 @@ class ManageMemberScreen extends Component {
     const {mobileNumber, fullName} = this.state;
 
     Alert.alert(mobileNumber + ' ' + fullName);
+    this.onModalHide();
   };
 
   onChangeFullName = value => {

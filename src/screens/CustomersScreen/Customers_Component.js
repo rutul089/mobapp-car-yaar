@@ -1,15 +1,17 @@
-import React from 'react';
-import {StyleSheet, FlatList} from 'react-native';
-import images from '../../assets/images';
 import {
   CardWrapper,
   CustomerCard,
   ImageHeader,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {FlatList, StyleSheet} from 'react-native';
+
 import {getGradientColors, getStatusColor} from '../../utils/helper';
+import {navigate} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
 const Customers_Component = ({customerList, onWrapperClick}) => {
   return (
@@ -17,6 +19,8 @@ const Customers_Component = ({customerList, onWrapperClick}) => {
       <ImageHeader
         subTittle={'Customers'}
         searchPlaceHolder={'Search by customer name or ID...'}
+        onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
+        onRightIconPress={() => navigate(ScreenNames.Notification)}
       />
 
       <FlatList
@@ -26,7 +30,7 @@ const Customers_Component = ({customerList, onWrapperClick}) => {
         renderItem={({item}) => (
           <>
             <CardWrapper
-              onWrapperClick={() => onWrapperClick && onWrapperClick(item)}
+              onPress={() => onWrapperClick && onWrapperClick(item)}
               applicationNumber={item?.applicationNumber}
               showRightArrow={true}
               statusColor={getStatusColor(item.applicationNumber)}

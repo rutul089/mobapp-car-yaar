@@ -1,18 +1,18 @@
-import React from 'react';
-import {Alert, StyleSheet} from 'react-native';
 import {
   Button,
   Card,
   Header,
+  images,
   Input,
   SafeAreaWrapper,
   Spacing,
-  Text,
-} from '../../../components';
-import {goBack} from '../../../navigation/NavigationUtils';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {Alert, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import theme from '../../../theme';
-import images from '../../../assets/images';
+
+import {goBack} from '../../../navigation/NavigationUtils';
 
 const Change_Password_Component = ({params}) => {
   return (

@@ -1,19 +1,18 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   Card,
   FormFooterButtons,
   Header,
-  RadioBlock,
   RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
 
 const Vehicle_Hypothecation_Component = ({
   onSelectedAnswer = () => {},

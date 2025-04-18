@@ -1,17 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {ScrollView, View, StyleSheet, Image} from 'react-native';
 import {
   Card,
   Header,
-  Pressable,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../../components';
-import images from '../../../assets/images';
+  images,
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
+
 import {goBack} from '../../../navigation/NavigationUtils';
-import theme from '../../../theme';
+
 import ScreenNames from '../../../constants/ScreenNames';
 
 const Profile_Component = ({

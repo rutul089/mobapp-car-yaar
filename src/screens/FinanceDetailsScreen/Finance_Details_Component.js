@@ -1,19 +1,19 @@
-import React, {useRef} from 'react';
-import {Alert, StyleSheet} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
 import {
   Card,
   FormFooterButtons,
   Header,
+  images,
   Input,
   RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React, {useRef} from 'react';
+import {Alert, StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
-import theme from '../../theme';
 import {goBack} from '../../navigation/NavigationUtils';
 
 const Finance_Details_Component = ({

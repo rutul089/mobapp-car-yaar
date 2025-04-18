@@ -1,11 +1,8 @@
-/* eslint-disable react-native/no-inline-styles */
-
 import {NavigationContainer} from '@react-navigation/native';
 import React, {Component} from 'react';
-import {AppState, Image, StyleSheet, View} from 'react-native';
+import {AppState, StyleSheet, View} from 'react-native';
 
-import {NetworkStatusBanner, Text} from '../components';
-import theme from '../theme';
+import {NetworkStatusBanner} from '../components';
 import {navigationRef} from './NavigationUtils';
 import StackRoutes from './StackRoutes';
 
@@ -30,29 +27,6 @@ export default class RootNavigator extends Component {
     this.setState({
       currentScreenName: currentRouteName,
     });
-  };
-
-  renderTabIcon = image => {
-    return (
-      <Image
-        source={image}
-        style={{
-          height: 24,
-          width: 24,
-        }}
-      />
-    );
-  };
-
-  renderTabLabel = (focused, label) => {
-    return (
-      <Text
-        color={focused ? theme.colors.textPrimary : theme.colors.textLabel}
-        size={theme.typography.fontSizes.caption}
-        hankenGroteskBold={focused}>
-        {label}
-      </Text>
-    );
   };
 
   render() {

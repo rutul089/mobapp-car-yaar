@@ -1,5 +1,3 @@
-import React from 'react';
-import {ScrollView, View, StyleSheet, Image} from 'react-native';
 import {
   Button,
   Card,
@@ -9,11 +7,14 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../../components';
-import images from '../../../assets/images';
+  images,
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+
 import {goBack} from '../../../navigation/NavigationUtils';
-import theme from '../../../theme';
-import ScreenNames from '../../../constants/ScreenNames';
+
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Edit_Profile_Component = ({handleSavePress}) => {

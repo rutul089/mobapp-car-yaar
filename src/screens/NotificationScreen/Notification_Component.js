@@ -1,10 +1,13 @@
+import {
+  Header,
+  NotificationCard,
+  SafeAreaWrapper,
+  theme,
+} from '@caryaar/components';
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import images from '../../assets/images';
-import {Header, SafeAreaWrapper} from '../../components';
-import theme from '../../theme';
-import NotificationCard from './NotificationCard';
 
 const Notification_Component = ({
   dataList,
@@ -33,10 +36,10 @@ const Notification_Component = ({
         bounces={false}
         renderItem={({item}) => (
           <NotificationCard
-            description={item?.description}
-            isLatest={item?.isLatest}
+            title={item?.description}
+            showBadge={item?.isLatest}
             imgSource={statusIcons[item.status]}
-            subTitle={item?.minutesAgo}
+            timeline={item?.minutesAgo}
           />
         )}
         contentContainerStyle={styles.listContent}

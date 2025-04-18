@@ -1,8 +1,7 @@
+import {Card, Header, SafeAreaWrapper, Text, theme} from '@caryaar/components';
 import React from 'react';
-import {ScrollView, View, StyleSheet} from 'react-native';
-import {Card, Header, SafeAreaWrapper, Text} from '../../../components';
+import {ScrollView, StyleSheet} from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
-import theme from '../../../theme';
 
 const Contact_Support_Component = ({params}) => {
   return (

@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import {
-  View,
   FlatList,
-  TouchableOpacity,
-  StyleSheet,
+  Image,
   LayoutAnimation,
   Platform,
+  StyleSheet,
   UIManager,
-  Image,
+  View,
 } from 'react-native';
 
 import {
@@ -16,9 +15,10 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../../components';
-import images from '../../../assets/images';
-import theme from '../../../theme';
+  images,
+  theme,
+} from '@caryaar/components';
+
 import {goBack} from '../../../navigation/NavigationUtils';
 
 if (Platform.OS === 'android') {
@@ -63,8 +63,8 @@ const faqData = [
 
 const AccordionItem = ({item, isExpanded, onPress}) => (
   <>
-    <Card padding={16} noShadow={true}>
-      <TouchableOpacity style={styles.header} onPress={onPress}>
+    <Card padding={16} noShadow={true} onPress={onPress}>
+      <View style={styles.header} onPress={onPress}>
         <Text size={'small'} hankenGroteskSemiBold={isExpanded}>
           {item.question}
         </Text>
@@ -73,7 +73,7 @@ const AccordionItem = ({item, isExpanded, onPress}) => (
           resizeMode="contain"
           style={{height: 20, width: 20}}
         />
-      </TouchableOpacity>
+      </View>
       {isExpanded && (
         <>
           <Spacing size="xs" />

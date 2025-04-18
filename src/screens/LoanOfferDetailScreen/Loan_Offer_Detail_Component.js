@@ -19,9 +19,8 @@ const Loan_Offer_Detail_Component = ({
   params,
   onProceedPress,
   onLoanOfferPress,
-  loanDetail,
+  loanDetail = {},
 }) => {
-  console.log({loanDetail123: loanDetail});
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
@@ -32,8 +31,8 @@ const Loan_Offer_Detail_Component = ({
       <ScrollView contentContainerStyle={styles.wrapper}>
         <FinanceCard
           statusImg={images.successCheck}
-          bankName={loanDetail.title}
-          interestRate={loanDetail.interestRate}
+          bankName={loanDetail?.title}
+          interestRate={loanDetail?.interestRate}
           noMargin
           showRightArrow
           rightIcon={images.successCheck}

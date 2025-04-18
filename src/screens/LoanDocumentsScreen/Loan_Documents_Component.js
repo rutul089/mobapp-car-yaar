@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 
-import {FlatList} from 'react-native';
 import {
   FormFooterButtons,
   Header,
@@ -10,6 +9,7 @@ import {
   VehicleImageCard,
   theme,
 } from '@caryaar/components';
+import {FlatList} from 'react-native';
 
 import strings from '../../locales/strings';
 

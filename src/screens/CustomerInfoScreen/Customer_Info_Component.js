@@ -1,5 +1,3 @@
-import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
 import {
   Button,
   CardWrapper,
@@ -8,8 +6,10 @@ import {
   Header,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';

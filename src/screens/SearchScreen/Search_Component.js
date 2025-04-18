@@ -1,18 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View} from 'react-native';
 import {
   Button,
   Header,
+  images,
   Input,
   SafeAreaWrapper,
   Spacing,
-} from '../../components';
-import {styles} from '../../styles/Search.style';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
-import images from '../../assets/images';
+import {styles} from '../../styles/Search.style';
 
 const Search_Component = ({
   params,

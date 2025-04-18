@@ -1,5 +1,3 @@
-import React from 'react';
-import {FlatList, Text} from 'react-native';
 import {
   Button,
   DetailInfoCard,
@@ -7,11 +5,13 @@ import {
   SafeAreaWrapper,
   Spacing,
   VehicleImageCard,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {FlatList, Text} from 'react-native';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {styles} from '../../styles/Vehicle.Image.style';
-import theme from '../../theme';
 
 const Customer_Financial_Docs_Component = ({
   documentList,

@@ -1,17 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {FlatList, Text} from 'react-native';
 import {
   Button,
   Header,
   SafeAreaWrapper,
   Spacing,
   VehicleImageCard,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {FlatList, Text} from 'react-native';
 import {styles} from '../../styles/Vehicle.Image.style';
-import theme from '../../theme';
-import strings from '../../locales/strings';
+
 import ImageViewing from 'react-native-image-viewing';
+import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 const images = [
   {uri: 'https://placekitten.com/800/600'},

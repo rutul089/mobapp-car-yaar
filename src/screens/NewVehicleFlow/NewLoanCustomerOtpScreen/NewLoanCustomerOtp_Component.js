@@ -1,5 +1,3 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
 import {
   Button,
   CommonModal,
@@ -9,10 +7,12 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../../components';
-import theme from '../../../theme';
-import {goBack} from '../../../navigation/NavigationUtils';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {goBack} from '../../../navigation/NavigationUtils';
 
 const NewLoanCustomerOtp_Component = ({handleSendOTPPress}) => {
   return (

@@ -1,5 +1,3 @@
-import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
 import {
   Button,
   DetailInfoCard,
@@ -7,9 +5,11 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
 
 const MoreOn_Financial_Component = ({
   cibilList,

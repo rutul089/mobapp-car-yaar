@@ -1,7 +1,3 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
 import {
   Card,
   FormFooterButtons,
@@ -10,8 +6,13 @@ import {
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
-import theme from '../../theme';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import images from '../../assets/images';
+
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 

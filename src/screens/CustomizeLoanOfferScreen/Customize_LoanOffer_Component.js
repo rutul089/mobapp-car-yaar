@@ -1,19 +1,20 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
 import {
   Button,
   Card,
   Header,
+  images,
   Input,
   RadioButton,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {goBack} from '../../navigation/NavigationUtils';
-import theme from '../../theme';
+
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../assets/images';
 
 const Customize_LoanOffer_Component = ({
   params,

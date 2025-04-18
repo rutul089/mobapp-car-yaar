@@ -1,9 +1,8 @@
 // navigation/TabNavigator.js
+import {Text, images, theme} from '@caryaar/components';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {Image} from 'react-native';
-import images from '../assets/images';
-import {Text} from '../components';
 import ScreenNames from '../constants/ScreenNames';
 import {
   ApplicationsScreen,
@@ -11,7 +10,6 @@ import {
   HomeScreen,
   VehiclesScreen,
 } from '../screens';
-import theme from '../theme';
 
 const Tab = createBottomTabNavigator();
 

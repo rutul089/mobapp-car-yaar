@@ -1,17 +1,17 @@
-import React from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
 import {
   Button,
   Card,
   Header,
+  images,
   Input,
   SafeAreaWrapper,
   Spacing,
   Text,
-} from '../../../components';
+  theme,
+} from '@caryaar/components';
+import React from 'react';
+import {ScrollView, StyleSheet} from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
-import theme from '../../../theme';
-import images from '../../../assets/images';
 
 const Select_Vehicle_Component = ({handleProceedPress}) => {
   return (
