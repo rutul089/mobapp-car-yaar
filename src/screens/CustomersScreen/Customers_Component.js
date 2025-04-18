@@ -31,9 +31,10 @@ const Customers_Component = ({customerList, onWrapperClick}) => {
           <>
             <CardWrapper
               onPress={() => onWrapperClick && onWrapperClick(item)}
-              applicationNumber={item?.applicationNumber}
-              showRightArrow={true}
-              statusColor={getStatusColor(item.applicationNumber)}
+              leftText={item?.applicationNumber}
+              showLeftText
+              showTrailingIcon
+              statusTextColor={getStatusColor(item.applicationNumber)}
               gradientColors={getGradientColors(item.applicationNumber)}>
               <CustomerCard
                 customerId={item.customerId}

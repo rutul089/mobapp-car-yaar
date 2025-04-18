@@ -28,9 +28,9 @@ const Customer_Info_Component = ({
       <ScrollView contentContainerStyle={styles.scrollWrapper} bounces={false}>
         <View style={styles.headerWrapper}>
           <CardWrapper
-            applicationNumber={customerInfo?.applicationNumber}
-            showRightArrow={false}
-            statusColor={'#1D95F0'}
+            leftText={customerInfo?.applicationNumber}
+            showLeftText
+            statusTextColor={'#1D95F0'}
             gradientColors={[
               'rgba(29, 149, 240, 0.24)',
               'rgba(61, 173, 255, 0.24)',
