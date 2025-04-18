@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import {ScrollView, StyleSheet, View} from 'react-native';
-
 import {
   Button,
   CardWithActionButton,
@@ -12,9 +11,7 @@ import {
   Text,
   theme,
 } from '@caryaar/components';
-
 import {goBack} from '../../navigation/NavigationUtils';
-
 import {Col, Grid, Row} from 'react-native-easy-grid';
 import {formatIndianNumber} from '../../utils/helper';
 
@@ -35,10 +32,10 @@ const Loan_Offer_Detail_Component = ({
     );
   };
 
-  const renderRow = (value, index, style) => {
+  const renderRow = (value, key, style) => {
     return (
       <Row
-        key={value}
+        key={key.toString()}
         style={[
           styles.tableHeaderStyle,
           {
@@ -46,11 +43,13 @@ const Loan_Offer_Detail_Component = ({
             alignItems: 'center',
             backgroundColor: 'white',
           },
+          style,
         ]}>
         <Text size="caption">{value}</Text>
       </Row>
     );
   };
+
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
@@ -58,6 +57,7 @@ const Loan_Offer_Detail_Component = ({
         subtitle="GJ 01 JR 0945"
         onBackPress={() => goBack()}
       />
+
       <ScrollView contentContainerStyle={styles.wrapper}>
         <CardWithActionButton
           buttonLabel={'Apply Now'}
@@ -72,7 +72,9 @@ const Loan_Offer_Detail_Component = ({
           arrowIcon={images.arrow_right}
           icon={images.moneyCycleIcon}
         />
+
         <Spacing size="md" />
+
         <FinanceCard
           statusImg={images.successCheck}
           bankName={loanDetail?.title}
@@ -90,7 +92,9 @@ const Loan_Offer_Detail_Component = ({
           breakdownValue={'5,90,000'}
           logo={images.hdfcImg}
         />
+
         <Spacing size="md" />
+
         <CardWithActionButton
           description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
           icon={images.filterFill}
@@ -98,14 +102,18 @@ const Loan_Offer_Detail_Component = ({
           arrowIcon={images.arrow_right}
           onPress={onLoanOfferPress}
         />
+
         <Spacing size="xl" />
+
         <View style={styles.rowWrapper}>
           <Text>Tentative EMI Payment</Text>
           <Text size={'small'} hankenGroteskBold color={'#F8A902'}>
             #ABC123
           </Text>
         </View>
+
         <Spacing size="md" />
+
         <View style={styles.tableContainer}>
           <ScrollView
             horizontal
@@ -113,55 +121,79 @@ const Loan_Offer_Detail_Component = ({
             contentContainerStyle={{
               flexGrow: 1,
             }}>
+            {/* S.No. */}
             <Grid>
               <Col>
                 {renderCellHeader('S.No.')}
-                {emiData.map((rowData, index) => renderRow(rowData.sno, index))}
+                {emiData.map((rowData, index) =>
+                  renderRow(rowData.sno, `sno-${index}`),
+                )}
               </Col>
             </Grid>
+
+            {/* Opening Balance */}
             <Grid>
               <Col>
                 {renderCellHeader('Opn.Bal.')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.opening, index)),
+                  renderRow(
+                    formatIndianNumber(rowData.opening),
+                    `opening-${index}`,
+                  ),
                 )}
               </Col>
             </Grid>
+
+            {/* EMI */}
             <Grid>
               <Col>
                 {renderCellHeader('EMI')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.emi, index)),
+                  renderRow(formatIndianNumber(rowData.emi), `emi-${index}`),
                 )}
               </Col>
             </Grid>
+
+            {/* Principal */}
             <Grid>
               <Col>
                 {renderCellHeader('Principal')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.principal, index)),
+                  renderRow(
+                    formatIndianNumber(rowData.principal),
+                    `principal-${index}`,
+                  ),
                 )}
               </Col>
             </Grid>
+
+            {/* Interest */}
             <Grid>
               <Col>
                 {renderCellHeader('Interest')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.interest, index)),
+                  renderRow(
+                    formatIndianNumber(rowData.interest),
+                    `interest-${index}`,
+                  ),
                 )}
               </Col>
             </Grid>
+
+            {/* Outstanding Balance */}
             <Grid>
               <Col>
                 {renderCellHeader('O/S Bal.')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.os, index)),
+                  renderRow(formatIndianNumber(rowData.os), `os-${index}`),
                 )}
               </Col>
             </Grid>
           </ScrollView>
         </View>
+
         <Spacing size="xl" />
+
         <Button label={'Proceed'} onPress={onProceedPress} />
       </ScrollView>
     </SafeAreaWrapper>
@@ -189,7 +221,7 @@ const styles = StyleSheet.create({
   },
   tableContainer: {
     borderRadius: theme.sizes.borderRadius.card,
-    overflow: 'hidden', // important — clips child borders inside rounded parent
+    overflow: 'hidden',
     backgroundColor: 'white',
   },
 });
