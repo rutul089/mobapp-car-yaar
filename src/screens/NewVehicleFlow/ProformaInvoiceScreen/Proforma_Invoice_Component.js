@@ -163,7 +163,6 @@ const Proforma_Invoice_Component = ({
               value={tenure}
               onValueChange={v => {
                 setTenure(v);
-                console.log(v);
               }}
               label={'Tenure'}
               min={0}

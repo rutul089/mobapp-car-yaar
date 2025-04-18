@@ -23,8 +23,7 @@ const Vehicle_Detail_Component = ({
         <View style={styles.wrapper}>
           <CardWrapper
             showLeftText
-            leftText={'DRAFT'}
-            status={'PRIVATE'}
+            leftText={'PRIVATE CAR'}
             statusTextColor={'black'}
             gradientColors={['#FFFFFF', '#FFFFFF']}>
             <VehicleCard
