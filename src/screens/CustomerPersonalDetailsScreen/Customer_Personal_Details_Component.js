@@ -473,6 +473,7 @@ const Customer_Personal_Details_Component = ({
           onPressPrimaryButton={saveAsDraftPress}
           onPressSecondaryButton={onNextPress}
         />
+        <Spacing size={'xl'} />
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={isOccupationModalVisible}

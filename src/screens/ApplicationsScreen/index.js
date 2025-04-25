@@ -9,11 +9,15 @@ class ApplicationsScreen extends Component {
     super(props);
     this.state = {};
     this.onItemPress = this.onItemPress.bind(this);
+    this.handleTrackApplication = this.handleTrackApplication.bind(this);
   }
 
   onItemPress = item => {
-    console.log({item});
     navigate(ScreenNames.ViewLoanDetail, {params: item});
+  };
+
+  handleTrackApplication = item => {
+    navigate(ScreenNames.TrackApplication, {params: item});
   };
 
   render() {
@@ -21,6 +25,7 @@ class ApplicationsScreen extends Component {
       <>
         <Applications_Component
           onItemPress={this.onItemPress}
+          handleTrackApplication={this.handleTrackApplication}
           dummyList={[
             {
               id: '#1023',

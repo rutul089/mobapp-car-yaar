@@ -6,6 +6,7 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  Button,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
@@ -22,6 +23,8 @@ const View_Loan_Details_Component = ({
   onBackToHomePress,
   item,
   loanDetail,
+  isError,
+  handleUploadDocument,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -37,6 +40,7 @@ const View_Loan_Details_Component = ({
             showApplicationNumber={true}
             showLeftText
             isStatusBold
+            isLeftTextBold
             gradientColors={getGradientColorsLoan(loanDetail.type)}
             leftText={loanDetail?.id}>
             <FinanceCard
@@ -70,6 +74,16 @@ const View_Loan_Details_Component = ({
             data={vehicleDetail}
             isSemiBold={false}
           />
+          {loanDetail.type === 4 && (
+            <>
+              <Spacing size="lg" />
+              <Button
+                label={'Upload Documents'}
+                onPress={handleUploadDocument}
+              />
+              <Spacing size="lg" />
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaWrapper>

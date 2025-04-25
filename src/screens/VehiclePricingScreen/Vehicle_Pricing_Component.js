@@ -32,7 +32,7 @@ const Vehicle_Pricing_Component = ({
         title={strings.vehicleDetailTitle}
         onBackPress={onBackPress}
         showRightContent
-        rightLabel={'_12312'}
+        // rightLabel={'_12312'}
       />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}

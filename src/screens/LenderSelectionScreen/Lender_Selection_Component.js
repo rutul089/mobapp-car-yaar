@@ -40,6 +40,7 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       badge: 2,
       showBadge: true,
       showNewBreakDown: true,
+      isEligibleForBT: true,
       footerInfo: [
         {label: 'Tenure', value: '60 Month'},
         {label: 'EMI', value: formatIndianNumber('75000.12')},
@@ -89,10 +90,11 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       badgeLevel={item.badge}
       footerData={item.footerInfo}
       onItemPress={() => onItemPress(item)}
-      showBreakdown
+      showBreakdown={item.showNewBreakDown}
       breakdownExpression={'(1.2 × 10,00,000) - 6,00,000 - 10,000'}
       breakdownValue={1.2 * 1000000 - 600000 - 10000}
       onPress={() => onItemPress(item)}
+      isEligibleForBT={item.isEligibleForBT}
     />
   );
 
@@ -105,12 +107,19 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       />
       <FlatList
         data={financeData}
-        bounces={false}
+        bounces={true}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<Text>Tailored Loans for #ABC123</Text>}
+        ListHeaderComponent={
+          <Text>
+            Tailored Loans for{' '}
+            <Text color={'#F8A902'} hankenGroteskBold>
+              #ABC123
+            </Text>
+          </Text>
+        }
       />
     </SafeAreaWrapper>
   );

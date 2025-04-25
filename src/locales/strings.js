@@ -1,5 +1,5 @@
 const strings = {
-  welcomeBack: 'Welcome Back',
+  welcomeBack: 'Welcome Back!',
   welcomeNote: 'Get Instant Approval on your Auto Loan',
   enterMobile: 'Enter your Mobile Number',
   generateOTP: 'Generate OTP',

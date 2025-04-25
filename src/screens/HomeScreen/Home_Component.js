@@ -13,6 +13,8 @@ import {
 } from '@caryaar/components';
 import {vehicleType} from '../../constants/enums';
 import {styles} from '../../styles/Home.style';
+import {navigate} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
 const Home_Component = ({
   params,
@@ -71,12 +73,13 @@ const Home_Component = ({
         <ImageHeader
           onRightIconPress={onNotificationPress}
           hideSubHeader={true}
+          onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
         />
         <View style={styles.header}>
           {/* User data */}
           <View style={styles.profileRow}>
             <Text
-              hankenGroteskBold={true}
+              hankenGroteskSemiBold={true}
               color={'white'}
               style={{width: '80%'}}>
               Welcome Back Ghanshyam Sinha!
@@ -95,6 +98,7 @@ const Home_Component = ({
             {renderBox(3, '#6EEE87', 'Loans\nApproved')}
             {renderBox(2, '#696EFF', 'Vehicles\nOnboarded')}
           </View>
+          <Spacing />
         </View>
         <ScrollView
           bounces={false}
@@ -102,7 +106,7 @@ const Home_Component = ({
           showsVerticalScrollIndicator={false}>
           {/* Car Type Selector */}
           <>
-            <Text size={'h4'} lineHeight={'body'} hankenGroteskSemiBold={true}>
+            <Text size={'h4'} lineHeight={'body'} hankenGroteskBold={true}>
               Find The Perfect Loan For Your Vehicle
             </Text>
             <Spacing />

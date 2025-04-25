@@ -1,7 +1,6 @@
-import {SafeAreaWrapper, Text, theme} from '@caryaar/components';
+import {SafeAreaWrapper, Text, theme, images} from '@caryaar/components';
 import {Image, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import images from '../../assets/images';
 
 import {styles} from '../../styles/splash';
 

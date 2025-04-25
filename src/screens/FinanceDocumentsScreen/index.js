@@ -8,12 +8,12 @@ class FinanceDocumentsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onNextPress = this.onNextPress.bind(this);
+    this.handleNextStepPress = this.handleNextStepPress.bind(this);
   }
 
   componentDidMount() {}
 
-  onNextPress = () => {
+  handleNextStepPress = () => {
     navigate(ScreenNames.LoanAmount);
   };
 
@@ -38,7 +38,7 @@ class FinanceDocumentsScreen extends Component {
               image: null,
             },
           ]}
-          onNextPress={this.onNextPress}
+          handleNextStepPress={this.handleNextStepPress}
         />
       </>
     );

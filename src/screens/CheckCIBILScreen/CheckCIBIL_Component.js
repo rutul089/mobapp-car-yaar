@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -56,7 +56,12 @@ const CheckCIBIL_Component = ({
             <>
               <Spacing size="md_lg" />
               <Text type={'label'}>Enter OTP</Text>
-              <OTPVerification containerStyle={{left: '-9%', marginTop: 9}} />
+              <OTPVerification
+                containerStyle={{
+                  left: Platform.OS === 'android' ? '-4%' : '-9%',
+                  marginTop: 9,
+                }}
+              />
               <Spacing size={'smd'} />
               <Text type={'helper-text'} textAlign={'center'}>
                 Didn't get the OTP?

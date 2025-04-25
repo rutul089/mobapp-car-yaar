@@ -9,8 +9,15 @@ import {
   theme,
 } from '@caryaar/components';
 import {getGradientColorsLoan} from '../../utils/helper';
+import {navigate} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
-const Applications_Component = ({params, dummyList, onItemPress}) => {
+const Applications_Component = ({
+  params,
+  dummyList,
+  onItemPress,
+  handleTrackApplication,
+}) => {
   const renderItem = ({item}) => (
     <>
       <CardWrapper
@@ -18,6 +25,7 @@ const Applications_Component = ({params, dummyList, onItemPress}) => {
         showApplicationNumber={true}
         showLeftText
         isStatusBold={true}
+        isLeftTextBold={true}
         gradientColors={getGradientColorsLoan(item.type)}
         leftText={item?.id}>
         <FinanceCard
@@ -26,7 +34,9 @@ const Applications_Component = ({params, dummyList, onItemPress}) => {
           hideTopMargin
           showRightArrow
           ctaLabel="Track Loan Application"
-          onCTAPress={() => {}}
+          onCTAPress={() =>
+            handleTrackApplication && handleTrackApplication(item)
+          }
           footerData={item.footerInfo}
           showBadge={false}
           logo={{uri: item.image}}
@@ -42,6 +52,7 @@ const Applications_Component = ({params, dummyList, onItemPress}) => {
       <ImageHeader
         subTittle={'Loan Application'}
         searchPlaceHolder={'Search by application id'}
+        onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
       />
       <FlatList
         data={dummyList}

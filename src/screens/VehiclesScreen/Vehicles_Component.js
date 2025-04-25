@@ -8,6 +8,8 @@ import {
 } from '@caryaar/components';
 import {FlatList, StyleSheet} from 'react-native';
 import {getGradientColors, getStatusColor} from '../../utils/helper';
+import {navigate} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
 const Vehicles_Component = ({vehicleData, onWrapperClick}) => {
   return (
@@ -15,6 +17,7 @@ const Vehicles_Component = ({vehicleData, onWrapperClick}) => {
       <ImageHeader
         subTittle={'Vehicles'}
         searchPlaceHolder={'Search by vehicle number...'}
+        onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
       />
       <FlatList
         data={vehicleData}
