@@ -1,6 +1,9 @@
 import {Component} from 'react';
+import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigateAndSimpleReset} from '../../navigation/NavigationUtils';
+import {setLoginStatus} from '../../redux/actions';
+import {getLoginStatus} from '../../utils/storage';
 import Splash_Component from './Splash_Component';
 
 class Splash extends Component {
@@ -10,10 +13,21 @@ class Splash extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      navigateAndSimpleReset(ScreenNames.Login);
-    }, 1500);
+    this.checkLoginStatusAndNavigate();
   }
+
+  checkLoginStatusAndNavigate = async () => {
+    const loginStatus = await getLoginStatus();
+    this.props.setLoginStatus(loginStatus);
+
+    setTimeout(() => {
+      if (loginStatus) {
+        navigateAndSimpleReset(ScreenNames.HomeTab);
+      } else {
+        navigateAndSimpleReset(ScreenNames.Login);
+      }
+    }, 1500);
+  };
 
   render() {
     return (
@@ -24,4 +38,8 @@ class Splash extends Component {
   }
 }
 
-export default Splash;
+const mapDispatchToProps = {setLoginStatus};
+const mapStateToProps = state => {
+  return {};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Splash);

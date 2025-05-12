@@ -1,4 +1,5 @@
 import theme from '../theme';
+import Toast from 'react-native-toast-message';
 
 export const formatIndianNumber = (value, showSign = true) => {
   const [intPart, decimalPart] = value?.toString().split('.');
@@ -87,5 +88,78 @@ export const getGradientColorsLoan = status => {
       return ['#FF5B5E', '#B60003'];
     default:
       return ['#E8E8E8', '#E8E8E8'];
+  }
+};
+
+/**
+ * Ensure mobile number has +91 prefix
+ * @param {string} num
+ * @returns {string}
+ */
+export const formatMobileNumber = num => {
+  return num.startsWith('+91') ? num : `+91${num}`;
+};
+
+/**
+ * Show toast message
+ * @param {'success'|'error'|'info'|'warning'} type
+ * @param {string} message
+ * @param {'top'|'bottom'} [position='bottom']
+ * @param {number} [visibilityTime=2000]
+ */
+export const showToast = (
+  type = 'warning',
+  message = '',
+  position = 'bottom',
+  visibilityTime = 2000,
+) => {
+  Toast.show({
+    type,
+    text1: message,
+    position,
+    bottomOffset: 100,
+    topOffset: 100,
+    visibilityTime,
+  });
+};
+
+/**
+ * Show API error toast
+ * @param {any} error
+ */
+export const showApiErrorToast = error => {
+  let type = 'warning';
+  let message = getErrorMessage(error);
+  if (error?.status === 503) {
+    type = 'warning';
+    message = 'Service is temporarily unavailable. Please try again later.';
+  }
+  showToast(type, message, 'bottom', 3000);
+};
+
+/**
+ * Parse API error object into readable message
+ * @param {any} error
+ * @returns {string}
+ */
+export const getErrorMessage = error => {
+  try {
+    // if (error?.message === 'Network Error') {
+    //   return 'Please check your internet connection.';
+    // }
+    const message = error?.response?.data?.message;
+    return message || 'Something went wrong';
+  } catch {
+    return 'Something went wrong';
+  }
+};
+
+/**
+ * Show API success toast
+ * @param {Object} response
+ */
+export const showApiSuccessToast = response => {
+  if (response?.success && response?.message) {
+    showToast('success', response.message, 'bottom', 3000);
   }
 };

@@ -76,6 +76,9 @@ const Login_Component = ({
                 keyboardType="number-pad"
                 isError={isError}
                 statusMsg={'Please enter a valid mobile number.'}
+                autoFocus
+                returnKeyType={'done'}
+                onSubmitEditing={generateOTP}
               />
               <Spacing size="xl" />
               <Button label={strings.generateOTP} onPress={generateOTP} />

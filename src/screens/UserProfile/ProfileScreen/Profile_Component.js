@@ -7,6 +7,7 @@ import {
   Text,
   images,
   theme,
+  CommonModal,
 } from '@caryaar/components';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
@@ -17,6 +18,9 @@ import ScreenNames from '../../../constants/ScreenNames';
 
 const Profile_Component = ({
   onPressRightContent,
+  onModalHide,
+  onPressPrimaryButton,
+  showLogoutModal,
   handleMenuPress = () => {},
 }) => {
   const profileCard = () => {
@@ -134,6 +138,21 @@ const Profile_Component = ({
           ))}
         </View>
       </ScrollView>
+      <CommonModal
+        isVisible={showLogoutModal}
+        onModalHide={onModalHide}
+        primaryButtonLabel={'Logout'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        onPressPrimaryButton={onPressPrimaryButton}
+        title="Confirm Logout">
+        <View style={{paddingVertical: 10}}>
+          <Text textAlign="center" lineHeight={22}>
+            Are you sure you want to log out? You will need to log in again to
+            access your account.
+          </Text>
+        </View>
+      </CommonModal>
     </SafeAreaWrapper>
   );
 };

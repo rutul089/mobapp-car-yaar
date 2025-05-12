@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
+import {updateUserDetailField} from '../../redux/actions';
 import {validateMobileNumber} from '../../utils/validation';
 import Login_Component from './Login_Component';
 
@@ -29,6 +31,7 @@ class Login extends Component {
       this.setState({isError: true});
       return;
     }
+    this.props.updateUserDetailField('phone', mobileNumber);
     navigate(ScreenNames.OTP, {mobileNumber});
   };
 
@@ -47,4 +50,10 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = {updateUserDetailField};
+const mapStateToProps = ({appState}) => {
+  return {
+    loading: appState.loading,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

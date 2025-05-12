@@ -58,10 +58,7 @@ class MoreOnFinancialScreen extends Component {
 
 const mapActionCreators = {};
 const mapStateToProps = state => {
-  return {
-    isInternetConnected: state.global.isInternetConnected,
-    isLoading: state.global.loading,
-  };
+  return {};
 };
 export default connect(
   mapStateToProps,

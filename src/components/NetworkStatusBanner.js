@@ -8,11 +8,14 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {Text, images} from '@caryaar/components';
+import {useDispatch} from 'react-redux';
+import {setNetworkStatus} from '../redux/actions';
 
 const NetworkStatusBanner = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [visible, setVisible] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -20,14 +23,16 @@ const NetworkStatusBanner = () => {
         setIsConnected(false);
         setVisible(true);
         fadeIn();
+        dispatch(setNetworkStatus(false)); // update redux
       } else if (!isConnected) {
         setIsConnected(true);
         fadeOut();
+        dispatch(setNetworkStatus(true)); // update redux
       }
     });
 
     return () => unsubscribe();
-  }, [isConnected]);
+  }, [isConnected, dispatch]);
 
   const fadeIn = () => {
     Animated.timing(fadeAnim, {

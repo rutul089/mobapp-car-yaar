@@ -74,6 +74,7 @@ const Home_Component = ({
           onRightIconPress={onNotificationPress}
           hideSubHeader={true}
           onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
+          profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
         />
         <View style={styles.header}>
           {/* User data */}

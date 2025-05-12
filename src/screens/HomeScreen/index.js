@@ -97,11 +97,8 @@ class HomeScreen extends Component {
   }
 }
 
-const mapActionCreators = {selectedLoanType};
-const mapStateToProps = state => {
-  return {
-    isInternetConnected: state.global.isInternetConnected,
-    isLoading: state.global.loading,
-  };
+const mapDispatchToProps = {selectedLoanType};
+const mapStateToProps = ({}) => {
+  return {};
 };
-export default connect(mapStateToProps, mapActionCreators)(HomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

@@ -93,11 +93,9 @@ class CustomerDetailView extends Component {
 }
 
 const mapActionCreators = {};
-const mapStateToProps = state => {
+const mapStateToProps = ({loanData}) => {
   return {
-    isInternetConnected: state.global.isInternetConnected,
-    isLoading: state.global.loading,
-    selectedLoanType: state.global.selectedLoanType,
+    selectedLoanType: loanData.selectedLoanType,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(CustomerDetailView);
