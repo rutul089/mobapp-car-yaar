@@ -131,3 +131,23 @@ export const onboardUsedVehicle = async vehicleData => {
     throw error;
   }
 };
+/**
+ * Searches for vehicles using a keyword with optional pagination.
+ *
+ * @async
+ * @function searchVehiclesByKeyword
+ * @param {string} search - Keyword used to search vehicles.
+ * @param {number} [page=1] - Page number for pagination.
+ * @param {number} [limit=10] - Number of results per page.
+ * @returns {Promise<Object>} Resolves with a list of matched vehicles.
+ * @throws {Error} Throws error if the API request fails.
+ */
+export const searchVehiclesByKeyword = async (search, page = 1, limit = 10) => {
+  try {
+    const params = {search, page, limit};
+    const response = await axiosInstance.get('/vehicles', {params});
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

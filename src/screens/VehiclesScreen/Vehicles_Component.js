@@ -1,22 +1,24 @@
 import {
   CardWrapper,
   ImageHeader,
+  Loader,
+  PaginationFooter,
   SafeAreaWrapper,
-  Spacing,
   theme,
   VehicleCard,
+  Text,
 } from '@caryaar/components';
+import {get} from 'lodash';
 import {FlatList, StyleSheet} from 'react-native';
+import ScreenNames from '../../constants/ScreenNames';
+import {navigate} from '../../navigation/NavigationUtils';
 import {
   formatIndianNumber,
   formatVehicleDetails,
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
-import {navigate} from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {Loader, PaginationFooter} from '../../components';
-import {get} from 'lodash';
+import {NoDataFound} from '../../components';
 
 const Vehicles_Component = ({
   vehicleData,
@@ -28,13 +30,21 @@ const Vehicles_Component = ({
   apiTrigger,
   totalPages,
   currentPage,
+  onSearchText,
+  searchText,
+  clearSearch,
+  setSearch,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
       <ImageHeader
-        subTittle={'Vehicles'}
+        subTittle={'Vehicles' + loading}
         searchPlaceHolder={'Search by vehicle number...'}
         onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
+        onChangeText={onSearchText}
+        value={searchText}
+        onCancelIconPress={clearSearch}
+        onSubmitEditing={setSearch}
       />
       <FlatList
         data={vehicleData}
@@ -97,6 +107,7 @@ const Vehicles_Component = ({
             minTotalPagesToShowMessage={1}
           />
         }
+        ListEmptyComponent={!loading && <NoDataFound />}
       />
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>

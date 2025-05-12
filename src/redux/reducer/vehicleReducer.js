@@ -11,19 +11,22 @@ const initialState = {
   error: null,
   allVehicles: {
     data: [], // For Get All Vehicles
-    pagination: {
-      total: 0,
-      page: 1,
-      limit: 10,
-      totalPages: 1,
-    },
-    loading: false,
-    error: null,
   },
+  totalPage: 1,
+  page: 1,
+  searchVehicles: [],
+  searchPage: 1,
+  searchTotalPages: 1,
 };
 
-const authReducer = (state = initialState, action) => {
+const vehicleReducer = (state = initialState, action) => {
   switch (action.type) {
+    case types.SEARCH_VEHICLES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
     case types.FETCH_VEHICLES_REQUEST:
       return {
         ...state,
@@ -41,24 +44,45 @@ const authReducer = (state = initialState, action) => {
             action.payload.page === 1
               ? action.payload.data // If it's the first page, overwrite data
               : [...state.allVehicles.data, ...action.payload.data], // If it's not, append data
-          pagination: {
-            ...state.allVehicles.pagination,
-            ...action.payload.pagination,
-          },
-          loading: false,
-          error: null,
         },
+        totalPage: action.payload.totalPages,
+        page: action.payload.page,
         loading: false,
       };
 
     case types.FETCH_VEHICLES_FAILURE:
+    case types.LOADING_STOP:
       return {
         ...state,
-        allVehicles: {
-          ...state.allVehicles,
-          loading: false,
-          error: action.payload,
-        },
+        loading: false,
+      };
+
+    case types.SEARCH_VEHICLES_SUCCESS:
+      return {
+        ...state,
+        searchVehicles:
+          action.payload.page === 1
+            ? action.payload.data
+            : [...state.searchVehicles, ...action.payload.data],
+        loading: false,
+        message: action.payload.message,
+        success: action.payload.success,
+        searchPage: action.payload.page,
+        searchTotalPages: action.payload.totalPages,
+      };
+
+    case types.SEARCH_VEHICLES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    case types.CLEAR_VEHICLE_SEARCH:
+      return {
+        ...state,
+        searchVehicles: [],
+        searchPage: 1,
+        searchTotalPages: 1,
         loading: false,
       };
 
@@ -69,4 +93,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+export default vehicleReducer;
