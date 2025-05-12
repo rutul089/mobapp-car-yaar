@@ -10,7 +10,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['user', 'auth'],
-  blacklist: [],
+  blacklist: ['vehicleData', 'loanData'],
 };
 
 // Persisted reducer

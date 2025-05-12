@@ -3,126 +3,73 @@ import Vehicles_Component from './Vehicles_Component';
 import {formatIndianNumber} from '../../utils/helper';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {connect} from 'react-redux';
+import {fetchVehiclesThunk} from '../../redux/actions/vehicleActions';
 
 class Vehicles extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      vehicleData: [
-        {
-          brandName: 'Maruti Suzuki',
-          vehicleDetail: 'Vitara Brezza | VDI | GY',
-          plateNumber: 'GJ 01 WN 5054',
-          status: 'SAVED',
-          logo: 'https://i.pravatar.cc/150',
-          footerInfo: [
-            {
-              label: 'Mfg Year',
-              value: '2019',
-              style: {flex: 1, marginRight: 5},
-            },
-            {
-              label: 'Seller Price',
-              value: formatIndianNumber(1200000),
-              style: {flex: 1.5, marginRight: 5},
-            },
-            {
-              label: 'Hypothecation Status',
-              value: 'Yes',
-              style: {flex: 2},
-            },
-          ],
-        },
-        {
-          brandName: 'Hyundai',
-          vehicleDetail: 'i20 Sportz | Petrol',
-          plateNumber: 'MH 12 AB 1234',
-          status: 'DRAFT',
-          logo: 'https://i.pravatar.cc/150',
-          footerInfo: [
-            {
-              label: 'Mfg Year',
-              value: '2020',
-              style: {flex: 1, marginRight: 5},
-            },
-            {
-              label: 'Seller Price',
-              value: formatIndianNumber(950000),
-              style: {flex: 1.5, marginRight: 5},
-            },
-            {
-              label: 'Hypothecation Status',
-              value: 'No',
-              style: {flex: 2},
-            },
-          ],
-        },
-        {
-          brandName: 'Tata',
-          vehicleDetail: 'Nexon EV | XZ+',
-          plateNumber: 'DL 09 CD 5678',
-          status: 'SAVED',
-          logo: 'https://i.pravatar.cc/150',
-          footerInfo: [
-            {
-              label: 'Mfg Year',
-              value: '2021',
-              style: {flex: 1, marginRight: 5},
-            },
-            {
-              label: 'Seller Price',
-              value: formatIndianNumber(1400000),
-              style: {flex: 1.5, marginRight: 5},
-            },
-            {
-              label: 'Hypothecation Status',
-              value: 'Yes',
-              style: {flex: 2},
-            },
-          ],
-        },
-        {
-          brandName: 'Honda',
-          vehicleDetail: 'City ZX | CVT',
-          plateNumber: 'KA 03 EF 7890',
-          status: 'DRAFT',
-          footerInfo: [
-            {
-              label: 'Mfg Year',
-              value: '2018',
-              style: {flex: 1, marginRight: 5},
-            },
-            {
-              label: 'Seller Price',
-              value: formatIndianNumber(870000),
-              style: {flex: 1.5, marginRight: 5},
-            },
-            {
-              label: 'Hypothecation Status',
-              value: 'No',
-              style: {flex: 2},
-            },
-          ],
-        },
-      ],
+      refreshing: false,
+      apiTrigger: 'default',
     };
     this.onWrapperClick = this.onWrapperClick.bind(this);
   }
+
+  componentDidMount() {
+    this.fetchVehicles();
+  }
+
+  fetchVehicles = (page = 1) => {
+    this.props.fetchVehiclesThunk(page).finally(() => {
+      this.setState({refreshing: false, apiTrigger: 'default'});
+    });
+  };
+
+  handleLoadMore = () => {
+    const {pagination} = this.props;
+    const currentPage = pagination.page;
+    if (currentPage < pagination.totalPages) {
+      this.setState({apiTrigger: 'loadMore'});
+      this.fetchVehicles(currentPage + 1);
+    }
+  };
 
   onWrapperClick = () => {
     navigate(ScreenNames.VehicleDetail);
   };
 
+  // Pull-to-refresh handler
+  pullToRefresh = async () => {
+    this.setState({refreshing: true});
+    await this.fetchVehicles();
+  };
+
   render() {
+    const {loading, vehicleList, pagination} = this.props;
+    const {refreshing, apiTrigger} = this.state;
     return (
-      <>
-        <Vehicles_Component
-          vehicleData={this.state.vehicleData}
-          onWrapperClick={this.onWrapperClick}
-        />
-      </>
+      <Vehicles_Component
+        vehicleData={vehicleList}
+        onWrapperClick={this.onWrapperClick}
+        loading={loading && !refreshing && apiTrigger === 'default'}
+        handleLoadMore={this.handleLoadMore}
+        refreshing={refreshing}
+        onRefresh={this.pullToRefresh}
+        apiTrigger={apiTrigger}
+        totalPages={pagination?.totalPages}
+        currentPage={pagination?.page}
+      />
     );
   }
 }
 
-export default Vehicles;
+const mapDispatchToProps = {fetchVehiclesThunk};
+const mapStateToProps = ({vehicleData}) => {
+  return {
+    vehicleList: vehicleData?.allVehicles?.data,
+    pagination: vehicleData?.allVehicles?.pagination,
+    loading: vehicleData?.loading,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Vehicles);

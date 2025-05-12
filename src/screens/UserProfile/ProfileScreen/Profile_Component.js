@@ -11,10 +11,9 @@ import {
 } from '@caryaar/components';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
-
 import {goBack} from '../../../navigation/NavigationUtils';
-
 import ScreenNames from '../../../constants/ScreenNames';
+import DeviceInfo from 'react-native-device-info';
 
 const Profile_Component = ({
   onPressRightContent,
@@ -23,6 +22,9 @@ const Profile_Component = ({
   showLogoutModal,
   handleMenuPress = () => {},
 }) => {
+  const version = DeviceInfo.getVersion();
+  const build = DeviceInfo.getBuildNumber();
+
   const profileCard = () => {
     return (
       <View style={styles.profileCard}>
@@ -137,6 +139,9 @@ const Profile_Component = ({
             </React.Fragment>
           ))}
         </View>
+        <Text textAlign="center" type="helper-text">
+          App Version: {version}.{build}
+        </Text>
       </ScrollView>
       <CommonModal
         isVisible={showLogoutModal}

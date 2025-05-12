@@ -2,6 +2,9 @@ import theme from '../theme';
 import Toast from 'react-native-toast-message';
 
 export const formatIndianNumber = (value, showSign = true) => {
+  if (!value) {
+    return '-';
+  }
   const [intPart, decimalPart] = value?.toString().split('.');
   let cleaned = intPart.replace(/[^0-9]/g, '');
 
@@ -35,7 +38,7 @@ export const getGradientColors = status => {
     case 'COMPLETED':
       return ['rgba(95, 197, 46, 0.12)', 'rgba(110, 238, 135, 0.2)'];
     default:
-      return ['#E8E8E8', '#f0f0f0']; // fallback
+      return ['#E8E8E8', '#E8E8E8']; // fallback
   }
 };
 
@@ -162,4 +165,18 @@ export const showApiSuccessToast = response => {
   if (response?.success && response?.message) {
     showToast('success', response.message, 'bottom', 3000);
   }
+};
+
+/**
+ * Constructs a vehicle description string from model, trim, and colour.
+ * Skips any null or undefined values.
+ *
+ * @param {Object} vehicle
+ * @param {string} vehicle.model
+ * @param {string} vehicle.trim
+ * @param {string} vehicle.colour
+ * @returns {string} Formatted string like "Camry | XLE | Silver"
+ */
+export const formatVehicleDetails = ({model, trim, colour}) => {
+  return [model, trim, colour].filter(Boolean).join(' | ');
 };
