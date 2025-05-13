@@ -1,5 +1,5 @@
 import {types} from '../actions';
-import {VEHICLE_BY_ID} from '../actions/actionType';
+import {VEHICLE_BY_ID, RESET_SELECTED_VEHICLE} from '../actions/actionType';
 
 const initialState = {
   selectedVehicle: null, // For Get Vehicle By ID or by register number
@@ -79,6 +79,12 @@ const vehicleReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedVehicle: action.payload,
+        loading: false,
+      };
+    case RESET_SELECTED_VEHICLE.SUCCESS:
+      return {
+        ...state,
+        selectedVehicle: null,
         loading: false,
       };
 

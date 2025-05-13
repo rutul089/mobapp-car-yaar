@@ -86,7 +86,7 @@ const Vehicles_Component = ({
                     style: {flex: 2},
                   },
                 ]}
-                logo={{uri: item.logo}}
+                logo={{uri: ''}}
                 noMargin
                 noShadow
               />

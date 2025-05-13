@@ -6,6 +6,7 @@ import {
   clearVehicleSearch,
   fetchVehiclesThunk,
   searchVehiclesByKeywordThunk,
+  resetSelectedVehicle,
 } from '../../redux/actions';
 import Vehicles_Component from './Vehicles_Component';
 
@@ -67,6 +68,7 @@ class Vehicles extends Component {
    * Navigates to vehicle detail screen when card is clicked
    */
   onWrapperClick = item => {
+    this.props.resetSelectedVehicle();
     navigate(ScreenNames.VehicleDetail, {
       params: item,
     });
@@ -181,6 +183,7 @@ const mapDispatchToProps = {
   fetchVehiclesThunk,
   clearVehicleSearch,
   searchVehiclesByKeywordThunk,
+  resetSelectedVehicle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Vehicles);

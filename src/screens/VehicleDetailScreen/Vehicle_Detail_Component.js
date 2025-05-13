@@ -11,6 +11,7 @@ import {
 import {ScrollView, StyleSheet, View} from 'react-native';
 import strings from '../../locales/strings';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {getGradientColors, getStatusColor} from '../../utils/helper';
 
 const Vehicle_Detail_Component = ({
   onBackPress,
@@ -23,6 +24,7 @@ const Vehicle_Detail_Component = ({
   make,
   vehicleDetail,
   lastUpdatedOn,
+  status,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -31,9 +33,10 @@ const Vehicle_Detail_Component = ({
         <View style={styles.wrapper}>
           <CardWrapper
             showLeftText
-            leftText={'PRIVATE CAR'}
+            leftText={status}
             statusTextColor={'black'}
-            gradientColors={['#FFFFFF', '#FFFFFF']}>
+            // statusColor={getStatusColor(status)}
+            gradientColors={getGradientColors(status)}>
             <VehicleCard
               noMargin
               wrapperColor={theme.colors.gray900}
@@ -48,6 +51,7 @@ const Vehicle_Detail_Component = ({
               lastUpdateStatus={`Last updated on ${lastUpdatedOn}`}
               showButton
               buttonLabel={'Refresh Details'}
+              logo={{uri: ''}}
             />
           </CardWrapper>
         </View>

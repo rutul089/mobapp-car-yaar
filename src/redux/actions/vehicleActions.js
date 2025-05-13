@@ -4,7 +4,7 @@ import {
   searchVehiclesByKeyword,
 } from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
-import {VEHICLE_BY_ID} from './actionType';
+import {VEHICLE_BY_ID, RESET_SELECTED_VEHICLE} from './actionType';
 
 import types from './types';
 
@@ -96,3 +96,7 @@ export const fetchVehicleFromIdThunk = (id, onSuccess, onFailure) => {
     }
   };
 };
+
+export const resetSelectedVehicle = () => ({
+  type: RESET_SELECTED_VEHICLE.SUCCESS,
+});
