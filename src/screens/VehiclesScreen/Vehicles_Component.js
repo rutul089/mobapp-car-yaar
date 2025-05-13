@@ -59,7 +59,7 @@ const Vehicles_Component = ({
 
           return (
             <CardWrapper
-              onPress={() => onWrapperClick && onWrapperClick(item)}
+              onPress={() => onWrapperClick?.(item)}
               leftText={status}
               showTrailingIcon
               statusColor={getStatusColor(status)}

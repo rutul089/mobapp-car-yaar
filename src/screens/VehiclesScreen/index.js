@@ -18,7 +18,7 @@ class Vehicles extends Component {
       isSearch: false,
       searchText: '',
     };
-    this.limit = 3;
+    this.limit = 10;
   }
 
   componentDidMount() {
@@ -66,8 +66,10 @@ class Vehicles extends Component {
   /**
    * Navigates to vehicle detail screen when card is clicked
    */
-  onWrapperClick = () => {
-    navigate(ScreenNames.VehicleDetail);
+  onWrapperClick = item => {
+    navigate(ScreenNames.VehicleDetail, {
+      params: item,
+    });
   };
 
   /**

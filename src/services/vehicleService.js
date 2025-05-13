@@ -44,7 +44,7 @@ export const updateVehicleById = async (id, data) => {
  * @returns {Promise<Object>} The vehicle data retrieved from the API.
  * @throws {Error} Throws an error if the fetch request fails.
  */
-export const getVehicleById = async id => {
+export const fetchVehicleById = async id => {
   try {
     const response = await axiosInstance.get(`/vehicles/${id}`);
     return response.data;

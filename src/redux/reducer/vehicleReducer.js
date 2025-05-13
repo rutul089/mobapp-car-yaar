@@ -1,4 +1,5 @@
 import {types} from '../actions';
+import {VEHICLE_BY_ID} from '../actions/actionType';
 
 const initialState = {
   selectedVehicle: null, // For Get Vehicle By ID or by register number
@@ -14,7 +15,7 @@ const initialState = {
   },
   totalPage: 1,
   page: 1,
-  searchVehicles: [],
+  searchVehicles: [], // For Get all Search Vehicle
   searchPage: 1,
   searchTotalPages: 1,
 };
@@ -22,6 +23,7 @@ const initialState = {
 const vehicleReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SEARCH_VEHICLES_REQUEST:
+    case VEHICLE_BY_ID.REQUEST:
       return {
         ...state,
         loading: true,
@@ -51,7 +53,9 @@ const vehicleReducer = (state = initialState, action) => {
       };
 
     case types.FETCH_VEHICLES_FAILURE:
-    case types.LOADING_STOP:
+    case types.STOP_LOADING:
+    case VEHICLE_BY_ID.FAILURE:
+    case types.SEARCH_VEHICLES_FAILURE:
       return {
         ...state,
         loading: false,
@@ -71,9 +75,10 @@ const vehicleReducer = (state = initialState, action) => {
         searchTotalPages: action.payload.totalPages,
       };
 
-    case types.SEARCH_VEHICLES_FAILURE:
+    case VEHICLE_BY_ID.SUCCESS:
       return {
         ...state,
+        selectedVehicle: action.payload,
         loading: false,
       };
 

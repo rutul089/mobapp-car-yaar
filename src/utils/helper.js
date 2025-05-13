@@ -1,5 +1,6 @@
 import theme from '../theme';
 import Toast from 'react-native-toast-message';
+import moment from 'moment';
 
 export const formatIndianNumber = (value, showSign = true) => {
   if (!value) {
@@ -177,6 +178,50 @@ export const showApiSuccessToast = response => {
  * @param {string} vehicle.colour
  * @returns {string} Formatted string like "Camry | XLE | Silver"
  */
-export const formatVehicleDetails = ({model, trim, colour}) => {
-  return [model, trim, colour].filter(Boolean).join(' | ');
+export const formatVehicleDetails = ({
+  model,
+  trim,
+  colour,
+  manufactureYear = '',
+}) => {
+  return [model, trim, manufactureYear, colour].filter(Boolean).join(' | ');
+};
+
+/**
+ * Attempts to parse and format a date string safely using known formats.
+ * Prevents Moment fallback warnings by strictly validating known formats only.
+ *
+ * @param {string} inputDate - The input date string.
+ * @param {string} outputFormat - The desired output format (default: 'DD MMM YYYY').
+ * @returns {string} Formatted date or empty string if invalid.
+ */
+export const formatDate = (inputDate, outputFormat = 'DD MMM YYYY') => {
+  if (!inputDate || typeof inputDate !== 'string') {
+    return '-';
+  }
+
+  // List of known safe formats (add more if needed)
+  const knownFormats = [
+    moment.ISO_8601,
+    'YYYY-MM-DD',
+    'YYYY/MM/DD',
+    'MM-DD-YYYY',
+    'DD-MM-YYYY',
+    'MM/DD/YYYY',
+    'DD/MM/YYYY',
+    'YYYY-MM-DDTHH:mm:ssZ',
+    'YYYY-MM-DD HH:mm:ss',
+    'DD MMM YYYY, hh:mm A',
+  ];
+
+  let parsedDate;
+
+  for (const format of knownFormats) {
+    parsedDate = moment(inputDate, format, true); // strict parsing
+    if (parsedDate.isValid()) {
+      break;
+    }
+  }
+
+  return parsedDate?.isValid() ? parsedDate.format(outputFormat) : '-';
 };

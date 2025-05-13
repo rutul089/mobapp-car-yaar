@@ -6,20 +6,28 @@ import {
   SafeAreaWrapper,
   VehicleCard,
   theme,
+  Loader,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import strings from '../../locales/strings';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Vehicle_Detail_Component = ({
   onBackPress,
   onSaveDraftPress,
   onNextPress,
   vehicleInfo,
+  loading,
+  onInfoChange,
+  registerNumber,
+  make,
+  vehicleDetail,
+  lastUpdatedOn,
 }) => {
   return (
     <SafeAreaWrapper>
       <Header title={strings.vehicleDetailTitle} onBackPress={onBackPress} />
-      <ScrollView bounces={false}>
+      <KeyboardAwareScrollView bounces={false}>
         <View style={styles.wrapper}>
           <CardWrapper
             showLeftText
@@ -32,12 +40,12 @@ const Vehicle_Detail_Component = ({
               customerNameColor={theme.colors.white}
               infoWrapperColor={theme.colors.primaryBlack}
               infoValueColor={theme.colors.white}
-              vehicleDetail={'Vitara Brezza | ZDI | 2019 | YL'}
+              vehicleDetail={vehicleDetail}
               vehicleDetailColor={theme.colors.white}
-              brandName={'Maruti Suzuki'}
-              plateNumber={'GJ01 WN 5123'}
+              brandName={make}
+              plateNumber={registerNumber}
               hideFooter={true}
-              lastUpdateStatus={'Last updated on 12 Dec 2024, 10:34 AM'}
+              lastUpdateStatus={`Last updated on ${lastUpdatedOn}`}
               showButton
               buttonLabel={'Refresh Details'}
             />
@@ -49,7 +57,7 @@ const Vehicle_Detail_Component = ({
             padding: theme.sizes.padding,
             backgroundColor: theme.colors.background,
           }}>
-          <DetailInfoCard data={vehicleInfo} />
+          <DetailInfoCard data={vehicleInfo} onChange={onInfoChange} />
           <FormFooterButtons
             primaryButtonLabel={strings.btnSaveDraft}
             secondaryButtonLabel={strings.next}
@@ -57,7 +65,8 @@ const Vehicle_Detail_Component = ({
             onPressSecondaryButton={onNextPress}
           />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };
