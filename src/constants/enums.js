@@ -27,4 +27,45 @@ export const loanType = Object.freeze({
   loan: 6,
   lease: 7,
   subscribe: 8,
+  addVehicle: 9,
 });
+
+/**
+ * Enum-like object for vehicle condition values.
+ */
+export const eVehicleCondition = Object.freeze({
+  EXCELLENT: 'excellent',
+  GOOD: 'good',
+  AVERAGE: 'average',
+  POOR: 'poor',
+  NEW: 'new',
+  USED: 'used',
+});
+
+/**
+ * Dropdown options for Vehicle Condition selection.
+ */
+export const vehicleConditionOptions = [
+  {id: '1', label: 'Excellent', value: eVehicleCondition.EXCELLENT},
+  {id: '2', label: 'Good', value: eVehicleCondition.GOOD},
+  {id: '3', label: 'Average', value: eVehicleCondition.AVERAGE},
+  {id: '4', label: 'Poor', value: eVehicleCondition.POOR},
+  {id: '5', label: 'New', value: eVehicleCondition.NEW},
+  {id: '6', label: 'Used', value: eVehicleCondition.USED},
+];
+
+/**
+ * Mapping of Vehicle Condition value to its display label.
+ */
+export const vehicleConditionValue = {
+  [eVehicleCondition.EXCELLENT]: 'Excellent',
+  [eVehicleCondition.GOOD]: 'Good',
+  [eVehicleCondition.AVERAGE]: 'Average',
+  [eVehicleCondition.POOR]: 'Poor',
+  [eVehicleCondition.NEW]: 'New',
+  [eVehicleCondition.USED]: 'Used',
+};
+
+export const getLabelFromEnum = (enumObject, value, defaultLabel = '') => {
+  return enumObject?.[value] || defaultLabel;
+};

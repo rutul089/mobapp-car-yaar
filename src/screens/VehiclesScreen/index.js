@@ -7,8 +7,10 @@ import {
   fetchVehiclesThunk,
   searchVehiclesByKeywordThunk,
   resetSelectedVehicle,
+  selectedLoanType,
 } from '../../redux/actions';
 import Vehicles_Component from './Vehicles_Component';
+import {loanType} from '../../constants/enums';
 
 class Vehicles extends Component {
   constructor(props) {
@@ -69,6 +71,7 @@ class Vehicles extends Component {
    */
   onWrapperClick = item => {
     this.props.resetSelectedVehicle();
+    this.props.selectedLoanType(loanType.addVehicle);
     navigate(ScreenNames.VehicleDetail, {
       params: item,
     });
@@ -184,6 +187,7 @@ const mapDispatchToProps = {
   clearVehicleSearch,
   searchVehiclesByKeywordThunk,
   resetSelectedVehicle,
+  selectedLoanType,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Vehicles);

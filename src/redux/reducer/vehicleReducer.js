@@ -1,5 +1,9 @@
 import {types} from '../actions';
-import {VEHICLE_BY_ID, RESET_SELECTED_VEHICLE} from '../actions/actionType';
+import {
+  VEHICLE_BY_ID,
+  RESET_SELECTED_VEHICLE,
+  UPDATE,
+} from '../actions/actionType';
 
 const initialState = {
   selectedVehicle: null, // For Get Vehicle By ID or by register number
@@ -24,6 +28,7 @@ const vehicleReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SEARCH_VEHICLES_REQUEST:
     case VEHICLE_BY_ID.REQUEST:
+    case UPDATE.REQUEST:
       return {
         ...state,
         loading: true,
@@ -54,6 +59,8 @@ const vehicleReducer = (state = initialState, action) => {
 
     case types.FETCH_VEHICLES_FAILURE:
     case types.STOP_LOADING:
+    case UPDATE.SUCCESS:
+    case UPDATE.FAILURE:
     case VEHICLE_BY_ID.FAILURE:
     case types.SEARCH_VEHICLES_FAILURE:
       return {

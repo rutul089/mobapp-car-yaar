@@ -193,6 +193,10 @@ const StackRoutes = () => {
         name={ScreenNames.ProformaInvoice}
         component={Screens.ProformaInvoiceScreen}
       />
+      <Stack.Screen
+        name={ScreenNames.SuccessScreen}
+        component={Screens.SuccessModalScreen}
+      />
     </Stack.Navigator>
   );
 };

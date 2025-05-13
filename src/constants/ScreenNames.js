@@ -52,6 +52,7 @@ const ScreenNames = {
   NewLoanCustomerOtp: 'NewLoanCustomerOtpScreen',
   SelectVehicle: 'SelectVehicleScreen',
   ProformaInvoice: 'ProformaInvoiceScreen',
+  SuccessScreen: 'SuccessScreen',
 };
 
 export default ScreenNames;

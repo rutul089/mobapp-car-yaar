@@ -10,7 +10,7 @@ import {
 } from '@caryaar/components';
 
 import {goBack} from '../../navigation/NavigationUtils';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 
 const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
   const financeData = [
@@ -26,8 +26,8 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       showBadge: true,
       footerInfo: [
         {label: 'Tenure', value: '60 Month'},
-        {label: 'EMI', value: formatIndianNumber('75000.12')},
-        {label: 'Processing Fee', value: formatIndianNumber(5000)},
+        {label: 'EMI', value: formatIndianCurrency('75000.12')},
+        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
     },
     {
@@ -43,8 +43,8 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       isEligibleForBT: true,
       footerInfo: [
         {label: 'Tenure', value: '60 Month'},
-        {label: 'EMI', value: formatIndianNumber('75000.12')},
-        {label: 'Processing Fee', value: formatIndianNumber(5000)},
+        {label: 'EMI', value: formatIndianCurrency('75000.12')},
+        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
     },
     {
@@ -58,8 +58,8 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       logo: images.hdfcImg,
       footerInfo: [
         {label: 'Tenure', value: '60 Month'},
-        {label: 'EMI', value: formatIndianNumber('75000.12')},
-        {label: 'Processing Fee', value: formatIndianNumber(5000)},
+        {label: 'EMI', value: formatIndianCurrency('75000.12')},
+        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
     },
     {
@@ -74,8 +74,8 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       showNewBreakDown: true,
       footerInfo: [
         {label: 'Tenure', value: '60 Month'},
-        {label: 'EMI', value: formatIndianNumber('75000')},
-        {label: 'Processing Fee', value: formatIndianNumber(5000)},
+        {label: 'EMI', value: formatIndianCurrency('75000')},
+        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
     },
   ];

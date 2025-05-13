@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import Slider from '../components/Slider';
 import Text from './Text';
-import {formatIndianNumber} from '../utils/helper';
+import {formatIndianCurrency} from '../utils/helper';
 
 const CurrencySlider = ({
   value,
@@ -10,8 +10,8 @@ const CurrencySlider = ({
   min = 0,
   max = 7290000,
   step = 1000,
-  minLabel = formatIndianNumber(0),
-  maxLabel = formatIndianNumber(7290000),
+  minLabel = formatIndianCurrency(0),
+  maxLabel = formatIndianCurrency(7290000),
   label,
 }) => {
   return (

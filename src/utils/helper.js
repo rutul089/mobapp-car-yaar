@@ -2,9 +2,13 @@ import theme from '../theme';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
-export const formatIndianNumber = (value, showSign = true) => {
+export const formatIndianCurrency = (
+  value,
+  showSign = true,
+  showPlaceholder = false,
+) => {
   if (!value) {
-    return '-';
+    return showPlaceholder ? '' : '-';
   }
   const [intPart, decimalPart] = value?.toString().split('.');
   let cleaned = intPart.replace(/[^0-9]/g, '');

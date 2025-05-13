@@ -50,3 +50,4 @@ export {default as ContactSupportScreen} from './UserProfile/ContactSupportScree
 export {default as NewLoanCustomerOtpScreen} from './NewVehicleFlow/NewLoanCustomerOtpScreen';
 export {default as SelectVehicleScreen} from './NewVehicleFlow/SelectVehicleScreen';
 export {default as ProformaInvoiceScreen} from './NewVehicleFlow/ProformaInvoiceScreen';
+export {default as SuccessModalScreen} from './SuccessModalScreen';

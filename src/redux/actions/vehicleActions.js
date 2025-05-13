@@ -2,9 +2,10 @@ import {
   fetchVehicleById,
   fetchVehicles,
   searchVehiclesByKeyword,
+  updateVehicleById,
 } from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
-import {VEHICLE_BY_ID, RESET_SELECTED_VEHICLE} from './actionType';
+import {VEHICLE_BY_ID, RESET_SELECTED_VEHICLE, UPDATE} from './actionType';
 
 import types from './types';
 
@@ -100,3 +101,26 @@ export const fetchVehicleFromIdThunk = (id, onSuccess, onFailure) => {
 export const resetSelectedVehicle = () => ({
   type: RESET_SELECTED_VEHICLE.SUCCESS,
 });
+
+export const updateVehicleByIdThunk = (id, payload, onSuccess, onFailure) => {
+  return async dispatch => {
+    dispatch({type: UPDATE.REQUEST});
+
+    try {
+      const response = await updateVehicleById(id, payload);
+      console.log('--------->', JSON.stringify(response));
+      dispatch({
+        type: UPDATE.SUCCESS,
+        payload: response.data,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: UPDATE.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};

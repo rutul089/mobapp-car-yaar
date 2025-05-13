@@ -16,3 +16,4 @@ export const VEHICLE_BY_ID = createAsyncActionTypes('FETCH_VEHICLE_BY_ID');
 export const RESET_SELECTED_VEHICLE = createAsyncActionTypes(
   'RESET_SELECTED_VEHICLE',
 );
+export const UPDATE = createAsyncActionTypes('UPDATE');

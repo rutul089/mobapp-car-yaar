@@ -14,7 +14,7 @@ import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {goBack} from '../../navigation/NavigationUtils';
 
 import images from '../../assets/images';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 
 const Lender_Details_Component = ({onHoldProceedPress}) => {
   const result = 1.2 * 1000000 - 600000 - 10000; // 590000
@@ -39,8 +39,8 @@ const Lender_Details_Component = ({onHoldProceedPress}) => {
           interestRate="8.96%"
           footerInfo={[
             {label: 'Tenure', value: '60 Month'},
-            {label: 'EMI', value: formatIndianNumber('75000.12')},
-            {label: 'Processing Fee', value: formatIndianNumber(5000)},
+            {label: 'EMI', value: formatIndianCurrency('75000.12')},
+            {label: 'Processing Fee', value: formatIndianCurrency(5000)},
           ]}
         />
         <Spacing size="lg" />
@@ -67,7 +67,7 @@ const Lender_Details_Component = ({onHoldProceedPress}) => {
               alignItems: 'center',
             }}>
             <Text hankenGroteskExtraBold={true} size={'h2'} color={'#5FC52E'}>
-              {formatIndianNumber(result, false)}
+              {formatIndianCurrency(result, false)}
             </Text>
           </View>
         </Card>

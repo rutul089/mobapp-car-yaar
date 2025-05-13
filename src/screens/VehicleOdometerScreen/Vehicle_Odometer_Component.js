@@ -1,25 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
+  Button,
   DropdownModal,
-  FormFooterButtons,
+  FilePickerModal,
   GroupWrapper,
   Header,
+  images,
   ImageUploadButton,
   Input,
+  Loader,
   SafeAreaWrapper,
   Spacing,
   theme,
-  images,
 } from '@caryaar/components';
 import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
-
-const dropdownOptions = [
-  {label: 'Option A', value: 'a'},
-  {label: 'Option B', value: 'b'},
-  {label: 'Option C', value: 'c'},
-];
 
 const Vehicle_Odometer_Component = ({
   params,
@@ -29,11 +25,16 @@ const Vehicle_Odometer_Component = ({
   selectedVehicleCondition,
   onSaveDraftPress,
   onNextPress,
-  odometerValue,
+  odometerReading,
   handleOdometerChange,
+  fileModalProps,
+  vehicleConditions,
+  selectVehicleConditionOption,
+  vehicleCondition,
+  restInputProps,
+  loading,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
-  const [selectedItem, setSelectedItem] = React.useState('');
 
   return (
     <SafeAreaWrapper>
@@ -58,9 +59,11 @@ const Vehicle_Odometer_Component = ({
             isLeftIconVisible
             leftIconName={images.icOdometer}
             rightLabel={'KM'}
-            value={odometerValue}
+            value={odometerReading}
             onChangeText={handleOdometerChange}
             keyboardType="decimal-pad"
+            returnKeyType="next"
+            {...(restInputProps?.odometerReading || {})}
           />
           <Spacing size="md_lg" />
           <Input
@@ -69,26 +72,40 @@ const Vehicle_Odometer_Component = ({
             leftIconName={images.usedVehicle}
             isAsDropdown
             isRightIconVisible
-            value={selectedItem}
-            // onPress={selectedVehicleCondition}
+            value={vehicleCondition}
             onPress={() => setShowModal(true)}
+            {...(restInputProps?.vehicleCondition || {})}
           />
         </GroupWrapper>
-        <FormFooterButtons
+        <Spacing size="xl" />
+        <Button label={strings.next} variant="link" onPress={onNextPress} />
+        {/* <FormFooterButtons
           primaryButtonLabel={strings.btnSaveDraft}
           secondaryButtonLabel={strings.next}
           onPressPrimaryButton={onSaveDraftPress}
           onPressSecondaryButton={onNextPress}
-        />
+        /> */}
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={showModal}
-        data={dropdownOptions}
-        selectedItem={selectedItem}
-        onSelect={item => setSelectedItem(item.label)}
+        data={vehicleConditions}
+        selectedItem={vehicleCondition}
+        onSelect={item => selectVehicleConditionOption?.(item)}
         onClose={() => setShowModal(false)}
-        title="Select Other Document Type"
+        title="Select Vehicle Type"
       />
+
+      <FilePickerModal
+        isVisible={fileModalProps?.showFilePicker}
+        onSelect={fileModalProps?.handleFile}
+        onClose={fileModalProps?.closeFilePicker}
+        autoCloseOnSelect={false}
+        options={[
+          {label: 'Camera', value: 'camera', icon: images.file_camera},
+          {label: 'Photo Gallery', value: 'gallery', icon: images.file_gallery},
+        ]}
+      />
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

@@ -13,7 +13,7 @@ import {
 } from '@caryaar/components';
 import {goBack} from '../../navigation/NavigationUtils';
 import {Col, Grid, Row} from 'react-native-easy-grid';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 
 const Loan_Offer_Detail_Component = ({
   params,
@@ -85,8 +85,8 @@ const Loan_Offer_Detail_Component = ({
           showBreakdown
           footerData={[
             {label: 'Tenure', value: '60 Month'},
-            {label: 'EMI', value: formatIndianNumber('75000.12')},
-            {label: 'Processing Fee', value: formatIndianNumber(5000)},
+            {label: 'EMI', value: formatIndianCurrency('75000.12')},
+            {label: 'Processing Fee', value: formatIndianCurrency(5000)},
           ]}
           breakdownExpression={'(1.2 x 10,00,000) - 6,00,000 - 10,000 ='}
           breakdownValue={'5,90,000'}
@@ -137,7 +137,7 @@ const Loan_Offer_Detail_Component = ({
                 {renderCellHeader('Opn.Bal.')}
                 {emiData.map((rowData, index) =>
                   renderRow(
-                    formatIndianNumber(rowData.opening),
+                    formatIndianCurrency(rowData.opening),
                     `opening-${index}`,
                   ),
                 )}
@@ -149,7 +149,7 @@ const Loan_Offer_Detail_Component = ({
               <Col>
                 {renderCellHeader('EMI')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.emi), `emi-${index}`),
+                  renderRow(formatIndianCurrency(rowData.emi), `emi-${index}`),
                 )}
               </Col>
             </Grid>
@@ -160,7 +160,7 @@ const Loan_Offer_Detail_Component = ({
                 {renderCellHeader('Principal')}
                 {emiData.map((rowData, index) =>
                   renderRow(
-                    formatIndianNumber(rowData.principal),
+                    formatIndianCurrency(rowData.principal),
                     `principal-${index}`,
                   ),
                 )}
@@ -173,7 +173,7 @@ const Loan_Offer_Detail_Component = ({
                 {renderCellHeader('Interest')}
                 {emiData.map((rowData, index) =>
                   renderRow(
-                    formatIndianNumber(rowData.interest),
+                    formatIndianCurrency(rowData.interest),
                     `interest-${index}`,
                   ),
                 )}
@@ -185,7 +185,7 @@ const Loan_Offer_Detail_Component = ({
               <Col>
                 {renderCellHeader('O/S Bal.')}
                 {emiData.map((rowData, index) =>
-                  renderRow(formatIndianNumber(rowData.os), `os-${index}`),
+                  renderRow(formatIndianCurrency(rowData.os), `os-${index}`),
                 )}
               </Col>
             </Grid>

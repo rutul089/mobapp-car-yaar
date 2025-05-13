@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import Applications_Component from './Applications_Component';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 
 class ApplicationsScreen extends Component {
   constructor(props) {
@@ -35,9 +35,9 @@ class ApplicationsScreen extends Component {
               badge: 1,
               image: 'https://i.pravatar.cc/150?img=1',
               footerInfo: [
-                {label: 'EMI', value: formatIndianNumber(41000)},
+                {label: 'EMI', value: formatIndianCurrency(41000)},
                 {label: 'Tenure', value: '48 Months'},
-                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
+                {label: 'Loan Amount', value: formatIndianCurrency(1200000)},
               ],
               status: 'Draft',
               type: 1,
@@ -50,9 +50,9 @@ class ApplicationsScreen extends Component {
               badge: 2,
               image: 'https://i.pravatar.cc/150?img=2',
               footerInfo: [
-                {label: 'EMI', value: formatIndianNumber(39000)},
+                {label: 'EMI', value: formatIndianCurrency(39000)},
                 {label: 'Tenure', value: '24 Months'},
-                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
+                {label: 'Loan Amount', value: formatIndianCurrency(1200000)},
               ],
               status: 'lender approved',
               type: 3,
@@ -65,9 +65,9 @@ class ApplicationsScreen extends Component {
               badge: 5,
               image: 'https://img.icons8.com/ios-filled/100/bank.png',
               footerInfo: [
-                {label: 'EMI', value: formatIndianNumber(39000)},
+                {label: 'EMI', value: formatIndianCurrency(39000)},
                 {label: 'Tenure', value: '60 Months'},
-                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
+                {label: 'Loan Amount', value: formatIndianCurrency(1200000)},
               ],
               status: 'Applied',
               type: 2,
@@ -80,9 +80,9 @@ class ApplicationsScreen extends Component {
               badge: 3,
               image: 'https://i.pravatar.cc/150?img=3',
               footerInfo: [
-                {label: 'EMI', value: formatIndianNumber(39000)},
+                {label: 'EMI', value: formatIndianCurrency(39000)},
                 {label: 'Tenure', value: '36 Months'},
-                {label: 'Loan Amount', value: formatIndianNumber(1200000)},
+                {label: 'Loan Amount', value: formatIndianCurrency(1200000)},
               ],
               status: 'on hold',
               type: 4,

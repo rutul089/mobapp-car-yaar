@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import MoreOn_Financial_Component from './MoreOn_Financial_Component';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 import {navigateAndSimpleReset} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 
@@ -23,7 +23,10 @@ class MoreOnFinancialScreen extends Component {
       <>
         <MoreOn_Financial_Component
           cibilList={[
-            {label: 'Desired Loan Amount', value: formatIndianNumber(1100000)},
+            {
+              label: 'Desired Loan Amount',
+              value: formatIndianCurrency(1100000),
+            },
             {label: 'CarYaar Partner ID', value: '#TV9089'},
             {label: 'CarYaar Sale Executive ID', value: '#SE9031'},
           ]}

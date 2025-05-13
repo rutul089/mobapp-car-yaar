@@ -13,7 +13,7 @@ import {FlatList, StyleSheet} from 'react-native';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {
-  formatIndianNumber,
+  formatIndianCurrency,
   formatVehicleDetails,
   getGradientColors,
   getStatusColor,
@@ -77,7 +77,7 @@ const Vehicles_Component = ({
                   },
                   {
                     label: 'Seller Price',
-                    value: formatIndianNumber(UsedVehicle?.salePrice),
+                    value: formatIndianCurrency(UsedVehicle?.salePrice),
                     style: {flex: 1.5, marginRight: 5},
                   },
                   {

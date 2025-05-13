@@ -16,7 +16,7 @@ import {
   theme,
 } from '@caryaar/components';
 import {goBack} from '../../../navigation/NavigationUtils';
-import {formatIndianNumber} from '../../../utils/helper';
+import {formatIndianCurrency} from '../../../utils/helper';
 
 const Proforma_Invoice_Component = ({
   button1Press,
@@ -153,7 +153,9 @@ const Proforma_Invoice_Component = ({
                 const numericValue = v.replace(/\D/g, '');
                 setAmount(numericValue);
               }}
-              value={isEditing ? amount + '' : `${formatIndianNumber(amount)}`}
+              value={
+                isEditing ? amount + '' : `${formatIndianCurrency(amount)}`
+              }
               keyboardType="number-pad"
               onFocus={() => setIsEditing(true)}
               onBlur={() => setIsEditing(false)}

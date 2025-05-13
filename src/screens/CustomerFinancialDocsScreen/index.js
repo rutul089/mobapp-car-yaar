@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Customer_Financial_Docs_Component from './Customer_Financial_Documents_Component';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 
@@ -40,9 +40,9 @@ class CustomerFinancialDocsScreen extends Component {
           loanDetails={[
             {label: 'Bank Name', value: 'HDFC Bank'},
             {label: 'Loan Account Number', value: '598407587258a1'},
-            {label: 'Loan Amount', value: formatIndianNumber(1000000)},
+            {label: 'Loan Amount', value: formatIndianCurrency(1000000)},
             {label: 'Tenure', value: '60 Months'},
-            {label: 'Monthly EMI', value: formatIndianNumber(12000)},
+            {label: 'Monthly EMI', value: formatIndianCurrency(12000)},
             {label: 'When was this loan closed', value: 'Jun 2025'},
           ]}
         />

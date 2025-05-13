@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Customer_Info_Component from './Customer_Info_Component';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
-import {formatIndianNumber} from '../../utils/helper';
+import {formatIndianCurrency} from '../../utils/helper';
 import {Alert} from 'react-native';
 import ScreenNames from '../../constants/ScreenNames';
 
@@ -69,15 +69,18 @@ class CustomerInfoScreen extends Component {
           professionalDetails={[
             {label: 'Occupation', value: 'Other'},
             {label: 'Income Source', value: 'Salaried'},
-            {label: 'Monthly Income', value: formatIndianNumber(41000)},
+            {label: 'Monthly Income', value: formatIndianCurrency(41000)},
           ]}
           bankDetails={[
             {label: 'Bank Name', value: 'HDFC Bank'},
             {label: 'Account Number', value: '5984075872581'},
             {label: 'Current Loan?', value: 'Yes'},
-            {label: 'Current EMI', value: formatIndianNumber(10000)},
-            {label: 'Max EMI Afford', value: formatIndianNumber(12231.12)},
-            {label: 'Avg Monthly Bank Bal', value: formatIndianNumber(1231.23)},
+            {label: 'Current EMI', value: formatIndianCurrency(10000)},
+            {label: 'Max EMI Afford', value: formatIndianCurrency(12231.12)},
+            {
+              label: 'Avg Monthly Bank Bal',
+              value: formatIndianCurrency(1231.23),
+            },
             {
               label: 'Income Proof',
               value: 'VIEW',
