@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
-  Button,
+  FormFooterButtons,
   Header,
   images,
   Input,
+  Loader,
   SafeAreaWrapper,
-  Spacing,
   theme,
 } from '@caryaar/components';
 import React from 'react';
@@ -24,6 +24,7 @@ const Search_Component = ({
   showError,
   statusMsg,
   showStatusIcon,
+  loading,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -32,11 +33,12 @@ const Search_Component = ({
         bounces={false}
         contentContainerStyle={styles.wrapper}
         enableOnAndroid={true}
+        scrollEnabled={false}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <Input
           label={strings.vehicleNumberLabel}
-          placeholder={strings.vehicleNumberLabel}
+          placeholder={'AB12AB1234'}
           optionalLabelContainerStyles={{alignSelf: 'center'}}
           labelStyles={{fontSize: theme.typography.fontSizes.body}}
           inputContainerBackgroundColor={'white'}
@@ -47,24 +49,22 @@ const Search_Component = ({
           isError
           statusMsg={statusMsg}
           statusIcon={images.infoStatus}
-          showStatus={showError}
           value={vehicleNumber}
           onChangeText={onVehicleNumberChange}
           showStatusIcon={showStatusIcon}
+          autoCapitalize={'characters'}
+          onSubmitEditing={onSearchVehicle}
         />
-        <Spacing size="xl" />
-        <Button label={strings.searchButton} onPress={onSearchVehicle} />
-        {showAddVehicle ? (
-          <>
-            <Spacing size="md" />
-            <Button
-              label={strings.addVehicleButton}
-              variant="link"
-              onPress={onAddVehicle}
-            />
-          </>
-        ) : null}
+        <FormFooterButtons
+          primaryButtonLabel={strings.searchButton}
+          secondaryButtonLabel={strings.addVehicleButton}
+          direction="column"
+          onPressPrimaryButton={onSearchVehicle}
+          onPressSecondaryButton={onAddVehicle}
+          hideSecondaryButton={showAddVehicle}
+        />
       </KeyboardAwareScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

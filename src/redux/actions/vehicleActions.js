@@ -1,11 +1,19 @@
 import {
+  checkVehicleExists,
   fetchVehicleById,
   fetchVehicles,
+  getVehicleByRegisterNumber,
   searchVehiclesByKeyword,
   updateVehicleById,
 } from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
-import {VEHICLE_BY_ID, RESET_SELECTED_VEHICLE, UPDATE} from './actionType';
+import {
+  VEHICLE_BY_ID,
+  RESET_SELECTED_VEHICLE,
+  UPDATE,
+  VEHICLE_EXISTS,
+  VEHICLE_DETAILS,
+} from './actionType';
 
 import types from './types';
 
@@ -108,7 +116,6 @@ export const updateVehicleByIdThunk = (id, payload, onSuccess, onFailure) => {
 
     try {
       const response = await updateVehicleById(id, payload);
-      console.log('--------->', JSON.stringify(response));
       dispatch({
         type: UPDATE.SUCCESS,
         payload: response.data,
@@ -117,6 +124,59 @@ export const updateVehicleByIdThunk = (id, payload, onSuccess, onFailure) => {
     } catch (error) {
       dispatch({
         type: UPDATE.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const checkVehicleExistsThunk = (
+  registerNumber,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: VEHICLE_EXISTS.REQUEST});
+
+    try {
+      const response = await checkVehicleExists(registerNumber);
+      dispatch({
+        type: VEHICLE_EXISTS.SUCCESS,
+        payload: response.data,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: VEHICLE_EXISTS.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const getVehicleByRegisterNumberThunk = (
+  registerNumber,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: VEHICLE_DETAILS.REQUEST});
+
+    try {
+      const response = await getVehicleByRegisterNumber(registerNumber);
+      console.log('getVehicleByRegisterNumberThunk', JSON.stringify(response));
+      dispatch({
+        type: VEHICLE_DETAILS.SUCCESS,
+        payload: response.data,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: VEHICLE_DETAILS.FAILURE,
         payload: error.message,
       });
       showApiErrorToast(error);

@@ -1,11 +1,14 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {images, Text} from '@caryaar/components';
+import {images, Text, Button} from '@caryaar/components';
 
 const NoDataFound = ({
   imageName = images.noData,
   text = 'No Result Found',
   wrapperStyle,
+  showButton,
+  btnLabel,
+  onPress,
 }) => {
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
@@ -17,6 +20,11 @@ const NoDataFound = ({
       <Text type={'caption'} hankenGroteskMedium size={'h4'}>
         {text}
       </Text>
+      {showButton && (
+        <View style={{width: '100%', marginTop: 20}}>
+          <Button variant="link" label={btnLabel} onPress={onPress} />
+        </View>
+      )}
     </View>
   );
 };

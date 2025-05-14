@@ -17,3 +17,5 @@ export const RESET_SELECTED_VEHICLE = createAsyncActionTypes(
   'RESET_SELECTED_VEHICLE',
 );
 export const UPDATE = createAsyncActionTypes('UPDATE');
+export const VEHICLE_EXISTS = createAsyncActionTypes('vehicle-exists');
+export const VEHICLE_DETAILS = createAsyncActionTypes('vehicle-details');

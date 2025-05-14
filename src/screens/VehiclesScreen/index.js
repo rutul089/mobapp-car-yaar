@@ -142,6 +142,13 @@ class Vehicles extends Component {
       .finally(() => this.setState({refreshing: false, apiTrigger: 'default'}));
   };
 
+  /**
+   * Navigate to Search Vehicle Number screen
+   */
+  onAddButtonPress = () => {
+    navigate(ScreenNames.SearchView);
+  };
+
   render() {
     const {loading, vehicleList, searchVehicles} = this.props;
 
@@ -167,6 +174,7 @@ class Vehicles extends Component {
         searchText={searchText}
         clearSearch={this.clearSearch}
         setSearch={this.searchFromAPI}
+        onAddButtonPress={this.onAddButtonPress}
       />
     );
   }

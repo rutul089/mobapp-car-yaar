@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
-import Search_Component from './Search_Component';
+import {connect} from 'react-redux';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
-import {isValidAlphanumeric} from '../../utils/validation';
-import strings from '../../locales/strings';
+import {
+  checkVehicleExistsThunk,
+  getVehicleByRegisterNumberThunk,
+  resetSelectedVehicle,
+} from '../../redux/actions';
+import {isValidIndianVehicleNumber} from '../../utils/validation';
+import Search_Component from './Search_Component';
 import ScreenNames from '../../constants/ScreenNames';
 
 class SearchScreen extends Component {
@@ -14,11 +19,16 @@ class SearchScreen extends Component {
       showError: false,
       statusMsg: '',
       showStatusIcon: false,
+      vehicleExists: true,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onAddVehicle = this.onAddVehicle.bind(this);
     this.onSearchVehicle = this.onSearchVehicle.bind(this);
     this.onVehicleNumberChange = this.onVehicleNumberChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.resetSelectedVehicle();
   }
 
   onBackPress = () => {
@@ -29,7 +39,7 @@ class SearchScreen extends Component {
 
   onSearchVehicle = () => {
     const {vehicleNumber} = this.state;
-    const isValid = isValidAlphanumeric(vehicleNumber);
+    const isValid = isValidIndianVehicleNumber(vehicleNumber);
     if (!isValid) {
       this.setState({
         showError: true,
@@ -37,51 +47,74 @@ class SearchScreen extends Component {
       });
       return;
     }
-    navigate(ScreenNames.VehicleDetail);
-    // Bellow code if api fail need to add vehicle
-    // setTimeout(() => {
-    //   this.setState({
-    //     statusMsg: strings.vehicleNotFound,
-    //     showStatusIcon: true,
-    //     showAddVehicle: true,
-    //     showError: true,
-    //   });
-    // }, 1000);
+    this.props.checkVehicleExistsThunk(vehicleNumber, response => {
+      if (response?.data) {
+        return this.props.getVehicleByRegisterNumberThunk(
+          vehicleNumber,
+          _response => {
+            navigate(ScreenNames.VehicleDetail, {
+              params: {
+                addNewVehicle: true,
+                UsedVehicle: {
+                  vehicleId: _response?.data?.vehicleId,
+                },
+                // vehicleId
+              },
+            });
+          },
+          () => {},
+        );
+      }
+
+      this.setState({
+        statusMsg: 'Oh no! Vehicle not found',
+        vehicleExists: response?.data,
+      });
+    });
   };
 
   onVehicleNumberChange = value => {
     this.setState({
-      vehicleNumber: value,
+      vehicleNumber: value.toUpperCase(),
       showError: false,
       showStatusIcon: false,
       showAddVehicle: false,
+      statusMsg: '',
+      vehicleExists: true,
     });
   };
 
   render() {
-    const {
-      showAddVehicle,
-      vehicleNumber,
-      statusMsg,
-      showError,
-      showStatusIcon,
-    } = this.state;
+    const {vehicleNumber, statusMsg, showStatusIcon, vehicleExists} =
+      this.state;
+    const {loading} = this.props;
     return (
       <>
         <Search_Component
           onBackPress={this.onBackPress}
           onAddVehicle={this.onAddVehicle}
           onSearchVehicle={this.onSearchVehicle}
-          showAddVehicle={showAddVehicle}
+          showAddVehicle={vehicleExists}
           onVehicleNumberChange={this.onVehicleNumberChange}
           vehicleNumber={vehicleNumber}
           statusMsg={statusMsg}
-          showError={showError}
           showStatusIcon={showStatusIcon}
+          loading={loading}
         />
       </>
     );
   }
 }
 
-export default SearchScreen;
+const mapDispatchToProps = {
+  checkVehicleExistsThunk,
+  resetSelectedVehicle,
+  getVehicleByRegisterNumberThunk,
+};
+const mapStateToProps = ({vehicleData}) => {
+  return {
+    vehicleExists: vehicleData?.vehicleExists,
+    loading: vehicleData?.loading,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

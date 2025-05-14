@@ -3,6 +3,8 @@ import {
   VEHICLE_BY_ID,
   RESET_SELECTED_VEHICLE,
   UPDATE,
+  VEHICLE_EXISTS,
+  VEHICLE_DETAILS,
 } from '../actions/actionType';
 
 const initialState = {
@@ -29,6 +31,9 @@ const vehicleReducer = (state = initialState, action) => {
     case types.SEARCH_VEHICLES_REQUEST:
     case VEHICLE_BY_ID.REQUEST:
     case UPDATE.REQUEST:
+    case VEHICLE_EXISTS.REQUEST:
+    case VEHICLE_DETAILS.REQUEST:
+    case VEHICLE_DETAILS.REQUEST:
       return {
         ...state,
         loading: true,
@@ -43,6 +48,7 @@ const vehicleReducer = (state = initialState, action) => {
         },
         loading: true,
       };
+
     case types.FETCH_VEHICLES_SUCCESS:
       return {
         ...state,
@@ -59,10 +65,11 @@ const vehicleReducer = (state = initialState, action) => {
 
     case types.FETCH_VEHICLES_FAILURE:
     case types.STOP_LOADING:
+    case types.SEARCH_VEHICLES_FAILURE:
     case UPDATE.SUCCESS:
     case UPDATE.FAILURE:
     case VEHICLE_BY_ID.FAILURE:
-    case types.SEARCH_VEHICLES_FAILURE:
+    case VEHICLE_EXISTS.FAILURE:
       return {
         ...state,
         loading: false,
@@ -88,6 +95,7 @@ const vehicleReducer = (state = initialState, action) => {
         selectedVehicle: action.payload,
         loading: false,
       };
+
     case RESET_SELECTED_VEHICLE.SUCCESS:
       return {
         ...state,
@@ -104,8 +112,23 @@ const vehicleReducer = (state = initialState, action) => {
         loading: false,
       };
 
+    case VEHICLE_EXISTS.SUCCESS:
+      return {
+        ...state,
+        newVehicleData: action.payload,
+        loading: false,
+      };
+
+    case VEHICLE_DETAILS.SUCCESS:
+      return {
+        ...state,
+        newVehicleData: action.payload,
+        loading: false,
+      };
+
     case types.RESET_APP_STATE:
       return {...initialState};
+
     default:
       return state;
   }

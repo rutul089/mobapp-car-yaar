@@ -34,6 +34,7 @@ const Vehicles_Component = ({
   searchText,
   clearSearch,
   setSearch,
+  onAddButtonPress,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
@@ -46,6 +47,8 @@ const Vehicles_Component = ({
         onCancelIconPress={clearSearch}
         onSubmitEditing={setSearch}
         profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
+        showAddBtn
+        onAddButtonPress={onAddButtonPress}
       />
       <FlatList
         data={vehicleData}
@@ -108,7 +111,16 @@ const Vehicles_Component = ({
             minTotalPagesToShowMessage={1}
           />
         }
-        ListEmptyComponent={!loading && <NoDataFound />}
+        ListEmptyComponent={
+          !loading && (
+            <NoDataFound
+              text="No Search Result Found"
+              btnLabel="Add Vehicle"
+              onPress={onAddButtonPress}
+              showButton
+            />
+          )
+        }
       />
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
