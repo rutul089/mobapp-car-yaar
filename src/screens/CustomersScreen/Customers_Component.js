@@ -21,6 +21,7 @@ const Customers_Component = ({customerList, onWrapperClick}) => {
         searchPlaceHolder={'Search by customer name or ID...'}
         onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
         onRightIconPress={() => navigate(ScreenNames.Notification)}
+        profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
       />
 
       <FlatList

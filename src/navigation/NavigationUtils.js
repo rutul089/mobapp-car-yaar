@@ -4,6 +4,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import * as React from 'react';
+import ScreenNames from '../constants/ScreenNames';
 
 export const navigationRef = React.createRef();
 
@@ -55,4 +56,13 @@ export const usePreviousRouteName = () => {
 
 export const getScreenParam = (route, key) => {
   return route?.params?.[key] || null;
+};
+
+export const navigateToTab = tabScreenName => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{name: ScreenNames.HomeTab, params: {screen: tabScreenName}}],
+    }),
+  );
 };

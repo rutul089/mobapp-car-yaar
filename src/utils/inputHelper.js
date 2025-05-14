@@ -5,7 +5,7 @@
  * @returns {string} - Error message if invalid, otherwise empty string
  */
 export const validateField = (key, value) => {
-  const trimmedValue = value?.trim();
+  // const trimmedValue = value?.trim();
 
   const nameRegex = /^[A-Za-z\s]+$/;
   const numericRegex = /^[0-9]+(\.[0-9]+)?$/;
@@ -15,6 +15,8 @@ export const validateField = (key, value) => {
   const pincodeRegex = /^[0-9]{6}$/;
   const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
   const accountNumberRegex = /^[0-9]{9,18}$/;
+
+  const trimmedValue = typeof value === 'string' ? value.trim() : '';
 
   switch (key) {
     case 'odometerReading':

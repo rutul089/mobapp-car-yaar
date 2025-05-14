@@ -69,3 +69,33 @@ export const vehicleConditionValue = {
 export const getLabelFromEnum = (enumObject, value, defaultLabel = '') => {
   return enumObject?.[value] || defaultLabel;
 };
+
+export const vehicleImageType = Object.freeze({
+  FRONT_VIEW: 'frontView',
+  REAR_VIEW: 'rearView',
+  LEFT_VIEW: 'leftView',
+  RIGHT_VIEW: 'rightView',
+  INTERIOR_VIEW: 'interiorView',
+  VISIBLE_DAMAGE: 'visibleDamage',
+  RC_BOOK: 'rcBook',
+});
+
+export const vehicleImageLabelMap = {
+  [vehicleImageType.FRONT_VIEW]: 'Front View',
+  [vehicleImageType.REAR_VIEW]: 'Rear View',
+  [vehicleImageType.LEFT_VIEW]: 'Left View',
+  [vehicleImageType.RIGHT_VIEW]: 'Right View',
+  [vehicleImageType.INTERIOR_VIEW]: 'Interior View',
+  [vehicleImageType.VISIBLE_DAMAGE]: 'Visible Damage',
+  [vehicleImageType.RC_BOOK]: 'RC Book',
+};
+
+export const vehicleImageTypes = [
+  [vehicleImageType.FRONT_VIEW],
+  [vehicleImageType.REAR_VIEW],
+  [vehicleImageType.LEFT_VIEW],
+  [vehicleImageType.RIGHT_VIEW],
+  [vehicleImageType.INTERIOR_VIEW],
+  [vehicleImageType.VISIBLE_DAMAGE],
+  [vehicleImageType.RC_BOOK],
+];

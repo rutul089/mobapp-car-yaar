@@ -113,7 +113,6 @@ class VehicleOdometerScreen extends Component {
     const {selectedVehicle} = this.props;
     const {vehicleCondition, odometerImage, odometerReading} = this.state;
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
-
     const isFormValid = this.validateAllFields();
     if (!isFormValid) {
       return showToast('error', 'Please enter all field');
@@ -125,8 +124,9 @@ class VehicleOdometerScreen extends Component {
       vehicleCondition: vehicleCondition,
     };
 
-    // this.props.updateVehicleByIdThunk(vehicleId, payload);
-    navigate(ScreenNames.VehiclePricing);
+    this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
+      navigate(ScreenNames.VehiclePricing);
+    });
   };
 
   validateAllFields = () => {

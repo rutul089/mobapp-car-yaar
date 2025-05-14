@@ -53,6 +53,7 @@ const Applications_Component = ({
         subTittle={'Loan Application'}
         searchPlaceHolder={'Search by application id'}
         onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
+        profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
       />
       <FlatList
         data={dummyList}

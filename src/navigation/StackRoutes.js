@@ -196,6 +196,13 @@ const StackRoutes = () => {
       <Stack.Screen
         name={ScreenNames.SuccessScreen}
         component={Screens.SuccessModalScreen}
+        options={{
+          gestureEnabled: false, // disables swipe back on iOS
+        }}
+      />
+      <Stack.Screen
+        name={ScreenNames.ImagePreviewScreen}
+        component={Screens.ImagePreviewScreen}
       />
     </Stack.Navigator>
   );

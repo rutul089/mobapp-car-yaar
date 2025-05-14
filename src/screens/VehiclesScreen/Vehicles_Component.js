@@ -38,13 +38,14 @@ const Vehicles_Component = ({
   return (
     <SafeAreaWrapper hideBottom>
       <ImageHeader
-        subTittle={'Vehicles' + loading}
+        subTittle={'Vehicles'}
         searchPlaceHolder={'Search by vehicle number...'}
         onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
         onChangeText={onSearchText}
         value={searchText}
         onCancelIconPress={clearSearch}
         onSubmitEditing={setSearch}
+        profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
       />
       <FlatList
         data={vehicleData}

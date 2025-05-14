@@ -53,6 +53,7 @@ const ScreenNames = {
   SelectVehicle: 'SelectVehicleScreen',
   ProformaInvoice: 'ProformaInvoiceScreen',
   SuccessScreen: 'SuccessScreen',
+  ImagePreviewScreen: 'ImagePreviewScreen',
 };
 
 export default ScreenNames;

@@ -63,10 +63,9 @@ const Vehicle_Detail_Component = ({
           }}>
           <DetailInfoCard data={vehicleInfo} onChange={onInfoChange} />
           <FormFooterButtons
-            primaryButtonLabel={strings.btnSaveDraft}
-            secondaryButtonLabel={strings.next}
-            onPressPrimaryButton={onSaveDraftPress}
-            onPressSecondaryButton={onNextPress}
+            primaryButtonLabel={strings.next}
+            onPressPrimaryButton={onNextPress}
+            hideSecondaryButton
           />
         </View>
       </KeyboardAwareScrollView>

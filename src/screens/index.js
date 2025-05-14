@@ -51,3 +51,4 @@ export {default as NewLoanCustomerOtpScreen} from './NewVehicleFlow/NewLoanCusto
 export {default as SelectVehicleScreen} from './NewVehicleFlow/SelectVehicleScreen';
 export {default as ProformaInvoiceScreen} from './NewVehicleFlow/ProformaInvoiceScreen';
 export {default as SuccessModalScreen} from './SuccessModalScreen';
+export {default as ImagePreviewScreen} from './ImagePreviewScreen';

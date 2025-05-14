@@ -8,12 +8,20 @@ import {
 import React, {Component} from 'react';
 import {Image, View} from 'react-native';
 import images from '../../assets/images';
-
-export default class index extends Component {
+import {navigateToTab} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
+class SuccessModalScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handleButton = this.handleButton.bind(this);
   }
+
+  componentDidMount() {}
+
+  handleButton = () => {
+    navigateToTab(ScreenNames.Vehicles);
+  };
 
   render() {
     return (
@@ -51,10 +59,15 @@ export default class index extends Component {
           </View>
           <Spacing size={'xl'} />
           <View style={{width: '100%'}}>
-            <Button label="Back to Vehicle Listing" />
+            <Button
+              label="Back to Vehicle Listing"
+              onPress={this.handleButton}
+            />
           </View>
         </View>
       </SafeAreaWrapper>
     );
   }
 }
+
+export default SuccessModalScreen;
