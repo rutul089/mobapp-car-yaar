@@ -4,3 +4,4 @@ export * from './userAction';
 export * from './authAction';
 export * from './loanActions';
 export * from './vehicleActions';
+export * from './customerActions';

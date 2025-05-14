@@ -99,3 +99,9 @@ export const vehicleImageTypes = [
   [vehicleImageType.VISIBLE_DAMAGE],
   [vehicleImageType.RC_BOOK],
 ];
+
+export const API_TRIGGER = {
+  DEFAULT: 'default',
+  LOAD_MORE: 'loadMore',
+  PULL_TO_REFRESH: 'pullToRefresh',
+};

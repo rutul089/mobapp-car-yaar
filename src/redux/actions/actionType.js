@@ -19,3 +19,14 @@ export const RESET_SELECTED_VEHICLE = createAsyncActionTypes(
 export const UPDATE = createAsyncActionTypes('UPDATE');
 export const VEHICLE_EXISTS = createAsyncActionTypes('vehicle-exists');
 export const VEHICLE_DETAILS = createAsyncActionTypes('vehicle-details');
+export const FETCH_CUSTOMERS = createAsyncActionTypes('FETCH_CUSTOMERS');
+export const FETCH_CUSTOMER_LOAN = createAsyncActionTypes(
+  'FETCH_CUSTOMER_LOAN',
+);
+export const FETCH_CUSTOMER_DOCUMENTS = createAsyncActionTypes(
+  'FETCH_CUSTOMER_DOCUMENTS',
+);
+export const FETCH_CUSTOMER_BY_ID = createAsyncActionTypes(
+  'FETCH_CUSTOMER_BY_ID',
+);
+export const CLEAR_SEARCH = createAsyncActionTypes('CLEAR_SEARCH');

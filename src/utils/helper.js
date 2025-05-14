@@ -229,3 +229,10 @@ export const formatDate = (inputDate, outputFormat = 'DD MMM YYYY') => {
 
   return parsedDate?.isValid() ? parsedDate.format(outputFormat) : '-';
 };
+
+export const capitalizeFirstLetter = str => {
+  if (!str) {
+    return '';
+  }
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};

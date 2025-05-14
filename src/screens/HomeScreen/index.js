@@ -37,7 +37,11 @@ class HomeScreen extends Component {
 
   onPurchasePress = () => {
     this.props.selectedLoanType(loanType.purchase);
-    navigate(ScreenNames.SearchView);
+    navigate('VehicleFullScreen', {
+      params: {
+        fullScreen: true,
+      },
+    });
   };
 
   onRefinancePress = () => {

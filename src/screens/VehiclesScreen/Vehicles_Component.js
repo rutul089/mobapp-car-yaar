@@ -6,10 +6,11 @@ import {
   SafeAreaWrapper,
   theme,
   VehicleCard,
-  Text,
+  SearchBar,
+  Header,
 } from '@caryaar/components';
 import {get} from 'lodash';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {
@@ -35,21 +36,40 @@ const Vehicles_Component = ({
   clearSearch,
   setSearch,
   onAddButtonPress,
+  fullScreen,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
-      <ImageHeader
-        subTittle={'Vehicles'}
-        searchPlaceHolder={'Search by vehicle number...'}
-        onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
-        onChangeText={onSearchText}
-        value={searchText}
-        onCancelIconPress={clearSearch}
-        onSubmitEditing={setSearch}
-        profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
-        showAddBtn
-        onAddButtonPress={onAddButtonPress}
-      />
+      {fullScreen ? (
+        <>
+          <Header title="Select Vehicle" />
+          <View style={styles.searchWrapper}>
+            <SearchBar
+              showAddBtn
+              onChangeText={onSearchText}
+              value={searchText}
+              onCancelIconPress={clearSearch}
+              onSubmitEditing={setSearch}
+              onAddButtonPress={onAddButtonPress}
+            />
+          </View>
+        </>
+      ) : (
+        <ImageHeader
+          subTittle={'Vehicles'}
+          searchPlaceHolder={'Search by vehicle number...'}
+          onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
+          onChangeText={onSearchText}
+          value={searchText}
+          onCancelIconPress={clearSearch}
+          onSubmitEditing={setSearch}
+          profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
+          showAddBtn
+          onAddButtonPress={onAddButtonPress}
+          hideHeader
+          hideSubHeaderTop={false}
+        />
+      )}
       <FlatList
         data={vehicleData}
         keyExtractor={(item, index) => index.toString()}
@@ -132,6 +152,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: theme.sizes.padding,
     backgroundColor: theme.colors.background,
+  },
+  searchWrapper: {
+    backgroundColor: theme.colors.primaryBlack,
+    padding: theme.sizes.spacing.md,
+    paddingTop: 0,
   },
 });
 

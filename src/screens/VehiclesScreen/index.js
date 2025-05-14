@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
-import {navigate} from '../../navigation/NavigationUtils';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import {
   clearVehicleSearch,
   fetchVehiclesThunk,
@@ -20,11 +20,22 @@ class Vehicles extends Component {
       apiTrigger: 'default',
       isSearch: false,
       searchText: '',
+      fullScreen: false,
     };
     this.limit = 10;
   }
 
   componentDidMount() {
+    let navState = getScreenParam(this.props.route, 'params');
+    this.setState(
+      {
+        fullScreen: navState?.fullScreen,
+      },
+      () => {
+        console.log('navState', this.state.fullScreen);
+      },
+    );
+
     this.fetchVehicles();
   }
 
@@ -152,7 +163,8 @@ class Vehicles extends Component {
   render() {
     const {loading, vehicleList, searchVehicles} = this.props;
 
-    const {refreshing, apiTrigger, searchText, isSearch} = this.state;
+    const {refreshing, apiTrigger, searchText, isSearch, fullScreen} =
+      this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
 
@@ -175,6 +187,7 @@ class Vehicles extends Component {
         clearSearch={this.clearSearch}
         setSearch={this.searchFromAPI}
         onAddButtonPress={this.onAddButtonPress}
+        fullScreen={fullScreen}
       />
     );
   }
