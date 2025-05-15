@@ -12,6 +12,7 @@ import {styles} from '../../styles/Vehicle.Image.style';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {getFileType} from '../../utils/documentUtils';
+import {DocumentGroup} from '../../components';
 
 const Customer_Documents_Component = ({
   onDeletePress,
@@ -44,7 +45,6 @@ const Customer_Documents_Component = ({
           );
         })}
       </View>
-      {/* <Spacing size="lg" /> */}
     </View>
   );
   return (
@@ -56,44 +56,17 @@ const Customer_Documents_Component = ({
         onBackPress={() => goBack()}
       />
       <ScrollView contentContainerStyle={styles.wrapper}>
-        {renderDocumentGroup('Documents', customerDocuments)}
+        <DocumentGroup
+          title={'Documents'}
+          documents={customerDocuments}
+          isView
+          isDocument={true}
+        />
+        {/* {renderDocumentGroup('Documents', customerDocuments)} */}
         <Spacing size="md" />
         <Button label={strings.next} onPress={onNextPress} />
         <Spacing size="md" />
       </ScrollView>
-      {/* <FlatList
-        data={customerList}
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: theme.colors.background,
-          padding: theme.sizes.padding,
-        }}
-        bounces={false}
-        renderItem={({item, index}) => (
-          <VehicleImageCard
-            label={item?.label}
-            image={item?.image}
-            onDeletePress={() => onDeletePress && onDeletePress(item)}
-            viewImage={() => openViewer(index)}
-            isView
-          />
-        )}
-        keyExtractor={item => item.label}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        ListHeaderComponent={
-          <>
-            <Text>{'Documents'}</Text>
-            <Spacing size="smd" />
-          </>
-        }
-        ListFooterComponent={
-          <>
-            <Spacing size="xl" />
-            <Button label={strings.next} onPress={onNextPress} />
-          </>
-        }
-      /> */}
     </SafeAreaWrapper>
   );
 };

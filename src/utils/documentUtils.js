@@ -144,10 +144,12 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
  */
 export const formatDocumentImages = (response = {}, baseUrl = '') => {
   const formatted = {};
-
   Object.values(documentImageType).forEach(key => {
-    if (Object.prototype.hasOwnProperty.call(response, key)) {
-      const imageName = response[key];
+    const imageName = response[key];
+    if (
+      Object.prototype.hasOwnProperty.call(response, key) &&
+      imageName !== null
+    ) {
       formatted[key] = {
         uri: imageName ? `${baseUrl}${imageName}` : null,
         uploadedUrl: imageName ? `${baseUrl}${imageName}` : null,

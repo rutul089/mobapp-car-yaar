@@ -1,0 +1,131 @@
+import axiosInstance from '../networking/axiosInstance';
+/**
+ * Fetch paginated loan applications.
+ *
+ * @param {number} [page=1] - The page number to retrieve.
+ * @param {number} [limit=10] - The number of items per page.
+ * @param {object} [payload={}] - Optional Axios request config or query parameters.
+ * @param {object} [payload.params] - Additional query parameters (e.g., filters, sorting).
+ * @returns {Promise<object>} - A promise that resolves to the loan applications data.
+ *
+ * @throws {Error} Throws an error if the API request fails.
+ */
+export const fetchLoanApplications = async (
+  page = 1,
+  limit = 10,
+  payload = {},
+) => {
+  try {
+    const response = await axiosInstance.get('/loan-applications', {
+      ...payload,
+      params: {
+        page,
+        limit,
+        ...(payload.params || {}),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch customers:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch details of a single loan application.
+ * @param {string} applicationId - Loan application ID.
+ * @param {object} config - Optional Axios config.
+ * @returns {Promise<object>} - Loan application details.
+ */
+export const fetchLoanApplicationById = async (applicationId, config = {}) => {
+  if (!applicationId) {
+    throw new Error('Application ID is required');
+  }
+
+  try {
+    const response = await axiosInstance.get(
+      `/loan-applications/${applicationId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to fetch loan application ${applicationId}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch loan application status statistics.
+ * @param {object} config - Optional Axios config.
+ * @returns {Promise<object>} - Loan status stats.
+ */
+export const fetchLoanStatusStats = async (config = {}) => {
+  try {
+    const response = await axiosInstance.get(
+      '/loan-applications/stats/status',
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch loan status stats:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch loan applications overview.
+ * @param {object} config - Optional Axios config.
+ * @returns {Promise<object>} - Loan overview data.
+ */
+export const fetchLoanApplicationsOverview = async (config = {}) => {
+  try {
+    const response = await axiosInstance.get(
+      '/loan-applications/overview',
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch loan overview:', error);
+    throw error;
+  }
+};
+
+/**
+ * Create a new loan application.
+ * @param {object} payload - Loan application data.
+ * @param {object} config - Optional Axios config.
+ * @returns {Promise<object>} - Created loan application.
+ */
+export const createLoanApplication = async (payload, config = {}) => {
+  try {
+    const response = await axiosInstance.post(
+      '/loan-applications',
+      payload,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create loan application:', error);
+    throw error;
+  }
+};
+
+/**
+ * Assign a loan application to a credit officer.
+ * @param {object} payload - Assignment details (e.g., { applicationId, creditOfficerId }).
+ * @param {object} config - Optional Axios config.
+ * @returns {Promise<object>} - Assignment result.
+ */
+export const assignLoanToCreditOfficer = async (payload, config = {}) => {
+  try {
+    const response = await axiosInstance.post(
+      '/loan-applications/assign-to-credit',
+      payload,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to assign loan to credit officer:', error);
+    throw error;
+  }
+};

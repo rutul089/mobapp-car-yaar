@@ -52,3 +52,15 @@ export const CUSTOMER_FINANCE_DOCUMENT = createAsyncActionTypes(
 export const CUSTOMER_MORE_FINANCE = createAsyncActionTypes(
   'CUSTOMER_MORE_FINANCE',
 );
+
+export const FETCH_LOAN_APPLICATIONS = createAsyncActionTypes(
+  'FETCH_LOAN_APPLICATIONS',
+);
+
+export const CLEAR_SEARCH_APPLICATION = createAsyncActionTypes(
+  'CLEAR_SEARCH_APPLICATION',
+);
+
+export const RESET_LOAN_APPLICATION = createAsyncActionTypes(
+  'RESET_LOAN_APPLICATION',
+);

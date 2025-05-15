@@ -1,37 +1,40 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import VehicleImageCard from '@caryaar/components'; // Adjust path as needed
+import {View, StyleSheet} from 'react-native';
+import {VehicleImageCard, Text, theme} from '@caryaar/components'; // Adjust path as needed
 import {getFileType} from '../utils/documentUtils';
 
-const DocumentGroup = ({title, documents = [], isView, isDocument}) => {
-  if (!documents.length) {
-    return null;
-  }
-
+const DocumentGroup = ({
+  title,
+  documents = [],
+  isView,
+  isDocument,
+  viewImage,
+}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.row}>
-        {documents.map(doc => {
-          const fileUri = doc?.docObject?.uri;
-          const fileType = getFileType(fileUri);
+      <Text>{title}</Text>
+      <View style={styles.rowSpaceBetween}>
+        {documents &&
+          documents.map(doc => {
+            const fileUri = doc?.docObject?.uri;
+            const fileType = getFileType(fileUri);
 
-          return (
-            <View key={`${title}-${doc.label}`} style={styles.item}>
-              <VehicleImageCard
-                label={doc.label}
-                image={fileUri}
-                onDeletePress={doc.onDeletePress}
-                viewImage={doc.viewImage}
-                fileType={fileType}
-                isView={isView}
-                btnLabel={'Click to Upload\nImage or PDF'}
-                uploadMedia={doc.uploadMedia}
-                isDocument={isDocument}
-              />
-            </View>
-          );
-        })}
+            return (
+              <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
+                <VehicleImageCard
+                  label={doc.label}
+                  image={fileUri}
+                  onDeletePress={doc.onDeletePress}
+                  viewImage={doc.viewImage}
+                  fileType={fileType}
+                  isView={isView}
+                  btnLabel={'Click to Upload\nImage or PDF'}
+                  uploadMedia={doc.uploadMedia}
+                  isDocument={isDocument ? fileType !== 'image' : false}
+                />
+              </View>
+            );
+          })}
       </View>
     </View>
   );
@@ -48,13 +51,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 8,
   },
-  row: {
+  rowSpaceBetween: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginTop: theme.sizes.spacing.smd,
   },
-  item: {
+  halfWidth: {
     width: '48%',
-    marginBottom: 12,
+    marginBottom: theme.sizes.spacing.smd,
   },
 });

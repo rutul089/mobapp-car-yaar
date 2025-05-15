@@ -1,6 +1,7 @@
-import theme from '../theme';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
+import {applicationStatus} from '../constants/enums';
+import {theme} from '@caryaar/components';
 
 export const formatIndianCurrency = (
   value,
@@ -34,31 +35,31 @@ export const formatAmount = text => {
   return text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
 };
 
-export const getGradientColors = status => {
-  switch (status) {
-    case 'SAVED':
-      return ['rgba(29, 149, 240, 0.12)', 'rgba(61, 173, 255, 0.2)'];
-    case 'IN_PROGRESS':
-      return ['rgba(243, 105, 110, 0.12)', 'rgba(248, 169, 2, 0.2)'];
-    case 'COMPLETED':
-      return ['rgba(95, 197, 46, 0.12)', 'rgba(110, 238, 135, 0.2)'];
-    default:
-      return ['#E8E8E8', '#E8E8E8']; // fallback
-  }
-};
+// export const getGradientColors = status => {
+//   switch (status) {
+//     case 'SAVED':
+//       return ['rgba(29, 149, 240, 0.12)', 'rgba(61, 173, 255, 0.2)'];
+//     case 'IN_PROGRESS':
+//       return ['rgba(243, 105, 110, 0.12)', 'rgba(248, 169, 2, 0.2)'];
+//     case 'COMPLETED':
+//       return ['rgba(95, 197, 46, 0.12)', 'rgba(110, 238, 135, 0.2)'];
+//     default:
+//       return ['#E8E8E8', '#E8E8E8']; // fallback
+//   }
+// };
 
-export const getStatusColor = status => {
-  switch (status) {
-    case 'SAVED':
-      return '#1D95F0';
-    case 'IN_PROGRESS':
-      return 'rgba(243, 105, 110, 0.12)';
-    case 'COMPLETED':
-      return 'rgba(110, 238, 135, 0.2)';
-    default:
-      return theme.colors.textPrimary;
-  }
-};
+// export const getStatusColor = status => {
+//   switch (status) {
+//     case 'SAVED':
+//       return '#1D95F0';
+//     case 'IN_PROGRESS':
+//       return 'rgba(243, 105, 110, 0.12)';
+//     case 'COMPLETED':
+//       return 'rgba(110, 238, 135, 0.2)';
+//     default:
+//       return theme.colors.textPrimary;
+//   }
+// };
 
 export const isLastRow = (index, data, item) => {
   const visibleItems = data.filter(d => !d.full); // half-width items
@@ -235,4 +236,42 @@ export const capitalizeFirstLetter = str => {
     return '';
   }
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+/**
+ * Get gradient color array based on application status
+ * @param {number} status
+ * @returns {string[]}
+ */
+export const getGradientColors = status => {
+  switch (status) {
+    case applicationStatus.PENDING:
+    case applicationStatus.IN_REVIEW:
+      return theme.colors.appliedGradient;
+    case applicationStatus.APPROVED:
+      return theme.colors.lenderApprovedGradient;
+    case applicationStatus.REJECTED:
+    case applicationStatus.QUERY:
+      return theme.colors.onHoldGradient;
+    default:
+      return theme.colors.appliedGradient;
+  }
+};
+
+/**
+ * Return background color for given application status
+ * @param {string} status
+ * @returns {string}
+ */
+export const getStatusColor = status => {
+  switch (status) {
+    case 'SAVED':
+      return '#1D95F0';
+    case 'IN_PROGRESS':
+      return 'rgba(243, 105, 110, 0.12)';
+    case 'COMPLETED':
+      return 'rgba(110, 238, 135, 0.2)';
+    default:
+      return theme.colors.textPrimary;
+  }
 };
