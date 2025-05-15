@@ -3,7 +3,11 @@ import Customers_Component from './Customers_Component';
 import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 import {connect} from 'react-redux';
-import {clearCustomerSearch, fetchAllCustomersThunk} from '../../redux/actions';
+import {
+  clearCustomerSearch,
+  fetchAllCustomersThunk,
+  resetSelectedCustomer,
+} from '../../redux/actions';
 import {API_TRIGGER} from '../../constants/enums';
 
 class CustomersScreen extends Component {
@@ -97,6 +101,7 @@ class CustomersScreen extends Component {
    * On customer list item click
    */
   onWrapperClick = item => {
+    this.props.resetSelectedCustomer();
     navigate(ScreenNames.CustomerInfo, {param: item});
   };
 
@@ -166,7 +171,11 @@ class CustomersScreen extends Component {
 }
 
 // Redux mappings
-const mapDispatchToProps = {fetchAllCustomersThunk, clearCustomerSearch};
+const mapDispatchToProps = {
+  fetchAllCustomersThunk,
+  clearCustomerSearch,
+  resetSelectedCustomer,
+};
 
 const mapStateToProps = ({customerData}) => {
   return {

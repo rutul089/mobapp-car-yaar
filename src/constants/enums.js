@@ -66,10 +66,7 @@ export const vehicleConditionValue = {
   [eVehicleCondition.USED]: 'Used',
 };
 
-export const getLabelFromEnum = (enumObject, value, defaultLabel = '') => {
-  return enumObject?.[value] || defaultLabel;
-};
-
+// Enum for different vehicle image types used in the app
 export const vehicleImageType = Object.freeze({
   FRONT_VIEW: 'frontView',
   REAR_VIEW: 'rearView',
@@ -80,6 +77,7 @@ export const vehicleImageType = Object.freeze({
   RC_BOOK: 'rcBook',
 });
 
+// Human-readable labels corresponding to each vehicle image type
 export const vehicleImageLabelMap = {
   [vehicleImageType.FRONT_VIEW]: 'Front View',
   [vehicleImageType.REAR_VIEW]: 'Rear View',
@@ -90,6 +88,7 @@ export const vehicleImageLabelMap = {
   [vehicleImageType.RC_BOOK]: 'RC Book',
 };
 
+// Array of vehicle image types used for iteration or rendering
 export const vehicleImageTypes = [
   [vehicleImageType.FRONT_VIEW],
   [vehicleImageType.REAR_VIEW],
@@ -100,8 +99,96 @@ export const vehicleImageTypes = [
   [vehicleImageType.RC_BOOK],
 ];
 
+// Enum for different document image types used in customer onboarding or verification
+export const documentImageType = Object.freeze({
+  ID_PROOF: 'idProofImage',
+  ADDRESS_PROOF: 'addressProofImage',
+  PERMANENT_ADDRESS: 'permanentAddressImage',
+  INCOME_PROOF: 'incomeProofImage',
+  BANKING_PROOF: 'bankingProofImage',
+  BUSINESS_PROOF: 'businessProofImage',
+  INSURANCE: 'insuranceImage',
+  APPLICATION_FORM: 'applicationFormImage',
+  CO_APPLICANT: 'coapplicantImage',
+  PASSPORT: 'passportImage',
+  OTHER_DOCUMENTS: 'otherDocuments',
+  SOA: 'soa',
+  SANCTION_LETTER: 'sanctionLetter',
+  NOC: 'noc',
+  FORM_34: 'form34',
+});
+
+// Human-readable labels corresponding to each document image type
+export const documentImageLabelMap = {
+  [documentImageType.ID_PROOF]: 'ID Proof',
+  [documentImageType.ADDRESS_PROOF]: 'Address Proof',
+  [documentImageType.PERMANENT_ADDRESS]: 'Permanent Address',
+  [documentImageType.INCOME_PROOF]: 'Income Proof',
+  [documentImageType.BANKING_PROOF]: 'Banking Proof',
+  [documentImageType.OTHER_DOCUMENTS]: 'Other Documents',
+  [documentImageType.BUSINESS_PROOF]: 'Business Proof',
+  [documentImageType.INSURANCE]: 'Insurance',
+  [documentImageType.APPLICATION_FORM]: 'Application Form',
+  [documentImageType.CO_APPLICANT]: 'Co-applicant Image',
+  [documentImageType.PASSPORT]: 'Passport',
+  [documentImageType.SOA]: 'SOA',
+  [documentImageType.SANCTION_LETTER]: 'Sanction Letter',
+  [documentImageType.NOC]: 'NOC',
+  [documentImageType.FORM_34]: 'Form 34',
+};
+
+// Array of document image types used for iteration or rendering
+export const documentImageTypes = [
+  [documentImageType.ID_PROOF],
+  [documentImageType.ADDRESS_PROOF],
+  [documentImageType.PERMANENT_ADDRESS],
+  [documentImageType.INCOME_PROOF],
+  [documentImageType.BANKING_PROOF],
+  [documentImageType.BUSINESS_PROOF],
+  [documentImageType.INSURANCE],
+  [documentImageType.APPLICATION_FORM],
+  [documentImageType.CO_APPLICANT],
+  [documentImageType.PASSPORT],
+  [documentImageType.OTHER_DOCUMENTS],
+  [documentImageType.SOA],
+  [documentImageType.SANCTION_LETTER],
+  [documentImageType.NOC],
+  [documentImageType.FORM_34],
+];
+
+// Constants to track API interaction states like loading, pagination, and refresh
 export const API_TRIGGER = {
   DEFAULT: 'default',
   LOAD_MORE: 'loadMore',
   PULL_TO_REFRESH: 'pullToRefresh',
+};
+
+// Enum-like object for reference types
+export const referenceType = Object.freeze({
+  HOME: 'HOME',
+  OFFICE: 'OFFICE',
+});
+
+// Human-readable labels corresponding to each reference type
+export const referenceLabelMap = {
+  [referenceType.HOME]: 'Home Verification',
+  [referenceType.OFFICE]: 'Office Verification',
+};
+
+// Array of reference types used for iteration or rendering
+export const referenceTypes = [referenceType.HOME, referenceType.OFFICE];
+
+/**
+ * Utility function to retrieve a label from a given enum-like object using a value.
+ *
+ * @param {Object} enumObject - The mapping object (e.g., label map).
+ * @param {string} value - The key whose corresponding label is needed.
+ * @param {string} defaultLabel - Fallback label to return if the value is not found in the enumObject.
+ * @returns {string} - The label corresponding to the value or the defaultLabel if not found.
+ *
+ * Example:
+ *   getLabelFromEnum(vehicleImageLabelMap, 'frontView', 'Unknown') // returns 'Front View'
+ */
+export const getLabelFromEnum = (enumObject, value, defaultLabel = '') => {
+  return enumObject?.[value] || defaultLabel;
 };

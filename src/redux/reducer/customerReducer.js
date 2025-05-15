@@ -3,6 +3,11 @@ import {
   FETCH_CUSTOMERS,
   CLEAR_SEARCH,
   FETCH_CUSTOMER_DETAIL,
+  FETCH_CUSTOMER_DOCUMENT,
+  CLEAR_SELECTED_CUSTOMER,
+  CUSTOMER_FINANCE_DETAILS,
+  CUSTOMER_FINANCE_DOCUMENT,
+  CUSTOMER_MORE_FINANCE,
 } from '../actions/actionType';
 
 const initialState = {
@@ -18,12 +23,19 @@ const initialState = {
   searchCustomer: [], // For Get all Search Vehicle
   searchPage: 1,
   searchTotalPages: 1,
+  financeDetails: null,
+  financeDocuments: null,
+  moreOnFinance: null,
 };
 
 const customerReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_CUSTOMERS.REQUEST:
     case FETCH_CUSTOMER_DETAIL.REQUEST:
+    case FETCH_CUSTOMER_DOCUMENT.REQUEST:
+    case CUSTOMER_FINANCE_DETAILS.REQUEST:
+    case CUSTOMER_FINANCE_DOCUMENT.REQUEST:
+    case CUSTOMER_MORE_FINANCE.REQUEST:
       return {
         ...state,
         loading: true,
@@ -79,8 +91,40 @@ const customerReducer = (state = initialState, action) => {
         selectedCustomerId: action?.payload?.id,
       };
 
+    case FETCH_CUSTOMER_DOCUMENT.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        documentDetail: action?.payload,
+      };
+
+    case CUSTOMER_FINANCE_DETAILS.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        financeDetails: action.payload,
+      };
+
+    case CUSTOMER_FINANCE_DOCUMENT.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        financeDocuments: action.payload,
+      };
+
+    case CUSTOMER_MORE_FINANCE.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        moreOnFinance: action.payload,
+      };
+
     case FETCH_CUSTOMERS.FAILURE:
     case FETCH_CUSTOMER_DETAIL.FAILURE:
+    case FETCH_CUSTOMER_DOCUMENT.FAILURE:
+    case CUSTOMER_FINANCE_DETAILS.FAILURE:
+    case CUSTOMER_FINANCE_DOCUMENT.FAILURE:
+    case CUSTOMER_MORE_FINANCE.FAILURE:
       return {
         ...state,
         loading: false,
@@ -93,6 +137,18 @@ const customerReducer = (state = initialState, action) => {
         searchPage: 1,
         searchTotalPages: 1,
         loading: false,
+      };
+
+    case CLEAR_SELECTED_CUSTOMER.SUCCESS:
+      return {
+        ...state,
+        selectedCustomer: null,
+        selectedCustomerId: null,
+        documentDetail: null,
+        loanDetail: null,
+        financeDetails: null,
+        financeDocuments: null,
+        moreOnFinance: null,
       };
 
     case types.RESET_APP_STATE:

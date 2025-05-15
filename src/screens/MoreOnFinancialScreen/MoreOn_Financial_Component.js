@@ -6,16 +6,22 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {goBack} from '../../navigation/NavigationUtils';
+import {getLabelFromEnum, referenceLabelMap} from '../../constants/enums';
 
 const MoreOn_Financial_Component = ({
   cibilList,
   officeVerificationList,
   homeVerificationList,
   onClosePress,
+  loading,
+  cibilScore,
+  lastUpdatedOn,
+  loanAddReferences,
 }) => (
   <SafeAreaWrapper backgroundColor={theme.colors.background}>
     <Header
@@ -32,28 +38,49 @@ const MoreOn_Financial_Component = ({
             color={theme.colors.primary}
             size={'h2'}
             hankenGroteskExtraBold={true}>
-            812
+            {cibilScore}
           </Text>
-          <Text type={'caption'} style={styles.textNote} textAlign={'center'}>
-            Last updated on 12 Dec 2024, 10:34 AM
-          </Text>
+          {lastUpdatedOn && (
+            <Text type={'caption'} style={styles.textNote} textAlign={'center'}>
+              Last updated on 12 Dec 2024, 10:34 AM
+            </Text>
+          )}
         </View>
       </DetailInfoCard>
-      <Spacing size="lg" />
-      <DetailInfoCard
-        label={'Home Verification'}
-        data={homeVerificationList}
-        isSemiBold={false}
-      />
-      <Spacing size="lg" />
-      <DetailInfoCard
-        label={'Office Verification'}
-        data={officeVerificationList}
-        isSemiBold={false}
-      />
+      {loanAddReferences?.map((item, index) => {
+        return (
+          <View key={`doc-${index}`}>
+            <Spacing size="lg" />
+            <DetailInfoCard
+              label={getLabelFromEnum(referenceLabelMap, item?.type)}
+              data={[
+                {label: 'Reference Name', value: item?.referenceName || '-'},
+                {label: 'Mobile Number', value: item?.mobileNumber || '-'},
+                {
+                  label: 'Relationship',
+                  value: item?.relationship || '-',
+                  full: true,
+                },
+                {
+                  label: 'Address',
+                  value: item?.address || '-',
+                  full: true,
+                },
+                {
+                  label: 'Pincode',
+                  value: item?.pincode || '-',
+                  full: true,
+                },
+              ]}
+              isSemiBold={false}
+            />
+          </View>
+        );
+      })}
       <Spacing size="xl" />
       <Button label={'Close'} onPress={onClosePress} />
     </ScrollView>
+    {loading && <Loader visible={loading} />}
   </SafeAreaWrapper>
 );
 

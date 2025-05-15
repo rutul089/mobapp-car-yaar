@@ -1,17 +1,29 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Customer_Documents_Component from './Customer_Documents_Component';
-import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {documentImageLabelMap, documentImageTypes} from '../../constants/enums';
+import {navigate} from '../../navigation/NavigationUtils';
+import {fetchCustomerDocumentsThunk} from '../../redux/actions';
+import {
+  formatDocumentImages,
+  viewDocumentHelper,
+} from '../../utils/documentUtils';
+import {showToast} from '../../utils/helper';
+import Customer_Documents_Component from './Customer_Documents_Component';
 
 class CustomerDocumentsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      documents: {},
+      isLoadingDocument: false,
+    };
     this.onNextPress = this.onNextPress.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.fetchCustomerDocuments();
+  }
 
   handleCreateNewWallet = () => {};
 
@@ -21,44 +33,59 @@ class CustomerDocumentsScreen extends Component {
     navigate(ScreenNames.CustomerFinancialDocs);
   };
 
+  handleViewImage = async uri => {
+    if (!uri) {
+      return;
+    }
+
+    setTimeout(async () => {
+      this.setState({isLoadingDocument: true});
+      try {
+        await viewDocumentHelper(
+          uri,
+          imageUri => {
+            navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+          },
+          error => {
+            console.warn('Error opening file:', error);
+            showToast('error', 'Could not open the document.', 'bottom', 3000);
+          },
+        );
+      } finally {
+        this.setState({isLoadingDocument: false});
+      }
+    }, 50);
+  };
+
+  fetchCustomerDocuments = async () => {
+    const {selectedCustomerId} = this.props;
+    await this.props.fetchCustomerDocumentsThunk(
+      selectedCustomerId,
+      {},
+      response => {
+        this.setState({
+          documents: formatDocumentImages(
+            response,
+            'https://your-image-server.com/images/',
+          ),
+        });
+      },
+    );
+  };
+
   render() {
+    const {documents} = this.state;
     return (
       <>
         <Customer_Documents_Component
-          customerList={[
-            {
-              label: 'ID Proof',
-              image: 'https://i.pravatar.cc/150?img=3',
-            },
-            {
-              label: 'Address Proof',
-              image: 'https://i.pravatar.cc/150',
-            },
-            {
-              label: 'Permanent Address',
-              image: 'https://i.pravatar.cc/150',
-            },
-            {
-              label: 'Income Proof',
-              image: 'https://i.pravatar.cc/150',
-            },
-            {
-              label: 'Banking Proof',
-              image: 'https://i.pravatar.cc/150',
-            },
-            {
-              label: 'Other Documents',
-              image: 'https://i.pravatar.cc/150',
-            },
-            {
-              label: 'Business Proof',
-              image: 'https://i.pravatar.cc/150',
-            },
-            {
-              label: 'Insurance',
-              image: 'https://i.pravatar.cc/150',
-            },
-          ]}
+          customerDocuments={documentImageTypes
+            .filter(type => documents[type]) // only include if document exists
+            .map(type => ({
+              type,
+              label: documentImageLabelMap[type],
+              docObject: documents[type],
+              viewImage: () => this.handleViewImage(documents[type]?.uri),
+            }))}
           onNextPress={this.onNextPress}
         />
       </>
@@ -66,9 +93,12 @@ class CustomerDocumentsScreen extends Component {
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
+const mapActionCreators = {fetchCustomerDocumentsThunk};
+const mapStateToProps = ({customerData}) => {
+  return {
+    selectedCustomerId: customerData?.selectedCustomerId,
+    documentDetail: customerData?.documentDetail,
+  };
 };
 export default connect(
   mapStateToProps,

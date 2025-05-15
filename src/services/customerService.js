@@ -136,3 +136,85 @@ export const fetchCustomerById = async (customerId, config = {}) => {
     throw error;
   }
 };
+
+/**
+ * Fetches finance details for a given customer ID.
+ *
+ * @param {string} customerId - The unique ID of the customer.
+ * @param {object} [config={}] - Optional Axios request configuration.
+ * @returns {Promise<object>} The finance details of the customer.
+ * @throws Will throw an error if the customerId is missing or the request fails.
+ *
+ */
+export const fetchCustomerFinanceDetails = async (customerId, config = {}) => {
+  if (!customerId) {
+    throw new Error('Customer ID is required');
+  }
+
+  try {
+    const response = await axiosInstance.get(
+      `/customers/financeDetails/${customerId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch finance details for customer ID ${customerId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+export const fetchCustomerFinanceDocuments = async (
+  customerId,
+  config = {},
+) => {
+  if (!customerId) {
+    throw new Error('Customer ID is required');
+  }
+
+  try {
+    const response = await axiosInstance.get(
+      `/customers/financeDocuments/${customerId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch finance details for customer ID ${customerId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+/**
+ * Fetch more finance details for a specific customer.
+ *
+ * @param {string} customerId - UUID of the customer.
+ * @param {object} [config={}] - Optional Axios config.
+ * @returns {Promise<object>} Response data containing additional finance details.
+ * @throws Will throw an error if the request fails or customerId is not provided.
+ */
+export const fetchCustomerMoreFinanceDetails = async (
+  customerId,
+  config = {},
+) => {
+  if (!customerId) {
+    throw new Error('Customer ID is required');
+  }
+
+  try {
+    const response = await axiosInstance.get(
+      `/customers/getCustomerMoreFinanceDetails/${customerId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch more finance details for customer ID ${customerId}:`,
+      error,
+    );
+    throw error;
+  }
+};

@@ -1,53 +1,67 @@
-/* eslint-disable react-native/no-inline-styles */
 import {
   Button,
   Header,
   SafeAreaWrapper,
   Spacing,
   VehicleImageCard,
-  theme,
 } from '@caryaar/components';
 import React from 'react';
-import {FlatList, Text} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import {styles} from '../../styles/Vehicle.Image.style';
 
-import ImageViewing from 'react-native-image-viewing';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
-const images = [
-  {uri: 'https://placekitten.com/800/600'},
-  {uri: 'https://placekitten.com/800/600'},
-  {uri: 'https://placekitten.com/801/600'},
-  {uri: 'https://placekitten.com/802/600'},
-  {uri: 'https://placekitten.com/803/600'},
-  {uri: 'https://placekitten.com/803/600'},
-  {uri: 'https://placekitten.com/803/600'},
-  {uri: 'https://placekitten.com/803/600'},
-];
+import {getFileType} from '../../utils/documentUtils';
 
 const Customer_Documents_Component = ({
   onDeletePress,
   onImagePress,
   customerList,
   onNextPress,
+  customerDocuments,
 }) => {
-  const [visible, setIsVisible] = React.useState(false);
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-
-  const openViewer = index => {
-    setCurrentIndex(index);
-    setIsVisible(true);
-  };
-
+  const renderDocumentGroup = (title, documents) => (
+    <View key={title}>
+      <Text>{title}</Text>
+      <View style={styles.rowSpaceBetween}>
+        {documents?.map(doc => {
+          const fileUri = doc?.docObject?.uri;
+          const fileType = getFileType(fileUri);
+          return (
+            <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
+              <VehicleImageCard
+                label={doc.label}
+                image={fileUri}
+                onDeletePress={doc.onDeletePress}
+                viewImage={doc.viewImage}
+                btnLabel={'Click to Upload\nImage or PDF'}
+                uploadMedia={doc.uploadMedia}
+                fileType={fileType}
+                isView={true}
+                isDocument={fileType !== 'image'}
+              />
+            </View>
+          );
+        })}
+      </View>
+      {/* <Spacing size="lg" /> */}
+    </View>
+  );
   return (
     <SafeAreaWrapper>
       <Header
         title="Customer Documents"
-        rightLabel="_#ABC123"
+        // rightLabel="_#ABC123"
         showRightContent={true}
         onBackPress={() => goBack()}
       />
-      <FlatList
+      <ScrollView contentContainerStyle={styles.wrapper}>
+        {renderDocumentGroup('Documents', customerDocuments)}
+        <Spacing size="md" />
+        <Button label={strings.next} onPress={onNextPress} />
+        <Spacing size="md" />
+      </ScrollView>
+      {/* <FlatList
         data={customerList}
         contentContainerStyle={{
           flexGrow: 1,
@@ -79,21 +93,7 @@ const Customer_Documents_Component = ({
             <Button label={strings.next} onPress={onNextPress} />
           </>
         }
-      />
-
-      <ImageViewing
-        images={[
-          {uri: 'https://i.pravatar.cc/150'},
-          {uri: 'https://i.pravatar.cc/150'},
-          {uri: 'https://i.pravatar.cc/150'},
-          {uri: 'https://i.pravatar.cc/150'},
-        ]}
-        imageIndex={currentIndex}
-        visible={visible}
-        onRequestClose={() => setIsVisible(false)}
-        swipeToCloseEnabled
-        doubleTapToZoomEnabled
-      />
+      /> */}
     </SafeAreaWrapper>
   );
 };

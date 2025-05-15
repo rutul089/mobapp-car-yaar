@@ -1,9 +1,21 @@
-import {fetchAllCustomers, fetchCustomerDetailsById} from '../../services';
+import {
+  fetchAllCustomers,
+  fetchCustomerDetailsById,
+  fetchCustomerDocuments,
+  fetchCustomerFinanceDetails,
+  fetchCustomerFinanceDocuments,
+  fetchCustomerMoreFinanceDetails,
+} from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
 import {
   CLEAR_SEARCH,
+  CLEAR_SELECTED_CUSTOMER,
   FETCH_CUSTOMERS,
   FETCH_CUSTOMER_DETAIL,
+  FETCH_CUSTOMER_DOCUMENT,
+  CUSTOMER_FINANCE_DETAILS,
+  CUSTOMER_FINANCE_DOCUMENT,
+  CUSTOMER_MORE_FINANCE,
 } from './actionType';
 
 /**
@@ -49,14 +61,9 @@ export const fetchAllCustomersThunk = (
   };
 };
 
-export const clearCustomerSearch = () => ({
-  type: CLEAR_SEARCH.SUCCESS,
-});
-
 export const fetchCustomerDetailsThunk =
   (customerId, config = {}, onSuccess, onFailure) =>
   async dispatch => {
-    console.log({customerId});
     dispatch({type: FETCH_CUSTOMER_DETAIL.REQUEST});
     try {
       const response = await fetchCustomerDetailsById(customerId, config);
@@ -65,6 +72,94 @@ export const fetchCustomerDetailsThunk =
     } catch (error) {
       dispatch({
         type: FETCH_CUSTOMER_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error.message);
+      showApiErrorToast(error);
+    }
+  };
+
+export const fetchCustomerDocumentsThunk =
+  (customerId, config = {}, onSuccess, onFailure) =>
+  async dispatch => {
+    dispatch({type: FETCH_CUSTOMER_DOCUMENT.REQUEST});
+    try {
+      const response = await fetchCustomerDocuments(customerId, config);
+      dispatch({
+        type: FETCH_CUSTOMER_DOCUMENT.SUCCESS,
+        payload: response?.data?.[0],
+      });
+      onSuccess?.(response?.data?.[0]);
+    } catch (error) {
+      dispatch({
+        type: FETCH_CUSTOMER_DOCUMENT.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error.message);
+      showApiErrorToast(error);
+    }
+  };
+
+export const fetchCustomerFinanceDetailsThunk =
+  (customerId, config = {}, onSuccess, onFailure) =>
+  async dispatch => {
+    dispatch({type: CUSTOMER_FINANCE_DETAILS.REQUEST});
+    try {
+      const response = await fetchCustomerFinanceDetails(customerId, config);
+      dispatch({
+        type: CUSTOMER_FINANCE_DETAILS.SUCCESS,
+        payload: response?.data,
+      });
+      onSuccess?.(response?.data);
+    } catch (error) {
+      dispatch({
+        type: CUSTOMER_FINANCE_DETAILS.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error.message);
+      showApiErrorToast(error);
+    }
+  };
+
+export const fetchCustomerFinanceDocumentsThunk =
+  (customerId, config = {}, onSuccess, onFailure) =>
+  async dispatch => {
+    dispatch({type: CUSTOMER_FINANCE_DOCUMENT.REQUEST});
+    try {
+      const response = await fetchCustomerFinanceDocuments(customerId, config);
+
+      dispatch({
+        type: CUSTOMER_FINANCE_DOCUMENT.SUCCESS,
+        payload: response?.data,
+      });
+      onSuccess?.(response?.data);
+    } catch (error) {
+      dispatch({
+        type: CUSTOMER_FINANCE_DOCUMENT.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error.message);
+      showApiErrorToast(error);
+    }
+  };
+
+export const fetchCustomerMoreFinanceDetailThunk =
+  (customerId, config = {}, onSuccess, onFailure) =>
+  async dispatch => {
+    dispatch({type: CUSTOMER_MORE_FINANCE.REQUEST});
+    try {
+      const response = await fetchCustomerMoreFinanceDetails(
+        customerId,
+        config,
+      );
+      dispatch({
+        type: CUSTOMER_MORE_FINANCE.SUCCESS,
+        payload: response?.data,
+      });
+      onSuccess?.(response?.data);
+    } catch (error) {
+      dispatch({
+        type: CUSTOMER_MORE_FINANCE.FAILURE,
         error: error?.message || 'Something went wrong',
       });
       onFailure?.(error.message);
@@ -97,3 +192,11 @@ export const fetchCustomerDetailsThunk =
 //       onFailure?.(error.message);
 //     }
 //   };
+
+export const resetSelectedCustomer = () => ({
+  type: CLEAR_SELECTED_CUSTOMER.SUCCESS,
+});
+
+export const clearCustomerSearch = () => ({
+  type: CLEAR_SEARCH.SUCCESS,
+});

@@ -33,3 +33,22 @@ export const CLEAR_SEARCH = createAsyncActionTypes('CLEAR_SEARCH');
 export const FETCH_CUSTOMER_DETAIL = createAsyncActionTypes(
   'FETCH_CUSTOMER_DETAIL',
 );
+export const FETCH_CUSTOMER_DOCUMENT = createAsyncActionTypes(
+  'FETCH_CUSTOMER_DOCUMENT',
+);
+
+export const CLEAR_SELECTED_CUSTOMER = createAsyncActionTypes(
+  'CLEAR_SELECTED_CUSTOMER',
+);
+
+export const CUSTOMER_FINANCE_DETAILS = createAsyncActionTypes(
+  'CUSTOMER_FINANCE_DETAILS',
+);
+
+export const CUSTOMER_FINANCE_DOCUMENT = createAsyncActionTypes(
+  'CUSTOMER_FINANCE_DOCUMENT',
+);
+
+export const CUSTOMER_MORE_FINANCE = createAsyncActionTypes(
+  'CUSTOMER_MORE_FINANCE',
+);

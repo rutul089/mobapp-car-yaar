@@ -2,6 +2,7 @@ import {pick, types} from '@react-native-documents/picker';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {documentImageType} from '../constants/enums';
 
 /**
  * Launches a file picker based on type: camera, gallery, or document.
@@ -131,4 +132,31 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
   } finally {
     onLoading?.();
   }
+};
+
+/**
+ * Formats the document images by creating a consistent object structure
+ * only for keys that are present in the response.
+ *
+ * @param {Object} response - API response object containing document keys and image names.
+ * @param {string} baseUrl - Base URL to prepend to image file names.
+ * @returns {Object} formatted - Object with formatted document image info.
+ */
+export const formatDocumentImages = (response = {}, baseUrl = '') => {
+  const formatted = {};
+
+  Object.values(documentImageType).forEach(key => {
+    if (Object.prototype.hasOwnProperty.call(response, key)) {
+      const imageName = response[key];
+      formatted[key] = {
+        uri: imageName ? `${baseUrl}${imageName}` : null,
+        uploadedUrl: imageName ? `${baseUrl}${imageName}` : null,
+        isLocal: false,
+        type: null,
+        fileSize: null,
+      };
+    }
+  });
+
+  return formatted;
 };
