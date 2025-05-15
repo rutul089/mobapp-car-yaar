@@ -30,3 +30,6 @@ export const FETCH_CUSTOMER_BY_ID = createAsyncActionTypes(
   'FETCH_CUSTOMER_BY_ID',
 );
 export const CLEAR_SEARCH = createAsyncActionTypes('CLEAR_SEARCH');
+export const FETCH_CUSTOMER_DETAIL = createAsyncActionTypes(
+  'FETCH_CUSTOMER_DETAIL',
+);

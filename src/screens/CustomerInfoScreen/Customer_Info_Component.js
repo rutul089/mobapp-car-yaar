@@ -7,6 +7,8 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  Loader,
+  images,
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
@@ -21,6 +23,7 @@ const Customer_Info_Component = ({
   bankDetails,
   onNextPress,
   handleEditDetailPress,
+  loading,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -40,7 +43,11 @@ const Customer_Info_Component = ({
               customerName={customerInfo.customerName}
               customerNote={customerInfo.customerNote}
               footerInfo={customerInfo.footerInfo}
-              logo={{uri: customerInfo.profileImage}}
+              logo={
+                customerInfo?.isValidUri
+                  ? {uri: customerInfo.profileImage}
+                  : images.placeholder_image
+              }
               noMargin
               noShadow
               wrapperColor={theme.colors.gray900}
@@ -75,6 +82,7 @@ const Customer_Info_Component = ({
           <Button label={strings.next} onPress={onNextPress} />
         </View>
       </ScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

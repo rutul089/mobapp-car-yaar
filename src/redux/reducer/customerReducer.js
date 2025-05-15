@@ -1,5 +1,9 @@
 import {types} from '../actions';
-import {FETCH_CUSTOMERS, CLEAR_SEARCH} from '../actions/actionType';
+import {
+  FETCH_CUSTOMERS,
+  CLEAR_SEARCH,
+  FETCH_CUSTOMER_DETAIL,
+} from '../actions/actionType';
 
 const initialState = {
   customers: [], // fetchAllCustomers
@@ -19,6 +23,7 @@ const initialState = {
 const customerReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_CUSTOMERS.REQUEST:
+    case FETCH_CUSTOMER_DETAIL.REQUEST:
       return {
         ...state,
         loading: true,
@@ -66,7 +71,16 @@ const customerReducer = (state = initialState, action) => {
     //   loading: false,
     // };
 
+    case FETCH_CUSTOMER_DETAIL.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        selectedCustomer: action?.payload,
+        selectedCustomerId: action?.payload?.id,
+      };
+
     case FETCH_CUSTOMERS.FAILURE:
+    case FETCH_CUSTOMER_DETAIL.FAILURE:
       return {
         ...state,
         loading: false,

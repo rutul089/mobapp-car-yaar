@@ -97,7 +97,7 @@ class CustomersScreen extends Component {
    * On customer list item click
    */
   onWrapperClick = item => {
-    // Example navigation: navigate(ScreenNames.CustomerInfo, {param: item});
+    navigate(ScreenNames.CustomerInfo, {param: item});
   };
 
   /**

@@ -2,15 +2,22 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Customer_Info_Component from './Customer_Info_Component';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
-import {formatIndianCurrency} from '../../utils/helper';
+import {
+  capitalizeFirstLetter,
+  formatDate,
+  formatIndianCurrency,
+} from '../../utils/helper';
 import {Alert} from 'react-native';
 import ScreenNames from '../../constants/ScreenNames';
+import {fetchCustomerDetailsThunk} from '../../redux/actions';
+import {get} from 'lodash';
 
 class CustomerInfoScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       customerInfo: {},
+      customerId: getScreenParam(this.props.route, 'param')?.id,
     };
     this.onNextPress = this.onNextPress.bind(this);
     this.handleEditDetailPress = this.handleEditDetailPress.bind(this);
@@ -18,17 +25,13 @@ class CustomerInfoScreen extends Component {
   }
 
   componentDidMount() {
-    let route = this.props.route;
-    let customerInfo = getScreenParam(route, 'param');
-    this.setState(
-      {
-        customerInfo,
-      },
-      () => {
-        console.log({customerInfo: this.state.customerInfo});
-      },
-    );
+    this.fetchCustomerDetailsThunk();
   }
+
+  fetchCustomerDetailsThunk = () => {
+    const {customerId} = this.state;
+    this.props.fetchCustomerDetailsThunk(customerId);
+  };
 
   onNextPress = () => {
     navigate(ScreenNames.CustomerDocuments);
@@ -42,62 +45,129 @@ class CustomerInfoScreen extends Component {
     Alert.alert('viewIncomeProof');
   };
 
+  safeGet = (obj, path) => {
+    return this.props.loading ? '-' : get(obj, path, '-');
+  };
+
   render() {
+    const {loading, selectedCustomer} = this.props;
+    const {details = {}} = selectedCustomer || {};
+
+    let customerNote = `${capitalizeFirstLetter(
+      selectedCustomer?.customerCategory,
+    )} - ${capitalizeFirstLetter(selectedCustomer?.customerType)}`;
+
+    let dob = this.safeGet(details, 'dob');
+    let applicantPhoto = this.safeGet(details, 'applicantPhoto');
+
+    const isValidUri =
+      applicantPhoto?.startsWith('http') || applicantPhoto?.startsWith('https');
+
     return (
-      <>
-        <Customer_Info_Component
-          state={this.state}
-          customerInfo={this.state.customerInfo}
-          personalDetail={[
-            {label: 'Mobile Number', value: '98653 90981'},
-            {label: 'Gender', value: 'Male'},
-            {label: 'Father/Mother Name', value: 'Jyotiben Nayak'},
-            {label: 'Spouse Name', value: 'Suresh Nayak'},
+      <Customer_Info_Component
+        state={this.state}
+        customerInfo={{
+          customerName: this.safeGet(details, 'applicantName'),
+          customerNote: customerNote,
+          footerInfo: [
             {
-              label: 'Email address',
-              value: 'aayushman_nayak85@gmail.com',
-              full: true,
-            },
-            {label: 'Date of Birth', value: '13 Aug 1993', full: true},
-            {
-              label: 'Current Address',
-              value: '84, MadhaviGarh, Rehman Nagar',
-              full: true,
-            },
-            {label: 'Current Pincode', value: '255488 - Ahmedabad'},
-          ]}
-          professionalDetails={[
-            {label: 'Occupation', value: 'Other'},
-            {label: 'Income Source', value: 'Salaried'},
-            {label: 'Monthly Income', value: formatIndianCurrency(41000)},
-          ]}
-          bankDetails={[
-            {label: 'Bank Name', value: 'HDFC Bank'},
-            {label: 'Account Number', value: '5984075872581'},
-            {label: 'Current Loan?', value: 'Yes'},
-            {label: 'Current EMI', value: formatIndianCurrency(10000)},
-            {label: 'Max EMI Afford', value: formatIndianCurrency(12231.12)},
-            {
-              label: 'Avg Monthly Bank Bal',
-              value: formatIndianCurrency(1231.23),
+              label: 'PAN Card',
+              value: this.safeGet(details, 'panCardNumber') || '-',
             },
             {
-              label: 'Income Proof',
-              value: 'VIEW',
-              isButton: true,
-              onPress: this.viewIncomeProof,
+              label: 'Aadhar Card',
+              value: this.safeGet(details, 'aadharNumber') || '-',
             },
-          ]}
-          onNextPress={this.onNextPress}
-          handleEditDetailPress={this.handleEditDetailPress}
-        />
-      </>
+          ],
+          profileImage: applicantPhoto,
+          isValidUri: isValidUri,
+        }}
+        personalDetail={[
+          {
+            label: 'Mobile Number',
+            value: this.safeGet(details, 'mobileNumber'),
+          },
+          {label: 'Gender', value: this.safeGet(details, 'gender')},
+          {
+            label: 'Father/Mother Name',
+            value: this.safeGet(details, 'fatherName'),
+          },
+          {label: 'Spouse Name', value: this.safeGet(details, 'spouseName')},
+          {
+            label: 'Email address',
+            value: this.safeGet(details, 'email'),
+            full: true,
+          },
+          {label: 'Date of Birth', value: formatDate(dob), full: true},
+          {
+            label: 'Current Address',
+            value: this.safeGet(details, 'address'),
+            full: true,
+          },
+          {label: 'Current Pincode', value: this.safeGet(details, 'pincode')},
+        ]}
+        professionalDetails={[
+          {label: 'Occupation', value: this.safeGet(details, 'occupation')},
+          {
+            label: 'Income Source',
+            value: this.safeGet(details, 'incomeSource'),
+          },
+          {
+            label: 'Monthly Income',
+            value:
+              formatIndianCurrency(
+                this.safeGet(details, 'monthlyIncome'),
+                true,
+                true,
+              ) || '-',
+          },
+        ]}
+        bankDetails={[
+          {label: 'Bank Name', value: this.safeGet(details, 'bankName')},
+          {
+            label: 'Account Number',
+            value: this.safeGet(details, 'accountNumber'),
+          },
+          {label: 'Current Loan?', value: this.safeGet(details, 'currentLoan')},
+          {
+            label: 'Current EMI',
+            value:
+              formatIndianCurrency(this.safeGet(details, 'currentEmi')) || '-',
+          },
+          {
+            label: 'Max EMI Afford',
+            value:
+              formatIndianCurrency(this.safeGet(details, 'maxEmiAfford')) ||
+              '-',
+          },
+          {
+            label: 'Avg Monthly Bank Bal',
+            value:
+              formatIndianCurrency(
+                this.safeGet(details, 'avgMonthlyBankBalance'),
+              ) || '-',
+          },
+          {
+            label: 'Income Proof',
+            value: 'VIEW',
+            isButton: true,
+            onPress: this.viewIncomeProof,
+          },
+        ]}
+        onNextPress={this.onNextPress}
+        handleEditDetailPress={this.handleEditDetailPress}
+        loading={loading}
+      />
     );
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
+const mapActionCreators = {fetchCustomerDetailsThunk};
+const mapStateToProps = ({customerData}) => {
+  return {
+    selectedCustomerId: customerData?.selectedCustomerId,
+    selectedCustomer: customerData?.selectedCustomer,
+    loading: customerData?.loading,
+  };
 };
 export default connect(mapStateToProps, mapActionCreators)(CustomerInfoScreen);

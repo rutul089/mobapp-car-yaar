@@ -1,6 +1,10 @@
-import {fetchAllCustomers} from '../../services';
+import {fetchAllCustomers, fetchCustomerDetailsById} from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
-import {CLEAR_SEARCH, FETCH_CUSTOMERS} from './actionType';
+import {
+  CLEAR_SEARCH,
+  FETCH_CUSTOMERS,
+  FETCH_CUSTOMER_DETAIL,
+} from './actionType';
 
 /**
  * Thunk to fetch all customers with optional pagination and filters.
@@ -48,6 +52,25 @@ export const fetchAllCustomersThunk = (
 export const clearCustomerSearch = () => ({
   type: CLEAR_SEARCH.SUCCESS,
 });
+
+export const fetchCustomerDetailsThunk =
+  (customerId, config = {}, onSuccess, onFailure) =>
+  async dispatch => {
+    console.log({customerId});
+    dispatch({type: FETCH_CUSTOMER_DETAIL.REQUEST});
+    try {
+      const response = await fetchCustomerDetailsById(customerId, config);
+      dispatch({type: FETCH_CUSTOMER_DETAIL.SUCCESS, payload: response?.data});
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: FETCH_CUSTOMER_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error.message);
+      showApiErrorToast(error);
+    }
+  };
 
 // export const fetchAllCustomersThunk =
 //   (page = 1, limit = 5, payload = {}, onSuccess, onFailure) =>
