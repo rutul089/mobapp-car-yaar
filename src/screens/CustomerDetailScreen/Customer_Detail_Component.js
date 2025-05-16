@@ -18,24 +18,17 @@ import {
   theme,
 } from '@caryaar/components';
 import OTPModal from '../../components/OTPModal';
-import {customerCategory, loanType} from '../../constants/enums';
-
-const dropdownOptions = [
-  {label: 'Corporate', value: 'a'},
-  {label: 'Salaried', value: 'b'},
-  {label: 'Self-Employed', value: 'c'},
-  {label: 'Business Owner', value: 'c'},
-  {label: 'Freelancer', value: 'c'},
-  {label: 'Consultant', value: 'c'},
-  {label: 'Retired', value: 'c'},
-  {label: 'Unemployed', value: 'c'},
-];
+import {
+  customerCategory,
+  customerCategoryValue,
+  customerIndividualTypeOptions,
+  loanType,
+} from '../../constants/enums';
 
 const Customer_Detail_Component = ({
   onBackPress,
   vehicleNumber,
   onSelectedOption,
-  selectedOption,
   mobileNumber,
   onChangeMobileNumber,
   individualType,
@@ -47,6 +40,8 @@ const Customer_Detail_Component = ({
   selectedLoanType,
   btnLabel,
   onProceedPress,
+  customerType,
+  selectedCustomerCategory,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState('');
@@ -77,20 +72,24 @@ const Customer_Detail_Component = ({
               marginTop: 10,
             }}>
             <OptionCard
-              label={'Individual'}
+              label={customerCategoryValue.INDIVIDUAL}
               backgroundColor={theme.colors.background}
               icon={images.userCircle}
-              value={customerCategory.individual}
+              value={customerCategory.INDIVIDUAL}
               onSelect={onSelectedOption}
-              isSelected={selectedOption === customerCategory.individual}
+              isSelected={
+                selectedCustomerCategory === customerCategory.INDIVIDUAL
+              }
             />
             <OptionCard
-              label={'Corporate'}
+              label={customerCategoryValue.CORPORATE}
               backgroundColor={theme.colors.background}
               icon={images.corporate}
-              value={customerCategory.corporate}
+              value={customerCategory.CORPORATE}
               onSelect={onSelectedOption}
-              isSelected={selectedOption === customerCategory.corporate}
+              isSelected={
+                selectedCustomerCategory === customerCategory.CORPORATE
+              }
             />
           </View>
           <Spacing size="md_lg" />
@@ -100,8 +99,7 @@ const Customer_Detail_Component = ({
             leftIconName={images.userCircle}
             isAsDropdown
             isRightIconVisible
-            value={individualType}
-            // onPress={selectedVehicleCondition}
+            value={customerType}
             onPress={() => setShowModal(true)}
           />
           {selectedLoanType === loanType.loan ? null : (
@@ -128,14 +126,13 @@ const Customer_Detail_Component = ({
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={showModal}
-        data={dropdownOptions}
-        selectedItem={selectedItem}
+        data={customerIndividualTypeOptions}
+        selectedItem={customerType}
         onSelect={(item, index) => {
-          setSelectedItem(item.label);
-          onChangeUserTypeOption && onChangeUserTypeOption(item, index);
+          onChangeUserTypeOption?.(item, index);
         }}
         onClose={() => setShowModal(false)}
-        title="Select Other Document Type"
+        title="Select Type"
       />
       <OTPModal
         isVisible={showVerifyOTP}

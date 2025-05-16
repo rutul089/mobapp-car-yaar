@@ -1,9 +1,10 @@
-import {fetchLoanApplications} from '../../services';
+import {fetchLoanApplicationById, fetchLoanApplications} from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
 import {
   FETCH_LOAN_APPLICATIONS,
   CLEAR_SEARCH_APPLICATION,
   RESET_LOAN_APPLICATION,
+  FETCH_LOAN_APP_BY_ID,
 } from './actionType';
 import types from './types';
 
@@ -41,6 +42,41 @@ export const fetchLoanApplicationsThunk = (
       dispatch({
         type: FETCH_LOAN_APPLICATIONS.FAILURE,
         error: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+/**
+ * Thunk to fetch a specific loan application by its ID.
+ *
+ * @param {string} id - The unique identifier of the loan application.
+ * @param {Function} [onSuccess] - Optional callback to execute on success. Receives full response.
+ * @param {Function} [onFailure] - Optional callback to execute on failure. Receives error message.
+ * @returns {Function} Redux thunk function.
+ */
+export const fetchLoanApplicationFromIdThunk = (
+  applicationId,
+  config = {},
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: FETCH_LOAN_APP_BY_ID.REQUEST});
+
+    try {
+      const response = await fetchLoanApplicationById(applicationId, config);
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
+        payload: response.data,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.FAILURE,
+        payload: error.message,
       });
       showApiErrorToast(error);
       onFailure?.(error.message);

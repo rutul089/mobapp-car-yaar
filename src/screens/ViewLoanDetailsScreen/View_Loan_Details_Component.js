@@ -7,24 +7,30 @@ import {
   Spacing,
   theme,
   Button,
+  Loader,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
 import {goBack} from '../../navigation/NavigationUtils';
-import {getGradientColorsLoan} from '../../utils/helper';
+import {
+  getApplicationGradientColors,
+  getGradientColors,
+  getGradientColorsLoan,
+} from '../../utils/helper';
+import {
+  applicationStatus,
+  getApplicationStatusLabel,
+} from '../../constants/enums';
 
 const View_Loan_Details_Component = ({
-  params,
-  loanDetails,
   customerDetail,
   vehicleDetail,
-  partnerDetail,
   onTrackLoanStatusPress,
   onBackToHomePress,
-  item,
-  loanDetail,
-  isError,
+  loanDetail = {},
   handleUploadDocument,
+  loading,
+  loanOverviewCard = {},
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -36,28 +42,33 @@ const View_Loan_Details_Component = ({
       <ScrollView bounces={false} contentContainerStyle={styles.wrapper}>
         <View style={styles.headerWrapper}>
           <CardWrapper
-            status={loanDetail?.status?.toUpperCase()}
-            showApplicationNumber={true}
             showLeftText
-            isStatusBold
             isLeftTextBold
-            gradientColors={getGradientColorsLoan(loanDetail.type)}
-            leftText={loanDetail?.id}>
+            isStatusBold
+            status={getApplicationStatusLabel(
+              loanOverviewCard?.status,
+            )?.toUpperCase()}
+            gradientColors={getApplicationGradientColors(
+              loanOverviewCard?.status,
+            )}
+            leftText={loanOverviewCard?.loanApplicationId}>
             <FinanceCard
-              bankName={loanDetail.title}
-              interestRate={loanDetail.interestRate}
+              bankName={loanOverviewCard?.lenderName}
+              interestRate={loanOverviewCard?.interesetRate}
               hideTopMargin
               showCTAButton
               ctaLabel="Track Loan Application"
-              footerData={item.footerInfo}
-              logo={{uri: loanDetail.image}}
+              footerData={loanOverviewCard.footerInfo}
+              // logo={{uri: loanDetail.image}}
               wrapperColor={theme.colors.gray900}
               textColor={theme.colors.white}
               infoValueColor={theme.colors.white}
               infoWrapperColor={'#0E0F11'}
               onCTAPress={onTrackLoanStatusPress}
-              showError={loanDetail.type === 4} // 4 is type of hold
-              errorMessage={'Extra documents required'}
+              showError={
+                loanOverviewCard?.status === applicationStatus.REJECTED
+              } // 4 is type of hold
+              errorMessage={loanOverviewCard?.rejectionReason}
             />
           </CardWrapper>
         </View>
@@ -86,6 +97,7 @@ const View_Loan_Details_Component = ({
           )}
         </View>
       </ScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

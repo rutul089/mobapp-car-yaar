@@ -1,18 +1,23 @@
 import React, {Component} from 'react';
-import {customerCategory, loanType} from '../../constants/enums';
+import {connect} from 'react-redux';
+import {
+  customerIndividualTypeValue,
+  customerCategory as eCustomerCategory,
+  getLabelFromEnum,
+} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Customer_Detail_Component from './Customer_Detail_Component';
-import ScreenNames from '../../constants/ScreenNames';
-import {connect} from 'react-redux';
 
 class CustomerDetailView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: customerCategory.individual,
+      customerCategory: eCustomerCategory.INDIVIDUAL,
       mobileNumber: '',
       selectedIndividualType: '',
       showVerifyOTP: false,
+      customerType: '',
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onSelectedOption = this.onSelectedOption.bind(this);
@@ -29,7 +34,7 @@ class CustomerDetailView extends Component {
 
   onSelectedOption = value => {
     this.setState({
-      selectedOption: value,
+      customerCategory: value,
     });
   };
 
@@ -39,9 +44,9 @@ class CustomerDetailView extends Component {
     });
   };
 
-  onChangeUserTypeOption = (value, index) => {
+  onChangeUserTypeOption = (item, index) => {
     this.setState({
-      selectedIndividualType: value?.label,
+      customerType: item?.value,
     });
   };
 
@@ -67,7 +72,12 @@ class CustomerDetailView extends Component {
   };
 
   render() {
-    const {mobileNumber, selectedIndividualType} = this.state;
+    const {
+      mobileNumber,
+      selectedIndividualType,
+      customerType,
+      customerCategory,
+    } = this.state;
     const {selectedLoanType} = this.props;
     return (
       <>
@@ -75,7 +85,7 @@ class CustomerDetailView extends Component {
           vehicleNumber={'GJ 01 JR 0945'}
           onBackPress={this.onBackPress}
           onSelectedOption={this.onSelectedOption}
-          selectedOption={this.state.selectedOption}
+          selectedCustomerCategory={customerCategory}
           mobileNumber={mobileNumber}
           onChangeMobileNumber={this.onChangeMobileNumber}
           individualType={selectedIndividualType}
@@ -86,6 +96,10 @@ class CustomerDetailView extends Component {
           onPressPrimaryButton={this.onPressPrimaryButton}
           selectedLoanType={selectedLoanType}
           onProceedPress={this.onProceedPress}
+          customerType={getLabelFromEnum(
+            customerIndividualTypeValue,
+            customerType,
+          )}
         />
       </>
     );

@@ -35,31 +35,31 @@ export const formatAmount = text => {
   return text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
 };
 
-// export const getGradientColors = status => {
-//   switch (status) {
-//     case 'SAVED':
-//       return ['rgba(29, 149, 240, 0.12)', 'rgba(61, 173, 255, 0.2)'];
-//     case 'IN_PROGRESS':
-//       return ['rgba(243, 105, 110, 0.12)', 'rgba(248, 169, 2, 0.2)'];
-//     case 'COMPLETED':
-//       return ['rgba(95, 197, 46, 0.12)', 'rgba(110, 238, 135, 0.2)'];
-//     default:
-//       return ['#E8E8E8', '#E8E8E8']; // fallback
-//   }
-// };
+export const getGradientColors = status => {
+  switch (status) {
+    case 'SAVED':
+      return ['rgba(29, 149, 240, 0.12)', 'rgba(61, 173, 255, 0.2)'];
+    case 'IN_PROGRESS':
+      return ['rgba(243, 105, 110, 0.12)', 'rgba(248, 169, 2, 0.2)'];
+    case 'COMPLETED':
+      return ['rgba(95, 197, 46, 0.12)', 'rgba(110, 238, 135, 0.2)'];
+    default:
+      return ['#E8E8E8', '#E8E8E8']; // fallback
+  }
+};
 
-// export const getStatusColor = status => {
-//   switch (status) {
-//     case 'SAVED':
-//       return '#1D95F0';
-//     case 'IN_PROGRESS':
-//       return 'rgba(243, 105, 110, 0.12)';
-//     case 'COMPLETED':
-//       return 'rgba(110, 238, 135, 0.2)';
-//     default:
-//       return theme.colors.textPrimary;
-//   }
-// };
+export const getStatusColor = status => {
+  switch (status) {
+    case 'SAVED':
+      return '#1D95F0';
+    case 'IN_PROGRESS':
+      return 'rgba(243, 105, 110, 0.12)';
+    case 'COMPLETED':
+      return 'rgba(110, 238, 135, 0.2)';
+    default:
+      return theme.colors.textPrimary;
+  }
+};
 
 export const isLastRow = (index, data, item) => {
   const visibleItems = data.filter(d => !d.full); // half-width items
@@ -243,7 +243,7 @@ export const capitalizeFirstLetter = str => {
  * @param {number} status
  * @returns {string[]}
  */
-export const getGradientColors = status => {
+export const getApplicationGradientColors = status => {
   switch (status) {
     case applicationStatus.PENDING:
     case applicationStatus.IN_REVIEW:
@@ -263,7 +263,7 @@ export const getGradientColors = status => {
  * @param {string} status
  * @returns {string}
  */
-export const getStatusColor = status => {
+export const getApplicationStatusColor = status => {
   switch (status) {
     case 'SAVED':
       return '#1D95F0';
@@ -274,4 +274,23 @@ export const getStatusColor = status => {
     default:
       return theme.colors.textPrimary;
   }
+};
+
+import get from 'lodash/get';
+
+/**
+ * Safely gets a value from an object, returns fallback if loading or value is undefined.
+ *
+ * @param {Object} obj - The source object.
+ * @param {string | Array<string>} path - Path to the property (lodash-style).
+ * @param {boolean} loading - If true, fallback will be returned regardless of value.
+ * @param {*} fallback - The fallback value if not found or loading is true.
+ * @returns {*} The resolved value or fallback.
+ */
+export const safeGet = (loading = false, obj, path, fallback = '-') => {
+  return loading ? fallback : get(obj, path, fallback);
+};
+
+export const formatMonths = (value, loading = false, fallback = '-') => {
+  return loading ? fallback : value ? `${value} Months` : fallback;
 };

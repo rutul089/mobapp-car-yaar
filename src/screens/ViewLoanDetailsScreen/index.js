@@ -7,12 +7,25 @@ import {
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
+import {
+  formatDate,
+  formatIndianCurrency,
+  formatMonths,
+  safeGet,
+} from '../../utils/helper';
+import {
+  customerCategoryValue,
+  customerIndividualTypeValue,
+  getLabelFromEnum,
+} from '../../constants/enums';
 
 class ViewLoanDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loanDetail: {},
+      applicationId: getScreenParam(props.route, 'params')?.id || '',
     };
     this.onBackToHomePress = this.onBackToHomePress.bind(this);
     this.onTrackLoanStatusPress = this.onTrackLoanStatusPress.bind(this);
@@ -20,16 +33,11 @@ class ViewLoanDetailsScreen extends Component {
   }
 
   componentDidMount() {
-    let route = this.props.route;
-    let loanDetail = getScreenParam(route, 'params');
-    this.setState(
-      {
-        loanDetail,
-      },
-      () => {
-        console.log({loanDetail: this.state.loanDetail});
-      },
-    );
+    const {applicationId} = this.state;
+    const {selectedLoanApplication} = this.props;
+    if (applicationId && !selectedLoanApplication) {
+      this.props.fetchLoanApplicationFromIdThunk(applicationId);
+    }
   }
 
   onBackToHomePress = () => {
@@ -43,82 +51,204 @@ class ViewLoanDetailsScreen extends Component {
   onTackLoanApplication = () => {};
 
   render() {
+    const {loading, selectedLoanApplication} = this.props;
+    const {
+      customer = {},
+      partner = {},
+      vehicle = {},
+      usedVehicle = {},
+      partnerUser = {},
+      salesExecutive = {},
+    } = selectedLoanApplication || {};
+
+    let dob = safeGet(loading, customer?.customerDetails, 'dob');
+    let _customerCategory = safeGet(loading, customer, 'customerCategory');
+    let _customerType = safeGet(loading, customer, 'customerType');
+
     return (
-      <>
-        <View_Loan_Details_Component
-          loanDetail={this.state.loanDetail}
-          customerDetail={[
-            {label: 'Customer Name', value: 'Aayushman Nayak'},
-            {label: 'Customer ID', value: '#968040'},
-            {label: 'Customer Type', value: 'Individual'},
-            {label: 'Individual Type', value: 'Salaried'},
-            {label: 'Mobile Number', value: '98653 90981'},
-            {label: 'Gender', value: 'Male'},
-            {label: 'Father/Mother Name', value: 'Jyotiben Nayak'},
-            {label: 'Spouse Name', value: 'Suresh Nayak'},
+      <View_Loan_Details_Component
+        loanOverviewCard={{
+          status: safeGet(loading, selectedLoanApplication, 'status'),
+          loanApplicationId: safeGet(
+            loading,
+            selectedLoanApplication,
+            'loanApplicationId',
+          ),
+          lenderName: safeGet(loading, selectedLoanApplication, 'lenderName'),
+          interesetRate: safeGet(
+            loading,
+            selectedLoanApplication,
+            'interesetRate',
+          ),
+          footerInfo: [
             {
-              label: 'Email address',
-              value: 'aayushman_nayak85@gmail.com',
-              full: true,
+              label: 'Loan Amount',
+              value: formatIndianCurrency(
+                safeGet(loading, selectedLoanApplication, 'loanAmount'),
+              ),
             },
-            {label: 'Date of Birth', value: '13 Aug 1993'},
             {
-              label: 'Current Address',
-              value: '84, MadhaviGarh, Rehman Nagar',
-              full: true,
+              label: 'EMI',
+              value: formatIndianCurrency(
+                safeGet(loading, selectedLoanApplication, 'emi'),
+              ),
             },
-            {label: 'Current Pincode', value: '255488 - Ahmedabad'},
-            {label: 'Occupation', value: 'Other'},
-            {label: 'Income Source', value: 'Salaried'},
-            {label: 'Monthly Income', value: '₹50,000'},
-          ]}
-          vehicleDetail={[
-            {label: 'Vehicle Type', value: 'Private Car'},
-            {label: 'Register Number', value: 'GJ 27 GY 1001'},
-            {label: 'Owner Name', value: 'Jagat Merchant'},
-            {label: 'Manufacture Year', value: '2019'},
-            {label: 'Chassis Number', value: '4S3BMHB68B3286050'},
-            {label: 'Engine Number', value: '52WVC10338'},
-            {label: 'Registration Date', value: '17 Sep 2019'},
-            {label: 'Registration Authority', value: 'RTO Ahmedabad'},
-            {label: 'Fuel Type', value: 'Diesel'},
-            {label: 'Emission Norm', value: 'BSVI'},
-            {label: 'Vehicle Age', value: '9 Years'},
-            {label: 'Hypothecated', value: 'No'},
-            {label: 'Vehicle Status', value: 'Active'},
-            {label: 'Insurance Valid Upto', value: '17 Sep 2025'},
-            {label: 'Fitness Valid Upto', value: '17 Sep 2025'},
-            {label: 'PUCC', value: 'Yes'},
-            {label: 'Ownership', value: '2'},
-          ]}
-          onTrackLoanStatusPress={this.onTrackLoanStatusPress}
-          onBackToHomePress={this.onBackToHomePress}
-          item={{
-            id: '1',
-            title: 'Bajaj Finserv',
-            interestRate: 10.25,
-            isEligible: true,
-            badge: 1,
-            image: 'https://i.pravatar.cc/150?img=3',
-            footerInfo: [
-              {label: 'Loan Amount', value: '₹12,00,000'},
-              {label: 'EMI', value: '₹10,000'},
-              {label: 'Principal Amount', value: '₹10,00,000'},
-              {label: 'Processing Fee', value: '₹1,000'},
-              {label: 'Tenure', value: '60 Months'},
-              {label: 'Loan Type', value: 'Purchase'},
-            ],
-          }}
-          onTackLoanApplication={this.onTackLoanApplication}
-        />
-      </>
+            {
+              label: 'Principal Amount',
+              value: formatIndianCurrency(
+                safeGet(loading, selectedLoanApplication, 'principalAmount'),
+              ),
+            },
+            {
+              label: 'Processing Fee',
+              value: formatIndianCurrency(
+                safeGet(loading, selectedLoanApplication, 'processingFee'),
+              ),
+            },
+            {
+              label: 'Tenure',
+              value: formatMonths(selectedLoanApplication?.tenure, loading),
+            },
+            {label: 'Loan Type', value: selectedLoanApplication?.loanType},
+          ],
+          rejectionReason: safeGet(
+            loading,
+            selectedLoanApplication,
+            'rejectionReason',
+          ),
+        }}
+        customerDetail={[
+          {
+            label: 'Customer Name',
+            value: safeGet(loading, customer?.customerDetails, 'applicantName'),
+          },
+          {label: 'Customer ID', value: '#968040'},
+          {
+            label: 'Customer Type',
+            value: getLabelFromEnum(customerCategoryValue, _customerCategory),
+          },
+          {
+            label: 'Individual Type',
+            value: getLabelFromEnum(customerIndividualTypeValue, _customerType),
+          },
+          {
+            label: 'Mobile Number',
+            value: safeGet(loading, customer?.customerDetails, 'mobileNumber'),
+          },
+          {
+            label: 'Gender',
+            value: safeGet(loading, customer?.customerDetails, 'gender'),
+          },
+          {
+            label: 'Father/Mother Name',
+            value: safeGet(loading, customer?.customerDetails, 'fatherName'),
+          },
+          {
+            label: 'Spouse Name',
+            value: safeGet(loading, customer?.customerDetails, 'spouseName'),
+          },
+          {
+            label: 'Email address',
+            value: safeGet(loading, customer?.customerDetails, 'email'),
+            full: true,
+          },
+          {label: 'Date of Birth', value: formatDate(dob)},
+          {
+            label: 'Current Address',
+            value: safeGet(loading, customer?.customerDetails, 'address'),
+            full: true,
+          },
+          {
+            label: 'Current Pincode',
+            value: safeGet(loading, customer?.customerDetails, 'pincode'),
+          },
+          {
+            label: 'Occupation',
+            value: safeGet(loading, customer?.customerDetails, 'occupation'),
+          },
+          {
+            label: 'Income Source',
+            value: safeGet(loading, customer?.customerDetails, 'incomeSource'),
+          },
+          {
+            label: 'Monthly Income',
+            value: formatIndianCurrency(
+              safeGet(loading, customer?.customerDetails, 'monthlyIncome'),
+            ),
+          },
+        ]}
+        vehicleDetail={[
+          {label: 'Vehicle Type', value: 'Private Car'},
+          {
+            label: 'Register Number',
+            value: safeGet(loading, usedVehicle, 'registerNumber'),
+          },
+          {
+            label: 'Owner Name',
+            value: safeGet(loading, usedVehicle, 'ownerName'),
+          },
+          {
+            label: 'Manufacture Year',
+            value: safeGet(loading, usedVehicle, 'manufactureYear'),
+          },
+          {
+            label: 'Chassis Number',
+            value: safeGet(loading, usedVehicle, 'chassisNumber'),
+          },
+          {
+            label: 'Engine Number',
+            value: safeGet(loading, usedVehicle, 'engineNumber'),
+          },
+          {label: 'Registration Date', value: '17 Sep 2019'},
+          {
+            label: 'Registration Authority',
+            value: safeGet(loading, usedVehicle, 'registrationAuthority'),
+          },
+          {label: 'Fuel Type', value: safeGet(loading, vehicle, 'fuelType')},
+          {
+            label: 'Emission Norm',
+            value: safeGet(loading, usedVehicle, 'emissionNorm'),
+          },
+          {
+            label: 'Vehicle Age',
+            value: safeGet(loading, usedVehicle, 'vehicleAge'),
+          },
+          {
+            label: 'Hypothecated',
+            value: safeGet(loading, usedVehicle, 'hypothecationStatus') || '-',
+          },
+          {
+            label: 'Vehicle Status',
+            value: safeGet(loading, usedVehicle, 'vehicleStatus'),
+          },
+          {label: 'Insurance Valid Upto', value: '17 Sep 2025'},
+          {label: 'Fitness Valid Upto', value: '17 Sep 2025'},
+          {
+            label: 'PUCC',
+            value: usedVehicle?.PUCC ? ' Yes' : 'No',
+          },
+          {
+            label: 'Ownership',
+            value: safeGet(loading, usedVehicle, 'ownershipCount'),
+          },
+        ]}
+        onTrackLoanStatusPress={this.onTrackLoanStatusPress}
+        onBackToHomePress={this.onBackToHomePress}
+        onTackLoanApplication={this.onTackLoanApplication}
+        loading={loading}
+      />
     );
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
+const mapActionCreators = {fetchLoanApplicationFromIdThunk};
+// Redux: map state to props
+const mapStateToProps = ({loanData}) => {
+  return {
+    loading: loanData.loading,
+    selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
+    selectedApplicationId: loanData?.selectedApplicationId,
+  };
 };
 export default connect(
   mapStateToProps,

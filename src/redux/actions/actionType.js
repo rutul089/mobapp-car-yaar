@@ -64,3 +64,7 @@ export const CLEAR_SEARCH_APPLICATION = createAsyncActionTypes(
 export const RESET_LOAN_APPLICATION = createAsyncActionTypes(
   'RESET_LOAN_APPLICATION',
 );
+
+export const FETCH_LOAN_APP_BY_ID = createAsyncActionTypes(
+  'FETCH_LOAN_APP_BY_ID',
+);

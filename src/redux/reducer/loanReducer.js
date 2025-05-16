@@ -3,6 +3,7 @@ import {
   CLEAR_SEARCH_APPLICATION,
   FETCH_LOAN_APPLICATIONS,
   RESET_LOAN_APPLICATION,
+  FETCH_LOAN_APP_BY_ID,
 } from '../actions/actionType';
 
 const initialState = {
@@ -27,9 +28,11 @@ const loanReducer = (state = initialState, action) => {
       return {...state, selectedLoanType: action.payload};
 
     case FETCH_LOAN_APPLICATIONS.REQUEST:
+    case FETCH_LOAN_APP_BY_ID.REQUEST:
       return {...state, loading: true};
 
     case FETCH_LOAN_APPLICATIONS.FAILURE:
+    case FETCH_LOAN_APP_BY_ID.FAILURE:
       return {...state, loading: false};
 
     case CLEAR_SEARCH_APPLICATION.SUCCESS:
@@ -69,6 +72,14 @@ const loanReducer = (state = initialState, action) => {
           totalPage: totalPages,
         };
       }
+
+    case FETCH_LOAN_APP_BY_ID.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        selectedLoanApplication: action.payload,
+        selectedApplicationId: action.payload?.id,
+      };
 
     case RESET_LOAN_APPLICATION.SUCCESS:
       return {

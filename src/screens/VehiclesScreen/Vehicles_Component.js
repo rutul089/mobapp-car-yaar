@@ -1,16 +1,17 @@
 import {
   CardWrapper,
+  Header,
   ImageHeader,
   Loader,
   PaginationFooter,
   SafeAreaWrapper,
+  SearchBar,
   theme,
   VehicleCard,
-  SearchBar,
-  Header,
 } from '@caryaar/components';
 import {get} from 'lodash';
 import {FlatList, StyleSheet, View} from 'react-native';
+import {NoDataFound} from '../../components';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {
@@ -19,7 +20,6 @@ import {
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
-import {NoDataFound} from '../../components';
 
 const Vehicles_Component = ({
   vehicleData,
