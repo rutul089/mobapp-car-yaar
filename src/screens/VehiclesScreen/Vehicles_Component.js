@@ -13,7 +13,7 @@ import {get} from 'lodash';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {NoDataFound} from '../../components';
 import ScreenNames from '../../constants/ScreenNames';
-import {navigate} from '../../navigation/NavigationUtils';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
   formatIndianCurrency,
   formatVehicleDetails,
@@ -42,7 +42,7 @@ const Vehicles_Component = ({
     <SafeAreaWrapper hideBottom>
       {fullScreen ? (
         <>
-          <Header title="Select Vehicle" />
+          <Header title="Select Vehicle" onBackPress={() => goBack()} />
           <View style={styles.searchWrapper}>
             <SearchBar
               showAddBtn

@@ -4,10 +4,14 @@ import {
   customerIndividualTypeValue,
   customerCategory as eCustomerCategory,
   getLabelFromEnum,
+  loanType,
 } from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Customer_Detail_Component from './Customer_Detail_Component';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import {showToast} from '../../utils/helper';
+import {createCustomerBasicDetailThunk} from '../../redux/actions';
 
 class CustomerDetailView extends Component {
   constructor(props) {
@@ -15,9 +19,13 @@ class CustomerDetailView extends Component {
     this.state = {
       customerCategory: eCustomerCategory.INDIVIDUAL,
       mobileNumber: '',
-      selectedIndividualType: '',
       showVerifyOTP: false,
       customerType: '',
+      errors: {
+        customerType: '',
+        mobileNumber: '',
+      },
+      isFormValid: false,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onSelectedOption = this.onSelectedOption.bind(this);
@@ -45,12 +53,25 @@ class CustomerDetailView extends Component {
   };
 
   onChangeUserTypeOption = (item, index) => {
-    this.setState({
-      customerType: item?.value,
-    });
+    this.setState(
+      {
+        customerType: item?.value,
+      },
+      () => {
+        this.onChangeField('customerType', this.state.customerType);
+      },
+    );
   };
 
   onSendOTPPress = () => {
+    const isFormValid = this.validateAllFields();
+
+    if (!isFormValid) {
+      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      return;
+    }
+
+    // this.addCustomerBasicDetail();
     this.setState({
       showVerifyOTP: true,
     });
@@ -68,17 +89,76 @@ class CustomerDetailView extends Component {
   };
 
   onProceedPress = () => {
+    const isFormValid = this.validateAllFields(loanType.loan);
+
+    if (!isFormValid) {
+      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      return;
+    }
     navigate(ScreenNames.CustomerPersonalDetails);
   };
 
-  render() {
-    const {
-      mobileNumber,
-      selectedIndividualType,
-      customerType,
-      customerCategory,
-    } = this.state;
+  onChangeField = (key, value) => {
+    handleFieldChange(this, key, value);
+  };
+
+  validateAllFields = _loanType => {
     const {selectedLoanType} = this.props;
+    const fieldValidationRules = {
+      customerType: {required: true},
+      mobileNumber: {required: selectedLoanType !== loanType.loan},
+    };
+
+    const fieldsToValidate = ['customerType', 'mobileNumber'];
+
+    const errors = {};
+    let isFormValid = true;
+
+    fieldsToValidate.forEach(key => {
+      const value = this.state[key];
+      const {required} = fieldValidationRules[key] || {};
+
+      // Skip validation if field is optional and empty
+      if (
+        !required &&
+        (value === undefined || value === null || value === '')
+      ) {
+        errors[key] = '';
+        return;
+      }
+
+      const error = validateField(key, value);
+      errors[key] = error;
+      if (error !== '') {
+        isFormValid = false;
+      }
+    });
+
+    this.setState({errors, isFormValid});
+    return isFormValid;
+  };
+
+  addCustomerBasicDetail = () => {
+    const {customerCategory, customerType, mobileNumber} = this.state;
+    let payload = {
+      customerCategory,
+      customerType,
+      mobileNumber,
+    };
+    this.props.createCustomerBasicDetailThunk(
+      payload,
+      response => {
+        console.log('response', response);
+      },
+      error => {
+        console.log('error', error);
+      },
+    );
+  };
+
+  render() {
+    const {mobileNumber, customerType, customerCategory, errors} = this.state;
+    const {selectedLoanType, loading} = this.props;
     return (
       <>
         <Customer_Detail_Component
@@ -87,8 +167,9 @@ class CustomerDetailView extends Component {
           onSelectedOption={this.onSelectedOption}
           selectedCustomerCategory={customerCategory}
           mobileNumber={mobileNumber}
-          onChangeMobileNumber={this.onChangeMobileNumber}
-          individualType={selectedIndividualType}
+          onChangeMobileNumber={value =>
+            this.onChangeField('mobileNumber', value)
+          }
           onChangeUserTypeOption={this.onChangeUserTypeOption}
           onSendOTPPress={this.onSendOTPPress}
           showVerifyOTP={this.state.showVerifyOTP}
@@ -100,16 +181,28 @@ class CustomerDetailView extends Component {
             customerIndividualTypeValue,
             customerType,
           )}
+          restInputProps={{
+            mobileNumber: {
+              isError: errors.mobileNumber,
+              statusMsg: errors.mobileNumber,
+            },
+            customerType: {
+              isError: errors.customerType,
+              statusMsg: errors.customerType,
+            },
+          }}
+          loading={loading}
         />
       </>
     );
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = ({loanData}) => {
+const mapActionCreators = {createCustomerBasicDetailThunk};
+const mapStateToProps = ({loanData, customerData}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
+    loading: customerData.loading,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(CustomerDetailView);

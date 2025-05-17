@@ -1,4 +1,5 @@
 import {
+  createCustomer,
   fetchAllCustomers,
   fetchCustomerDetailsById,
   fetchCustomerDocuments,
@@ -16,6 +17,7 @@ import {
   CUSTOMER_FINANCE_DETAILS,
   CUSTOMER_FINANCE_DOCUMENT,
   CUSTOMER_MORE_FINANCE,
+  CREATE_CUSTOMER_BASIC_DETAIL,
 } from './actionType';
 
 /**
@@ -167,31 +169,25 @@ export const fetchCustomerMoreFinanceDetailThunk =
     }
   };
 
-// export const fetchAllCustomersThunk =
-//   (page = 1, limit = 5, payload = {}, onSuccess, onFailure) =>
-//   async dispatch => {
-//     dispatch({type: FETCH_CUSTOMERS.REQUEST});
-
-//     try {
-//       const response = await fetchAllCustomers(page, limit, payload);
-//       dispatch({
-//         type: FETCH_CUSTOMERS.SUCCESS,
-//         payload: {
-//           data: response.data,
-//           page: response.pagination.page,
-//           totalPages: response.pagination.totalPages,
-//         },
-//       });
-//       onSuccess?.(response);
-//     } catch (error) {
-//       dispatch({
-//         type: FETCH_CUSTOMERS.FAILURE,
-//         payload: error.message || 'Something went wrong',
-//       });
-//       showApiErrorToast(error);
-//       onFailure?.(error.message);
-//     }
-//   };
+export const createCustomerBasicDetailThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
+    try {
+      const response = await createCustomer(payload);
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+        payload: response?.data,
+      });
+      onSuccess?.(response?.data);
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error.message);
+      showApiErrorToast(error);
+    }
+  };
 
 export const resetSelectedCustomer = () => ({
   type: CLEAR_SELECTED_CUSTOMER.SUCCESS,

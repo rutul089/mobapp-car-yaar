@@ -34,6 +34,10 @@ export const validateField = (key, value) => {
       return trimmedValue === ''
         ? 'Please select a valid vehicle condition.'
         : '';
+    case 'customerType':
+      return trimmedValue === ''
+        ? 'Please select a valid individual type.'
+        : '';
 
     case 'amount':
     case 'estimatedPrice':
@@ -48,6 +52,13 @@ export const validateField = (key, value) => {
         : // : parseInt(trimmedValue, 10) > 99999999
           // ? 'Value is too large'
           '';
+
+    case 'mobileNumber':
+      return trimmedValue === ''
+        ? 'Please enter a mobile number'
+        : !mobileNumberRegex.test(trimmedValue)
+        ? 'Mobile number must be a 10-digit number'
+        : '';
 
     default:
       return '';

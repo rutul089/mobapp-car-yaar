@@ -86,8 +86,8 @@ class LoanDocumentsScreen extends Component {
 
 const mapActionCreators = {};
 
-const mapStateToProps = state => ({
-  selectedLoanType: state.global.selectedLoanType,
+const mapStateToProps = ({loanData}) => ({
+  selectedLoanType: loanData.selectedLoanType,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(LoanDocumentsScreen);

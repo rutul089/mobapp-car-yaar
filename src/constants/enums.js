@@ -201,7 +201,7 @@ export const vehicleType = Object.freeze({
 /**
  * Generic helper to get label from any label map.
  */
-export const getLabelFromEnum = (enumObject, value, defaultLabel = '-') => {
+export const getLabelFromEnum = (enumObject, value, defaultLabel = '') => {
   return enumObject?.[value] || defaultLabel;
 };
 

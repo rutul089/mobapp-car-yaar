@@ -8,6 +8,7 @@ import {
   CUSTOMER_FINANCE_DETAILS,
   CUSTOMER_FINANCE_DOCUMENT,
   CUSTOMER_MORE_FINANCE,
+  CREATE_CUSTOMER_BASIC_DETAIL,
 } from '../actions/actionType';
 
 const initialState = {
@@ -36,9 +37,17 @@ const customerReducer = (state = initialState, action) => {
     case CUSTOMER_FINANCE_DETAILS.REQUEST:
     case CUSTOMER_FINANCE_DOCUMENT.REQUEST:
     case CUSTOMER_MORE_FINANCE.REQUEST:
+    case CREATE_CUSTOMER_BASIC_DETAIL.REQUEST:
       return {
         ...state,
         loading: true,
+      };
+
+    case CREATE_CUSTOMER_BASIC_DETAIL.FAILURE:
+    case CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS:
+      return {
+        ...state,
+        loading: false,
       };
 
     case FETCH_CUSTOMERS.SUCCESS:
@@ -66,22 +75,6 @@ const customerReducer = (state = initialState, action) => {
           totalPage: totalPages,
         };
       }
-    // return {
-    //   ...state,
-    //   customers:
-    //     action.payload.page === 1
-    //       ? action.payload.data
-    //       : [...state.customers, ...action.payload.data], // If it's not, append data
-    //   // allVehicles: {
-    //   //   data:
-    //   //     action.payload.page === 1
-    //   //       ? action.payload.data // If it's the first page, overwrite data
-    //   //       : [...state.allVehicles.data, ...action.payload.data], // If it's not, append data
-    //   // },
-    //   totalPage: action.payload.totalPages,
-    //   page: action.payload.page,
-    //   loading: false,
-    // };
 
     case FETCH_CUSTOMER_DETAIL.SUCCESS:
       return {

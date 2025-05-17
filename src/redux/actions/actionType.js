@@ -68,3 +68,7 @@ export const RESET_LOAN_APPLICATION = createAsyncActionTypes(
 export const FETCH_LOAN_APP_BY_ID = createAsyncActionTypes(
   'FETCH_LOAN_APP_BY_ID',
 );
+
+export const CREATE_CUSTOMER_BASIC_DETAIL = createAsyncActionTypes(
+  'CREATE_CUSTOMER_BASIC_DETAIL',
+);

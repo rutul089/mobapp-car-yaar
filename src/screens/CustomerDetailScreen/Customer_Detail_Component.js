@@ -16,6 +16,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import OTPModal from '../../components/OTPModal';
 import {
@@ -31,7 +32,6 @@ const Customer_Detail_Component = ({
   onSelectedOption,
   mobileNumber,
   onChangeMobileNumber,
-  individualType,
   onChangeUserTypeOption,
   onSendOTPPress,
   showVerifyOTP,
@@ -42,9 +42,10 @@ const Customer_Detail_Component = ({
   onProceedPress,
   customerType,
   selectedCustomerCategory,
+  restInputProps = {},
+  loading,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
-  const [selectedItem, setSelectedItem] = React.useState('');
   return (
     <SafeAreaWrapper>
       <Header
@@ -101,6 +102,7 @@ const Customer_Detail_Component = ({
             isRightIconVisible
             value={customerType}
             onPress={() => setShowModal(true)}
+            {...(restInputProps?.customerType || {})}
           />
           {selectedLoanType === loanType.loan ? null : (
             <>
@@ -113,6 +115,9 @@ const Customer_Detail_Component = ({
                 value={mobileNumber}
                 onChangeText={onChangeMobileNumber}
                 maxLength={10}
+                returnKeyType="done"
+                onSubmitEditing={onSendOTPPress}
+                {...(restInputProps?.mobileNumber || {})}
               />
             </>
           )}
@@ -140,6 +145,8 @@ const Customer_Detail_Component = ({
         onPressPrimaryButton={onPressPrimaryButton}
         mobileNumber="+91-9876543210"
       />
+
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

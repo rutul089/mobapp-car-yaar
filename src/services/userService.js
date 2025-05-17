@@ -80,3 +80,23 @@ export const getUserProfile = async payload => {
     throw error;
   }
 };
+
+/**
+ * Completes the user's registration process.
+ *
+ * @param {Object} registrationData - The data required to complete registration.
+ * @returns {Promise<Object>} The response data from the API.
+ * @throws Will throw an error if the API call fails.
+ */
+export const completeUserRegistration = async registrationData => {
+  try {
+    const response = await axiosInstance.patch(
+      '/user/complete-registration',
+      registrationData,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error completing user registration:', error);
+    throw error;
+  }
+};
