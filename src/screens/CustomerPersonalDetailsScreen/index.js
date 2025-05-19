@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
 import {currentLoanOptions, gender} from '../../constants/enums';
-import {navigate} from '../../navigation/NavigationUtils';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 
 class CustomerPersonalDetails extends Component {
@@ -81,6 +81,11 @@ class CustomerPersonalDetails extends Component {
     this.onChangeMaxEMIAfford = this.onChangeMaxEMIAfford.bind(this);
     this.onChangeMonthlyBankBalance =
       this.onChangeMonthlyBankBalance.bind(this);
+  }
+
+  componentDidMount() {
+    let param = getScreenParam(this.props.route, 'params');
+    console.log({param});
   }
 
   onFormChange = (key, value, callback) => {

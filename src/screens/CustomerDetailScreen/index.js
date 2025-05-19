@@ -7,11 +7,22 @@ import {
   loanType,
 } from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
+import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
 import Customer_Detail_Component from './Customer_Detail_Component';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {showToast} from '../../utils/helper';
-import {createCustomerBasicDetailThunk} from '../../redux/actions';
+import {
+  formatMobileNumber,
+  getErrorMessage,
+  showToast,
+} from '../../utils/helper';
+import {
+  createCustomerBasicDetailThunk,
+  verifyCustomerOtpThunk,
+} from '../../redux/actions';
 
 class CustomerDetailView extends Component {
   constructor(props) {
@@ -26,6 +37,10 @@ class CustomerDetailView extends Component {
         mobileNumber: '',
       },
       isFormValid: false,
+      isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
+      registrationNumber: 'GJ01RM5023',
+      loading: false,
+      otp: '',
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onSelectedOption = this.onSelectedOption.bind(this);
@@ -34,6 +49,12 @@ class CustomerDetailView extends Component {
     this.onCloseVerifyOTP = this.onCloseVerifyOTP.bind(this);
     this.onPressPrimaryButton = this.onPressPrimaryButton.bind(this);
     this.onProceedPress = this.onProceedPress.bind(this);
+    // applicationId: getScreenParam(props.route, 'params')?.id || '',
+  }
+
+  componentDidMount() {
+    const {isOnboard} = this.state;
+    console.log({isOnboard});
   }
 
   onBackPress = () => {
@@ -71,10 +92,7 @@ class CustomerDetailView extends Component {
       return;
     }
 
-    // this.addCustomerBasicDetail();
-    this.setState({
-      showVerifyOTP: true,
-    });
+    this.addCustomerBasicDetail();
   };
 
   onCloseVerifyOTP = () => {
@@ -84,8 +102,16 @@ class CustomerDetailView extends Component {
   };
 
   onPressPrimaryButton = () => {
-    this.onCloseVerifyOTP();
-    navigate(ScreenNames.CustomerPersonalDetails);
+    const {otp} = this.state;
+    if (otp.length !== 4) {
+      this.setState({
+        isError: true,
+        errorMessage: 'Enter all 4 digits of the OTP to continue.',
+      });
+      return;
+    }
+
+    this.verifyCustomerOtp();
   };
 
   onProceedPress = () => {
@@ -140,65 +166,142 @@ class CustomerDetailView extends Component {
 
   addCustomerBasicDetail = () => {
     const {customerCategory, customerType, mobileNumber} = this.state;
+    this.setState({loading: true});
     let payload = {
       customerCategory,
       customerType,
       mobileNumber,
     };
-    this.props.createCustomerBasicDetailThunk(
+    this.props
+      .createCustomerBasicDetailThunk(
+        payload,
+        response => {
+          if (response?.success) {
+            this.showOTPAfterDelay();
+          }
+        },
+        error => {},
+      )
+      .finally(() => {
+        this.setState({loading: false});
+      });
+  };
+
+  showOTPAfterDelay = () => {
+    this.setState({loading: false}, () => {
+      setTimeout(() => {
+        this.setState({showVerifyOTP: true});
+      }, 500);
+    });
+  };
+
+  onOtpComplete = value => {
+    this.setState({otp: value, isError: false}, () => {
+      if (value.length === 4) {
+        this.onPressPrimaryButton();
+      }
+    });
+  };
+
+  verifyCustomerOtp = () => {
+    const {route} = this.props;
+    const {otp, mobileNumber} = this.state;
+    let params = route.params;
+
+    let payload = {
+      code: otp,
+      mobileNumber: mobileNumber,
+    };
+    this.props.verifyCustomerOtpThunk(
       payload,
       response => {
-        console.log('response', response);
+        if (response?.success) {
+          this.onCloseVerifyOTP();
+          navigate(ScreenNames.CustomerPersonalDetails, {params});
+        }
+        console.log('response', params);
       },
       error => {
-        console.log('error', error);
+        this.setState({
+          isError: true,
+          errorMessage: getErrorMessage(error),
+        });
       },
     );
   };
 
   render() {
-    const {mobileNumber, customerType, customerCategory, errors} = this.state;
-    const {selectedLoanType, loading} = this.props;
+    const {
+      mobileNumber,
+      customerType,
+      customerCategory,
+      errors,
+      isOnboard,
+      registrationNumber,
+      loading,
+      showVerifyOTP,
+      errorMessage,
+      isError,
+    } = this.state;
+    const {selectedLoanType} = this.props;
     return (
-      <>
-        <Customer_Detail_Component
-          vehicleNumber={'GJ 01 JR 0945'}
-          onBackPress={this.onBackPress}
-          onSelectedOption={this.onSelectedOption}
-          selectedCustomerCategory={customerCategory}
-          mobileNumber={mobileNumber}
-          onChangeMobileNumber={value =>
-            this.onChangeField('mobileNumber', value)
-          }
-          onChangeUserTypeOption={this.onChangeUserTypeOption}
-          onSendOTPPress={this.onSendOTPPress}
-          showVerifyOTP={this.state.showVerifyOTP}
-          onCloseVerifyOTP={this.onCloseVerifyOTP}
-          onPressPrimaryButton={this.onPressPrimaryButton}
-          selectedLoanType={selectedLoanType}
-          onProceedPress={this.onProceedPress}
-          customerType={getLabelFromEnum(
-            customerIndividualTypeValue,
-            customerType,
-          )}
-          restInputProps={{
-            mobileNumber: {
-              isError: errors.mobileNumber,
-              statusMsg: errors.mobileNumber,
-            },
-            customerType: {
-              isError: errors.customerType,
-              statusMsg: errors.customerType,
-            },
-          }}
-          loading={loading}
-        />
-      </>
+      <Customer_Detail_Component
+        headerProp={{
+          title: 'Add Customer Details',
+          subtitle: isOnboard ? '' : '',
+          showRightContent: true,
+          rightLabel: isOnboard ? '' : registrationNumber,
+          rightLabelColor: '#F8A902',
+          onBackPress: this.onBackPress,
+        }}
+        vehicleNumber={'GJ 01 JR 0945'}
+        onBackPress={this.onBackPress}
+        onSelectedOption={this.onSelectedOption}
+        selectedCustomerCategory={customerCategory}
+        mobileNumber={mobileNumber}
+        onChangeMobileNumber={value =>
+          this.onChangeField('mobileNumber', value)
+        }
+        onChangeUserTypeOption={this.onChangeUserTypeOption}
+        onSendOTPPress={this.onSendOTPPress}
+        showVerifyOTP={showVerifyOTP}
+        onCloseVerifyOTP={this.onCloseVerifyOTP}
+        onPressPrimaryButton={this.onPressPrimaryButton}
+        selectedLoanType={selectedLoanType}
+        onProceedPress={this.onProceedPress}
+        customerType={getLabelFromEnum(
+          customerIndividualTypeValue,
+          customerType,
+        )}
+        restInputProps={{
+          mobileNumber: {
+            isError: errors.mobileNumber,
+            statusMsg: errors.mobileNumber,
+          },
+          customerType: {
+            isError: errors.customerType,
+            statusMsg: errors.customerType,
+          },
+        }}
+        loading={loading}
+        otpModalProp={{
+          isVisible: showVerifyOTP,
+          onModalHide: this.onCloseVerifyOTP,
+          onOtpComplete: this.onOtpComplete,
+          onPressPrimaryButton: this.onPressPrimaryButton,
+          mobileNumber: mobileNumber,
+          isError: isError,
+          errorMessage: errorMessage,
+        }}
+      />
     );
   }
 }
 
-const mapActionCreators = {createCustomerBasicDetailThunk};
+const mapActionCreators = {
+  createCustomerBasicDetailThunk,
+  verifyCustomerOtpThunk,
+};
 const mapStateToProps = ({loanData, customerData}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,

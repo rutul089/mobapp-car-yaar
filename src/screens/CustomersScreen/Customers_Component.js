@@ -36,6 +36,7 @@ const Customers_Component = ({
   searchText,
   clearSearch,
   setSearch,
+  onAddButtonPress,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
@@ -51,6 +52,8 @@ const Customers_Component = ({
         onSubmitEditing={setSearch}
         hideHeader
         hideSubHeaderTop={false}
+        showAddBtn
+        onAddButtonPress={onAddButtonPress}
       />
 
       <FlatList

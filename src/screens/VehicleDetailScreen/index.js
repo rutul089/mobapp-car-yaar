@@ -64,7 +64,6 @@ class VehicleDetail extends Component {
 
   render() {
     const {loading, selectedVehicle} = this.props;
-    console.log('selectedVehicle', selectedVehicle);
     const {basicDetail} = this.state;
     let {UsedVehicle} = selectedVehicle || {};
     let manufactureYear = UsedVehicle?.manufactureYear;

@@ -16,8 +16,6 @@ import {navigate} from '../../navigation/NavigationUtils';
 import {
   formatIndianCurrency,
   getApplicationGradientColors,
-  getGradientColors,
-  getGradientColorsLoan,
 } from '../../utils/helper';
 
 const Applications_Component = ({

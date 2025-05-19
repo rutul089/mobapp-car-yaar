@@ -17,8 +17,9 @@ import {
   Text,
   theme,
   Loader,
+  OTPModal,
 } from '@caryaar/components';
-import OTPModal from '../../components/OTPModal';
+
 import {
   customerCategory,
   customerCategoryValue,
@@ -44,18 +45,13 @@ const Customer_Detail_Component = ({
   selectedCustomerCategory,
   restInputProps = {},
   loading,
+  headerProp,
+  otpModalProp,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
   return (
     <SafeAreaWrapper>
-      <Header
-        title="Customer Details"
-        subtitle={vehicleNumber}
-        showRightContent
-        rightLabel="#ABC123"
-        rightLabelColor={'#F8A902'}
-        onBackPress={onBackPress}
-      />
+      <Header {...headerProp} />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
@@ -139,12 +135,7 @@ const Customer_Detail_Component = ({
         onClose={() => setShowModal(false)}
         title="Select Type"
       />
-      <OTPModal
-        isVisible={showVerifyOTP}
-        onModalHide={onCloseVerifyOTP}
-        onPressPrimaryButton={onPressPrimaryButton}
-        mobileNumber="+91-9876543210"
-      />
+      <OTPModal {...otpModalProp} />
 
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>

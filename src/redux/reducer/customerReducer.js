@@ -44,10 +44,16 @@ const customerReducer = (state = initialState, action) => {
       };
 
     case CREATE_CUSTOMER_BASIC_DETAIL.FAILURE:
+      return {
+        ...state,
+        loading: false,
+      };
     case CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS:
       return {
         ...state,
         loading: false,
+        selectedCustomer: action.payload,
+        selectedCustomerId: action.payload?.id,
       };
 
     case FETCH_CUSTOMERS.SUCCESS:

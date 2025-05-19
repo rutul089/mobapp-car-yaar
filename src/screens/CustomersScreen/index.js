@@ -140,6 +140,15 @@ class CustomersScreen extends Component {
     this.fetchAllCustomer(1, {params: {search: trimmed}});
   };
 
+  onAddButtonPress = () => {
+    navigate(ScreenNames.CustomerDetail, {
+      params: {
+        fromScreen: ScreenNames.Customer,
+        isOnboard: true,
+      },
+    });
+  };
+
   render() {
     const {apiTrigger, refreshing, searchText, isSearch} = this.state;
     const {customers, loading, searchCustomers} = this.props;
@@ -165,6 +174,7 @@ class CustomersScreen extends Component {
         searchText={searchText}
         clearSearch={this.clearSearch}
         setSearch={this.searchFromAPI}
+        onAddButtonPress={this.onAddButtonPress}
       />
     );
   }

@@ -6,8 +6,9 @@ import {
   fetchCustomerFinanceDetails,
   fetchCustomerFinanceDocuments,
   fetchCustomerMoreFinanceDetails,
+  verifyCustomerOtp,
 } from '../../services';
-import {showApiErrorToast} from '../../utils/helper';
+import {getErrorMessage, showApiErrorToast} from '../../utils/helper';
 import {
   CLEAR_SEARCH,
   CLEAR_SELECTED_CUSTOMER,
@@ -178,7 +179,7 @@ export const createCustomerBasicDetailThunk =
         type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
         payload: response?.data,
       });
-      onSuccess?.(response?.data);
+      onSuccess?.(response);
     } catch (error) {
       dispatch({
         type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
@@ -186,6 +187,26 @@ export const createCustomerBasicDetailThunk =
       });
       onFailure?.(error.message);
       showApiErrorToast(error);
+    }
+  };
+
+export const verifyCustomerOtpThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
+    try {
+      const response = await verifyCustomerOtp(payload);
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+        payload: response?.data,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      // showApiErrorToast(error);
     }
   };
 
