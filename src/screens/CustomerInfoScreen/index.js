@@ -11,6 +11,11 @@ import {Alert} from 'react-native';
 import ScreenNames from '../../constants/ScreenNames';
 import {fetchCustomerDetailsThunk} from '../../redux/actions';
 import {get} from 'lodash';
+import {
+  getLabelEnum,
+  getLabelFromEnum,
+  occupationLabelMap,
+} from '../../constants/enums';
 
 class CustomerInfoScreen extends Component {
   constructor(props) {
@@ -63,6 +68,8 @@ class CustomerInfoScreen extends Component {
     const isValidUri =
       applicantPhoto?.startsWith('http') || applicantPhoto?.startsWith('https');
 
+    const occupation = this.safeGet(details, 'occupation');
+
     return (
       <Customer_Info_Component
         state={this.state}
@@ -107,7 +114,11 @@ class CustomerInfoScreen extends Component {
           {label: 'Current Pincode', value: this.safeGet(details, 'pincode')},
         ]}
         professionalDetails={[
-          {label: 'Occupation', value: this.safeGet(details, 'occupation')},
+          {
+            label: 'Occupation',
+            value:
+              getLabelFromEnum(occupationLabelMap, occupation) || occupation,
+          },
           {
             label: 'Income Source',
             value: this.safeGet(details, 'incomeSource'),
@@ -128,7 +139,10 @@ class CustomerInfoScreen extends Component {
             label: 'Account Number',
             value: this.safeGet(details, 'accountNumber'),
           },
-          {label: 'Current Loan?', value: this.safeGet(details, 'currentLoan')},
+          {
+            label: 'Current Loan?',
+            value: this.safeGet(details, 'currentLoan') ? 'Yes' : 'No',
+          },
           {
             label: 'Current EMI',
             value:

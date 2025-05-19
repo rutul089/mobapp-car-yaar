@@ -6,6 +6,7 @@ import {
   fetchCustomerFinanceDetails,
   fetchCustomerFinanceDocuments,
   fetchCustomerMoreFinanceDetails,
+  submitCustomerDetails,
   verifyCustomerOtp,
 } from '../../services';
 import {getErrorMessage, showApiErrorToast} from '../../utils/helper';
@@ -90,9 +91,9 @@ export const fetchCustomerDocumentsThunk =
       const response = await fetchCustomerDocuments(customerId, config);
       dispatch({
         type: FETCH_CUSTOMER_DOCUMENT.SUCCESS,
-        payload: response?.data?.[0],
+        payload: response?.data,
       });
-      onSuccess?.(response?.data?.[0]);
+      onSuccess?.(response);
     } catch (error) {
       dispatch({
         type: FETCH_CUSTOMER_DOCUMENT.FAILURE,
@@ -206,6 +207,27 @@ export const verifyCustomerOtpThunk =
         error: error?.message || 'Something went wrong',
       });
       onFailure?.(error);
+      // showApiErrorToast(error);
+    }
+  };
+
+export const submitCustomerDetailsThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
+    try {
+      const response = await submitCustomerDetails(payload);
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+        payload: response?.data,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      // console.log('error----<', JSON.stringify(error));
       // showApiErrorToast(error);
     }
   };

@@ -165,16 +165,91 @@ export const vehicleImageLabelMap = {
 
 export const vehicleImageTypes = Object.values(vehicleImageType).map(v => [v]);
 
+export const occupationType = Object.freeze({
+  SALARIED: 'SALARIED',
+  SELF_EMPLOYED: 'SELF_EMPLOYED',
+  SELF_EMPLOYED_PROFESSIONAL: 'SELF_EMPLOYED_PROFESSIONAL',
+  AGRICULTURE: 'AGRICULTURE',
+  OTHER: 'OTHER',
+});
+
+export const occupationLabelMap = {
+  [occupationType.SALARIED]: 'Salaried',
+  [occupationType.SELF_EMPLOYED]: 'Self Employed',
+  [occupationType.SELF_EMPLOYED_PROFESSIONAL]: 'Self Employed Professional',
+  [occupationType.AGRICULTURE]: 'Agriculture',
+  [occupationType.OTHER]: 'Other',
+};
+
+export const occupationOptions = [
+  {
+    id: '1',
+    label: occupationLabelMap[occupationType.SALARIED],
+    value: occupationType.SALARIED,
+  },
+  {
+    id: '2',
+    label: occupationLabelMap[occupationType.SELF_EMPLOYED],
+    value: occupationType.SELF_EMPLOYED,
+  },
+  {
+    id: '3',
+    label: occupationLabelMap[occupationType.SELF_EMPLOYED_PROFESSIONAL],
+    value: occupationType.SELF_EMPLOYED_PROFESSIONAL,
+  },
+  {
+    id: '4',
+    label: occupationLabelMap[occupationType.AGRICULTURE],
+    value: occupationType.AGRICULTURE,
+  },
+  {
+    id: '5',
+    label: occupationLabelMap[occupationType.OTHER],
+    value: occupationType.OTHER,
+  },
+];
+
+export const genderType = Object.freeze({
+  MALE: 'Male',
+  FEMALE: 'Female',
+});
+
+export const genderLabelMap = {
+  [genderType.MALE]: 'Male',
+  [genderType.FEMALE]: 'Female',
+};
+
+export const genderTypes = [
+  {label: genderLabelMap[genderType.MALE], value: genderType.MALE},
+  {label: genderLabelMap[genderType.FEMALE], value: genderType.FEMALE},
+];
+
+export const currentLoanOptions = Object.freeze({
+  NO: false,
+  YES: true,
+});
+
+export const currentLoanLabelMap = {
+  [currentLoanOptions.NO]: 'No',
+  [currentLoanOptions.YES]: 'Yes',
+};
+
+export const currentLoanTypes = [
+  {
+    label: currentLoanLabelMap[currentLoanOptions.YES],
+    value: currentLoanOptions.YES,
+  },
+  {
+    label: currentLoanLabelMap[currentLoanOptions.NO],
+    value: currentLoanOptions.NO,
+  },
+];
+
 export const API_TRIGGER = {
   DEFAULT: 'default',
   LOAD_MORE: 'loadMore',
   PULL_TO_REFRESH: 'pullToRefresh',
 };
-
-export const currentLoanOptions = Object.freeze({
-  no: 'no',
-  yes: 'yes',
-});
 
 export const gender = Object.freeze({
   female: 'female',

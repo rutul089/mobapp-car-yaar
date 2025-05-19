@@ -1,56 +1,63 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
 import {connect} from 'react-redux';
+import {
+  currentLoanOptions,
+  genderType,
+  getLabelFromEnum,
+  occupationLabelMap,
+} from '../../constants/enums';
+import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
+import {submitCustomerDetailsThunk} from '../../redux/actions';
+import {handleFileSelection} from '../../utils/documentUtils';
+import {showApiErrorToast, showToast} from '../../utils/helper';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
-import {currentLoanOptions, gender} from '../../constants/enums';
-import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+
+const initialState = {
+  applicantPhoto: '',
+  pancardPhoto: '',
+  panCardNumber: '',
+  aadharNumber: '',
+  applicantName: '',
+  mobileNumber: '',
+  fatherName: '',
+  spouseName: '',
+  email: '',
+  dob: '',
+  address: '',
+  pincode: '',
+  monthlyIncome: '',
+  accountNumber: '',
+  currentEmi: '',
+  maxEmiAfford: '',
+  avgMonthlyBankBalance: '',
+  gender: genderType.MALE,
+  currentLoan: currentLoanOptions.YES,
+  aadharFrontPhoto: '',
+  aadharBackphoto: '',
+  currentState: '',
+  occupation: null,
+  incomeSource: null,
+};
 
 class CustomerPersonalDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedGender: gender.male,
-      panCardNumber: '',
-      aadharNumber: '',
-      applicantName: '',
-      mobileNumber: '',
-      fatherMotherName: '',
-      spouseName: '',
-      email: '',
-      dob: '',
-      currentAddress: '',
-      currentPincode: '',
-      currentState: 'GUJ',
-      selectedLoanOption: currentLoanOptions.no,
-      occupation: '',
-      incomeSource: '',
-      monthlyIncome: '',
-      bankName: '',
-      accountNumber: '',
-      currentEMI: '',
-      maxEMIAfford: '',
-      monthlyBankBalance: '',
-      occupationOptions: [
-        {label: 'Salaried', value: 'salaried'},
-        {label: 'Self Employed', value: 'self_employed'},
-        {label: 'Business', value: 'business'},
-        {label: 'Student', value: 'student'},
-        {label: 'Retired', value: 'retired'},
-        {label: 'Homemaker', value: 'homemaker'},
-        {label: 'Unemployed', value: 'unemployed'},
-        {label: 'Freelancer', value: 'freelancer'},
-        {label: 'Government Employee', value: 'government_employee'},
-        {label: 'Private Sector Employee', value: 'private_sector'},
-      ],
+      ...initialState,
       incomeSourceOptions: [
-        {label: 'Salary', value: 'salary'},
-        {label: 'Business', value: 'business'},
-        {label: 'Freelancing', value: 'freelancing'},
-        {label: 'Rental Income', value: 'rental'},
-        {label: 'Investment', value: 'investment'},
-        {label: 'Pension', value: 'pension'},
-        {label: 'Other', value: 'other'},
+        {label: 'Salary', value: 'Salary'},
+        {label: 'Business', value: 'Business'},
+        {label: 'Freelancing', value: 'Freelancing'},
+        {label: 'Rental Income', value: 'Rental Income'},
+        {label: 'Investment', value: 'Investment'},
+        {label: 'Pension', value: 'Pension'},
+        {label: 'Other', value: 'Other'},
       ],
       bankOptions: [
         {label: 'HDFC Bank', value: 'hdfc'},
@@ -58,164 +65,487 @@ class CustomerPersonalDetails extends Component {
         {label: 'State Bank of India', value: 'sbi'},
         {label: 'Axis Bank', value: 'axis'},
       ],
+      isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
+      registrationNumber: '',
+      errors: {
+        panCardNumber: '',
+        aadharNumber: '',
+        applicantName: '',
+        mobileNumber: '',
+        fatherName: '',
+        spouseName: '',
+        email: '',
+        dob: '',
+        address: '',
+        pincode: '',
+        monthlyIncome: '',
+        accountNumber: '',
+        currentEmi: '',
+        maxEmiAfford: '',
+        avgMonthlyBankBalance: '',
+        occupation: '',
+        incomeSource: '',
+      },
+      isFormValid: false,
+      showFilePicker: false,
+      selectionType: '',
     };
-    this.onSelectedGender = this.onSelectedGender.bind(this);
-    this.onChangePanCardNumber = this.onChangePanCardNumber.bind(this);
-    this.onChangeAadharNumber = this.onChangeAadharNumber.bind(this);
-    this.onChangeApplicantName = this.onChangeApplicantName.bind(this);
-    this.onChangemobileNumber = this.onChangemobileNumber.bind(this);
-    this.onChangeFatherMotherName = this.onChangeFatherMotherName.bind(this);
-    this.onChangeSpouseName = this.onChangeSpouseName.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeCurrentAddress = this.onChangeCurrentAddress.bind(this);
-    this.onChangeCurrentPincode = this.onChangeCurrentPincode.bind(this);
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
     this.onSelectBankOption = this.onSelectBankOption.bind(this);
-    this.onChangeMonthlyIncome = this.onChangeMonthlyIncome.bind(this);
     this.onSelectIncomeSourceOption =
       this.onSelectIncomeSourceOption.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
-    this.onChangeAccountNumber = this.onChangeAccountNumber.bind(this);
-    this.onChangeCurrentEMI = this.onChangeCurrentEMI.bind(this);
-    this.onChangeMaxEMIAfford = this.onChangeMaxEMIAfford.bind(this);
-    this.onChangeMonthlyBankBalance =
-      this.onChangeMonthlyBankBalance.bind(this);
   }
 
   componentDidMount() {
-    let param = getScreenParam(this.props.route, 'params');
-    console.log({param});
+    const {isOnboard} = this.state;
+    // this.setState({
+    //   panCardNumber: 'ABCDE1234L',
+    //   aadharNumber: '223456789001',
+    //   applicantName: 'Jhon Doe',
+    //   mobileNumber: '8866089179',
+    //   gender: 'Male',
+    //   fatherName: 'Jhony Sharma',
+    //   spouseName: 'Jany Sharma',
+    //   email: 'rahull2.sharma@example.com',
+    //   dob: '1995-07-15T00:00:00.000Z',
+    //   address: '123, Green Street, Mumbai',
+    //   pincode: '400001',
+    //   monthlyIncome: '75000',
+    //   bankName: 'HDFC Bank',
+    //   accountNumber: '223456789019',
+    //   currentLoan: currentLoanOptions.YES,
+    //   currentEmi: '20000',
+    //   maxEmiAfford: '25000',
+    //   avgMonthlyBankBalance: '90000',
+    //   occupation: 'SELF_EMPLOYED',
+    //   incomeSource: 'Rental Income',
+    //   aadharBackphoto:
+    //     'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    //   aadharFrontPhoto:
+    //     'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    // });
   }
 
-  onFormChange = (key, value, callback) => {
+  onSelectedGender = value => {
+    this.onChangeField('gender', value);
+  };
+
+  onSelectedLoanOption = value => {
+    this.onChangeField('currentLoan', value);
+  };
+
+  onSelectedOccupation = (item, index) => {
     this.setState(
       {
-        [key]: value,
+        occupation: item.value,
       },
       () => {
-        if (typeof callback === 'function') {
-          callback();
-        }
+        this.onChangeField('occupation', this.state.occupation);
       },
     );
   };
 
-  onSelectedGender = value => {
-    this.onFormChange('selectedGender', value);
-  };
-
-  onChangePanCardNumber = value => {
-    this.onFormChange('panCardNumber', value);
-  };
-  onChangeAadharNumber = value => {
-    this.onFormChange('aadharNumber', value);
-  };
-  onChangeApplicantName = value => {
-    this.onFormChange('applicantName', value);
-  };
-  onChangemobileNumber = value => {
-    this.onFormChange('mobileNumber', value);
-  };
-  onChangeFatherMotherName = value => {
-    this.onFormChange('fatherMotherName', value);
-  };
-  onChangeSpouseName = value => {
-    this.onFormChange('spouseName', value);
-  };
-  onChangeEmail = value => {
-    this.onFormChange('email', value);
-  };
-  onChangeCurrentAddress = value => {
-    this.onFormChange('currentAddress', value);
-  };
-  onChangeCurrentPincode = value => {
-    this.onFormChange('currentPincode', value);
-  };
-
-  onSelectedLoanOption = value => {
-    this.onFormChange('selectedLoanOption', value);
-  };
-
-  onSelectedOccupation = (value, index) => {
-    this.onFormChange('occupation', value);
-  };
-
-  onSelectIncomeSourceOption = (value, index) => {
-    this.onFormChange('incomeSource', value);
+  onSelectIncomeSourceOption = (item, index) => {
+    this.setState(
+      {
+        incomeSource: item?.value,
+      },
+      () => {
+        this.onChangeField('incomeSource', this.state.incomeSource);
+      },
+    );
   };
 
   onSelectBankOption = (value, index) => {
-    this.onFormChange('bankName', value);
-  };
-
-  onChangeMonthlyIncome = (value, index) => {
-    this.onFormChange('monthlyIncome', value);
-  };
-
-  onChangeAccountNumber = (value, index) => {
-    this.onFormChange('accountNumber', value);
-  };
-  onChangeCurrentEMI = (value, index) => {
-    this.onFormChange('currentEMI', value);
-  };
-  onChangeMaxEMIAfford = (value, index) => {
-    this.onFormChange('maxEMIAfford', value);
-  };
-  onChangeMonthlyBankBalance = (value, index) => {
-    this.onFormChange('monthlyBankBalance', value);
+    this.onChangeField('bankName', value?.label);
   };
 
   onNextPress = () => {
-    navigate(ScreenNames.LoanDocument);
+    const isFormValid = this.validateAllFields();
+
+    if (!isFormValid) {
+      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      return;
+    }
+
+    this.props.submitCustomerDetailsThunk(
+      this.getPayload(),
+      response => {
+        navigate(ScreenNames.LoanDocument);
+      },
+      error => {
+        showApiErrorToast(error);
+      },
+    );
+  };
+
+  getPayload = () => {
+    const state = this.state;
+    const {selectedCustomerId} = this.props;
+
+    let payload = {
+      applicantPhoto: state.applicantPhoto,
+      pancardPhoto: state.pancardPhoto,
+      panCardNumber: state.panCardNumber,
+      aadharFrontPhoto: state.aadharFrontPhoto,
+      aadharBackphoto: state.aadharBackphoto,
+      aadharNumber: state.aadharNumber,
+      applicantName: state.applicantName,
+      mobileNumber: state.mobileNumber,
+      gender: state.gender,
+      fatherName: state.fatherName,
+      spouseName: state.spouseName,
+      email: state.email,
+      dob: '1995-07-15T00:00:00.000Z',
+      address: state.address,
+      pincode: state.pincode,
+      occupation: state.occupation,
+      incomeSource: state.incomeSource,
+      monthlyIncome: Number(state.monthlyIncome),
+      bankName: state.bankName,
+      accountNumber: state.accountNumber,
+      currentLoan: state.currentLoan,
+      currentEmi: Number(state.currentEmi),
+      maxEmiAfford: Number(state.maxEmiAfford),
+      avgMonthlyBankBalance: Number(state.avgMonthlyBankBalance),
+      customerId: selectedCustomerId,
+    };
+
+    console.log({payload});
+
+    if (!state.currentLoan) {
+      delete payload.currentEmi;
+    }
+
+    return payload;
+  };
+
+  validateAllFields = () => {
+    const {currentLoan} = this.state;
+    const fieldValidationRules = {
+      applicantPhoto: {required: false},
+      currentEmi: {required: currentLoan},
+    };
+
+    const fieldsToValidate = [
+      'panCardNumber',
+      'aadharNumber',
+      'applicantName',
+      'mobileNumber',
+      'fatherName',
+      'spouseName',
+      'email',
+      'dob',
+      'address',
+      'pincode',
+      'monthlyIncome',
+      'accountNumber',
+      'currentEmi',
+      'maxEmiAfford',
+      'avgMonthlyBankBalance',
+      'occupation',
+      'incomeSource',
+      'applicantPhoto',
+      'aadharFrontPhoto',
+      'aadharBackphoto',
+      'pancardPhoto',
+    ];
+
+    const errors = {};
+    let isFormValid = true;
+
+    fieldsToValidate.forEach(key => {
+      const value = this.state[key];
+      const {required = true} = fieldValidationRules[key] || {};
+
+      // Skip validation if field is optional and empty
+      if (
+        !required &&
+        (value === undefined || value === null || value === '')
+      ) {
+        errors[key] = '';
+        return;
+      }
+
+      const error = validateField(key, value);
+      errors[key] = error;
+      if (error !== '') {
+        isFormValid = false;
+      }
+    });
+
+    this.setState({errors, isFormValid});
+    return isFormValid;
+  };
+
+  onChangeField = (key, value) => {
+    handleFieldChange(this, key, value);
+  };
+
+  handleFile = type => {
+    const {selectionType} = this.state;
+    handleFileSelection(type, async asset => {
+      if (!asset?.uri) {
+        return;
+      }
+
+      const docObj = {
+        uri: asset.uri,
+        name: asset.fileName,
+        type: asset.type,
+        isLocal: true,
+        fileSize: asset.fileSize,
+        uploadedUrl:
+          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock
+      };
+
+      this.setState(
+        {
+          [selectionType]: docObj.uri,
+          // [selectionType]: docObj,  // Save the whole object here
+          showFilePicker: false,
+        },
+        () => {
+          this.onChangeField(selectionType, this.state[selectionType]);
+        },
+      );
+
+      // TODO : Upload API call here to get the link
+    });
+  };
+
+  closeFilePicker = () => {
+    this.setState({showFilePicker: false});
+  };
+
+  handleFilePicker = type => {
+    this.setState({showFilePicker: true, selectionType: type});
   };
 
   render() {
-    const {selectedGender} = this.state;
+    const {
+      gender,
+      isOnboard,
+      registrationNumber,
+      errors,
+      incomeSource,
+      occupation,
+      aadharNumber,
+      showFilePicker,
+    } = this.state;
+
+    const {loading} = this.props;
+
     return (
-      <>
-        <Customer_Personal_Details_Component
-          state={this.state}
-          onSelectedGender={this.onSelectedGender}
-          selectedGender={selectedGender}
-          genderOptions={[
-            {label: 'Male', value: gender.male},
-            {label: 'Female', value: gender.female},
-          ]}
-          onChangePanCardNumber={this.onChangePanCardNumber}
-          onChangeAadharNumber={this.onChangeAadharNumber}
-          onChangeApplicantName={this.onChangeApplicantName}
-          onChangemobileNumber={this.onChangemobileNumber}
-          onChangeFatherMotherName={this.onChangeFatherMotherName}
-          onChangeSpouseName={this.onChangeSpouseName}
-          onChangeEmail={this.onChangeEmail}
-          onChangeCurrentAddress={this.onChangeCurrentAddress}
-          onChangeCurrentPincode={this.onChangeCurrentPincode}
-          currentLoanOptions={[
-            {label: 'Yes', value: currentLoanOptions.yes},
-            {label: 'No', value: currentLoanOptions.no},
-          ]}
-          onSelectedLoanOption={this.onSelectedLoanOption}
-          onSelectedOccupation={this.onSelectedOccupation}
-          onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
-          onSelectBankOption={this.onSelectBankOption}
-          onChangeMonthlyIncome={this.onChangeMonthlyIncome}
-          onChangeAccountNumber={this.onChangeAccountNumber}
-          onChangeCurrentEMI={this.onChangeCurrentEMI}
-          onChangeMaxEMIAfford={this.onChangeMaxEMIAfford}
-          onChangeMonthlyBankBalance={this.onChangeMonthlyBankBalance}
-          onNextPress={this.onNextPress}
-        />
-      </>
+      <Customer_Personal_Details_Component
+        headerProp={{
+          title: 'Add Customer Details',
+          subtitle: isOnboard ? '' : '',
+          showRightContent: true,
+          rightLabel: isOnboard ? '' : registrationNumber,
+          rightLabelColor: '#F8A902',
+          onBackPress: () => goBack(),
+        }}
+        state={this.state}
+        onSelectedGender={this.onSelectedGender}
+        selectedGender={gender}
+        onChangePanCardNumber={value =>
+          this.onChangeField('panCardNumber', value)
+        }
+        onChangeAadharNumber={value =>
+          this.onChangeField('aadharNumber', value)
+        }
+        onChangeApplicantName={value =>
+          this.onChangeField('applicantName', value)
+        }
+        onChangemobileNumber={value =>
+          this.onChangeField('mobileNumber', value)
+        }
+        onChangeFatherMotherName={value =>
+          this.onChangeField('fatherName', value)
+        }
+        onChangeSpouseName={value => this.onChangeField('spouseName', value)}
+        onChangeEmail={value => this.onChangeField('email', value)}
+        onChangeCurrentAddress={value => this.onChangeField('address', value)}
+        onChangeCurrentPincode={value => this.onChangeField('pincode', value)}
+        onSelectedLoanOption={this.onSelectedLoanOption}
+        onSelectedOccupation={this.onSelectedOccupation}
+        onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
+        onSelectBankOption={this.onSelectBankOption}
+        onChangeMonthlyIncome={value =>
+          this.onChangeField('monthlyIncome', value)
+        }
+        onChangeAccountNumber={value =>
+          this.onChangeField('accountNumber', value)
+        }
+        onChangeCurrentEMI={value => this.onChangeField('currentEmi', value)}
+        onChangeMaxEMIAfford={value =>
+          this.onChangeField('maxEmiAfford', value)
+        }
+        onChangeMonthlyBankBalance={value =>
+          this.onChangeField('avgMonthlyBankBalance', value)
+        }
+        onNextPress={this.onNextPress}
+        occupation={getLabelFromEnum(occupationLabelMap, occupation)}
+        restInputProps={{
+          panCardNumber: {
+            isError: errors?.panCardNumber,
+            statusMsg: errors?.panCardNumber,
+            autoCapitalize: 'characters',
+          },
+          aadharNumber: {
+            value: aadharNumber,
+            isError: errors?.aadharNumber,
+            statusMsg: errors?.aadharNumber,
+          },
+          applicantName: {
+            isError: errors?.applicantName,
+            statusMsg: errors?.applicantName,
+          },
+          mobileNumber: {
+            isError: errors?.mobileNumber,
+            statusMsg: errors?.mobileNumber,
+          },
+          fatherName: {
+            isError: errors?.fatherName,
+            statusMsg: errors?.fatherName,
+          },
+          spouseName: {
+            isError: errors?.spouseName,
+            statusMsg: errors?.spouseName,
+          },
+          email: {
+            isError: errors?.email,
+            statusMsg: errors?.email,
+          },
+          address: {
+            isError: errors?.address,
+            statusMsg: errors?.address,
+          },
+          pincode: {
+            isError: errors?.pincode,
+            statusMsg: errors?.pincode,
+          },
+          occupation: {
+            isError: errors?.occupation,
+            statusMsg: errors?.occupation,
+          },
+          incomeSource: {
+            isError: errors?.incomeSource,
+            statusMsg: errors?.incomeSource,
+            value: incomeSource,
+          },
+          accountNumber: {
+            isError: errors?.accountNumber,
+            statusMsg: errors?.accountNumber,
+          },
+          currentEmi: {
+            isError: errors?.currentEmi,
+            statusMsg: errors?.currentEmi,
+          },
+          maxEmiAfford: {
+            isError: errors?.maxEmiAfford,
+            statusMsg: errors?.maxEmiAfford,
+          },
+          monthlyIncome: {
+            isError: errors?.monthlyIncome,
+            statusMsg: errors?.monthlyIncome,
+          },
+          avgMonthlyBankBalance: {
+            isError: errors?.avgMonthlyBankBalance,
+            statusMsg: errors?.avgMonthlyBankBalance,
+          },
+          applicantPhoto: {
+            isError: errors?.applicantPhoto,
+            statusMsg: errors?.applicantPhoto,
+          },
+          pancardPhoto: {
+            isError: errors?.pancardPhoto,
+            statusMsg: errors?.pancardPhoto,
+          },
+          aadharFrontPhoto: {
+            isError: errors?.aadharFrontPhoto,
+            statusMsg: errors?.aadharFrontPhoto,
+          },
+          aadharBackphoto: {
+            isError: errors?.aadharBackphoto,
+            statusMsg: errors?.aadharBackphoto,
+          },
+        }}
+        filePickerProps={{
+          isVisible: showFilePicker,
+          autoCloseOnSelect: true,
+          onSelect: this.handleFile,
+          onClose: this.closeFilePicker,
+          restModalProp: {
+            isCancellable: false,
+          },
+        }}
+        handleFilePicker={this.handleFilePicker}
+        loading={loading}
+      />
     );
   }
 }
 
-const mapActionCreators = {};
+const mapActionCreators = {submitCustomerDetailsThunk};
 
-const mapStateToProps = state => ({});
+const mapStateToProps = ({customerData}) => ({
+  loading: customerData.loading,
+  selectedCustomerId: customerData?.selectedCustomerId,
+});
 
 export default connect(
   mapStateToProps,
   mapActionCreators,
 )(CustomerPersonalDetails);
+
+// // Define this utility function either locally or extract to a utils/helper file
+// const buildInputProps = (fields, errors = {}, extraProps = {}) => {
+//   return fields.reduce((acc, field) => {
+//     acc[field] = {
+//       isError: errors?.[field],
+//       statusMsg: errors?.[field],
+//       ...(extraProps[field] || {}),
+//     };
+//     return acc;
+//   }, {});
+// };
+
+// // Then use it where you're defining restInputProps
+// const fields = [
+//   'panCardNumber',
+//   'aadharNumber',
+//   'applicantName',
+//   'mobileNumber',
+//   'fatherName',
+//   'spouseName',
+//   'email',
+//   'address',
+//   'pincode',
+//   'occupation',
+//   'incomeSource',
+//   'accountNumber',
+//   'currentEmi',
+//   'maxEmiAfford',
+//   'monthlyIncome',
+//   'avgMonthlyBankBalance',
+//   'applicantPhoto',
+//   'pancardPhoto',
+//   'aadharFrontPhoto',
+//   'aadharBackphoto',
+// ];
+
+// const extraProps = {
+//   panCardNumber: { autoCapitalize: 'characters' },
+//   aadharNumber: { value: aadharNumber },
+//   incomeSource: { value: incomeSource },
+// };
+
+// const restInputProps = buildInputProps(fields, errors, extraProps);
+
+{
+  /* <YourComponent restInputProps={restInputProps} /> */
+}

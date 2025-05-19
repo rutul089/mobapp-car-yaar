@@ -15,7 +15,18 @@ class CustomerDocumentsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      documents: {},
+      documents: {
+        // Default document list
+        addressProofImage: {},
+        applicationFormImage: {},
+        bankingProofImage: {},
+        businessProofImage: {},
+        idProofImage: {},
+        incomeProofImage: {},
+        insuranceImage: {},
+        otherDocuments: {},
+        permanentAddressImage: {},
+      },
       isLoadingDocument: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
@@ -63,12 +74,15 @@ class CustomerDocumentsScreen extends Component {
       selectedCustomerId,
       {},
       response => {
-        this.setState({
-          documents: formatDocumentImages(
-            response,
-            'https://your-image-server.com/images/',
-          ),
-        });
+        if (response.success && response?.data?.length > 0) {
+          let data = response?.data?.[0];
+          this.setState({
+            documents: formatDocumentImages(
+              data,
+              'https://your-image-server.com/images/',
+            ),
+          });
+        }
       },
     );
   };
@@ -76,19 +90,17 @@ class CustomerDocumentsScreen extends Component {
   render() {
     const {documents} = this.state;
     return (
-      <>
-        <Customer_Documents_Component
-          customerDocuments={documentImageTypes
-            .filter(type => documents[type]) // only include if document exists
-            .map(type => ({
-              type,
-              label: documentImageLabelMap[type],
-              docObject: documents[type],
-              viewImage: () => this.handleViewImage(documents[type]?.uri),
-            }))}
-          onNextPress={this.onNextPress}
-        />
-      </>
+      <Customer_Documents_Component
+        customerDocuments={documentImageTypes
+          .filter(type => documents[type]) // only include if document exists
+          .map(type => ({
+            type,
+            label: documentImageLabelMap[type],
+            docObject: documents[type],
+            viewImage: () => this.handleViewImage(documents[type]?.uri),
+          }))}
+        onNextPress={this.onNextPress}
+      />
     );
   }
 }

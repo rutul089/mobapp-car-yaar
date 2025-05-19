@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -15,14 +15,22 @@ import {
   Spacing,
   Text,
   theme,
+  FilePickerModal,
+  Loader,
 } from '@caryaar/components';
+import {
+  currentLoanTypes,
+  genderTypes,
+  occupationOptions,
+} from '../../constants/enums';
 import strings from '../../locales/strings';
-import {goBack} from '../../navigation/NavigationUtils';
+import {formatIndianCurrency} from '../../utils/helper';
+import {sanitizeAmount} from '../../utils/inputHelper';
+import {useInputRefs} from '../../utils/useInputRefs';
 
 const Customer_Personal_Details_Component = ({
   selectedGender,
   onSelectedGender = () => {},
-  genderOptions,
   state,
   onChangePanCardNumber,
   onChangeAadharNumber,
@@ -46,30 +54,32 @@ const Customer_Personal_Details_Component = ({
   onSelectBankOption = () => {},
   onNextPress,
   saveAsDraftPress,
+  headerProp = {},
+  restInputProps = {},
+  occupation,
+  filePickerProps = {},
+  handleFilePicker,
+  loading,
 }) => {
-  const [errors, setErrors] = React.useState({});
-
-  const refs = {
-    panCard: useRef(null),
-    aadhar: useRef(null),
-    applicant: useRef(null),
-    mobile: useRef(null),
-    fatherMother: useRef(null),
-    spouse: useRef(null),
-    email: useRef(null),
-    dob: useRef(null),
-    address: useRef(null),
-    pincode: useRef(null),
-    monthlyIncome: useRef(null),
-    accountNumber: useRef(null),
-    currentEMI: useRef(null),
-    maxEMIAfford: useRef(null),
-    monthlyBankBalance: useRef(null),
-  };
-
-  const focusNext = key => {
-    refs[key]?.current?.focus();
-  };
+  const {refs, focusNext, scrollToInput} = useInputRefs([
+    'panCardNumber',
+    'aadharNumber',
+    'applicantName',
+    'mobileNumber',
+    'fatherName',
+    'spouseName',
+    'email',
+    'dob',
+    'address',
+    'pincode',
+    'monthlyIncome',
+    'accountNumber',
+    'currentEmi',
+    'maxEmiAfford',
+    'avgMonthlyBankBalance',
+    'incomeSource',
+    'occupation',
+  ]);
 
   const [isOccupationModalVisible, setIsOccupationModalVisible] =
     React.useState(false);
@@ -77,120 +87,24 @@ const Customer_Personal_Details_Component = ({
     React.useState(false);
   const [showBankOptionModal, setShowBankOptionModal] = React.useState(false);
 
-  const validateFields = () => {
-    const errors = {};
+  const [editingStates, setEditingStates] = React.useState({
+    currentEmi: false,
+    maxEmiAfford: false,
+    avgMonthlyBankBalance: false,
+    monthlyIncome: false,
+  });
 
-    // PERSONAL DETAILS
-    if (!state.panCardNumber?.trim()) {
-      errors.panCardNumber = 'PAN card number is required';
-    }
-
-    if (!/^\d{12}$/.test(state.aadharNumber)) {
-      errors.aadharNumber = 'Aadhar number must be 12 digits';
-    }
-
-    if (!state.applicantName?.trim()) {
-      errors.applicantName = 'Applicant name is required';
-    }
-
-    if (!/^\d{10}$/.test(state.mobileNumber)) {
-      errors.mobileNumber = 'Enter a valid 10-digit mobile number';
-    }
-
-    if (!state.fatherMotherName?.trim()) {
-      errors.fatherMotherName = 'This field is required';
-    }
-
-    // Spouse name is optional
-
-    if (state.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email)) {
-      errors.email = 'Enter a valid email';
-    }
-
-    if (!state.dob) {
-      errors.dob = 'Date of birth is required';
-    }
-
-    if (!state.currentAddress?.trim()) {
-      errors.currentAddress = 'Address is required';
-    }
-
-    if (!/^\d{6}$/.test(state.currentPincode)) {
-      errors.currentPincode = 'Enter a valid 6-digit pincode';
-    }
-
-    if (!selectedGender) {
-      errors.gender = 'Please select gender';
-    }
-
-    // PROFESSIONAL DETAILS
-    if (!state.occupation?.label) {
-      errors.occupation = 'Occupation is required';
-    }
-
-    if (!state.incomeSource?.label) {
-      errors.incomeSource = 'Income source is required';
-    }
-
-    if (!state.monthlyIncome || isNaN(state.monthlyIncome)) {
-      errors.monthlyIncome = 'Enter a valid monthly income';
-    }
-
-    // BANK DETAILS
-    if (!state.bankName?.label) {
-      errors.bankName = 'Bank name is required';
-    }
-
-    if (!state.accountNumber || state.accountNumber.length < 6) {
-      errors.accountNumber = 'Enter a valid account number';
-    }
-
-    if (
-      state.currentEMI &&
-      (isNaN(state.currentEMI) || Number(state.currentEMI) < 0)
-    ) {
-      errors.currentEMI = 'Enter a valid EMI amount';
-    }
-
-    if (
-      !state.maxEMIAfford ||
-      isNaN(state.maxEMIAfford) ||
-      Number(state.maxEMIAfford) <= 0
-    ) {
-      errors.maxEMIAfford = 'Enter max EMI you can afford';
-    }
-
-    if (
-      !state.monthlyBankBalance ||
-      isNaN(state.monthlyBankBalance) ||
-      Number(state.monthlyBankBalance) <= 0
-    ) {
-      errors.monthlyBankBalance = 'Enter valid bank balance';
-    }
-
-    return errors;
+  const setFieldEditing = (field, value) => {
+    setEditingStates(prev => ({...prev, [field]: value}));
   };
 
-  const handleNext = () => {
-    const validationErrors = validateFields();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    // No errors, continue
-    onNextPress();
+  const getDisplayValue = (isEditing, value) => {
+    return isEditing ? value + '' : formatIndianCurrency(value, false, true);
   };
 
   return (
     <SafeAreaWrapper>
-      <Header
-        title="Customer Details"
-        subtitle="GJ 01 JR 0945"
-        rightLabel="#ABC123213"
-        showRightContent
-        onBackPress={() => goBack()}
-      />
+      <Header {...headerProp} />
       <KeyboardAwareScrollView
         enableOnAndroid
         extraScrollHeight={100} // adjust if needed
@@ -202,21 +116,35 @@ const Customer_Personal_Details_Component = ({
           <ImageUploadButton
             label={'Applicant Photo'}
             btnLabel={'Click to Upload Photo'}
+            image={state.applicantPhoto}
+            handleImagePick={() => handleFilePicker?.('applicantPhoto')}
+            {...(restInputProps?.applicantPhoto || {})}
           />
           <Spacing size="md" />
           <ImageUploadButton
             label={'Pan Card'}
             btnLabel={'Click to Upload PAN Card Photo'}
+            image={state.pancardPhoto}
+            handleImagePick={() => handleFilePicker?.('pancardPhoto')}
+            {...(restInputProps?.pancardPhoto || {})}
           />
           <Spacing size="md" />
           <Input
             placeholder=""
             isLeftIconVisible
             leftIconName={images.idCard}
-            onChangeText={onChangePanCardNumber}
+            onChangeText={value => {
+              const sanitizedText = value
+                .replace(/[^a-zA-Z0-9]/g, '')
+                .toUpperCase();
+              onChangePanCardNumber?.(sanitizedText);
+            }}
             value={state.panCardNumber}
             returnKeyType="next"
-            ref={refs.panCard}
+            ref={refs?.panCardNumber}
+            onSubmitEditing={() => focusNext('aadharNumber')}
+            onFocus={() => scrollToInput('aadharNumber')}
+            {...(restInputProps?.panCardNumber || {})}
           />
           <Spacing size="md" />
           <Text type={'label'}>Aadhar Card</Text>
@@ -224,31 +152,43 @@ const Customer_Personal_Details_Component = ({
             <ImageUploadButton
               btnLabel={'Click to Upload Front Side Photo'}
               wrapperStyle={styles.halfWidth}
+              image={state.aadharFrontPhoto}
+              handleImagePick={() => handleFilePicker?.('aadharFrontPhoto')}
+              {...(restInputProps?.aadharFrontPhoto || {})}
             />
             <ImageUploadButton
               btnLabel={'Click to Upload Back Side Photo'}
               wrapperStyle={styles.halfWidth}
+              image={state.aadharBackphoto}
+              handleImagePick={() => handleFilePicker?.('aadharBackphoto')}
+              {...(restInputProps?.aadharBackphoto || {})}
             />
           </View>
           <Spacing size="md" />
           <Input
-            ref={refs.aadhar}
+            ref={refs?.aadharNumber}
             placeholder="8752 7580 9001"
             isLeftIconVisible
             leftIconName={images.idCard}
             rightLabel="VERIFY"
             rightLabelColor={theme.colors.primary}
             rightLabelPress={() => Alert.alert('test')}
-            onChangeText={onChangeAadharNumber}
+            onChangeText={value => {
+              const sanitizedText = value.replace(/[^0-9]/g, '');
+              onChangeAadharNumber?.(sanitizedText);
+            }}
             value={state.aadharNumber}
-            returnKeyType="next"
-            isError={!!errors.aadharNumber}
             showStatus
-            statusMsg={errors.aadharNumber}
+            keyboardType="number-pad"
+            maxLength={12}
+            returnKeyType="next"
+            onSubmitEditing={() => focusNext('applicantName')}
+            onFocus={() => scrollToInput('applicantName')}
+            {...(restInputProps?.aadharNumber || {})}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.applicant}
+            ref={refs?.applicantName}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.user}
@@ -256,11 +196,13 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeApplicantName}
             value={state.applicantName}
             returnKeyType="next"
-            onSubmitEditing={() => focusNext('mobile')}
+            onSubmitEditing={() => focusNext('mobileNumber')}
+            onFocus={() => scrollToInput('mobileNumber')}
+            {...(restInputProps?.applicantName || {})}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.mobile}
+            ref={refs?.mobileNumber}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.callOutline}
@@ -269,30 +211,35 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangemobileNumber}
             value={state.mobileNumber}
             returnKeyType="next"
-            onSubmitEditing={() => focusNext('fatherMother')}
+            maxLength={10}
+            onSubmitEditing={() => focusNext('fatherName')}
+            onFocus={() => scrollToInput('fatherName')}
+            {...(restInputProps?.mobileNumber || {})}
           />
           <Spacing size="md" />
           <RadioGroupRow
             label={'Gender'}
-            options={genderOptions}
+            options={genderTypes}
             selectedValue={selectedGender}
             onChange={onSelectedGender}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.fatherMother}
+            ref={refs?.fatherName}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.user}
             label="Father/Mother Name"
             onChangeText={onChangeFatherMotherName}
-            value={state.fatherMotherName}
+            value={state.fatherName}
             returnKeyType="next"
-            onSubmitEditing={() => focusNext('spouse')}
+            onSubmitEditing={() => focusNext('spouseName')}
+            onFocus={() => scrollToInput('spouseName')}
+            {...(restInputProps?.fatherName || {})}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.spouse}
+            ref={refs?.spouseName}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.user}
@@ -301,10 +248,12 @@ const Customer_Personal_Details_Component = ({
             value={state.spouseName}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('email')}
+            onFocus={() => scrollToInput('email')}
+            {...(restInputProps?.spouseName || {})}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.email}
+            ref={refs?.email}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.email}
@@ -314,6 +263,8 @@ const Customer_Personal_Details_Component = ({
             value={state.email}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('address')}
+            onFocus={() => scrollToInput('address')}
+            {...(restInputProps?.email || {})}
           />
           <Spacing size="md" />
           <Input
@@ -326,66 +277,87 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
-            ref={refs.address}
+            ref={refs?.address}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.locationPin}
             label="Current Address"
             onChangeText={onChangeCurrentAddress}
-            value={state.currentAddress}
+            value={state.address}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('pincode')}
+            onFocus={() => scrollToInput('pincode')}
+            {...(restInputProps?.address || {})}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.pincode}
+            ref={refs?.pincode}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.locationPin}
             label="Current Pincode"
             rightLabel={state.currentState}
             onChangeText={onChangeCurrentPincode}
-            value={state.currentPincode}
+            value={state.pincode}
             returnKeyType="next"
+            maxLength={6}
+            keyboardType="number-pad"
             onSubmitEditing={() => focusNext('monthlyIncome')}
+            onFocus={() => scrollToInput('monthlyIncome')}
+            {...(restInputProps?.pincode || {})}
           />
         </GroupWrapper>
         {/* Professional Details */}
         <Spacing size="lg" />
         <GroupWrapper title={'Professional Details'}>
           <Input
+            ref={refs?.occupation}
             placeholder="Select Occupation"
             isLeftIconVisible
             leftIconName={images.businessSuitcase}
-            value={state.occupation?.label}
+            value={occupation}
             isAsDropdown
             isRightIconVisible
             label="Occupation"
             onPress={() => setIsOccupationModalVisible(true)}
+            {...(restInputProps?.occupation || {})}
           />
           <Spacing size="md" />
           <Input
-            placeholder="Select Income Source"
+            ref={refs?.incomeSource}
             isLeftIconVisible
             leftIconName={images.businessSuitcase}
-            value={state.incomeSource?.label}
             isAsDropdown
+            placeholder={'Select Income Source'}
             isRightIconVisible
             label="Income Source"
             onPress={() => setShowIncomeSourceModal(true)}
+            {...(restInputProps?.incomeSource || {})}
           />
           <Spacing size="md" />
           <Input
-            ref={refs.monthlyIncome}
+            ref={refs?.monthlyIncome}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.icRupee}
-            value={state.monthlyIncome}
+            value={getDisplayValue(
+              editingStates.monthlyIncome,
+              state.monthlyIncome,
+            )}
             label="Monthly Income"
-            onChangeText={onChangeMonthlyIncome}
+            onChangeText={value => {
+              const sanitizedText = sanitizeAmount(value);
+              onChangeMonthlyIncome?.(sanitizedText);
+            }}
             keyboardType="decimal-pad"
             returnKeyType="next"
             onSubmitEditing={() => focusNext('accountNumber')}
+            onFocus={() => {
+              scrollToInput('monthlyIncome');
+              setFieldEditing('monthlyIncome', true);
+            }}
+            onBlur={() => setFieldEditing('monthlyIncome', false)}
+            {...(restInputProps?.monthlyIncome || {})}
           />
         </GroupWrapper>
         {/* Bank Details */}
@@ -403,7 +375,7 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
-            ref={refs.accountNumber}
+            ref={refs?.accountNumber}
             placeholder=""
             isLeftIconVisible
             leftIconName={images.bank}
@@ -411,75 +383,110 @@ const Customer_Personal_Details_Component = ({
             keyboardType="numeric"
             returnKeyType="next"
             value={state.accountNumber}
-            onSubmitEditing={() => focusNext('currentEMI')}
-            onChangeText={onChangeAccountNumber}
+            onChangeText={value => {
+              const sanitizedText = value.replace(/[^0-9]/g, '');
+              onChangeAccountNumber?.(sanitizedText);
+            }}
+            onSubmitEditing={() => focusNext('currentEmi')}
+            onFocus={() => scrollToInput('currentEmi')}
+            {...(restInputProps?.accountNumber || {})}
           />
           <Spacing size="md" />
           <RadioGroupRow
             label={'Current Loan?'}
-            options={currentLoanOptions}
-            selectedValue={state.selectedLoanOption}
+            options={currentLoanTypes}
+            selectedValue={state.currentLoan}
             onChange={onSelectedLoanOption}
           />
           <Spacing size="md" />
           <View style={styles.rowSpaceBetween}>
-            <View style={styles.halfWidth}>
+            {state.currentLoan && (
+              <View style={styles.halfWidth}>
+                <Input
+                  ref={refs?.currentEmi}
+                  placeholder=""
+                  isLeftIconVisible
+                  leftIconName={images.icRupee}
+                  label="Current EMI"
+                  keyboardType="decimal-pad"
+                  returnKeyType="next"
+                  onChangeText={onChangeCurrentEMI}
+                  value={getDisplayValue(
+                    editingStates.currentEmi,
+                    state.currentEmi,
+                  )}
+                  onSubmitEditing={() => focusNext('maxEmiAfford')}
+                  onFocus={() => {
+                    scrollToInput('currentEmi');
+                    setFieldEditing('currentEmi', true);
+                  }}
+                  onBlur={() => setFieldEditing('currentEmi', false)}
+                  {...(restInputProps?.currentEmi || {})}
+                />
+              </View>
+            )}
+            <View
+              style={state.currentLoan ? styles.halfWidth : styles.fullWidth}>
               <Input
-                ref={refs.currentEMI}
-                placeholder=""
-                isLeftIconVisible
-                leftIconName={images.icRupee}
-                label="Current EMI"
-                keyboardType="decimal-pad"
-                value={state.currentEMI}
-                returnKeyType="next"
-                onSubmitEditing={() => focusNext('maxEMIAfford')}
-                onChangeText={onChangeCurrentEMI}
-              />
-            </View>
-            <View style={styles.halfWidth}>
-              <Input
-                ref={refs.maxEMIAfford}
+                ref={refs?.maxEmiAfford}
                 placeholder=""
                 isLeftIconVisible
                 leftIconName={images.icRupee}
                 label="Max EMI Afford"
                 keyboardType="decimal-pad"
-                value={state.maxEMIAfford}
+                value={getDisplayValue(
+                  editingStates.maxEmiAfford,
+                  state.maxEmiAfford,
+                )}
                 returnKeyType="next"
-                onSubmitEditing={() => focusNext('monthlyBankBalance')}
                 onChangeText={onChangeMaxEMIAfford}
+                onSubmitEditing={() => focusNext('avgMonthlyBankBalance')}
+                onFocus={() => {
+                  scrollToInput('maxEmiAfford');
+                  setFieldEditing('maxEmiAfford', true);
+                }}
+                onBlur={() => setFieldEditing('maxEmiAfford', false)}
+                {...(restInputProps?.maxEmiAfford || {})}
               />
             </View>
           </View>
           <Spacing size="md" />
           <Input
             placeholder=""
-            ref={refs.monthlyBankBalance}
+            ref={refs?.avgMonthlyBankBalance}
             isLeftIconVisible
             leftIconName={images.icRupee}
             label="Average Monthly Bank Balance"
             keyboardType="decimal-pad"
-            value={state.monthlyBankBalance}
+            value={getDisplayValue(
+              editingStates.avgMonthlyBankBalance,
+              state.avgMonthlyBankBalance,
+            )}
             returnKeyType="done"
-            onSubmitEditing={onNextPress}
             onChangeText={onChangeMonthlyBankBalance}
-            isError
+            onSubmitEditing={onNextPress}
+            onFocus={() => {
+              scrollToInput('avgMonthlyBankBalance');
+              setFieldEditing('avgMonthlyBankBalance', true);
+            }}
+            onBlur={() => setFieldEditing('avgMonthlyBankBalance', false)}
+            {...(restInputProps?.avgMonthlyBankBalance || {})}
           />
         </GroupWrapper>
         <FormFooterButtons
-          primaryButtonLabel={strings.btnSaveDraft}
-          secondaryButtonLabel={strings.next}
-          onPressPrimaryButton={saveAsDraftPress}
-          onPressSecondaryButton={onNextPress}
+          primaryButtonLabel={strings.next}
+          // secondaryButtonLabel={strings.next}
+          onPressPrimaryButton={onNextPress}
+          // onPressSecondaryButton={onNextPress}
+          hideSecondaryButton
         />
         <Spacing size={'xl'} />
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={isOccupationModalVisible}
-        data={state.occupationOptions}
-        selectedItem={state.occupation?.label}
-        onSelect={(item, index) => onSelectedOccupation(item, index)}
+        data={occupationOptions}
+        selectedItem={occupation}
+        onSelect={(item, index) => onSelectedOccupation?.(item)}
         onClose={() => setIsOccupationModalVisible(false)}
         title="Select Occupation Type"
       />
@@ -487,8 +494,8 @@ const Customer_Personal_Details_Component = ({
       <DropdownModal
         visible={showIncomeSourceModal}
         data={state.incomeSourceOptions}
-        selectedItem={state.incomeSource?.label}
-        onSelect={(item, index) => onSelectIncomeSourceOption(item, index)}
+        selectedItem={state.incomeSource}
+        onSelect={(item, index) => onSelectIncomeSourceOption?.(item)}
         onClose={() => setShowIncomeSourceModal(false)}
         title="Select Income Source Type"
       />
@@ -501,6 +508,10 @@ const Customer_Personal_Details_Component = ({
         onClose={() => setShowBankOptionModal(false)}
         title="Select Bank Type"
       />
+
+      <FilePickerModal {...filePickerProps} autoCloseOnSelect={false} />
+
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };
@@ -522,6 +533,9 @@ const styles = StyleSheet.create({
   },
   halfWidth: {
     width: '47%',
+  },
+  fullWidth: {
+    width: '100%',
   },
 });
 

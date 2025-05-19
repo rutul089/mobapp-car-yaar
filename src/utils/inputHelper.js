@@ -15,6 +15,7 @@ export const validateField = (key, value) => {
   const pincodeRegex = /^[0-9]{6}$/;
   const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
   const accountNumberRegex = /^[0-9]{9,18}$/;
+  const aadharRegex = /^[2-9]{1}[0-9]{11}$/;
 
   const trimmedValue = typeof value === 'string' ? value.trim() : '';
 
@@ -34,6 +35,7 @@ export const validateField = (key, value) => {
       return trimmedValue === ''
         ? 'Please select a valid vehicle condition.'
         : '';
+
     case 'customerType':
       return trimmedValue === ''
         ? 'Please select a valid individual type.'
@@ -59,6 +61,85 @@ export const validateField = (key, value) => {
         : !mobileNumberRegex.test(trimmedValue)
         ? 'Mobile number must be a 10-digit number'
         : '';
+
+    case 'panCardNumber':
+      return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(trimmedValue)
+        ? ''
+        : 'Please enter a valid PAN card number.';
+
+    case 'aadharNumber':
+      return trimmedValue === ''
+        ? 'Please enter a mobile number'
+        : !aadharRegex.test(trimmedValue)
+        ? 'Please enter a valid 12-digit Aadhaar number.'
+        : '';
+
+    case 'applicantName':
+      return trimmedValue === ''
+        ? 'Please enter applicant name'
+        : !nameRegex.test(trimmedValue)
+        ? 'Applicant name should only contain alphabets and spaces'
+        : '';
+
+    case 'email':
+      return trimmedValue === ''
+        ? 'Please enter your email address'
+        : !emailRegex.test(trimmedValue)
+        ? 'Please enter a valid email address'
+        : '';
+
+    case 'fatherName':
+      return trimmedValue === ''
+        ? 'Please enter Father/mother name'
+        : !nameRegex.test(trimmedValue)
+        ? 'Father/mother name should only contain alphabets and spaces'
+        : '';
+
+    case 'spouseName':
+      return trimmedValue === ''
+        ? 'Please enter Spouse name'
+        : !nameRegex.test(trimmedValue)
+        ? 'Spouse name should only contain alphabets and spaces'
+        : '';
+
+    case 'address':
+      return trimmedValue === '' ? 'Please enter address.' : '';
+
+    case 'pincode':
+      return trimmedValue === ''
+        ? 'Please enter a PIN code'
+        : !pincodeRegex.test(trimmedValue)
+        ? 'PIN code must be a 6-digit number'
+        : '';
+
+    case 'occupation':
+    case 'incomeSource':
+      return trimmedValue === '' ? 'Please select valid option.' : '';
+
+    case 'accountNumber':
+      return trimmedValue === ''
+        ? 'Please enter an account number'
+        : !accountNumberRegex.test(trimmedValue)
+        ? 'Account number must be between 9 to 18 digits'
+        : '';
+
+    case 'currentEmi':
+    case 'maxEmiAfford':
+    case 'avgMonthlyBankBalance':
+    case 'monthlyIncome':
+      return trimmedValue === ''
+        ? 'Please enter a valid amount.'
+        : !/^\d+(\.\d{1,2})?$/.test(trimmedValue)
+        ? 'Amount must be a valid number, optionally with up to 2 decimal places, and not starting with a decimal point.'
+        : parseFloat(trimmedValue) <= 0
+        ? 'Amount must be greater than 0'
+        : '';
+
+    case 'applicantPhoto':
+    case 'pancardPhoto':
+    case 'aadharFrontPhoto':
+    case 'aadharBackphoto':
+      return trimmedValue === '' ? 'Please upload required image' : '';
 
     default:
       return '';
@@ -91,3 +172,85 @@ export const handleFieldChange = (component, key, value) => {
     };
   });
 };
+
+/**
+ * Sanitizes and normalizes an amount string:
+ * - Removes non-numeric characters except one decimal
+ * - Removes leading zeros
+ * - Converts valid numbers like "012" -> "12", "12.0" -> "12", "12.50" -> "12.5"
+ * - Keeps "12." while typing
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+export const sanitizeAmount = value => {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  // Remove invalid characters (keep digits and .)
+  let cleaned = value.replace(/[^0-9.]/g, '');
+
+  // Allow only one decimal point
+  const parts = cleaned.split('.');
+  if (parts.length > 2) {
+    cleaned = parts[0] + '.' + parts.slice(1).join('');
+  }
+
+  // Prevent decimal at the start (e.g., ".5" => "0.5")
+  if (cleaned.startsWith('.')) {
+    cleaned = '0' + cleaned;
+  }
+
+  // Remove leading zeros (but keep "0." intact)
+  if (/^0[0-9]+/.test(cleaned)) {
+    cleaned = cleaned.replace(/^0+/, '');
+  }
+
+  // If number ends with '.', keep it as-is (user is still typing)
+  if (cleaned.endsWith('.')) {
+    return cleaned;
+  }
+
+  // If number has decimals like "12.0", convert to number and back
+  const num = parseFloat(cleaned);
+  if (!isNaN(num)) {
+    return cleaned.includes('.') ? cleaned : String(num); // preserve decimal input like "12.01"
+  }
+
+  return '';
+};
+
+// /**
+//  * Sanitizes and normalizes amount input:
+//  * - Allows digits and a single decimal point
+//  * - Removes leading zeros unless it's "0" or "0.xxx"
+//  * - Preserves trailing decimal (e.g. "12." or "12.0")
+//  *
+//  * @param {string} value
+//  * @returns {string}
+//  */
+// export const sanitizeAmount = value => {
+//   if (typeof value !== 'string') {
+//     return '';
+//   }
+
+//   // Remove invalid characters (keep digits and .)
+//   let cleaned = value.replace(/[^0-9.]/g, '');
+
+//   // Allow only one decimal point
+//   const parts = cleaned.split('.');
+//   if (parts.length > 2) {
+//     cleaned = parts[0] + '.' + parts.slice(1).join('');
+//   }
+
+//   // Remove leading zeros unless "0" or "0.xxx"
+//   cleaned = cleaned.replace(/^0+(?!\.)/, '');
+
+//   // Prevent input starting with a decimal (e.g., ".5" => "0.5")
+//   if (cleaned.startsWith('.')) {
+//     cleaned = '0' + cleaned;
+//   }
+
+//   return cleaned;
+// };

@@ -12,17 +12,13 @@ import {
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import Customer_Detail_Component from './Customer_Detail_Component';
-import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {
-  formatMobileNumber,
-  getErrorMessage,
-  showToast,
-} from '../../utils/helper';
 import {
   createCustomerBasicDetailThunk,
   verifyCustomerOtpThunk,
 } from '../../redux/actions';
+import {getErrorMessage, showToast} from '../../utils/helper';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import Customer_Detail_Component from './Customer_Detail_Component';
 
 class CustomerDetailView extends Component {
   constructor(props) {
@@ -217,7 +213,7 @@ class CustomerDetailView extends Component {
       response => {
         if (response?.success) {
           this.onCloseVerifyOTP();
-          navigate(ScreenNames.CustomerPersonalDetails, {params});
+          navigate(ScreenNames.CustomerPersonalDetails, params);
         }
         console.log('response', params);
       },
