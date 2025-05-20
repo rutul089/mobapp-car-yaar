@@ -142,17 +142,27 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
  * @param {string} baseUrl - Base URL to prepend to image file names.
  * @returns {Object} formatted - Object with formatted document image info.
  */
+
 export const formatDocumentImages = (response = {}, baseUrl = '') => {
   const formatted = {};
+
+  // Map the otherDocuments type to a real image key
+  const otherDocumentTypeMap = {
+    APPLICATION_FORM: 'applicationFormImage',
+    PASSPORT_SIZE_PHOTO: 'passportImage',
+    CO_APPLICANT_DOCUMENTS: 'coapplicantImage',
+  };
+
+  // First format all static image keys
   Object.values(documentImageType).forEach(key => {
-    const imageName = response[key];
-    if (
-      Object.prototype.hasOwnProperty.call(response, key) &&
-      imageName !== null
-    ) {
+    // imageKeys.forEach(key => {
+    const value = response[key];
+    if (value !== null && value !== undefined) {
+      const imageUrl =
+        typeof value === 'object' && value.url ? value.url : value;
       formatted[key] = {
-        uri: imageName ? `${baseUrl}${imageName}` : null,
-        uploadedUrl: imageName ? `${baseUrl}${imageName}` : null,
+        uri: `${baseUrl}${imageUrl}`,
+        uploadedUrl: `${baseUrl}${imageUrl}`,
         isLocal: false,
         type: null,
         fileSize: null,
@@ -160,5 +170,63 @@ export const formatDocumentImages = (response = {}, baseUrl = '') => {
     }
   });
 
+  // Handle one of the conditional keys based on otherDocuments
+  const otherDocKey = otherDocumentTypeMap[response.otherDocuments];
+  if (
+    otherDocKey &&
+    response[otherDocKey] !== null &&
+    response[otherDocKey] !== undefined
+  ) {
+    const value = response[otherDocKey];
+    const imageUrl = typeof value === 'object' && value.url ? value.url : value;
+    formatted[otherDocKey] = {
+      uri: `${baseUrl}${imageUrl}`,
+      uploadedUrl: `${baseUrl}${imageUrl}`,
+      isLocal: false,
+      type: null,
+      fileSize: null,
+    };
+  }
+
+  delete formatted.otherDocuments;
+
   return formatted;
+};
+
+/**
+ * Convert formatted images to minimal response payload for submission.
+ * @param {Object} formattedImages - The object with formatted image data.
+ * @param {String} customerId - The customer's ID.
+ * @returns {Object} - The payload to send to backend.
+ */
+export const generateImageUploadPayload = (formattedImages, customerId) => {
+  const payload = {
+    customerId,
+  };
+
+  Object.values(documentImageType).forEach(key => {
+    // staticKeys.forEach(key => {
+    if (formattedImages[key]?.uploadedUrl) {
+      payload[key] = formattedImages[key].uploadedUrl;
+    }
+  });
+
+  // Identify otherDocument type and image key
+  const otherDocumentKeys = {
+    applicationFormImage: 'APPLICATION_FORM',
+    passportImage: 'PASSPORT_SIZE_PHOTO',
+    coapplicantImage: 'CO_APPLICANT_DOCUMENTS',
+  };
+
+  // for (const [key, type] of Object.entries(otherDocumentKeys)) {
+  //   if (formattedImages[key]?.uploadedUrl) {
+  //     payload.otherDocuments = {
+  //       url: formattedImages[key].uploadedUrl,
+  //       type,
+  //     };
+  //     break; // Only one type allowed
+  //   }
+  // }
+
+  return payload;
 };

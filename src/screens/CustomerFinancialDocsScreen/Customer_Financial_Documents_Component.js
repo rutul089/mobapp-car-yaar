@@ -23,6 +23,8 @@ const Customer_Financial_Docs_Component = ({
   loading,
   financeDocuments,
 }) => {
+  console.log('financeDocuments', JSON.stringify(financeDocuments));
+
   const renderDocumentGroup = (title, documents) => (
     <View key={title}>
       <Text>{title}</Text>
@@ -37,8 +39,8 @@ const Customer_Financial_Docs_Component = ({
                 image={fileUri}
                 onDeletePress={doc.onDeletePress}
                 viewImage={doc.viewImage}
-                // btnLabel={'Click to Upload\nImage or PDF'}
-                // uploadMedia={doc.uploadMedia}
+                btnLabel={'Click to Upload\nImage or PDF'}
+                uploadMedia={doc.uploadMedia}
                 fileType={fileType}
                 isView
                 isDocument={fileType !== 'image'}
@@ -53,7 +55,13 @@ const Customer_Financial_Docs_Component = ({
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header title="Financial Details" onBackPress={() => goBack()} />
       <ScrollView contentContainerStyle={styles.wrapper}>
-        {renderDocumentGroup('Documents', financeDocuments)}
+        {/* {renderDocumentGroup('Documents', financeDocuments)} */}
+        <DocumentGroup
+          title={'Documents'}
+          documents={financeDocuments}
+          isDocument={true}
+          isView
+        />
 
         <Spacing size="smd" />
         <DetailInfoCard

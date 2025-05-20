@@ -141,12 +141,6 @@ class CustomersScreen extends Component {
   };
 
   onAddButtonPress = () => {
-    // navigate(ScreenNames.CustomerPersonalDetails, {
-    //   params: {
-    //     fromScreen: ScreenNames.Customer,
-    //     isOnboard: true,
-    //   },
-    // });
     navigate(ScreenNames.CustomerDetail, {
       params: {
         fromScreen: ScreenNames.Customer,

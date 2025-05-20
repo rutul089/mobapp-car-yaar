@@ -7,6 +7,7 @@ import {
   fetchCustomerFinanceDocuments,
   fetchCustomerMoreFinanceDetails,
   submitCustomerDetails,
+  uploadCustomerDocuments,
   verifyCustomerOtp,
 } from '../../services';
 import {getErrorMessage, showApiErrorToast} from '../../utils/helper';
@@ -178,7 +179,10 @@ export const createCustomerBasicDetailThunk =
       const response = await createCustomer(payload);
       dispatch({
         type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
-        payload: response?.data,
+        payload: {
+          data: response?.data,
+          customerId: response?.data?.id,
+        },
       });
       onSuccess?.(response);
     } catch (error) {
@@ -198,7 +202,10 @@ export const verifyCustomerOtpThunk =
       const response = await verifyCustomerOtp(payload);
       dispatch({
         type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
-        payload: response?.data,
+        payload: {
+          data: response?.data,
+          customerId: response?.data?.id,
+        },
       });
       onSuccess?.(response);
     } catch (error) {
@@ -218,7 +225,10 @@ export const submitCustomerDetailsThunk =
       const response = await submitCustomerDetails(payload);
       dispatch({
         type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
-        payload: response?.data,
+        payload: {
+          data: response?.data,
+          customerId: response?.data?.customerId,
+        },
       });
       onSuccess?.(response);
     } catch (error) {
@@ -229,6 +239,29 @@ export const submitCustomerDetailsThunk =
       onFailure?.(error);
       // console.log('error----<', JSON.stringify(error));
       // showApiErrorToast(error);
+    }
+  };
+
+export const uploadCustomerDocumentsThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
+    try {
+      const response = await uploadCustomerDocuments(payload);
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+        payload: {
+          data: response?.data,
+          customerId: response?.data?.customerId,
+        },
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      showApiErrorToast(error);
     }
   };
 

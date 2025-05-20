@@ -80,6 +80,8 @@ export const documentImageType = Object.freeze({
   SANCTION_LETTER: 'sanctionLetter',
   NOC: 'noc',
   FORM_34: 'form34',
+  PASSPORT_SIZE_PHOTO: 'passportImage',
+  CO_APPLICANT_DOCUMENTS: 'coapplicantImage',
 });
 
 export const documentImageLabelMap = {
@@ -98,6 +100,8 @@ export const documentImageLabelMap = {
   [documentImageType.PERMANENT_ADDRESS]: 'Permanent Address',
   [documentImageType.SANCTION_LETTER]: 'Sanction Letter',
   [documentImageType.SOA]: 'SOA',
+  [documentImageType.PASSPORT_SIZE_PHOTO]: 'Passport Image',
+  [documentImageType.CO_APPLICANT_DOCUMENTS]: 'Co-applicant Image',
 };
 
 export const documentImageTypes = Object.values(documentImageType).map(v => [

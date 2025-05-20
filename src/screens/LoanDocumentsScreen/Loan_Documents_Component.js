@@ -1,81 +1,54 @@
-/* eslint-disable react-native/no-inline-styles */
-
 import {
-  FormFooterButtons,
+  Button,
   Header,
   SafeAreaWrapper,
   Spacing,
-  Text,
-  VehicleImageCard,
   theme,
+  FilePickerModal,
+  Loader,
 } from '@caryaar/components';
-import {FlatList} from 'react-native';
+import {ScrollView} from 'react-native';
 
 import strings from '../../locales/strings';
 
-import {goBack} from '../../navigation/NavigationUtils';
+import {DocumentGroup} from '../../components';
 import {styles} from '../../styles/Vehicle.Image.style';
 
 const Loan_Documents_Component = ({
   params,
-  imageSlots,
-  onDeletePress,
-  onImagePress,
   onNextPress,
-  saveAsDraftPress,
-  onBackPress,
+  headerProp,
+  documentList,
+  otherDocuments,
+  fileModalProps,
+  isOnboard,
+  loading,
 }) => {
-  const renderImageItem = ({item}) => {
-    return (
-      <>
-        <VehicleImageCard
-          label={item?.label}
-          image={item?.image}
-          onDeletePress={() => onDeletePress && onDeletePress(item)}
-          viewImage={() => onImagePress && onImagePress(item)}
-          btnLabel={'Click to Upload\nImage or PDF'}
-          cardWrapper={{width: '47%', flex: 0}}
-        />
-      </>
-    );
-  };
-
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header
-        title="Loan Documents"
-        subtitle="GJ 01 JR 0945"
-        rightLabel="#2ABC123"
-        showRightContent={true}
-        onBackPress={() => goBack()}
-      />
-      <FlatList
-        data={imageSlots}
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: theme.colors.background,
-          padding: theme.sizes.padding,
-        }}
-        bounces={false}
-        renderItem={renderImageItem}
-        keyExtractor={item => item.key}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        ListHeaderComponent={
-          <>
-            <Text>{'Documents'}</Text>
-            <Spacing size="smd" />
-          </>
-        }
-        ListFooterComponent={
-          <FormFooterButtons
-            primaryButtonLabel={strings.btnSaveDraft}
-            secondaryButtonLabel={strings.next}
-            onPressPrimaryButton={saveAsDraftPress}
-            onPressSecondaryButton={onNextPress}
-          />
-        }
-      />
+      <Header {...headerProp} />
+      <ScrollView contentContainerStyle={styles.wrapper}>
+        <DocumentGroup
+          title={'Documents'}
+          documents={documentList}
+          isDocument={true}
+        />
+        <DocumentGroup
+          title={'Other Documents'}
+          documents={otherDocuments}
+          isDocument={true}
+        />
+        <Button
+          variant="link"
+          onPress={onNextPress}
+          label={isOnboard ? 'Save' : strings.next}
+        />
+        <Spacing size="md" />
+      </ScrollView>
+
+      <FilePickerModal {...fileModalProps} />
+
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

@@ -393,6 +393,26 @@ export const uploadFinanceDocuments = async documentsData => {
 };
 
 /**
+ * Upload customer documents.
+ *
+ * @param {Object} documentsData - The customer documents to update.
+ * @returns {Promise<Object>} The response data from the API.
+ * @throws Will throw an error if the API call fails.
+ */
+export const uploadCustomerDocuments = async documentsData => {
+  try {
+    const response = await axiosInstance.post(
+      '/customers/customerDocuments',
+      documentsData,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating customer documents:', error);
+    throw error;
+  }
+};
+
+/**
  * Updates customer details.
  *
  * @param {Object} detailsData - The customer details to update.

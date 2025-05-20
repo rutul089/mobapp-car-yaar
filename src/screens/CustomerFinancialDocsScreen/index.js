@@ -5,7 +5,11 @@ import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {fetchCustomerFinanceDocumentsThunk} from '../../redux/actions';
 import {formatDocumentImages} from '../../utils/documentUtils';
-import {formatDate, formatIndianCurrency} from '../../utils/helper';
+import {
+  formatDate,
+  formatIndianCurrency,
+  formatMonths,
+} from '../../utils/helper';
 import Customer_Financial_Docs_Component from './Customer_Financial_Documents_Component';
 import {get} from 'lodash';
 
@@ -13,7 +17,11 @@ class CustomerFinancialDocsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      documents: {},
+      documents: {
+        noc: {},
+        form34: {},
+        otherDocuments: {},
+      },
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -28,6 +36,7 @@ class CustomerFinancialDocsScreen extends Component {
       selectedCustomerId,
       {},
       response => {
+        console.log('response', JSON.stringify(response));
         if (response?.details) {
           this.setState({
             documents: formatDocumentImages(
@@ -78,7 +87,7 @@ class CustomerFinancialDocsScreen extends Component {
           },
           {
             label: 'Tenure',
-            value: this.safeGet(carFinance, 'tenure') + ' Months',
+            value: formatMonths(carFinance?.tenure, loading),
           },
           {
             label: 'Monthly EMI',

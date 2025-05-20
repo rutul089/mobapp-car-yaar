@@ -52,8 +52,8 @@ const customerReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        selectedCustomer: action.payload,
-        selectedCustomerId: action.payload?.id,
+        selectedCustomer: action.payload?.data,
+        selectedCustomerId: action.payload?.customerId,
       };
 
     case FETCH_CUSTOMERS.SUCCESS:

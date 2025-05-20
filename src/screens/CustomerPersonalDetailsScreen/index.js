@@ -163,6 +163,8 @@ class CustomerPersonalDetails extends Component {
   };
 
   onNextPress = () => {
+    const {route} = this.props;
+    let params = route.params;
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
@@ -173,7 +175,7 @@ class CustomerPersonalDetails extends Component {
     this.props.submitCustomerDetailsThunk(
       this.getPayload(),
       response => {
-        navigate(ScreenNames.LoanDocument);
+        navigate(ScreenNames.LoanDocument, params);
       },
       error => {
         showApiErrorToast(error);
@@ -403,6 +405,7 @@ class CustomerPersonalDetails extends Component {
           applicantName: {
             isError: errors?.applicantName,
             statusMsg: errors?.applicantName,
+            autoCapitalize: 'words',
           },
           mobileNumber: {
             isError: errors?.mobileNumber,
@@ -411,10 +414,12 @@ class CustomerPersonalDetails extends Component {
           fatherName: {
             isError: errors?.fatherName,
             statusMsg: errors?.fatherName,
+            autoCapitalize: 'words',
           },
           spouseName: {
             isError: errors?.spouseName,
             statusMsg: errors?.spouseName,
+            autoCapitalize: 'words',
           },
           email: {
             isError: errors?.email,

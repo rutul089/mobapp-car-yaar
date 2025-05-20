@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {documentImageLabelMap, documentImageTypes} from '../../constants/enums';
-import {navigate} from '../../navigation/NavigationUtils';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import {fetchCustomerDocumentsThunk} from '../../redux/actions';
 import {
   formatDocumentImages,
@@ -28,11 +28,13 @@ class CustomerDocumentsScreen extends Component {
         permanentAddressImage: {},
       },
       isLoadingDocument: false,
+      isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
 
   componentDidMount() {
+    // console.log('isOnboard', isOnboard);
     this.fetchCustomerDocuments();
   }
 
@@ -77,10 +79,7 @@ class CustomerDocumentsScreen extends Component {
         if (response.success && response?.data?.length > 0) {
           let data = response?.data?.[0];
           this.setState({
-            documents: formatDocumentImages(
-              data,
-              'https://your-image-server.com/images/',
-            ),
+            documents: formatDocumentImages(data, ''),
           });
         }
       },
@@ -89,6 +88,7 @@ class CustomerDocumentsScreen extends Component {
 
   render() {
     const {documents} = this.state;
+
     return (
       <Customer_Documents_Component
         customerDocuments={documentImageTypes
