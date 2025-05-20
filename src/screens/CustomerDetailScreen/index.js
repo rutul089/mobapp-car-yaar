@@ -215,7 +215,6 @@ class CustomerDetailView extends Component {
           this.onCloseVerifyOTP();
           navigate(ScreenNames.CustomerPersonalDetails, params);
         }
-        console.log('response', params);
       },
       error => {
         this.setState({

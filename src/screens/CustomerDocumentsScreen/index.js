@@ -34,7 +34,6 @@ class CustomerDocumentsScreen extends Component {
   }
 
   componentDidMount() {
-    // console.log('isOnboard', isOnboard);
     this.fetchCustomerDocuments();
   }
 
@@ -88,6 +87,16 @@ class CustomerDocumentsScreen extends Component {
 
   render() {
     const {documents} = this.state;
+    let documentList = [
+      'idProofImage',
+      'addressProofImage',
+      'permanentAddressImage',
+      'incomeProofImage',
+      'bankingProofImage',
+      'otherDocuments',
+      'businessProofImage',
+      'insuranceImage',
+    ];
 
     return (
       <Customer_Documents_Component

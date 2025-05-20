@@ -146,7 +146,6 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
 export const formatDocumentImages = (response = {}, baseUrl = '') => {
   const formatted = {};
 
-  // Map the otherDocuments type to a real image key
   const otherDocumentTypeMap = {
     APPLICATION_FORM: 'applicationFormImage',
     PASSPORT_SIZE_PHOTO: 'passportImage',
@@ -155,7 +154,6 @@ export const formatDocumentImages = (response = {}, baseUrl = '') => {
 
   // First format all static image keys
   Object.values(documentImageType).forEach(key => {
-    // imageKeys.forEach(key => {
     const value = response[key];
     if (value !== null && value !== undefined) {
       const imageUrl =
@@ -189,7 +187,6 @@ export const formatDocumentImages = (response = {}, baseUrl = '') => {
   }
 
   delete formatted.otherDocuments;
-
   return formatted;
 };
 
@@ -199,34 +196,82 @@ export const formatDocumentImages = (response = {}, baseUrl = '') => {
  * @param {String} customerId - The customer's ID.
  * @returns {Object} - The payload to send to backend.
  */
-export const generateImageUploadPayload = (formattedImages, customerId) => {
+export const generateImageUploadPayload = (
+  formattedImages,
+  customerId,
+  isEdit = false,
+) => {
   const payload = {
     customerId,
   };
 
-  Object.values(documentImageType).forEach(key => {
-    // staticKeys.forEach(key => {
-    if (formattedImages[key]?.uploadedUrl) {
-      payload[key] = formattedImages[key].uploadedUrl;
+  const imageKeys = [
+    documentImageType.ID_PROOF, // e.g. "idProofImage"
+    documentImageType.ADDRESS_PROOF,
+    documentImageType.PERMANENT_ADDRESS,
+    documentImageType.INCOME_PROOF,
+    documentImageType.BANKING_PROOF,
+    documentImageType.BUSINESS_PROOF,
+    documentImageType.INSURANCE,
+    // documentImageType.APPLICATION_FORM,
+    // documentImageType.PASSPORT_SIZE_PHOTO,
+    // documentImageType.CO_APPLICANT_DOCUMENTS,
+  ];
+
+  imageKeys.forEach(key => {
+    const uploadedUrl = formattedImages?.[key]?.uploadedUrl;
+    if (uploadedUrl) {
+      payload[key] = uploadedUrl;
+    } else if (isEdit) {
+      // Ensure missing keys are explicitly set to null in edit mode
+      payload[key] = null;
     }
   });
 
-  // Identify otherDocument type and image key
-  const otherDocumentKeys = {
-    applicationFormImage: 'APPLICATION_FORM',
-    passportImage: 'PASSPORT_SIZE_PHOTO',
-    coapplicantImage: 'CO_APPLICANT_DOCUMENTS',
-  };
-
-  // for (const [key, type] of Object.entries(otherDocumentKeys)) {
-  //   if (formattedImages[key]?.uploadedUrl) {
-  //     payload.otherDocuments = {
-  //       url: formattedImages[key].uploadedUrl,
-  //       type,
-  //     };
-  //     break; // Only one type allowed
-  //   }
-  // }
-
   return payload;
 };
+
+// export const generateImageUploadPayload = (formattedImages, customerId) => {
+//   const payload = {
+//     customerId,
+//   };
+
+//   let array = [
+//     documentImageType.ID_PROOF,
+//     documentImageType.ADDRESS_PROOF,
+//     documentImageType.PERMANENT_ADDRESS,
+//     documentImageType.INCOME_PROOF,
+//     documentImageType.BANKING_PROOF,
+//     documentImageType.BUSINESS_PROOF,
+//     documentImageType.INSURANCE,
+//     documentImageType.APPLICATION_FORM,
+//     documentImageType.PASSPORT_SIZE_PHOTO,
+//     documentImageType.CO_APPLICANT_DOCUMENTS,
+//   ];
+
+//   Object.values(documentImageType).forEach(key => {
+//     // staticKeys.forEach(key => {
+//     if (formattedImages[key]?.uploadedUrl) {
+//       payload[key] = formattedImages[key].uploadedUrl;
+//     }
+//   });
+
+//   // Identify otherDocument type and image key
+//   const otherDocumentKeys = {
+//     applicationFormImage: 'APPLICATION_FORM',
+//     passportImage: 'PASSPORT_SIZE_PHOTO',
+//     coapplicantImage: 'CO_APPLICANT_DOCUMENTS',
+//   };
+
+//   // for (const [key, type] of Object.entries(otherDocumentKeys)) {
+//   //   if (formattedImages[key]?.uploadedUrl) {
+//   //     payload.otherDocuments = {
+//   //       url: formattedImages[key].uploadedUrl,
+//   //       type,
+//   //     };
+//   //     break; // Only one type allowed
+//   //   }
+//   // }
+
+//   return payload;
+// };

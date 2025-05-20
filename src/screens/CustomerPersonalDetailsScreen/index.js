@@ -11,9 +11,12 @@ import {
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import {submitCustomerDetailsThunk} from '../../redux/actions';
+import {
+  submitCustomerDetailsThunk,
+  updateCustomerDetailsThunk,
+} from '../../redux/actions';
 import {handleFileSelection} from '../../utils/documentUtils';
-import {showApiErrorToast, showToast} from '../../utils/helper';
+import {formatDate, showApiErrorToast, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
 import ScreenNames from '../../constants/ScreenNames';
@@ -89,6 +92,7 @@ class CustomerPersonalDetails extends Component {
       isFormValid: false,
       showFilePicker: false,
       selectionType: '',
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
@@ -99,33 +103,37 @@ class CustomerPersonalDetails extends Component {
   }
 
   componentDidMount() {
-    const {isOnboard} = this.state;
-    // this.setState({
-    //   panCardNumber: 'ABCDE1234L',
-    //   aadharNumber: '223456789001',
-    //   applicantName: 'Jhon Doe',
-    //   mobileNumber: '8866089179',
-    //   gender: 'Male',
-    //   fatherName: 'Jhony Sharma',
-    //   spouseName: 'Jany Sharma',
-    //   email: 'rahull2.sharma@example.com',
-    //   dob: '1995-07-15T00:00:00.000Z',
-    //   address: '123, Green Street, Mumbai',
-    //   pincode: '400001',
-    //   monthlyIncome: '75000',
-    //   bankName: 'HDFC Bank',
-    //   accountNumber: '223456789019',
-    //   currentLoan: currentLoanOptions.YES,
-    //   currentEmi: '20000',
-    //   maxEmiAfford: '25000',
-    //   avgMonthlyBankBalance: '90000',
-    //   occupation: 'SELF_EMPLOYED',
-    //   incomeSource: 'Rental Income',
-    //   aadharBackphoto:
-    //     'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    //   aadharFrontPhoto:
-    //     'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-    // });
+    const {isEdit} = this.state;
+    const {selectedCustomer} = this.props;
+    let customerDetail = selectedCustomer?.details;
+    if (isEdit) {
+      this.setState({
+        panCardNumber: customerDetail?.panCardNumber,
+        aadharNumber: customerDetail?.aadharNumber,
+        applicantName: customerDetail?.applicantName,
+        mobileNumber: customerDetail?.mobileNumber,
+        gender: customerDetail?.gender,
+        fatherName: customerDetail?.fatherName,
+        spouseName: customerDetail?.spouseName,
+        email: customerDetail?.email,
+        dob: formatDate(customerDetail?.dob, 'DD/MM/YYYY'),
+        address: customerDetail?.address,
+        pincode: customerDetail?.pincode,
+        monthlyIncome: String(customerDetail?.monthlyIncome),
+        bankName: customerDetail?.bankName,
+        accountNumber: customerDetail?.accountNumber,
+        currentLoan: customerDetail?.currentLoan,
+        currentEmi: String(customerDetail?.currentEmi),
+        maxEmiAfford: String(customerDetail?.maxEmiAfford),
+        avgMonthlyBankBalance: String(customerDetail?.avgMonthlyBankBalance),
+        occupation: customerDetail?.occupation,
+        incomeSource: customerDetail?.incomeSource,
+        aadharBackphoto: customerDetail?.aadharBackphoto,
+        aadharFrontPhoto: customerDetail?.aadharFrontPhoto,
+        pancardPhoto: customerDetail?.pancardPhoto,
+        applicantPhoto: customerDetail?.applicantPhoto,
+      });
+    }
   }
 
   onSelectedGender = value => {
@@ -164,6 +172,7 @@ class CustomerPersonalDetails extends Component {
 
   onNextPress = () => {
     const {route} = this.props;
+    const {isEdit} = this.state;
     let params = route.params;
     const isFormValid = this.validateAllFields();
 
@@ -172,15 +181,16 @@ class CustomerPersonalDetails extends Component {
       return;
     }
 
-    this.props.submitCustomerDetailsThunk(
-      this.getPayload(),
-      response => {
-        navigate(ScreenNames.LoanDocument, params);
-      },
-      error => {
-        showApiErrorToast(error);
-      },
-    );
+    const payload = this.getPayload();
+    const onSuccess = () => navigate(ScreenNames.LoanDocument, params);
+    const onError = error => showApiErrorToast(error);
+
+    if (isEdit) {
+      delete payload.currentLoan;
+      this.props.updateCustomerDetailsThunk(payload, onSuccess, onError);
+    } else {
+      this.props.submitCustomerDetailsThunk(payload, onSuccess, onError);
+    }
   };
 
   getPayload = () => {
@@ -214,8 +224,6 @@ class CustomerPersonalDetails extends Component {
       avgMonthlyBankBalance: Number(state.avgMonthlyBankBalance),
       customerId: selectedCustomerId,
     };
-
-    console.log({payload});
 
     if (!state.currentLoan) {
       delete payload.currentEmi;
@@ -336,6 +344,7 @@ class CustomerPersonalDetails extends Component {
       occupation,
       aadharNumber,
       showFilePicker,
+      isEdit,
     } = this.state;
 
     const {loading} = this.props;
@@ -343,7 +352,7 @@ class CustomerPersonalDetails extends Component {
     return (
       <Customer_Personal_Details_Component
         headerProp={{
-          title: 'Add Customer Details',
+          title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
           subtitle: isOnboard ? '' : '',
           showRightContent: true,
           rightLabel: isOnboard ? '' : registrationNumber,
@@ -495,11 +504,15 @@ class CustomerPersonalDetails extends Component {
   }
 }
 
-const mapActionCreators = {submitCustomerDetailsThunk};
+const mapActionCreators = {
+  submitCustomerDetailsThunk,
+  updateCustomerDetailsThunk,
+};
 
 const mapStateToProps = ({customerData}) => ({
   loading: customerData.loading,
   selectedCustomerId: customerData?.selectedCustomerId,
+  selectedCustomer: customerData?.selectedCustomer,
 });
 
 export default connect(

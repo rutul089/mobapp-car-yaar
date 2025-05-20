@@ -370,7 +370,7 @@ const Customer_Personal_Details_Component = ({
             isAsDropdown
             isRightIconVisible
             label="Bank Name"
-            value={state.bankName?.label}
+            value={state.bankName}
             onPress={() => setShowBankOptionModal(true)}
           />
           <Spacing size="md" />

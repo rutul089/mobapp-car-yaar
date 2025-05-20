@@ -7,6 +7,8 @@ import {
   fetchCustomerFinanceDocuments,
   fetchCustomerMoreFinanceDetails,
   submitCustomerDetails,
+  updateCustomerDetails,
+  updateCustomerDocuments,
   uploadCustomerDocuments,
   verifyCustomerOtp,
 } from '../../services';
@@ -237,7 +239,6 @@ export const submitCustomerDetailsThunk =
         error: error?.message || 'Something went wrong',
       });
       onFailure?.(error);
-      // console.log('error----<', JSON.stringify(error));
       // showApiErrorToast(error);
     }
   };
@@ -261,7 +262,53 @@ export const uploadCustomerDocumentsThunk =
         error: error?.message || 'Something went wrong',
       });
       onFailure?.(error);
-      showApiErrorToast(error);
+      // showApiErrorToast(error);
+    }
+  };
+
+export const updateCustomerDetailsThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
+    try {
+      const response = await updateCustomerDetails(payload);
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+        payload: {
+          data: response?.data,
+          customerId: response?.data?.customerId,
+        },
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      // showApiErrorToast(error);
+    }
+  };
+
+export const updateCustomerDocumentsThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
+    try {
+      const response = await updateCustomerDocuments(payload);
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+        payload: {
+          data: response?.data,
+          customerId: response?.data?.customerId,
+        },
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_BASIC_DETAIL.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      // showApiErrorToast(error);
     }
   };
 

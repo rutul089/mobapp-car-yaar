@@ -52,7 +52,11 @@ const customerReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        selectedCustomer: action.payload?.data,
+        // selectedCustomer: {details: action.payload?.data},
+        selectedCustomer: {
+          ...state.selectedCustomer,
+          details: action.payload?.data,
+        },
         selectedCustomerId: action.payload?.customerId,
       };
 

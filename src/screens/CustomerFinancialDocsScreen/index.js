@@ -36,7 +36,6 @@ class CustomerFinancialDocsScreen extends Component {
       selectedCustomerId,
       {},
       response => {
-        console.log('response', JSON.stringify(response));
         if (response?.details) {
           this.setState({
             documents: formatDocumentImages(

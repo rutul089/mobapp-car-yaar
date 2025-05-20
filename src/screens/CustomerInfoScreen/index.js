@@ -43,7 +43,12 @@ class CustomerInfoScreen extends Component {
   };
 
   handleEditDetailPress = () => {
-    Alert.alert('handleEditDetailPress');
+    navigate(ScreenNames.CustomerPersonalDetails, {
+      params: {
+        fromScreen: ScreenNames.CustomerInfo,
+        isEdit: true,
+      },
+    });
   };
 
   viewIncomeProof = () => {
@@ -66,7 +71,9 @@ class CustomerInfoScreen extends Component {
     let applicantPhoto = this.safeGet(details, 'applicantPhoto');
 
     const isValidUri =
-      applicantPhoto?.startsWith('http') || applicantPhoto?.startsWith('https');
+      applicantPhoto?.startsWith('http') ||
+      applicantPhoto?.startsWith('https') ||
+      applicantPhoto?.startsWith('file://');
 
     const occupation = this.safeGet(details, 'occupation');
 

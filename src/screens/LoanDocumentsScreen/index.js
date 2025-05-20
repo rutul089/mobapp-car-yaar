@@ -13,13 +13,18 @@ import {
   navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
+  fetchCustomerDocumentsThunk,
+  updateCustomerDocumentsThunk,
+  uploadCustomerDocumentsThunk,
+} from '../../redux/actions';
+import {
+  formatDocumentImages,
   generateImageUploadPayload,
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
-import {showToast} from '../../utils/helper';
+import {showApiErrorToast, showToast} from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
-import {uploadCustomerDocumentsThunk} from '../../redux/actions';
 
 class LoanDocumentsScreen extends Component {
   constructor(props) {
@@ -31,29 +36,52 @@ class LoanDocumentsScreen extends Component {
       showFilePicker: false,
       selectedDocType: null,
       isLoading: false,
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
 
   componentDidMount() {
-    const formattedDocs = {};
+    const {isOnboard, isEdit} = this.state;
+    const {documentDetail} = this.props;
+    const isEmpty =
+      Array.isArray(documentDetail) && documentDetail.length === 0;
 
-    const {isOnboard} = this.state;
-
-    // this.setState({
-    //   documents: formatDocumentImages(
-    //     response?.details,
-    //     'https://your-image-server.com/images/',
-    //   ),
-    // });
-    console.log({isOnboard});
+    if (isEdit) {
+      this.fetchCustomerDocuments();
+    }
   }
+
+  fetchCustomerDocuments = async () => {
+    const {selectedCustomerId} = this.props;
+
+    this.setState({isLoading: true}, async () => {
+      try {
+        await this.props.fetchCustomerDocumentsThunk(
+          selectedCustomerId,
+          {},
+          response => {
+            if (
+              response.success &&
+              Array.isArray(response.data) &&
+              response.data.length > 0
+            ) {
+              const data = response.data[0];
+              this.setState({documents: formatDocumentImages(data, '')});
+            }
+          },
+        );
+      } finally {
+        this.setState({isLoading: false});
+      }
+    });
+  };
 
   onNextPress = () => {
     const {selectedLoanType} = this.props;
-    const {isOnboard} = this.state;
-    if (isOnboard) {
-      this.uploadCustomerDocuments();
+    const {isOnboard, isEdit} = this.state;
+    if (isOnboard || isEdit) {
+      this.handleCustomerDocumentSubmission();
       return;
     }
     if (selectedLoanType === loanType.refinance) {
@@ -89,8 +117,9 @@ class LoanDocumentsScreen extends Component {
         type: asset.type,
         isLocal: true,
         fileSize: asset.fileSize,
-        uploadedUrl:
-          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock URL for now
+        uploadedUrl: asset.uri,
+        // uploadedUrl:
+        //   'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock URL for now
       };
 
       this.setState(prev => ({
@@ -167,25 +196,27 @@ class LoanDocumentsScreen extends Component {
     }, 50);
   };
 
-  uploadCustomerDocuments = () => {
-    this.setState({isLoading: true});
+  handleCustomerDocumentSubmission = () => {
+    const {isEdit} = this.state;
     const {documents} = this.state;
     const {selectedCustomerId} = this.props;
 
     const customerId = selectedCustomerId;
-    // const customerId = '0a9a0e0d-c8a9-4534-9c04-c1eb8df4ae0d';
 
-    const payload = generateImageUploadPayload(documents, customerId);
-    console.log(payload);
-    this.props
-      .uploadCustomerDocumentsThunk(
+    const payload = generateImageUploadPayload(documents, customerId, isEdit);
+    const thunk = isEdit
+      ? this.props.updateCustomerDocumentsThunk
+      : this.props.uploadCustomerDocumentsThunk;
+
+    this.setState({isLoading: true}, () => {
+      thunk(
         payload,
-        response => {
-          return navigateToTab(ScreenNames.Customer);
+        () => navigateToTab(ScreenNames.Customer),
+        error => {
+          showApiErrorToast(error);
         },
-        error => {},
-      )
-      .finally(() => this.setState({isLoading: false}));
+      ).finally(() => this.setState({isLoading: false}));
+    });
   };
 
   render() {
@@ -196,12 +227,13 @@ class LoanDocumentsScreen extends Component {
       isOnboard,
       registrationNumber,
       isLoading,
+      isEdit,
     } = this.state;
     return (
       <Loan_Documents_Component
-        isOnboard={isOnboard}
+        isOnboard={isOnboard || isEdit}
         headerProp={{
-          title: 'Loan Documents',
+          title: `${isEdit ? 'Edit ' : ''}Loan Documents`,
           subtitle: isOnboard ? '' : '',
           showRightContent: true,
           rightLabel: isOnboard ? '' : registrationNumber,
@@ -249,12 +281,16 @@ class LoanDocumentsScreen extends Component {
   }
 }
 
-const mapActionCreators = {uploadCustomerDocumentsThunk};
+const mapActionCreators = {
+  uploadCustomerDocumentsThunk,
+  fetchCustomerDocumentsThunk,
+  updateCustomerDocumentsThunk,
+};
 
 const mapStateToProps = ({loanData, customerData}) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
-  loading: customerData?.loading,
+  documentDetail: customerData?.documentDetail,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(LoanDocumentsScreen);

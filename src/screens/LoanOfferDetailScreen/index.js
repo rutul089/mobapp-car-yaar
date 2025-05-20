@@ -99,14 +99,9 @@ class LoanOfferDetailScreen extends Component {
   componentDidMount() {
     let route = this.props.route;
     let loanDetail = getScreenParam(route, 'params');
-    this.setState(
-      {
-        loanDetail,
-      },
-      () => {
-        console.log({loanDetail: this.state.loanDetail});
-      },
-    );
+    this.setState({
+      loanDetail,
+    });
   }
   onProceedPress = () => {
     navigate(ScreenNames.AddReference);

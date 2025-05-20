@@ -44,7 +44,7 @@ export default DocumentGroup;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   title: {
     fontSize: 16,

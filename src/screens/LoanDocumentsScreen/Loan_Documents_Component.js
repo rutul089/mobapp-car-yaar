@@ -38,6 +38,7 @@ const Loan_Documents_Component = ({
           documents={otherDocuments}
           isDocument={true}
         />
+        <Spacing size="smd" />
         <Button
           variant="link"
           onPress={onNextPress}
