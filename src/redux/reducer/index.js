@@ -6,6 +6,7 @@ import userReducer from './userReducer';
 import loanReducer from './loanReducer';
 import vehicleReducer from './vehicleReducer';
 import customerReducer from './customerReducer';
+import bankReducer from './bankReducer';
 
 const rootReducer = combineReducers({
   appState: appStateReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   loanData: loanReducer,
   vehicleData: vehicleReducer,
   customerData: customerReducer,
+  bankData: bankReducer,
 });
 
 export default rootReducer;

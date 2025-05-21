@@ -4,19 +4,20 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
   DropdownModal,
+  FilePickerModal,
   FormFooterButtons,
   GroupWrapper,
   Header,
   images,
   ImageUploadButton,
   Input,
+  Loader,
   RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
   Text,
   theme,
-  FilePickerModal,
-  Loader,
+  AutocompleteInput,
 } from '@caryaar/components';
 import {
   currentLoanTypes,
@@ -25,7 +26,11 @@ import {
 } from '../../constants/enums';
 import strings from '../../locales/strings';
 import {formatIndianCurrency} from '../../utils/helper';
-import {sanitizeAmount} from '../../utils/inputHelper';
+import {
+  formatInputDate,
+  isValidInput,
+  sanitizeAmount,
+} from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
 
 const Customer_Personal_Details_Component = ({
@@ -60,6 +65,9 @@ const Customer_Personal_Details_Component = ({
   filePickerProps = {},
   handleFilePicker,
   loading,
+  onBankNameChange,
+  searchBankNameFromAPI,
+  onSelectSuggestion,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'panCardNumber',
@@ -79,6 +87,7 @@ const Customer_Personal_Details_Component = ({
     'avgMonthlyBankBalance',
     'incomeSource',
     'occupation',
+    'bankName',
   ]);
 
   const [isOccupationModalVisible, setIsOccupationModalVisible] =
@@ -262,18 +271,29 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeEmail}
             value={state.email}
             returnKeyType="next"
-            onSubmitEditing={() => focusNext('address')}
+            onSubmitEditing={() => focusNext('dob')}
             onFocus={() => scrollToInput('address')}
             {...(restInputProps?.email || {})}
           />
           <Spacing size="md" />
           <Input
+            ref={refs?.dob}
             value={state.dob}
             isLeftIconVisible
             leftIconName={images.calendar}
             label="Date Of Birth"
-            isAsDropdown
-            onPress={onChangeDob}
+            onChangeText={text => {
+              if (!isValidInput(text)) {
+                return;
+              }
+              const formatted = formatInputDate(text);
+              onChangeDob?.(formatted);
+            }}
+            keyboardType="number-pad"
+            returnKeyType="next"
+            onSubmitEditing={() => focusNext('address')}
+            onFocus={() => scrollToInput('dob')}
+            {...(restInputProps?.dob || {})}
           />
           <Spacing size="md" />
           <Input
@@ -363,15 +383,22 @@ const Customer_Personal_Details_Component = ({
         {/* Bank Details */}
         <Spacing size="lg" />
         <GroupWrapper title={'Bank Details'}>
-          <Input
-            placeholder="Select Bank Option"
-            isLeftIconVisible
-            leftIconName={images.bank}
-            isAsDropdown
-            isRightIconVisible
-            label="Bank Name"
-            value={state.bankName}
-            onPress={() => setShowBankOptionModal(true)}
+          <AutocompleteInput
+            ref={refs.bankName}
+            restProps={{
+              label: 'Bank Name',
+              isLeftIconVisible: true,
+              leftIconName: images.bank,
+              returnKeyType: 'next',
+              onSubmitEditing: () => focusNext('accountNumber'),
+              onFocus: () => scrollToInput('bankName'),
+            }}
+            onChangeText={onBankNameChange}
+            fetchSuggestions={searchBankNameFromAPI}
+            onSelectSuggestion={onSelectSuggestion}
+            value={restInputProps.bankName?.value || ''}
+            suggestionTextKey={'bank'}
+            {...(restInputProps.bankName || {})}
           />
           <Spacing size="md" />
           <Input

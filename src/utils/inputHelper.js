@@ -4,9 +4,7 @@
  * @param {string} value
  * @returns {string} - Error message if invalid, otherwise empty string
  */
-export const validateField = (key, value) => {
-  // const trimmedValue = value?.trim();
-
+export const validateField = (key, value, isOptional) => {
   const nameRegex = /^[A-Za-z\s]+$/;
   const numericRegex = /^[0-9]+(\.[0-9]+)?$/;
   const integerRegex = /^[0-9]+$/;
@@ -18,6 +16,10 @@ export const validateField = (key, value) => {
   const aadharRegex = /^[2-9]{1}[0-9]{11}$/;
 
   const trimmedValue = typeof value === 'string' ? value.trim() : '';
+
+  if (isOptional) {
+    return '';
+  }
 
   switch (key) {
     case 'odometerReading':
@@ -141,6 +143,46 @@ export const validateField = (key, value) => {
     case 'aadharBackphoto':
       return trimmedValue === '' ? 'Please upload required image' : '';
 
+    case 'dob': {
+      if (trimmedValue === '') {
+        return 'Please enter date of birth';
+      }
+
+      const parts = trimmedValue.split('/');
+      if (parts.length !== 3) {
+        return 'Please enter a valid date in dd/mm/yyyy format';
+      }
+
+      const [dd, mm, yyyy] = parts.map(Number);
+      const date = new Date(yyyy, mm - 1, dd);
+
+      const isValid =
+        date.getFullYear() === yyyy &&
+        date.getMonth() === mm - 1 &&
+        date.getDate() === dd;
+
+      if (!isValid) {
+        return 'Please enter a valid date in dd/mm/yyyy format';
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const inputDate = new Date(yyyy, mm - 1, dd);
+
+      if (inputDate.getTime() === today.getTime()) {
+        return 'Date of birth cannot be today';
+      }
+
+      if (inputDate > today) {
+        return 'Date of birth cannot be in the future';
+      }
+
+      return ''; // All good
+    }
+
+    case 'bankName':
+      return trimmedValue === '' ? 'Please enter Bank Name.' : '';
+
     default:
       return '';
   }
@@ -152,8 +194,13 @@ export const validateField = (key, value) => {
  * @param {string} key
  * @param {string} value
  */
-export const handleFieldChange = (component, key, value) => {
-  const errorMsg = validateField(key, value);
+export const handleFieldChange = (
+  component,
+  key,
+  value,
+  isOptional = false,
+) => {
+  const errorMsg = validateField(key, value, isOptional);
 
   component.setState(prevState => {
     const updatedErrors = {
@@ -254,3 +301,35 @@ export const sanitizeAmount = value => {
 
 //   return cleaned;
 // };
+
+export const formatInputDate = input => {
+  // Remove non-digit characters
+  const cleaned = input.replace(/[^\d]/g, '');
+
+  let day = cleaned.slice(0, 2);
+  let month = cleaned.slice(2, 4);
+  let year = cleaned.slice(4, 8);
+
+  // Pad single digit day/month with leading zero
+  if (day.length === 1 && parseInt(day) > 3) {
+    day = '0' + day;
+  }
+  if (month.length === 1 && parseInt(month) > 1) {
+    month = '0' + month;
+  }
+
+  let formatted = day;
+  if (month.length > 0) {
+    formatted += '/' + month;
+  }
+  if (year.length > 0) {
+    formatted += '/' + year;
+  }
+
+  return formatted;
+};
+
+export const isValidInput = input => {
+  // Allow only numbers and slashes
+  return /^[0-9/]*$/.test(input);
+};

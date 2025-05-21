@@ -294,3 +294,14 @@ export const safeGet = (loading = false, obj, path, fallback = '-') => {
 export const formatMonths = (value, loading = false, fallback = '-') => {
   return loading ? fallback : value ? `${value} Months` : fallback;
 };
+
+export const convertToISODate = dateStr => {
+  const [day, month, year] = dateStr.split('/');
+  const date = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
+
+  if (isNaN(date.getTime())) {
+    return null; // invalid date
+  }
+
+  return date.toISOString(); // returns "1995-07-15T00:00:00.000Z"
+};

@@ -12,11 +12,17 @@ import {
   navigate,
 } from '../../navigation/NavigationUtils';
 import {
+  searchBanksThunk,
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
 } from '../../redux/actions';
 import {handleFileSelection} from '../../utils/documentUtils';
-import {formatDate, showApiErrorToast, showToast} from '../../utils/helper';
+import {
+  convertToISODate,
+  formatDate,
+  showApiErrorToast,
+  showToast,
+} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
 import ScreenNames from '../../constants/ScreenNames';
@@ -46,6 +52,7 @@ const initialState = {
   currentState: '',
   occupation: null,
   incomeSource: null,
+  bankName: '',
 };
 
 class CustomerPersonalDetails extends Component {
@@ -88,6 +95,7 @@ class CustomerPersonalDetails extends Component {
         avgMonthlyBankBalance: '',
         occupation: '',
         incomeSource: '',
+        bankName: '',
       },
       isFormValid: false,
       showFilePicker: false,
@@ -141,7 +149,9 @@ class CustomerPersonalDetails extends Component {
   };
 
   onSelectedLoanOption = value => {
+    const {currentEmi} = this.state;
     this.onChangeField('currentLoan', value);
+    this.onChangeField('currentEmi', currentEmi, !value);
   };
 
   onSelectedOccupation = (item, index) => {
@@ -196,7 +206,6 @@ class CustomerPersonalDetails extends Component {
   getPayload = () => {
     const state = this.state;
     const {selectedCustomerId} = this.props;
-
     let payload = {
       applicantPhoto: state.applicantPhoto,
       pancardPhoto: state.pancardPhoto,
@@ -210,7 +219,7 @@ class CustomerPersonalDetails extends Component {
       fatherName: state.fatherName,
       spouseName: state.spouseName,
       email: state.email,
-      dob: '1995-07-15T00:00:00.000Z',
+      dob: convertToISODate(state.dob),
       address: state.address,
       pincode: state.pincode,
       occupation: state.occupation,
@@ -219,15 +228,11 @@ class CustomerPersonalDetails extends Component {
       bankName: state.bankName,
       accountNumber: state.accountNumber,
       currentLoan: state.currentLoan,
-      currentEmi: Number(state.currentEmi),
+      currentEmi: !state.currentLoan ? Number(0) : Number(state.currentEmi),
       maxEmiAfford: Number(state.maxEmiAfford),
       avgMonthlyBankBalance: Number(state.avgMonthlyBankBalance),
       customerId: selectedCustomerId,
     };
-
-    if (!state.currentLoan) {
-      delete payload.currentEmi;
-    }
 
     return payload;
   };
@@ -261,6 +266,7 @@ class CustomerPersonalDetails extends Component {
       'aadharFrontPhoto',
       'aadharBackphoto',
       'pancardPhoto',
+      'bankName',
     ];
 
     const errors = {};
@@ -271,10 +277,7 @@ class CustomerPersonalDetails extends Component {
       const {required = true} = fieldValidationRules[key] || {};
 
       // Skip validation if field is optional and empty
-      if (
-        !required &&
-        (value === undefined || value === null || value === '')
-      ) {
+      if (!required) {
         errors[key] = '';
         return;
       }
@@ -290,8 +293,8 @@ class CustomerPersonalDetails extends Component {
     return isFormValid;
   };
 
-  onChangeField = (key, value) => {
-    handleFieldChange(this, key, value);
+  onChangeField = (key, value, isOptional = false) => {
+    handleFieldChange(this, key, value, isOptional);
   };
 
   handleFile = type => {
@@ -334,6 +337,25 @@ class CustomerPersonalDetails extends Component {
     this.setState({showFilePicker: true, selectionType: type});
   };
 
+  searchBankNameFromAPI = async query => {
+    this.onChangeField('bankName', query);
+    let searchResult = [];
+    await this.props.searchBanksThunk(
+      query,
+      onSuccess => {
+        searchResult = onSuccess;
+      },
+      error => {
+        return [];
+      },
+    );
+    return searchResult;
+  };
+
+  onSelectBank = (item, index) => {
+    this.onChangeField('bankName', item?.bank);
+  };
+
   render() {
     const {
       gender,
@@ -345,6 +367,7 @@ class CustomerPersonalDetails extends Component {
       aadharNumber,
       showFilePicker,
       isEdit,
+      bankName,
     } = this.state;
 
     const {loading} = this.props;
@@ -391,15 +414,21 @@ class CustomerPersonalDetails extends Component {
         onChangeAccountNumber={value =>
           this.onChangeField('accountNumber', value)
         }
-        onChangeCurrentEMI={value => this.onChangeField('currentEmi', value)}
+        onChangeCurrentEMI={value =>
+          this.onChangeField('currentEmi', value, !this.state.currentLoan)
+        }
         onChangeMaxEMIAfford={value =>
           this.onChangeField('maxEmiAfford', value)
         }
+        onChangeDob={value => this.onChangeField('dob', value)}
         onChangeMonthlyBankBalance={value =>
           this.onChangeField('avgMonthlyBankBalance', value)
         }
+        onBankNameChange={value => this.onChangeField('bankName', value)}
         onNextPress={this.onNextPress}
         occupation={getLabelFromEnum(occupationLabelMap, occupation)}
+        onSelectSuggestion={this.onSelectBank}
+        searchBankNameFromAPI={this.searchBankNameFromAPI}
         restInputProps={{
           panCardNumber: {
             isError: errors?.panCardNumber,
@@ -487,6 +516,15 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.aadharBackphoto,
             statusMsg: errors?.aadharBackphoto,
           },
+          dob: {
+            isError: errors?.dob,
+            statusMsg: errors?.dob,
+          },
+          bankName: {
+            value: bankName,
+            isError: errors.bankName,
+            statusMsg: errors.bankName,
+          },
         }}
         filePickerProps={{
           isVisible: showFilePicker,
@@ -507,6 +545,7 @@ class CustomerPersonalDetails extends Component {
 const mapActionCreators = {
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
+  searchBanksThunk,
 };
 
 const mapStateToProps = ({customerData}) => ({

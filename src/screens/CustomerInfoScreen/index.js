@@ -153,7 +153,8 @@ class CustomerInfoScreen extends Component {
           {
             label: 'Current EMI',
             value:
-              formatIndianCurrency(this.safeGet(details, 'currentEmi')) || '-',
+              formatIndianCurrency(this.safeGet(details, 'currentEmi') + '') ||
+              '-',
           },
           {
             label: 'Max EMI Afford',
