@@ -10,6 +10,7 @@ import {
   getScreenParam,
   goBack,
   navigate,
+  navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
   searchBanksThunk,
@@ -181,9 +182,8 @@ class CustomerPersonalDetails extends Component {
   };
 
   onNextPress = () => {
-    const {route} = this.props;
     const {isEdit} = this.state;
-    let params = route.params;
+
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
@@ -192,11 +192,12 @@ class CustomerPersonalDetails extends Component {
     }
 
     const payload = this.getPayload();
-    const onSuccess = () => navigate(ScreenNames.LoanDocument, params);
+    const onSuccess = () => {
+      isEdit ? goBack() : navigateToTab(ScreenNames.Customer);
+    };
     const onError = error => showApiErrorToast(error);
 
     if (isEdit) {
-      delete payload.currentLoan;
       this.props.updateCustomerDetailsThunk(payload, onSuccess, onError);
     } else {
       this.props.submitCustomerDetailsThunk(payload, onSuccess, onError);
@@ -374,6 +375,7 @@ class CustomerPersonalDetails extends Component {
 
     return (
       <Customer_Personal_Details_Component
+        isEdit={isEdit}
         headerProp={{
           title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
           subtitle: isOnboard ? '' : '',

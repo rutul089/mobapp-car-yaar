@@ -22,7 +22,7 @@ class VehicleDetail extends Component {
       basicDetail: getScreenParam(this.props.route, 'params') || '',
     };
     this.onBackPress = this.onBackPress.bind(this);
-    this.onSaveDraftPress = this.onSaveDraftPress.bind(this);
+    this.onPressSecondaryButton = this.onPressSecondaryButton.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
   }
 
@@ -50,10 +50,17 @@ class VehicleDetail extends Component {
     goBack();
   };
 
-  onSaveDraftPress = () => {};
+  onPressSecondaryButton = () => {
+    navigate(ScreenNames.VehicleImages);
+  };
 
   onNextPress = () => {
-    navigate(ScreenNames.VehicleImages);
+    const {isCreatingLoanApplication} = this.props;
+    navigate(
+      isCreatingLoanApplication
+        ? ScreenNames.CustomerFullScreen
+        : ScreenNames.VehicleImages,
+    );
   };
 
   handleInfoChange = (index, text) => {
@@ -63,7 +70,7 @@ class VehicleDetail extends Component {
   };
 
   render() {
-    const {loading, selectedVehicle} = this.props;
+    const {loading, selectedVehicle, isCreatingLoanApplication} = this.props;
     const {basicDetail} = this.state;
     let {UsedVehicle} = selectedVehicle || {};
     let manufactureYear = UsedVehicle?.manufactureYear;
@@ -74,7 +81,7 @@ class VehicleDetail extends Component {
     return (
       <Vehicle_Detail_Component
         onBackPress={this.onBackPress}
-        onSaveDraftPress={this.onSaveDraftPress}
+        onPressSecondaryButton={this.onPressSecondaryButton}
         onNextPress={this.onNextPress}
         registerNumber={this.safeGet(UsedVehicle, 'registerNumber')}
         make={this.safeGet(basicDetail, 'make')}
@@ -150,16 +157,18 @@ class VehicleDetail extends Component {
         onInfoChange={this.handleInfoChange}
         status={status}
         loading={loading}
+        isCreatingLoanApplication={isCreatingLoanApplication}
       />
     );
   }
 }
 
 const mapDispatchToProps = {fetchVehicleFromIdThunk};
-const mapStateToProps = ({vehicleData}) => {
+const mapStateToProps = ({vehicleData, loanData}) => {
   return {
     selectedVehicle: vehicleData?.selectedVehicle,
     loading: vehicleData?.loading,
+    isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VehicleDetail);

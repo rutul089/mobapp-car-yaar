@@ -10,20 +10,22 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
-import {goBack} from '../../navigation/NavigationUtils';
 import strings from '../../locales/strings';
+import {sanitizeAmount} from '../../utils/inputHelper';
 
-const Loan_Amount_Component = ({onSaveDraftPress, onNextButtonPress}) => {
+const Loan_Amount_Component = ({
+  headerProp,
+  onSaveDraftPress,
+  onNextButtonPress,
+  restInputProps = {},
+  onChangeLoanAmount,
+  loading,
+}) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header
-        title="Loan Amount"
-        subtitle="GJ 01 JR 0945"
-        rightLabel="ABC123"
-        showRightContent={true}
-        onBackPress={() => goBack()}
-      />
+      <Header {...headerProp} />
       <KeyboardAwareScrollView bounces={false} style={styles.wrapper}>
         <Text>What is the desired Loan Amount?</Text>
         <Spacing size="xs" />
@@ -39,16 +41,24 @@ const Loan_Amount_Component = ({onSaveDraftPress, onNextButtonPress}) => {
           inputContainerBackgroundColorFocused={'white'}
           inputStyles={styles.inputStyle}
           returnKeyType="done"
-          keyboardType="decimal-pad"
+          keyboardType="number-pad"
           autoFocus
+          onChangeText={value => {
+            const sanitizedText = sanitizeAmount(value);
+            onChangeLoanAmount?.(sanitizedText);
+          }}
+          onSubmitEditing={onNextButtonPress}
+          {...(restInputProps?.loanAmount || {})}
         />
         <FormFooterButtons
-          primaryButtonLabel={strings.btnSaveDraft}
-          secondaryButtonLabel={strings.next}
-          onPressPrimaryButton={onSaveDraftPress}
-          onPressSecondaryButton={onNextButtonPress}
+          primaryButtonLabel={strings.next}
+          // secondaryButtonLabel={strings.next}
+          onPressPrimaryButton={onNextButtonPress}
+          // onPressSecondaryButton={onNextButtonPress}
+          hideSecondaryButton
         />
       </KeyboardAwareScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

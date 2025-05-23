@@ -3,7 +3,10 @@ import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import Home_Component from './Home_Component';
 import {connect} from 'react-redux';
-import {selectedLoanType} from '../../redux/actions';
+import {
+  selectedLoanType,
+  setIsCreatingLoanApplication,
+} from '../../redux/actions';
 import {loanType, vehicleType} from '../../constants/enums';
 
 class HomeScreen extends Component {
@@ -37,9 +40,12 @@ class HomeScreen extends Component {
 
   onPurchasePress = () => {
     this.props.selectedLoanType(loanType.purchase);
-    navigate('VehicleFullScreen', {
+    this.props.setIsCreatingLoanApplication(true);
+    //VehicleFullScreen LoanAmount
+    navigate(ScreenNames.VehicleFullScreen, {
       params: {
         fullScreen: true,
+        isLoanApplication: true,
       },
     });
   };
@@ -101,7 +107,7 @@ class HomeScreen extends Component {
   }
 }
 
-const mapDispatchToProps = {selectedLoanType};
+const mapDispatchToProps = {selectedLoanType, setIsCreatingLoanApplication};
 const mapStateToProps = ({}) => {
   return {};
 };

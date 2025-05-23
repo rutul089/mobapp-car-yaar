@@ -82,7 +82,7 @@ class Vehicles extends Component {
    */
   onWrapperClick = item => {
     this.props.resetSelectedVehicle();
-    this.props.selectedLoanType(loanType.addVehicle);
+    // this.props.selectedLoanType(loanType.addVehicle);
     navigate(ScreenNames.VehicleDetail, {
       params: item,
     });
@@ -161,7 +161,8 @@ class Vehicles extends Component {
   };
 
   render() {
-    const {loading, vehicleList, searchVehicles} = this.props;
+    const {loading, vehicleList, searchVehicles, isCreatingLoanApplication} =
+      this.props;
 
     const {refreshing, apiTrigger, searchText, isSearch, fullScreen} =
       this.state;
@@ -187,13 +188,13 @@ class Vehicles extends Component {
         clearSearch={this.clearSearch}
         setSearch={this.searchFromAPI}
         onAddButtonPress={this.onAddButtonPress}
-        fullScreen={fullScreen}
+        isCreatingLoanApplication={isCreatingLoanApplication}
       />
     );
   }
 }
 
-const mapStateToProps = ({vehicleData}) => ({
+const mapStateToProps = ({vehicleData, loanData}) => ({
   vehicleList: vehicleData?.allVehicles?.data,
   searchVehicles: vehicleData?.searchVehicles,
   page: vehicleData.page,
@@ -201,6 +202,7 @@ const mapStateToProps = ({vehicleData}) => ({
   searchPage: vehicleData.searchPage,
   searchTotalPages: vehicleData.searchTotalPages,
   loading: vehicleData?.loading,
+  isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
 });
 
 const mapDispatchToProps = {

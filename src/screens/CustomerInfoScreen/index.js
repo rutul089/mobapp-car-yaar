@@ -9,7 +9,10 @@ import {
 } from '../../utils/helper';
 import {Alert} from 'react-native';
 import ScreenNames from '../../constants/ScreenNames';
-import {fetchCustomerDetailsThunk} from '../../redux/actions';
+import {
+  fetchCustomerDetailsThunk,
+  initiateLoanApplicationThunk,
+} from '../../redux/actions';
 import {get} from 'lodash';
 import {
   getLabelEnum,
@@ -39,7 +42,10 @@ class CustomerInfoScreen extends Component {
   };
 
   onNextPress = () => {
-    navigate(ScreenNames.CustomerDocuments);
+    const {isCreatingLoanApplication} = this.props;
+    isCreatingLoanApplication
+      ? this.createLoanApplication()
+      : navigate(ScreenNames.CustomerDocuments);
   };
 
   handleEditDetailPress = () => {
@@ -57,6 +63,24 @@ class CustomerInfoScreen extends Component {
 
   safeGet = (obj, path) => {
     return this.props.loading ? '-' : get(obj, path, '-');
+  };
+
+  createLoanApplication = () => {
+    const {vehicleId, loanType, selectedCustomerId} = this.props;
+
+    let payload = {
+      vehicleId,
+      loanType,
+      customerId: selectedCustomerId,
+    };
+
+    this.props.initiateLoanApplicationThunk(
+      payload,
+      success => {
+        navigate(ScreenNames.LoanDocument);
+      },
+      error => {},
+    );
   };
 
   render() {
@@ -184,12 +208,18 @@ class CustomerInfoScreen extends Component {
   }
 }
 
-const mapActionCreators = {fetchCustomerDetailsThunk};
-const mapStateToProps = ({customerData}) => {
+const mapActionCreators = {
+  fetchCustomerDetailsThunk,
+  initiateLoanApplicationThunk,
+};
+const mapStateToProps = ({customerData, loanData, vehicleData}) => {
   return {
     selectedCustomerId: customerData?.selectedCustomerId,
     selectedCustomer: customerData?.selectedCustomer,
-    loading: customerData?.loading,
+    loading: customerData?.loading || loanData?.loading,
+    isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+    vehicleId: vehicleData?.selectedVehicle?.id,
+    loanType: loanData?.selectedLoanType,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(CustomerInfoScreen);

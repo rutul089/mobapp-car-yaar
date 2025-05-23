@@ -1,4 +1,4 @@
-// navigation/TabNavigator.js
+/* eslint-disable react-native/no-inline-styles */
 import {Text, images, theme} from '@caryaar/components';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
@@ -10,6 +10,8 @@ import {
   HomeScreen,
   VehiclesScreen,
 } from '../screens';
+import {useDispatch} from 'react-redux';
+import {setIsCreatingLoanApplication} from '../redux/actions';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +29,12 @@ const renderTabLabel = (focused, label) => (
 );
 
 const TabNavigator = () => {
+  const dispatch = useDispatch();
+
+  // Reset isCreatingLoanApplication when tab changes
+  const handleTabPress = () => {
+    dispatch(setIsCreatingLoanApplication(false));
+  };
   return (
     <Tab.Navigator
       initialRouteName={ScreenNames.Home}
@@ -54,6 +62,7 @@ const TabNavigator = () => {
           tabBarIcon: ({focused}) =>
             renderTabIcon(focused ? images.homeSolid : images.homeOutline),
         }}
+        listeners={{tabPress: handleTabPress}}
       />
       <Tab.Screen
         name={ScreenNames.Applications}
@@ -65,6 +74,7 @@ const TabNavigator = () => {
               focused ? images.applicationSolid : images.applicationOutline,
             ),
         }}
+        listeners={{tabPress: handleTabPress}}
       />
       <Tab.Screen
         name={ScreenNames.Vehicles}
@@ -76,6 +86,7 @@ const TabNavigator = () => {
               focused ? images.vehiclesSolid : images.vehiclesOutline,
             ),
         }}
+        listeners={{tabPress: handleTabPress}}
       />
       <Tab.Screen
         name={ScreenNames.Customer}
@@ -87,6 +98,7 @@ const TabNavigator = () => {
               focused ? images.customersSolid : images.customersOutline,
             ),
         }}
+        listeners={{tabPress: handleTabPress}}
       />
     </Tab.Navigator>
   );

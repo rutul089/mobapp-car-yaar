@@ -20,6 +20,7 @@ const initialState = {
   searchTotalPages: 1,
   loading: false,
   error: null,
+  isCreatingLoanApplication: false,
 };
 
 const loanReducer = (state = initialState, action) => {
@@ -87,6 +88,25 @@ const loanReducer = (state = initialState, action) => {
         selectedLoanApplication: null,
         selectedApplicationId: null,
       };
+
+    case types.SET_IS_CREATING_LOAN_APPLICATION:
+      return {
+        ...state,
+        isCreatingLoanApplication: action.payload,
+      };
+
+    case types.APPEND_NEW_LOAN_APPLICATION: {
+      const exists = state.applications.some(
+        app => app.id === action.payload.id,
+      );
+
+      return {
+        ...state,
+        applications: exists
+          ? state.applications
+          : [action.payload, ...state.applications],
+      };
+    }
 
     case types.RESET_APP_STATE:
       return {...initialState};

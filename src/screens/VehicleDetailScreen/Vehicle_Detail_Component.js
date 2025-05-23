@@ -3,15 +3,15 @@ import {
   DetailInfoCard,
   FormFooterButtons,
   Header,
+  Loader,
   SafeAreaWrapper,
   VehicleCard,
   theme,
-  Loader,
 } from '@caryaar/components';
-import {ScrollView, StyleSheet, View} from 'react-native';
-import strings from '../../locales/strings';
+import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {getGradientColors, getStatusColor} from '../../utils/helper';
+import strings from '../../locales/strings';
+import {getGradientColors} from '../../utils/helper';
 
 const Vehicle_Detail_Component = ({
   onBackPress,
@@ -25,6 +25,8 @@ const Vehicle_Detail_Component = ({
   vehicleDetail,
   lastUpdatedOn,
   status,
+  isCreatingLoanApplication,
+  onPressSecondaryButton,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -64,8 +66,10 @@ const Vehicle_Detail_Component = ({
           <DetailInfoCard data={vehicleInfo} onChange={onInfoChange} />
           <FormFooterButtons
             primaryButtonLabel={strings.next}
+            secondaryButtonLabel={'Edit'}
             onPressPrimaryButton={onNextPress}
-            hideSecondaryButton
+            hideSecondaryButton={!isCreatingLoanApplication}
+            onPressSecondaryButton={onPressSecondaryButton}
           />
         </View>
       </KeyboardAwareScrollView>

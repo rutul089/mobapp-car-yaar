@@ -1,10 +1,15 @@
-import {fetchLoanApplicationById, fetchLoanApplications} from '../../services';
+import {
+  addCustomerLoanAmount,
+  fetchLoanApplicationById,
+  fetchLoanApplications,
+} from '../../services';
+import {initiateLoanApplication} from '../../services/loanServices';
 import {showApiErrorToast} from '../../utils/helper';
 import {
-  FETCH_LOAN_APPLICATIONS,
   CLEAR_SEARCH_APPLICATION,
-  RESET_LOAN_APPLICATION,
   FETCH_LOAN_APP_BY_ID,
+  FETCH_LOAN_APPLICATIONS,
+  RESET_LOAN_APPLICATION,
 } from './actionType';
 import types from './types';
 
@@ -83,6 +88,74 @@ export const fetchLoanApplicationFromIdThunk = (
     }
   };
 };
+
+export const initiateLoanApplicationThunk = (
+  applicationData,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: FETCH_LOAN_APP_BY_ID.REQUEST});
+
+    try {
+      const response = await initiateLoanApplication(applicationData);
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
+        payload: response.data,
+      });
+
+      dispatch({
+        type: types.APPEND_NEW_LOAN_APPLICATION,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const addCustomerLoanAmountThunk = (
+  applicationData,
+  applicationId,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: FETCH_LOAN_APP_BY_ID.REQUEST});
+
+    try {
+      const response = await addCustomerLoanAmount(
+        applicationData,
+        applicationId,
+      );
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const setIsCreatingLoanApplication = isCreating => ({
+  type: types.SET_IS_CREATING_LOAN_APPLICATION,
+  payload: isCreating,
+});
 
 export const clearSearchApplication = () => ({
   type: CLEAR_SEARCH_APPLICATION.SUCCESS,

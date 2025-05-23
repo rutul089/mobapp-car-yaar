@@ -54,6 +54,8 @@ const ScreenNames = {
   ProformaInvoice: 'ProformaInvoiceScreen',
   SuccessScreen: 'SuccessScreen',
   ImagePreviewScreen: 'ImagePreviewScreen',
+  VehicleFullScreen: 'VehicleFullScreen',
+  CustomerFullScreen: 'CustomersScreen',
 };
 
 export default ScreenNames;

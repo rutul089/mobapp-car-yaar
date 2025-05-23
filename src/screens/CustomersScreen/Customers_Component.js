@@ -8,16 +8,18 @@ import {
   Loader,
   PaginationFooter,
   images,
+  Header,
+  SearchBar,
 } from '@caryaar/components';
 import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 
 import {
   capitalizeFirstLetter,
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
-import {navigate} from '../../navigation/NavigationUtils';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 import {NoDataFound} from '../../components';
 import {API_TRIGGER} from '../../constants/enums';
@@ -37,24 +39,41 @@ const Customers_Component = ({
   clearSearch,
   setSearch,
   onAddButtonPress,
+  isCreatingLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
-      <ImageHeader
-        subTittle={'Customers'}
-        searchPlaceHolder={'Search by customer name or ID...'}
-        onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
-        onRightIconPress={() => navigate(ScreenNames.Notification)}
-        profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
-        onChangeText={onSearchText}
-        value={searchText}
-        onCancelIconPress={clearSearch}
-        onSubmitEditing={setSearch}
-        hideHeader
-        hideSubHeaderTop={false}
-        showAddBtn
-        onAddButtonPress={onAddButtonPress}
-      />
+      {isCreatingLoanApplication ? (
+        <>
+          <Header title="Select Customer" onBackPress={() => goBack()} />
+          <View style={styles.searchWrapper}>
+            <SearchBar
+              showAddBtn={!isCreatingLoanApplication}
+              onChangeText={onSearchText}
+              value={searchText}
+              onCancelIconPress={clearSearch}
+              onSubmitEditing={setSearch}
+              onAddButtonPress={onAddButtonPress}
+            />
+          </View>
+        </>
+      ) : (
+        <ImageHeader
+          subTittle={'Customers'}
+          searchPlaceHolder={'Search by customer name or ID...'}
+          onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
+          onRightIconPress={() => navigate(ScreenNames.Notification)}
+          profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
+          onChangeText={onSearchText}
+          value={searchText}
+          onCancelIconPress={clearSearch}
+          onSubmitEditing={setSearch}
+          hideHeader
+          hideSubHeaderTop={false}
+          showAddBtn
+          onAddButtonPress={onAddButtonPress}
+        />
+      )}
 
       <FlatList
         data={customerList}
@@ -124,6 +143,13 @@ const styles = StyleSheet.create({
   wrapper: {
     flexGrow: 1,
     padding: theme.sizes.padding,
+    backgroundColor: theme.colors.background,
+  },
+
+  searchWrapper: {
+    backgroundColor: theme.colors.primaryBlack,
+    padding: theme.sizes.spacing.md,
+    paddingTop: 0,
   },
 });
 

@@ -4,3 +4,4 @@ export * from './customerService';
 export * from './loanApplicationServices';
 export * from './notificationServices';
 export * from './bankServices';
+export * from './loanServices';

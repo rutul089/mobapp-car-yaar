@@ -262,14 +262,14 @@ export const gender = Object.freeze({
 
 export const loanType = Object.freeze({
   addVehicle: 9,
-  externalBT: 5,
-  internalBT: 4,
+  externalBT: 'EXTERNAL_BALANCE_TRANSFER',
+  internalBT: 'INTERNAL_BALACE_TRANSFER',
   lease: 7,
   loan: 6,
-  purchase: 1,
-  refinance: 2,
+  purchase: 'OLD_CAR_SALE_PURCHASE',
+  refinance: 'REFINANCE',
   subscribe: 8,
-  topUp: 3,
+  topUp: 'TOP_UP',
 });
 
 export const vehicleType = Object.freeze({

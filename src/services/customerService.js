@@ -57,34 +57,6 @@ export const fetchCustomerDetailsById = async (customerId, config = {}) => {
 };
 
 /**
- * Fetches loan amount details for a specific customer.
- *
- * @param {string} customerId - The UUID of the customer.
- * @param {Object} [config={}] - Optional Axios config (e.g., headers).
- * @returns {Promise<Object>} A promise that resolves with the loan amount details.
- * @throws Will throw an error if the API call fails.
- */
-export const fetchCustomerLoanAmount = async (customerId, config = {}) => {
-  if (!customerId) {
-    throw new Error('Customer ID is required');
-  }
-
-  try {
-    const response = await axiosInstance.get(
-      `/customers/customerLoanAmount/${customerId}`,
-      config,
-    );
-    return response.data;
-  } catch (error) {
-    console.error(
-      `Failed to fetch loan amount for customer ID ${customerId}:`,
-      error,
-    );
-    throw error;
-  }
-};
-
-/**
  * Fetches document details for a specific customer.
  *
  * @param {string} customerId - The UUID of the customer.
@@ -99,7 +71,7 @@ export const fetchCustomerDocuments = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/customers/customerDocuments/${customerId}`,
+      `loan-applications/customerDocuments/${customerId}`,
       config,
     );
     return response.data;
@@ -153,7 +125,7 @@ export const fetchCustomerFinanceDetails = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/customers/financeDetails/${customerId}`,
+      `loan-applications/financeDetails/${customerId}`,
       config,
     );
     return response.data;
@@ -175,7 +147,7 @@ export const fetchCustomerFinanceDocuments = async (
 
   try {
     const response = await axiosInstance.get(
-      `/customers/financeDocuments/${customerId}`,
+      `loan-applications/financeDocuments/${customerId}`,
       config,
     );
     return response.data;
@@ -206,7 +178,7 @@ export const fetchCustomerMoreFinanceDetails = async (
 
   try {
     const response = await axiosInstance.get(
-      `/customers/getCustomerMoreFinanceDetails/${customerId}`,
+      `loan-applications/getCustomerMoreFinanceDetails/${customerId}`,
       config,
     );
     return response.data;
@@ -293,46 +265,6 @@ export const submitCustomerLoanAmount = async loanAmountData => {
 };
 
 /**
- * Verifies the OTP for CIBIL.
- *
- * @param {Object} otpCibilData - The OTP data for CIBIL verification.
- * @returns {Promise<Object>} The response data from the API.
- * @throws Will throw an error if the API call fails.
- */
-export const verifyOtpForCibil = async otpCibilData => {
-  try {
-    const response = await axiosInstance.post(
-      '/customers/verifyOtpForCibil',
-      otpCibilData,
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error verifying OTP for CIBIL:', error);
-    throw error;
-  }
-};
-
-/**
- * Sends an OTP for CIBIL verification.
- *
- * @param {Object} sendOtpData - The data required to send the OTP.
- * @returns {Promise<Object>} The response data from the API.
- * @throws Will throw an error if the API call fails.
- */
-export const sendOtpForCibil = async sendOtpData => {
-  try {
-    const response = await axiosInstance.post(
-      '/customers/sendOtpForCibil',
-      sendOtpData,
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error sending OTP for CIBIL:', error);
-    throw error;
-  }
-};
-
-/**
  * Adds a reference for the customer.
  *
  * @param {Object} referenceData - The reference data to add.
@@ -399,10 +331,10 @@ export const uploadFinanceDocuments = async documentsData => {
  * @returns {Promise<Object>} The response data from the API.
  * @throws Will throw an error if the API call fails.
  */
-export const uploadCustomerDocuments = async documentsData => {
+export const uploadCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.post(
-      '/customers/customerDocuments',
+      `/loan-applications/customerDocuments/${customerId}`,
       documentsData,
     );
     return response.data;
@@ -422,7 +354,7 @@ export const uploadCustomerDocuments = async documentsData => {
 export const updateCustomerDetails = async detailsData => {
   try {
     const response = await axiosInstance.patch(
-      '/customers/customerDetails',
+      `/customers/customerDetails/${detailsData.customerId}`,
       detailsData,
     );
     return response.data;
@@ -439,35 +371,15 @@ export const updateCustomerDetails = async detailsData => {
  * @returns {Promise<Object>} The response data from the API.
  * @throws Will throw an error if the API call fails.
  */
-export const updateCustomerDocuments = async documentsData => {
+export const updateCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.patch(
-      '/customers/customerDocuments',
+      `/customers/customerDocuments/${customerId}`,
       documentsData,
     );
     return response.data;
   } catch (error) {
     console.error('Error updating customer documents:', error);
-    throw error;
-  }
-};
-
-/**
- * Updates the customer's loan amount information.
- *
- * @param {Object} loanAmountData - The loan amount data to update.
- * @returns {Promise<Object>} The response data from the API.
- * @throws Will throw an error if the API call fails.
- */
-export const updateCustomerLoanAmount = async loanAmountData => {
-  try {
-    const response = await axiosInstance.patch(
-      '/customers/customerLoanAmount',
-      loanAmountData,
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error updating customer loan amount:', error);
     throw error;
   }
 };

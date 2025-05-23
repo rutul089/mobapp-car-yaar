@@ -205,8 +205,12 @@ const StackRoutes = () => {
         component={Screens.ImagePreviewScreen}
       />
       <Stack.Screen
-        name={'VehicleFullScreen'}
+        name={ScreenNames.VehicleFullScreen}
         component={Screens.VehiclesScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.CustomerFullScreen}
+        component={Screens.CustomersScreen}
       />
     </Stack.Navigator>
   );

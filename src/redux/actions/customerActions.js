@@ -244,10 +244,10 @@ export const submitCustomerDetailsThunk =
   };
 
 export const uploadCustomerDocumentsThunk =
-  (payload, onSuccess, onFailure) => async dispatch => {
+  (payload, customerId, onSuccess, onFailure) => async dispatch => {
     dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
     try {
-      const response = await uploadCustomerDocuments(payload);
+      const response = await uploadCustomerDocuments(payload, customerId);
       dispatch({
         type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
         payload: {
@@ -290,10 +290,10 @@ export const updateCustomerDetailsThunk =
   };
 
 export const updateCustomerDocumentsThunk =
-  (payload, onSuccess, onFailure) => async dispatch => {
+  (payload, customerId, onSuccess, onFailure) => async dispatch => {
     dispatch({type: CREATE_CUSTOMER_BASIC_DETAIL.REQUEST});
     try {
-      const response = await updateCustomerDocuments(payload);
+      const response = await updateCustomerDocuments(payload, customerId);
       dispatch({
         type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
         payload: {

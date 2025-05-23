@@ -36,16 +36,16 @@ const Vehicles_Component = ({
   clearSearch,
   setSearch,
   onAddButtonPress,
-  fullScreen,
+  isCreatingLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
-      {fullScreen ? (
+      {isCreatingLoanApplication ? (
         <>
           <Header title="Select Vehicle" onBackPress={() => goBack()} />
           <View style={styles.searchWrapper}>
             <SearchBar
-              showAddBtn
+              showAddBtn={!isCreatingLoanApplication}
               onChangeText={onSearchText}
               value={searchText}
               onCancelIconPress={clearSearch}

@@ -68,6 +68,7 @@ const Customer_Personal_Details_Component = ({
   onBankNameChange,
   searchBankNameFromAPI,
   onSelectSuggestion,
+  isEdit,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'panCardNumber',
@@ -501,7 +502,7 @@ const Customer_Personal_Details_Component = ({
           />
         </GroupWrapper>
         <FormFooterButtons
-          primaryButtonLabel={strings.next}
+          primaryButtonLabel={'Save'}
           // secondaryButtonLabel={strings.next}
           onPressPrimaryButton={onNextPress}
           // onPressSecondaryButton={onNextPress}

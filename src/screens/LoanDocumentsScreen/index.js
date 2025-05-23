@@ -80,22 +80,30 @@ class LoanDocumentsScreen extends Component {
   onNextPress = () => {
     const {selectedLoanType} = this.props;
     const {isOnboard, isEdit} = this.state;
-    if (isOnboard || isEdit) {
-      this.handleCustomerDocumentSubmission();
-      return;
-    }
-    if (selectedLoanType === loanType.refinance) {
-      return navigate(ScreenNames.FinanceDetails);
-    } else if (
-      selectedLoanType === loanType.topUp ||
-      selectedLoanType === loanType.internalBT ||
-      selectedLoanType === loanType.externalBT
-    ) {
-      return navigate(ScreenNames.CarFinanceDetails);
-    } else if (selectedLoanType === loanType.loan) {
-      return navigate(ScreenNames.CheckCIBIL);
-    } else {
-      navigate(ScreenNames.LoanAmount);
+    // if (isOnboard || isEdit) {
+    //   this.handleCustomerDocumentSubmission();
+    //   return;
+    // }
+    this.handleCustomerDocumentSubmission();
+
+    // this.navigateToNextScreenBasedOnLoanType(selectedLoanType);
+  };
+
+  navigateToNextScreenBasedOnLoanType = selectedLoanType => {
+    switch (selectedLoanType) {
+      case loanType.refinance:
+        return navigate(ScreenNames.FinanceDetails);
+
+      case loanType.topUp:
+      case loanType.internalBT:
+      case loanType.externalBT:
+        return navigate(ScreenNames.CarFinanceDetails);
+
+      case loanType.loan:
+        return navigate(ScreenNames.CheckCIBIL);
+
+      default:
+        return navigate(ScreenNames.LoanAmount);
     }
   };
 
@@ -199,11 +207,17 @@ class LoanDocumentsScreen extends Component {
   handleCustomerDocumentSubmission = () => {
     const {isEdit} = this.state;
     const {documents} = this.state;
-    const {selectedCustomerId} = this.props;
+    const {selectedCustomerId, selectedApplicationId, selectedLoanType} =
+      this.props;
 
-    const customerId = selectedCustomerId;
+    const customerId = isEdit ? selectedCustomerId : selectedApplicationId;
 
-    const payload = generateImageUploadPayload(documents, customerId, isEdit);
+    const payload = generateImageUploadPayload(
+      documents,
+      selectedCustomerId,
+      isEdit,
+    );
+
     const thunk = isEdit
       ? this.props.updateCustomerDocumentsThunk
       : this.props.uploadCustomerDocumentsThunk;
@@ -211,7 +225,12 @@ class LoanDocumentsScreen extends Component {
     this.setState({isLoading: true}, () => {
       thunk(
         payload,
-        () => navigateToTab(ScreenNames.Customer),
+        selectedApplicationId,
+        () => {
+          this.navigateToNextScreenBasedOnLoanType(selectedLoanType);
+
+          // navigateToTab(ScreenNames.Customer);
+        },
         error => {
           showApiErrorToast(error);
         },
@@ -291,6 +310,7 @@ const mapStateToProps = ({loanData, customerData}) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
   documentDetail: customerData?.documentDetail,
+  selectedApplicationId: loanData?.selectedApplicationId,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(LoanDocumentsScreen);
