@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {addCustomerLoanAmountThunk} from '../../redux/actions';
-import {showToast} from '../../utils/helper';
+import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Loan_Amount_Component from './Loan_Amount_Component';
 
@@ -80,7 +80,7 @@ class LoanAmountScreen extends Component {
         headerProp={{
           title: 'Loan Amount',
           subtitle: isCreatingLoanApplication
-            ? UsedVehicle?.registerNumber
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
           showRightContent: true,
           rightLabel: isCreatingLoanApplication

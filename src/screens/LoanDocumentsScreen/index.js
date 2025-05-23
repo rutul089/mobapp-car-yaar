@@ -23,7 +23,11 @@ import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
-import {showApiErrorToast, showToast} from '../../utils/helper';
+import {
+  formatVehicleNumber,
+  showApiErrorToast,
+  showToast,
+} from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
 
 class LoanDocumentsScreen extends Component {
@@ -245,22 +249,15 @@ class LoanDocumentsScreen extends Component {
       selectedLoanApplication,
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
-    const {
-      documents,
-      isLoadingDocument,
-      showFilePicker,
-      isOnboard,
-      registrationNumber,
-      isLoading,
-      isEdit,
-    } = this.state;
+    const {documents, showFilePicker, isOnboard, isLoading, isEdit} =
+      this.state;
     return (
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}
         headerProp={{
           title: `${isEdit ? 'Edit ' : ''}Loan Documents`,
           subtitle: isCreatingLoanApplication
-            ? UsedVehicle?.registerNumber
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
           showRightContent: true,
           rightLabel: isCreatingLoanApplication

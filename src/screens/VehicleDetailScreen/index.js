@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {fetchVehicleFromIdThunk} from '../../redux/actions';
 import {get} from 'lodash';
 import {formatDate, formatVehicleDetails} from '../../utils/helper';
+import {loanType} from '../../constants/enums';
 
 class VehicleDetail extends Component {
   constructor(props) {
@@ -55,11 +56,17 @@ class VehicleDetail extends Component {
   };
 
   onNextPress = () => {
-    const {isCreatingLoanApplication} = this.props;
+    const {isCreatingLoanApplication, selectedLoanType} = this.props;
+    let screenName = '';
+    if (isCreatingLoanApplication && selectedLoanType === loanType.refinance) {
+      screenName = ScreenNames.VehicleHypothecation;
+    } else if (isCreatingLoanApplication) {
+      screenName = ScreenNames.CustomerFullScreen;
+    } else {
+      screenName = ScreenNames.CustomerFullScreen;
+    }
     navigate(
-      isCreatingLoanApplication
-        ? ScreenNames.CustomerFullScreen
-        : ScreenNames.VehicleImages,
+      isCreatingLoanApplication ? screenName : ScreenNames.VehicleImages,
     );
   };
 
@@ -169,6 +176,7 @@ const mapStateToProps = ({vehicleData, loanData}) => {
     selectedVehicle: vehicleData?.selectedVehicle,
     loading: vehicleData?.loading,
     isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+    selectedLoanType: loanData.selectedLoanType,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(VehicleDetail);

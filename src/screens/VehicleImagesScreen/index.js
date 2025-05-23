@@ -12,7 +12,7 @@ import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
-import {showToast} from '../../utils/helper';
+import {formatVehicleNumber, showToast} from '../../utils/helper';
 import Vehicle_Images_Component from './Vehicle_Images_Component';
 
 class VehicleImagesScreen extends Component {
@@ -184,7 +184,9 @@ class VehicleImagesScreen extends Component {
 
     return (
       <Vehicle_Images_Component
-        registerNumber={selectedVehicle?.UsedVehicle?.registerNumber}
+        registerNumber={formatVehicleNumber(
+          selectedVehicle?.UsedVehicle?.registerNumber,
+        )}
         vehicleImages={vehicleImageTypes.map(type => ({
           type,
           label: vehicleImageLabelMap[type],

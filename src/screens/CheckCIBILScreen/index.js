@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import CheckCIBIL_Component from './CheckCIBIL_Component';
+import {formatVehicleNumber} from '../../utils/helper';
 
 class CheckCIBILScreen extends Component {
   constructor(props) {
@@ -32,28 +33,6 @@ class CheckCIBILScreen extends Component {
     navigate(ScreenNames.CustomerEnvelope);
   };
 
-  formatVehicleNumber = (vehicleNumber = '') => {
-    const clean = vehicleNumber.toUpperCase().replace(/\s+/g, '');
-
-    // Format for Bharat Series (e.g., KABH1234AA)
-    const bhPattern = /^([A-Z]{2})(BH)(\d{4})([A-Z]{2})$/;
-    const standardPattern = /^([A-Z]{2})(\d{2})([A-Z]{2})(\d{4})$/;
-
-    if (bhPattern.test(clean)) {
-      const [, state, bh, number, series] = clean.match(bhPattern);
-      return `${state} ${bh} ${number} ${series}`;
-    }
-
-    // Format for standard numbers (e.g., GJ01RM5054)
-    if (standardPattern.test(clean)) {
-      const [, state, code, series, number] = clean.match(standardPattern);
-      return `${state} ${code} ${series} ${number}`;
-    }
-
-    // Return original if it doesn't match known formats
-    return vehicleNumber;
-  };
-
   render() {
     const {
       selectedVehicle,
@@ -71,7 +50,7 @@ class CheckCIBILScreen extends Component {
           headerProp={{
             title: 'Check CIBIL Score',
             subtitle: isCreatingLoanApplication
-              ? this.formatVehicleNumber(UsedVehicle?.registerNumber)
+              ? formatVehicleNumber(UsedVehicle?.registerNumber)
               : '',
             showRightContent: true,
             rightLabel: isCreatingLoanApplication

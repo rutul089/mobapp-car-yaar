@@ -72,3 +72,7 @@ export const FETCH_LOAN_APP_BY_ID = createAsyncActionTypes(
 export const CREATE_CUSTOMER_BASIC_DETAIL = createAsyncActionTypes(
   'CREATE_CUSTOMER_BASIC_DETAIL',
 );
+
+export const PARTNER_PERFORMANCE = createAsyncActionTypes(
+  'PARTNER_PERFORMANCE',
+);

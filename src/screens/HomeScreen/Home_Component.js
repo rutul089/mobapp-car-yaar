@@ -25,6 +25,9 @@ const Home_Component = ({
   handleSubscribeOptionPress,
   handleLoanTypeSelection,
   profileImage,
+  userName,
+  userRole,
+  partnerStats,
 }) => {
   /**
    * Render a small stat card (e.g., Loans Pending/Approved)
@@ -75,7 +78,7 @@ const Home_Component = ({
         <View style={styles.header}>
           <View style={styles.profileRow}>
             <Text hankenGroteskSemiBold color="white" style={{width: '80%'}}>
-              Welcome Back Ghanshyam Sinha!
+              {`Welcome Back ${userName}!`}
             </Text>
             <Text
               style={{width: '20%'}}
@@ -83,14 +86,26 @@ const Home_Component = ({
               textAlign="right"
               color={theme.colors.textLabel}
               size={theme.typography.fontSizes.small}>
-              XX0012
+              {userRole}
             </Text>
           </View>
 
           <View style={styles.statsContainer}>
-            {renderStatBox(3, '#F8A902', 'Loans\nPending')}
-            {renderStatBox(3, '#6EEE87', 'Loans\nApproved')}
-            {renderStatBox(2, '#696EFF', 'Vehicles\nOnboarded')}
+            {renderStatBox(
+              partnerStats?.loansPending ?? '-',
+              '#F8A902',
+              'Loans\nPending',
+            )}
+            {renderStatBox(
+              partnerStats?.loansApproved ?? '-',
+              '#6EEE87',
+              'Loans\nApproved',
+            )}
+            {renderStatBox(
+              partnerStats?.vehiclesOnboarded ?? '-',
+              '#696EFF',
+              'Vehicles\nOnboarded',
+            )}
           </View>
           <Spacing />
         </View>

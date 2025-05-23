@@ -81,6 +81,7 @@ export const fetchUser = (onSuccess, onFailure) => {
       });
 
       onSuccess?.(response?.data);
+      return response?.data;
     } catch (error) {
       dispatch({
         type: types.FETCH_USER_FAILURE,

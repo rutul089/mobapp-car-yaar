@@ -13,6 +13,7 @@ import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
+import {currentLoanTypes} from '../../constants/enums';
 
 const Vehicle_Hypothecation_Component = ({
   onSelectedAnswer = () => {},
@@ -20,16 +21,12 @@ const Vehicle_Hypothecation_Component = ({
   state,
   saveAsDraftPress,
   onNextPress,
+  headerProp,
+  isCreatingLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper>
-      <Header
-        title="Vehicle Details"
-        subtitle="@12313"
-        rightLabel="#ABC123"
-        showRightContent={true}
-        onBackPress={() => goBack()}
-      />
+      <Header {...headerProp} />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
         bounces={false}>
@@ -38,16 +35,17 @@ const Vehicle_Hypothecation_Component = ({
         <Card>
           <RadioGroupRow
             label={'Select answer'}
-            options={answerList}
+            options={currentLoanTypes}
             selectedValue={state.carHypoStatus}
             onChange={onSelectedAnswer}
           />
         </Card>
         <FormFooterButtons
-          primaryButtonLabel={strings.btnSaveDraft}
-          secondaryButtonLabel={strings.next}
-          onPressPrimaryButton={saveAsDraftPress}
-          onPressSecondaryButton={onNextPress}
+          primaryButtonLabel={strings.next}
+          // secondaryButtonLabel={strings.next}
+          onPressPrimaryButton={onNextPress}
+          // onPressSecondaryButton={onNextPress}
+          hideSecondaryButton={true}
         />
       </KeyboardAwareScrollView>
     </SafeAreaWrapper>

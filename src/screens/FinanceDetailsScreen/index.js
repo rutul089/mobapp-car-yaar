@@ -9,7 +9,7 @@ class FinanceDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedAnswer: '',
+      selectedAnswer: currentLoanOptions.YES,
     };
     this.onSelectAnswer = this.onSelectAnswer.bind(this);
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
@@ -46,10 +46,6 @@ class FinanceDetailsScreen extends Component {
       <>
         <Finance_Details_Component
           state={this.state}
-          answerOption={[
-            {label: 'Yes', value: currentLoanOptions.yes},
-            {label: 'No', value: currentLoanOptions.no},
-          ]}
           onSelectAnswer={this.onSelectAnswer}
           saveAsDraftPress={this.saveAsDraftPress}
           onNextPress={this.onNextPress}

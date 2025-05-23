@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {loanType, vehicleType} from '../../constants/enums';
+import {
+  getLabelFromEnum,
+  loanType,
+  userRoleValue,
+  vehicleType,
+} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {
+  fetchPartnerStatsThunk,
   fetchUser,
   selectedLoanType,
   setIsCreatingLoanApplication,
@@ -31,9 +37,12 @@ class HomeScreen extends Component {
     this.handleLoanTypeSelection = this.handleLoanTypeSelection.bind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchUser();
-  }
+  componentDidMount = async () => {
+    try {
+      const userResponse = await this.props.fetchUser();
+      await this.props.fetchPartnerStatsThunk(userResponse.id);
+    } catch (err) {}
+  };
 
   /**
    * Navigates to the notifications screen.
@@ -92,7 +101,7 @@ class HomeScreen extends Component {
   };
 
   render() {
-    const {userData} = this.props;
+    const {userData, partnerStats} = this.props;
     return (
       <Home_Component
         onSelectedCarType={this.onSelectedCarType}
@@ -103,6 +112,9 @@ class HomeScreen extends Component {
         handleSubscribeOptionPress={this.handleSubscribeOptionPress}
         handleLoanTypeSelection={this.handleLoanTypeSelection}
         profileImage={userData?.profileImage}
+        userName={userData?.name || ''}
+        userRole={getLabelFromEnum(userRoleValue, userData?.role)}
+        partnerStats={partnerStats}
       />
     );
   }
@@ -112,10 +124,12 @@ const mapDispatchToProps = {
   selectedLoanType,
   setIsCreatingLoanApplication,
   fetchUser,
+  fetchPartnerStatsThunk,
 };
 
-const mapStateToProps = ({user}) => ({
+const mapStateToProps = ({user, partnerPerformance}) => ({
   userData: user?.userProfile,
+  partnerStats: partnerPerformance?.partnerStats,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

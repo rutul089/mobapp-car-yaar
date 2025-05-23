@@ -15,6 +15,7 @@ import {Alert, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
+import {currentLoanTypes} from '../../constants/enums';
 
 const Finance_Details_Component = ({
   answerOption,
@@ -45,7 +46,7 @@ const Finance_Details_Component = ({
         <Card>
           <RadioGroupRow
             label={'Select answer'}
-            options={answerOption}
+            options={currentLoanTypes}
             selectedValue={state.selectedAnswer}
             onChange={onSelectAnswer}
           />

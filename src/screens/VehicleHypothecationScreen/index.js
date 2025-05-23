@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Vehicle_Hypothecation_Component from './Vehicle_Hypothecation_Component';
 import {currentLoanOptions} from '../../constants/enums';
-import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
+import Vehicle_Hypothecation_Component from './Vehicle_Hypothecation_Component';
+import {formatVehicleNumber} from '../../utils/helper';
 
 class VehicleHypothecationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      carHypoStatus: '',
+      carHypoStatus: currentLoanOptions.YES,
     };
     this.onSelectedAnswer = this.onSelectedAnswer.bind(this);
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
@@ -31,17 +32,34 @@ class VehicleHypothecationScreen extends Component {
   };
 
   render() {
+    const {
+      selectedVehicle,
+      isCreatingLoanApplication,
+      selectedLoanApplication,
+      loading,
+      selectedCustomer,
+    } = this.props;
+    const {UsedVehicle = {}} = selectedVehicle || {};
     return (
       <>
         <Vehicle_Hypothecation_Component
+          headerProp={{
+            title: 'Vehicle Details',
+            subtitle: isCreatingLoanApplication
+              ? formatVehicleNumber(UsedVehicle?.registerNumber)
+              : '',
+            showRightContent: true,
+            rightLabel: isCreatingLoanApplication
+              ? selectedLoanApplication?.loanApplicationId || ''
+              : '',
+            rightLabelColor: '#F8A902',
+            onBackPress: () => goBack(),
+          }}
           state={this.state}
-          answerList={[
-            {label: 'Yes', value: currentLoanOptions.yes},
-            {label: 'No', value: currentLoanOptions.no},
-          ]}
           onSelectedAnswer={this.onSelectedAnswer}
           onNextPress={this.onNextPress}
           saveAsDraftPress={this.saveAsDraftPress}
+          isCreatingLoanApplication={isCreatingLoanApplication}
         />
       </>
     );
@@ -49,9 +67,19 @@ class VehicleHypothecationScreen extends Component {
 }
 
 const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
-};
+
+const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
+  selectedLoanType: loanData.selectedLoanType,
+  selectedCustomerId: customerData?.selectedCustomerId,
+  documentDetail: customerData?.documentDetail,
+  selectedApplicationId: loanData?.selectedApplicationId,
+  loading: loanData?.loading,
+  selectedVehicle: vehicleData?.selectedVehicle,
+  isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+  selectedLoanApplication: loanData?.selectedLoanApplication,
+  selectedCustomer: loanData?.selectedCustomer,
+});
+
 export default connect(
   mapStateToProps,
   mapActionCreators,
