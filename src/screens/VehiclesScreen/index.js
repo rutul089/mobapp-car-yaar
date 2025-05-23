@@ -161,8 +161,13 @@ class Vehicles extends Component {
   };
 
   render() {
-    const {loading, vehicleList, searchVehicles, isCreatingLoanApplication} =
-      this.props;
+    const {
+      loading,
+      vehicleList,
+      searchVehicles,
+      isCreatingLoanApplication,
+      userData,
+    } = this.props;
 
     const {refreshing, apiTrigger, searchText, isSearch, fullScreen} =
       this.state;
@@ -189,12 +194,13 @@ class Vehicles extends Component {
         setSearch={this.searchFromAPI}
         onAddButtonPress={this.onAddButtonPress}
         isCreatingLoanApplication={isCreatingLoanApplication}
+        profileImage={userData?.profileImage}
       />
     );
   }
 }
 
-const mapStateToProps = ({vehicleData, loanData}) => ({
+const mapStateToProps = ({vehicleData, loanData, user}) => ({
   vehicleList: vehicleData?.allVehicles?.data,
   searchVehicles: vehicleData?.searchVehicles,
   page: vehicleData.page,
@@ -203,6 +209,7 @@ const mapStateToProps = ({vehicleData, loanData}) => ({
   searchTotalPages: vehicleData.searchTotalPages,
   loading: vehicleData?.loading,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+  userData: user?.userProfile,
 });
 
 const mapDispatchToProps = {

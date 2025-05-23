@@ -18,6 +18,7 @@ import {
   customerCategoryValue,
   customerIndividualTypeValue,
   getLabelFromEnum,
+  loanTypeLabelMap,
 } from '../../constants/enums';
 
 class ViewLoanDetailsScreen extends Component {
@@ -109,7 +110,13 @@ class ViewLoanDetailsScreen extends Component {
               label: 'Tenure',
               value: formatMonths(selectedLoanApplication?.tenure, loading),
             },
-            {label: 'Loan Type', value: selectedLoanApplication?.loanType},
+            {
+              label: 'Loan Type',
+              value: getLabelFromEnum(
+                loanTypeLabelMap,
+                selectedLoanApplication?.loanType,
+              ),
+            },
           ],
           rejectionReason: safeGet(
             loading,

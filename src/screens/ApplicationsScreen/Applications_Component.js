@@ -34,6 +34,7 @@ const Applications_Component = ({
   searchText,
   clearSearch,
   setSearch,
+  profileImage,
 }) => {
   const renderItem = ({item}) => (
     <CardWrapper
@@ -77,7 +78,7 @@ const Applications_Component = ({
         subTittle={'Loan Application'}
         searchPlaceHolder={'Search by application id'}
         onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
-        profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
+        profileImage={profileImage}
         onChangeText={onSearchText}
         value={searchText}
         onCancelIconPress={clearSearch}

@@ -14,6 +14,7 @@ import {
 } from '@caryaar/components';
 import strings from '../../locales/strings';
 import {sanitizeAmount} from '../../utils/inputHelper';
+import {formatIndianCurrency} from '../../utils/helper';
 
 const Loan_Amount_Component = ({
   headerProp,
@@ -22,6 +23,7 @@ const Loan_Amount_Component = ({
   restInputProps = {},
   onChangeLoanAmount,
   loading,
+  loanAmount,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -48,6 +50,7 @@ const Loan_Amount_Component = ({
             onChangeLoanAmount?.(sanitizedText);
           }}
           onSubmitEditing={onNextButtonPress}
+          value={formatIndianCurrency(loanAmount, true, true)}
           {...(restInputProps?.loanAmount || {})}
         />
         <FormFooterButtons

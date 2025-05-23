@@ -184,6 +184,21 @@ export const validateField = (key, value, isOptional) => {
     case 'bankName':
       return trimmedValue === '' ? 'Please enter Bank Name.' : '';
 
+    case 'fullName':
+    case 'ownerName':
+    case 'accountHolderName':
+      return trimmedValue === ''
+        ? `Please enter a valid ${
+            key === 'ownerName'
+              ? 'owner name'
+              : key === 'fullName'
+              ? 'Full Name'
+              : 'account holder name'
+          }`
+        : !nameRegex.test(trimmedValue)
+        ? 'Name should contain only alphabets'
+        : '';
+
     default:
       return '';
   }

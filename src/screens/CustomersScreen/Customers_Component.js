@@ -1,28 +1,27 @@
 import {
   CardWrapper,
   CustomerCard,
+  Header,
   ImageHeader,
-  SafeAreaWrapper,
-  Spacing,
-  theme,
   Loader,
   PaginationFooter,
-  images,
-  Header,
+  SafeAreaWrapper,
   SearchBar,
+  images,
+  theme,
 } from '@caryaar/components';
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 
+import {NoDataFound} from '../../components';
+import {API_TRIGGER} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
   capitalizeFirstLetter,
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {NoDataFound} from '../../components';
-import {API_TRIGGER} from '../../constants/enums';
 
 const Customers_Component = ({
   customerList,
@@ -40,6 +39,7 @@ const Customers_Component = ({
   setSearch,
   onAddButtonPress,
   isCreatingLoanApplication,
+  profileImage,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
@@ -63,7 +63,7 @@ const Customers_Component = ({
           searchPlaceHolder={'Search by customer name or ID...'}
           onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
           onRightIconPress={() => navigate(ScreenNames.Notification)}
-          profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
+          profileImage={profileImage}
           onChangeText={onSearchText}
           value={searchText}
           onCancelIconPress={clearSearch}

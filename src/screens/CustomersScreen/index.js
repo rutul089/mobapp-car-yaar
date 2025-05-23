@@ -151,8 +151,13 @@ class CustomersScreen extends Component {
 
   render() {
     const {apiTrigger, refreshing, searchText, isSearch} = this.state;
-    const {customers, loading, searchCustomers, isCreatingLoanApplication} =
-      this.props;
+    const {
+      customers,
+      loading,
+      searchCustomers,
+      isCreatingLoanApplication,
+      userData,
+    } = this.props;
 
     const [currentPage, totalPages] = this.getPageInfo();
     const initialLoading =
@@ -177,6 +182,7 @@ class CustomersScreen extends Component {
         setSearch={this.searchFromAPI}
         onAddButtonPress={this.onAddButtonPress}
         isCreatingLoanApplication={isCreatingLoanApplication}
+        profileImage={userData?.profileImage}
       />
     );
   }
@@ -189,7 +195,7 @@ const mapDispatchToProps = {
   resetSelectedCustomer,
 };
 
-const mapStateToProps = ({customerData, loanData}) => {
+const mapStateToProps = ({customerData, loanData, user}) => {
   return {
     customers: customerData?.customers,
     searchCustomers: customerData?.searchCustomer,
@@ -199,6 +205,7 @@ const mapStateToProps = ({customerData, loanData}) => {
     searchPage: customerData.searchPage,
     searchTotalPages: customerData.searchTotalPages,
     isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+    userData: user?.userProfile,
   };
 };
 

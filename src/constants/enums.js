@@ -272,6 +272,18 @@ export const loanType = Object.freeze({
   topUp: 'TOP_UP',
 });
 
+export const loanTypeLabelMap = {
+  [loanType.addVehicle]: 'Add Vehicle',
+  [loanType.externalBT]: 'External Balance Transfer',
+  [loanType.internalBT]: 'Internal Balance Transfer',
+  [loanType.lease]: 'Lease',
+  [loanType.loan]: 'Loan',
+  [loanType.purchase]: 'Purchase',
+  [loanType.refinance]: 'Refinance',
+  [loanType.subscribe]: 'Subscribe',
+  [loanType.topUp]: 'Top-Up',
+};
+
 export const vehicleType = Object.freeze({
   used: 'used',
   new: 'new',
@@ -289,4 +301,16 @@ export const getLabelFromEnum = (enumObject, value, defaultLabel = '') => {
  */
 export const getApplicationStatusLabel = status => {
   return applicationStatusValue[status] || '';
+};
+
+export const userRole = Object.freeze({
+  ADMIN: 'ADMIN',
+  PARTNER: 'PARTNER',
+  SALES_EXECUTIVE: 'SALES_EXECUTIVE',
+});
+
+export const userRoleValue = {
+  [userRole.ADMIN]: 'Admin',
+  [userRole.PARTNER]: 'Partner',
+  [userRole.SALES_EXECUTIVE]: 'Sales Executive',
 };

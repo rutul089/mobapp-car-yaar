@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Profile_Component from './Profile_Component';
-import {navigate} from '../../../navigation/NavigationUtils';
 import ScreenNames from '../../../constants/ScreenNames';
-import {Alert} from 'react-native';
-import {logoutUser} from '../../../redux/actions';
+import {navigate} from '../../../navigation/NavigationUtils';
+import {fetchUser, logoutUser} from '../../../redux/actions';
+import Profile_Component from './Profile_Component';
+import {getLabelFromEnum, userRoleValue} from '../../../constants/enums';
+import {removeCountryCode} from '../../../utils/helper';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -18,7 +19,9 @@ class ProfileScreen extends Component {
     this.onPressPrimaryButton = this.onPressPrimaryButton.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.fetchUser();
+  }
 
   onPressRightContent = () => {
     navigate(ScreenNames.EditProfile);
@@ -54,6 +57,8 @@ class ProfileScreen extends Component {
 
   render() {
     const {showLogoutModal} = this.state;
+    const {loading, profileDetail} = this.props;
+    console.log({profileDetail});
 
     return (
       <>
@@ -63,14 +68,25 @@ class ProfileScreen extends Component {
           showLogoutModal={showLogoutModal}
           onModalHide={this.onModalHide}
           onPressPrimaryButton={this.onPressPrimaryButton}
+          loading={loading}
+          name={profileDetail?.name}
+          email={profileDetail?.email}
+          phone={removeCountryCode(profileDetail?.mobileNumber)}
+          designation={getLabelFromEnum(userRoleValue, profileDetail?.role)}
+          avatar={profileDetail?.profileImage}
         />
       </>
     );
   }
 }
 
-const mapActionCreators = {logoutUser};
-const mapStateToProps = state => {
-  return {};
+const mapActionCreators = {logoutUser, fetchUser};
+const mapStateToProps = ({user}) => {
+  return {
+    userDetail: user?.userDetails,
+    loading: user.loading,
+    profileDetail: user.userProfile,
+    error: user.error,
+  };
 };
 export default connect(mapStateToProps, mapActionCreators)(ProfileScreen);

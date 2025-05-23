@@ -8,6 +8,7 @@ import {
   images,
   theme,
   CommonModal,
+  Loader,
 } from '@caryaar/components';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
@@ -21,6 +22,14 @@ const Profile_Component = ({
   onPressPrimaryButton,
   showLogoutModal,
   handleMenuPress = () => {},
+  loading,
+  address,
+  name,
+  email,
+  phone,
+  userID,
+  avatar,
+  designation,
 }) => {
   const version = DeviceInfo.getVersion();
   const build = DeviceInfo.getBuildNumber();
@@ -28,21 +37,26 @@ const Profile_Component = ({
   const profileCard = () => {
     return (
       <View style={styles.profileCard}>
-        <Image source={images.placeholder_image} style={styles.profilePic} />
+        <Image
+          source={avatar == null ? images.placeholder_image : {uri: avatar}}
+          style={styles.profilePic}
+        />
         <View style={styles.infoSection}>
           <Text
             size={'small'}
             hankenGroteskSemiBold={true}
             color={theme.colors.primary}>
-            !XX0012
+            {designation}
           </Text>
           <Text hankenGroteskExtraBold={true} color={theme.colors.white}>
-            Ghanshyam Sinha
+            {name}
           </Text>
-          <View style={{flexDirection: 'row', marginTop: 5}}>
-            <Image source={images.locationPin} style={styles.locationStyle} />
-            <Text color={theme.colors.textSecondary}>Delhi</Text>
-          </View>
+          {address && (
+            <View style={{flexDirection: 'row', marginTop: 5}}>
+              <Image source={images.locationPin} style={styles.locationStyle} />
+              <Text color={theme.colors.textSecondary}>{address}</Text>
+            </View>
+          )}
         </View>
       </View>
     );
@@ -56,9 +70,9 @@ const Profile_Component = ({
             icon: images.businessSuitcase,
             label: 'CarYaar Designation Name',
           },
-          {icon: images.user, label: 'Dealer Type'},
-          {icon: images.email, label: 'ghanshyam_sinha859@gmail.com'},
-          {icon: images.callOutline, label: '91448 82901'},
+          {icon: images.user, label: designation},
+          {icon: images.email, label: email},
+          {icon: images.callOutline, label: phone},
         ].map((item, index) => (
           <View key={index} style={styles.detailRow}>
             <Image source={item.icon} style={styles.detailIcon} />
@@ -150,7 +164,8 @@ const Profile_Component = ({
         isScrollableContent={true}
         isPrimaryButtonVisible={true}
         onPressPrimaryButton={onPressPrimaryButton}
-        title="Confirm Logout">
+        title="Confirm Logout"
+        isCancellable={false}>
         <View style={{paddingVertical: 10}}>
           <Text textAlign="center" lineHeight={22}>
             Are you sure you want to log out? You will need to log in again to
@@ -158,6 +173,7 @@ const Profile_Component = ({
           </Text>
         </View>
       </CommonModal>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

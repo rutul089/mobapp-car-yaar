@@ -24,16 +24,11 @@ const CheckCIBIL_Component = ({
   resendOTP,
   onConfirmPress,
   isOtpSend,
+  headerProp,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header
-        title="Check CIBIL Score"
-        subtitle="GJ 01 JR 0945"
-        rightLabel="#ABC123"
-        showRightContent
-        onBackPress={() => goBack()}
-      />
+      <Header {...headerProp} />
       <KeyboardAwareScrollView
         bounces={false}
         contentContainerStyle={styles.wrapper}>

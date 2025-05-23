@@ -305,3 +305,27 @@ export const convertToISODate = dateStr => {
 
   return date.toISOString(); // returns "1995-07-15T00:00:00.000Z"
 };
+
+/**
+ * Remove country code from phone number
+ * @param {string} phoneNumber
+ * @param {string} [defaultCountryCode='91']
+ * @returns {string}
+ */
+export const removeCountryCode = (phoneNumber, defaultCountryCode = '91') => {
+  if (!phoneNumber) {
+    return '';
+  }
+
+  const digitsOnly = phoneNumber.replace(/\D/g, '');
+
+  if (digitsOnly.startsWith(defaultCountryCode)) {
+    return digitsOnly.slice(defaultCountryCode.length);
+  }
+
+  if (digitsOnly.startsWith('0')) {
+    return digitsOnly.slice(1);
+  }
+
+  return digitsOnly.length > 10 ? digitsOnly.slice(-10) : digitsOnly;
+};

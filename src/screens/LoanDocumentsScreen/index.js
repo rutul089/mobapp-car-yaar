@@ -240,6 +240,12 @@ class LoanDocumentsScreen extends Component {
 
   render() {
     const {
+      selectedVehicle,
+      isCreatingLoanApplication,
+      selectedLoanApplication,
+    } = this.props;
+    const {UsedVehicle = {}} = selectedVehicle || {};
+    const {
       documents,
       isLoadingDocument,
       showFilePicker,
@@ -253,9 +259,13 @@ class LoanDocumentsScreen extends Component {
         isOnboard={isOnboard || isEdit}
         headerProp={{
           title: `${isEdit ? 'Edit ' : ''}Loan Documents`,
-          subtitle: isOnboard ? '' : '',
+          subtitle: isCreatingLoanApplication
+            ? UsedVehicle?.registerNumber
+            : '',
           showRightContent: true,
-          rightLabel: isOnboard ? '' : registrationNumber,
+          rightLabel: isCreatingLoanApplication
+            ? selectedLoanApplication?.loanApplicationId || ''
+            : '',
           rightLabelColor: '#F8A902',
           onBackPress: () => goBack(),
         }}
@@ -306,11 +316,14 @@ const mapActionCreators = {
   updateCustomerDocumentsThunk,
 };
 
-const mapStateToProps = ({loanData, customerData}) => ({
+const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
   documentDetail: customerData?.documentDetail,
   selectedApplicationId: loanData?.selectedApplicationId,
+  selectedVehicle: vehicleData?.selectedVehicle,
+  isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+  selectedLoanApplication: loanData?.selectedLoanApplication,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(LoanDocumentsScreen);

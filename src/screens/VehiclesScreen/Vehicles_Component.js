@@ -37,6 +37,7 @@ const Vehicles_Component = ({
   setSearch,
   onAddButtonPress,
   isCreatingLoanApplication,
+  profileImage,
 }) => {
   return (
     <SafeAreaWrapper hideBottom>
@@ -63,7 +64,7 @@ const Vehicles_Component = ({
           value={searchText}
           onCancelIconPress={clearSearch}
           onSubmitEditing={setSearch}
-          profileImage={'https://randomuser.me/api/portraits/men/75.jpg'}
+          profileImage={profileImage}
           showAddBtn
           onAddButtonPress={onAddButtonPress}
           hideHeader

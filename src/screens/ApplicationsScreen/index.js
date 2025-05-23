@@ -165,7 +165,7 @@ class ApplicationsScreen extends Component {
    */
   render() {
     const {apiTrigger, refreshing, searchText, isSearch} = this.state;
-    const {applications, loading, searchApplications} = this.props;
+    const {applications, loading, searchApplications, userData} = this.props;
 
     const [currentPage, totalPages] = this.getPageInfo();
     const initialLoading =
@@ -189,6 +189,7 @@ class ApplicationsScreen extends Component {
         clearSearch={this.clearSearch}
         setSearch={this.searchFromAPI}
         loading={initialLoading}
+        profileImage={userData?.profileImage}
       />
     );
   }
@@ -202,7 +203,7 @@ const mapDispatchToProps = {
 };
 
 // Redux: map state to props
-const mapStateToProps = ({loanData}) => {
+const mapStateToProps = ({loanData, user}) => {
   return {
     applications: loanData.applications,
     loading: loanData.loading,
@@ -211,6 +212,7 @@ const mapStateToProps = ({loanData}) => {
     totalPage: loanData?.totalPage,
     searchPage: loanData.searchPage,
     searchTotalPages: loanData.searchTotalPages,
+    userData: user?.userProfile,
   };
 };
 
