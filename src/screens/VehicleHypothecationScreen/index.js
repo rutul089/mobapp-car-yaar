@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {currentLoanOptions} from '../../constants/enums';
+import {currentLoanOptions, loanType} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Vehicle_Hypothecation_Component from './Vehicle_Hypothecation_Component';
@@ -28,7 +28,24 @@ class VehicleHypothecationScreen extends Component {
   saveAsDraftPress = () => {};
 
   onNextPress = () => {
-    navigate(ScreenNames.CustomerDetail);
+    const {selectedLoanType} = this.props;
+
+    switch (selectedLoanType) {
+      case loanType.refinance:
+        return navigate(ScreenNames.FinanceDetails);
+
+      case loanType.topUp:
+      case loanType.internalBT:
+      case loanType.externalBT:
+        return navigate(ScreenNames.CarFinanceDetails);
+
+      case loanType.loan:
+        return navigate(ScreenNames.CheckCIBIL);
+
+      default:
+        return navigate(ScreenNames.LoanAmount);
+    }
+    // navigate(ScreenNames.CustomerDetail);
   };
 
   render() {

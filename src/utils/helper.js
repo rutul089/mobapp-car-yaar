@@ -15,7 +15,7 @@ export const formatIndianCurrency = (
   let cleaned = intPart.replace(/[^0-9]/g, '');
 
   if (!cleaned) {
-    return '';
+    return showPlaceholder ? '' : '-';
   }
 
   let lastThree = cleaned.slice(-3);

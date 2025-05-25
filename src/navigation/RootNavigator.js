@@ -30,7 +30,6 @@ export default class RootNavigator extends Component {
   };
 
   render() {
-    const {currentScreenName} = this.state;
     return (
       <View style={styles.wrapper}>
         <NavigationContainer

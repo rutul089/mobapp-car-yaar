@@ -6,10 +6,10 @@ import {
   getLabelFromEnum,
   occupationLabelMap,
 } from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
-  navigate,
   navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
@@ -26,7 +26,6 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
-import ScreenNames from '../../constants/ScreenNames';
 
 const initialState = {
   applicantPhoto: '',
@@ -105,7 +104,6 @@ class CustomerPersonalDetails extends Component {
     };
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
-    this.onSelectBankOption = this.onSelectBankOption.bind(this);
     this.onSelectIncomeSourceOption =
       this.onSelectIncomeSourceOption.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
@@ -175,10 +173,6 @@ class CustomerPersonalDetails extends Component {
         this.onChangeField('incomeSource', this.state.incomeSource);
       },
     );
-  };
-
-  onSelectBankOption = (value, index) => {
-    this.onChangeField('bankName', value?.label);
   };
 
   onNextPress = () => {
@@ -409,7 +403,6 @@ class CustomerPersonalDetails extends Component {
         onSelectedLoanOption={this.onSelectedLoanOption}
         onSelectedOccupation={this.onSelectedOccupation}
         onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
-        onSelectBankOption={this.onSelectBankOption}
         onChangeMonthlyIncome={value =>
           this.onChangeField('monthlyIncome', value)
         }

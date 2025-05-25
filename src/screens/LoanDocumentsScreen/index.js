@@ -10,7 +10,6 @@ import {
   getScreenParam,
   goBack,
   navigate,
-  navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
   fetchCustomerDocumentsThunk,
@@ -96,7 +95,8 @@ class LoanDocumentsScreen extends Component {
   navigateToNextScreenBasedOnLoanType = selectedLoanType => {
     switch (selectedLoanType) {
       case loanType.refinance:
-        return navigate(ScreenNames.FinanceDetails);
+        // return navigate(ScreenNames.FinanceDetails);
+        return navigate(ScreenNames.VehicleHypothecation);
 
       case loanType.topUp:
       case loanType.internalBT:
@@ -232,8 +232,6 @@ class LoanDocumentsScreen extends Component {
         selectedApplicationId,
         () => {
           this.navigateToNextScreenBasedOnLoanType(selectedLoanType);
-
-          // navigateToTab(ScreenNames.Customer);
         },
         error => {
           showApiErrorToast(error);

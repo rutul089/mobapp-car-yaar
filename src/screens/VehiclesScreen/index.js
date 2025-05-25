@@ -27,14 +27,9 @@ class Vehicles extends Component {
 
   componentDidMount() {
     let navState = getScreenParam(this.props.route, 'params');
-    this.setState(
-      {
-        fullScreen: navState?.fullScreen,
-      },
-      () => {
-        console.log('navState', this.state.fullScreen);
-      },
-    );
+    this.setState({
+      fullScreen: navState?.fullScreen,
+    });
 
     this.fetchVehicles();
   }

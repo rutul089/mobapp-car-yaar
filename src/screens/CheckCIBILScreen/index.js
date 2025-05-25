@@ -43,7 +43,6 @@ class CheckCIBILScreen extends Component {
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
 
-    console.log(JSON.stringify(selectedCustomer));
     return (
       <>
         <CheckCIBIL_Component

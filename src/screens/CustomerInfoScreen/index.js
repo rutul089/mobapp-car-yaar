@@ -1,24 +1,20 @@
+import {get} from 'lodash';
 import React, {Component} from 'react';
+import {Alert} from 'react-native';
 import {connect} from 'react-redux';
-import Customer_Info_Component from './Customer_Info_Component';
+import {getLabelFromEnum, occupationLabelMap} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
+import {
+  fetchCustomerDetailsThunk,
+  initiateLoanApplicationThunk,
+} from '../../redux/actions';
 import {
   capitalizeFirstLetter,
   formatDate,
   formatIndianCurrency,
 } from '../../utils/helper';
-import {Alert} from 'react-native';
-import ScreenNames from '../../constants/ScreenNames';
-import {
-  fetchCustomerDetailsThunk,
-  initiateLoanApplicationThunk,
-} from '../../redux/actions';
-import {get} from 'lodash';
-import {
-  getLabelEnum,
-  getLabelFromEnum,
-  occupationLabelMap,
-} from '../../constants/enums';
+import Customer_Info_Component from './Customer_Info_Component';
 
 class CustomerInfoScreen extends Component {
   constructor(props) {

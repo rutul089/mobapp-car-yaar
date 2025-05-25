@@ -129,3 +129,54 @@ export const assignLoanToCreditOfficer = async (payload, config = {}) => {
     throw error;
   }
 };
+
+/**
+ * Submits finance details for a given application ID.
+ *
+ * @param {string} applicationId - The ID of the application.
+ * @param {object} financeDetails - The finance details payload to submit.
+ * @param {object} [config={}] - Optional Axios request config.
+ * @returns {Promise<object>} - The server response.
+ * @throws {Error} If the application or financeDetails are invalid or the request fails.
+ */
+export const postCustomerFinanceDetails = async (
+  applicationId,
+  financeDetails,
+  config = {},
+) => {
+  if (!applicationId) {
+    throw new Error('Customer ID is required');
+  }
+
+  try {
+    const response = await axiosInstance.post(
+      `loan-applications/financeDetails/${applicationId}`,
+      financeDetails,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postCustomerFinanceDocuments = async (
+  applicationId,
+  financeDocuments,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.post(
+      `loan-applications/financeDocuments/${applicationId}`,
+      financeDocuments,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch finance details for customer ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};

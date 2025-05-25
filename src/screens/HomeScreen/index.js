@@ -66,7 +66,7 @@ class HomeScreen extends Component {
   handleLoanTypeSelection = chosenLoanType => {
     this.props.selectedLoanType(chosenLoanType);
     this.props.setIsCreatingLoanApplication(true);
-    // VehicleFullScreen LoanAmount
+    // VehicleFullScreen LoanAmount FinanceDetails
 
     navigate(ScreenNames.VehicleFullScreen, {
       params: {

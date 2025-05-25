@@ -28,11 +28,6 @@ class VehicleDetail extends Component {
   }
 
   componentDidMount() {
-    let navState = getScreenParam(this.props.route, 'params');
-    console.log(
-      'navState',
-      getScreenParam(this.props.route, 'params')?.UsedVehicle?.vehicleId,
-    );
     const {vehicleId} = this.state;
     if (vehicleId) {
       this.fetchVehicleFromId(vehicleId);
@@ -58,7 +53,7 @@ class VehicleDetail extends Component {
   onNextPress = () => {
     const {isCreatingLoanApplication, selectedLoanType} = this.props;
     let screenName = '';
-    if (isCreatingLoanApplication && selectedLoanType === loanType.refinance) {
+    if (isCreatingLoanApplication) {
       screenName = ScreenNames.VehicleHypothecation;
     } else if (isCreatingLoanApplication) {
       screenName = ScreenNames.CustomerFullScreen;
@@ -66,7 +61,9 @@ class VehicleDetail extends Component {
       screenName = ScreenNames.CustomerFullScreen;
     }
     navigate(
-      isCreatingLoanApplication ? screenName : ScreenNames.VehicleImages,
+      isCreatingLoanApplication
+        ? ScreenNames.CustomerFullScreen
+        : ScreenNames.VehicleImages,
     );
   };
 

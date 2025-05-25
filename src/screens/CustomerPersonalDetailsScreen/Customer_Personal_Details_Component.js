@@ -56,7 +56,6 @@ const Customer_Personal_Details_Component = ({
   onSelectedLoanOption = () => {},
   onSelectedOccupation = () => {},
   onSelectIncomeSourceOption = () => {},
-  onSelectBankOption = () => {},
   onNextPress,
   saveAsDraftPress,
   headerProp = {},
@@ -93,9 +92,9 @@ const Customer_Personal_Details_Component = ({
 
   const [isOccupationModalVisible, setIsOccupationModalVisible] =
     React.useState(false);
+
   const [showIncomeSourceModal, setShowIncomeSourceModal] =
     React.useState(false);
-  const [showBankOptionModal, setShowBankOptionModal] = React.useState(false);
 
   const [editingStates, setEditingStates] = React.useState({
     currentEmi: false,
@@ -526,15 +525,6 @@ const Customer_Personal_Details_Component = ({
         onSelect={(item, index) => onSelectIncomeSourceOption?.(item)}
         onClose={() => setShowIncomeSourceModal(false)}
         title="Select Income Source Type"
-      />
-
-      <DropdownModal
-        visible={showBankOptionModal}
-        data={state.bankOptions}
-        selectedItem={state.bankName?.label}
-        onSelect={(item, index) => onSelectBankOption(item, index)}
-        onClose={() => setShowBankOptionModal(false)}
-        title="Select Bank Type"
       />
 
       <FilePickerModal {...filePickerProps} autoCloseOnSelect={false} />

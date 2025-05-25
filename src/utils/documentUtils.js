@@ -200,12 +200,7 @@ export const generateImageUploadPayload = (
   formattedImages,
   customerId,
   isEdit = false,
-) => {
-  const payload = {
-    customerId,
-  };
-
-  const imageKeys = [
+  imageKeys = [
     documentImageType.ID_PROOF, // e.g. "idProofImage"
     documentImageType.ADDRESS_PROOF,
     documentImageType.PERMANENT_ADDRESS,
@@ -216,7 +211,11 @@ export const generateImageUploadPayload = (
     documentImageType.APPLICATION_FORM,
     documentImageType.PASSPORT_SIZE_PHOTO,
     documentImageType.CO_APPLICANT_DOCUMENTS,
-  ];
+  ],
+) => {
+  const payload = {
+    customerId,
+  };
 
   imageKeys.forEach(key => {
     const uploadedUrl = formattedImages?.[key]?.uploadedUrl;

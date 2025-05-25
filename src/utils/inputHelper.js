@@ -125,11 +125,19 @@ export const validateField = (key, value, isOptional) => {
         ? 'Account number must be between 9 to 18 digits'
         : '';
 
+    case 'loanAccountNumber':
+      return trimmedValue === ''
+        ? 'Please enter an loan account number'
+        : !accountNumberRegex.test(trimmedValue)
+        ? 'Account number must be between 9 to 18 digits'
+        : '';
+
     case 'currentEmi':
     case 'maxEmiAfford':
     case 'avgMonthlyBankBalance':
     case 'monthlyIncome':
     case 'loanAmount':
+    case 'monthlyEmi':
       return trimmedValue === ''
         ? 'Please enter a valid amount.'
         : !/^\d+(\.\d{1,2})?$/.test(trimmedValue)
@@ -144,9 +152,10 @@ export const validateField = (key, value, isOptional) => {
     case 'aadharBackphoto':
       return trimmedValue === '' ? 'Please upload required image' : '';
 
-    case 'dob': {
+    case 'dob':
+    case 'loanClosedDate': {
       if (trimmedValue === '') {
-        return 'Please enter date of birth';
+        return 'Please enter valid date';
       }
 
       const parts = trimmedValue.split('/');
@@ -170,12 +179,12 @@ export const validateField = (key, value, isOptional) => {
       today.setHours(0, 0, 0, 0);
       const inputDate = new Date(yyyy, mm - 1, dd);
 
-      if (inputDate.getTime() === today.getTime()) {
+      if (inputDate.getTime() === today.getTime() && key === 'dob') {
         return 'Date of birth cannot be today';
       }
 
       if (inputDate > today) {
-        return 'Date of birth cannot be in the future';
+        return 'Date cannot be in the future';
       }
 
       return ''; // All good
@@ -198,6 +207,23 @@ export const validateField = (key, value, isOptional) => {
         : !nameRegex.test(trimmedValue)
         ? 'Name should contain only alphabets'
         : '';
+
+    case 'tenure': {
+      if (trimmedValue === '') {
+        return 'Please enter Loan Tenure.';
+      }
+      const tenureValue = Number(trimmedValue);
+      if (isNaN(tenureValue)) {
+        return 'Loan Tenure must be a valid number.';
+      }
+      if (!Number.isInteger(tenureValue)) {
+        return 'Loan Tenure must be a whole number.';
+      }
+      if (tenureValue <= 0) {
+        return 'Loan Tenure must be greater than 0.';
+      }
+      return '';
+    }
 
     default:
       return '';

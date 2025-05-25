@@ -1,17 +1,15 @@
-/* eslint-disable react-native/no-inline-styles */
 import {
+  FilePickerModal,
   FormFooterButtons,
   Header,
   SafeAreaWrapper,
   Spacing,
-  Text,
-  VehicleImageCard,
-  theme,
+  Loader,
 } from '@caryaar/components';
 import React from 'react';
-import {FlatList} from 'react-native';
+import {ScrollView} from 'react-native';
+import {DocumentGroup} from '../../components';
 import strings from '../../locales/strings';
-import {goBack} from '../../navigation/NavigationUtils';
 import {styles} from '../../styles/Vehicle.Image.style';
 
 const Finance_Documents_Component = ({
@@ -20,62 +18,37 @@ const Finance_Documents_Component = ({
   onDeletePress,
   onImagePress,
   onNextPress,
-  saveAsDraftPress,
   onBackPress,
   handleSaveDraftPress,
   handleNextStepPress,
+  headerProp,
+  documentList,
+  fileModalProps,
+  loading,
 }) => {
-  const renderImageItem = ({item}) => {
-    return (
-      <>
-        <VehicleImageCard
-          label={item?.label}
-          image={item?.image}
-          onDeletePress={() => onDeletePress && onDeletePress(item)}
-          viewImage={() => onImagePress && onImagePress(item)}
-          cardWrapper={{width: '45%', flex: 0}}
-          btnLabel={'Click to Upload\nImage or PDF'}
-        />
-      </>
-    );
-  };
-
   return (
     <SafeAreaWrapper>
-      <Header
-        title="Finance Documents"
-        subtitle="GJ 01 JR 0945"
-        rightLabel="ABC123"
-        showRightContent={true}
-        onBackPress={() => goBack()}
-      />
-      <FlatList
-        data={imageSlots}
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: theme.colors.background,
-          padding: theme.sizes.padding,
-        }}
-        bounces={false}
-        renderItem={renderImageItem}
-        keyExtractor={item => item.key}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        ListHeaderComponent={
-          <>
-            <Text>{'Documents'}</Text>
-            <Spacing size="smd" />
-          </>
-        }
-        ListFooterComponent={
-          <FormFooterButtons
-            primaryButtonLabel={strings.btnSaveDraft}
-            secondaryButtonLabel={strings.next}
-            onPressPrimaryButton={handleSaveDraftPress}
-            onPressSecondaryButton={handleNextStepPress}
-          />
-        }
-      />
+      <Header {...headerProp} />
+      <ScrollView contentContainerStyle={styles.wrapper}>
+        <DocumentGroup
+          title={'Documents'}
+          documents={documentList}
+          isDocument={true}
+        />
+        <Spacing size="smd" />
+        <FormFooterButtons
+          primaryButtonLabel={strings.next}
+          secondaryButtonLabel={strings.btnSave}
+          onPressPrimaryButton={onNextPress}
+          onPressSecondaryButton={handleSaveDraftPress}
+          hideSecondaryButton
+        />
+        <Spacing size="md" />
+      </ScrollView>
+
+      <FilePickerModal {...fileModalProps} />
+
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

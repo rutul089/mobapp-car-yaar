@@ -19,6 +19,7 @@ import {
   customerIndividualTypeValue,
   getLabelFromEnum,
   loanTypeLabelMap,
+  occupationLabelMap,
 } from '../../constants/enums';
 
 class ViewLoanDetailsScreen extends Component {
@@ -65,6 +66,9 @@ class ViewLoanDetailsScreen extends Component {
     let dob = safeGet(loading, customer?.customerDetails, 'dob');
     let _customerCategory = safeGet(loading, customer, 'customerCategory');
     let _customerType = safeGet(loading, customer, 'customerType');
+    let _occupation = safeGet(loading, customer?.customerDetails, 'occupation');
+    let monthlyIncome =
+      safeGet(loading, customer?.customerDetails, 'monthlyIncome') ?? '-';
 
     return (
       <View_Loan_Details_Component
@@ -171,7 +175,7 @@ class ViewLoanDetailsScreen extends Component {
           },
           {
             label: 'Occupation',
-            value: safeGet(loading, customer?.customerDetails, 'occupation'),
+            value: getLabelFromEnum(occupationLabelMap, _occupation) || '-',
           },
           {
             label: 'Income Source',
@@ -179,9 +183,7 @@ class ViewLoanDetailsScreen extends Component {
           },
           {
             label: 'Monthly Income',
-            value: formatIndianCurrency(
-              safeGet(loading, customer?.customerDetails, 'monthlyIncome'),
-            ),
+            value: formatIndianCurrency(monthlyIncome) ?? '-',
           },
         ]}
         vehicleDetail={[

@@ -2,6 +2,8 @@ import {
   addCustomerLoanAmount,
   fetchLoanApplicationById,
   fetchLoanApplications,
+  postCustomerFinanceDetails,
+  postCustomerFinanceDocuments,
 } from '../../services';
 import {initiateLoanApplication} from '../../services/loanServices';
 import {showApiErrorToast} from '../../utils/helper';
@@ -135,6 +137,70 @@ export const addCustomerLoanAmountThunk = (
         applicationData,
         applicationId,
       );
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const postCustomerFinanceDetailsThunk = (
+  applicationId,
+  financeDetails,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: FETCH_LOAN_APP_BY_ID.REQUEST});
+
+    try {
+      const response = await postCustomerFinanceDetails(
+        applicationId,
+        financeDetails,
+      );
+
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: FETCH_LOAN_APP_BY_ID.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const postCustomerFinanceDocumentsThunk = (
+  applicationId,
+  documents = {},
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: FETCH_LOAN_APP_BY_ID.REQUEST});
+
+    try {
+      const response = await postCustomerFinanceDocuments(
+        applicationId,
+        documents,
+      );
+
       dispatch({
         type: FETCH_LOAN_APP_BY_ID.SUCCESS,
         payload: response.data,
