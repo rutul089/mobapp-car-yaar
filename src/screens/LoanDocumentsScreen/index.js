@@ -20,6 +20,7 @@ import {
   formatDocumentImages,
   generateImageUploadPayload,
   handleFileSelection,
+  validateRequiredDocuments,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
 import {
@@ -28,6 +29,13 @@ import {
   showToast,
 } from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
+
+const requiredFields = [
+  'addressProofImage',
+  'idProofImage',
+  'incomeProofImage',
+  'bankingProofImage',
+];
 
 class LoanDocumentsScreen extends Component {
   constructor(props) {
@@ -216,6 +224,10 @@ class LoanDocumentsScreen extends Component {
 
     const customerId = isEdit ? selectedCustomerId : selectedApplicationId;
 
+    if (!validateRequiredDocuments(documents, requiredFields)) {
+      return;
+    }
+
     const payload = generateImageUploadPayload(
       documents,
       selectedCustomerId,
@@ -279,6 +291,7 @@ class LoanDocumentsScreen extends Component {
           onDeletePress: () => this.handleDeleteMedia(type),
           uploadMedia: () => this.handleUploadMedia(type),
           viewImage: () => this.handleViewImage(documents[type]?.uri),
+          isRequired: requiredFields.includes(type),
         }))}
         otherDocuments={[
           documentImageType.APPLICATION_FORM,

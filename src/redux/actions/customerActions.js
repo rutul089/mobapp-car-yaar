@@ -12,17 +12,17 @@ import {
   uploadCustomerDocuments,
   verifyCustomerOtp,
 } from '../../services';
-import {getErrorMessage, showApiErrorToast} from '../../utils/helper';
+import {showApiErrorToast} from '../../utils/helper';
 import {
   CLEAR_SEARCH,
   CLEAR_SELECTED_CUSTOMER,
-  FETCH_CUSTOMERS,
-  FETCH_CUSTOMER_DETAIL,
-  FETCH_CUSTOMER_DOCUMENT,
+  CREATE_CUSTOMER_BASIC_DETAIL,
   CUSTOMER_FINANCE_DETAILS,
   CUSTOMER_FINANCE_DOCUMENT,
   CUSTOMER_MORE_FINANCE,
-  CREATE_CUSTOMER_BASIC_DETAIL,
+  FETCH_CUSTOMERS,
+  FETCH_CUSTOMER_DETAIL,
+  FETCH_CUSTOMER_DOCUMENT,
 } from './actionType';
 
 /**

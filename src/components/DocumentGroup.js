@@ -22,7 +22,7 @@ const DocumentGroup = ({
             return (
               <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
                 <VehicleImageCard
-                  label={doc.label}
+                  label={doc.label + `${doc?.isRequired ? ' *' : ''} `}
                   image={fileUri}
                   onDeletePress={doc.onDeletePress}
                   viewImage={doc.viewImage}

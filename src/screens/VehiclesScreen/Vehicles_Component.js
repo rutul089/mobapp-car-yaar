@@ -17,6 +17,7 @@ import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
   formatIndianCurrency,
   formatVehicleDetails,
+  formatVehicleNumber,
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
@@ -82,6 +83,8 @@ const Vehicles_Component = ({
             return get(obj, path, '-');
           };
 
+          const _registerNumber = safeGet(UsedVehicle, 'registerNumber') ?? '-';
+
           return (
             <CardWrapper
               onPress={() => onWrapperClick?.(item)}
@@ -93,7 +96,7 @@ const Vehicles_Component = ({
               <VehicleCard
                 brandName={safeGet(item, 'make')}
                 vehicleDetail={formatVehicleDetails(item)}
-                plateNumber={safeGet(UsedVehicle, 'registerNumber')}
+                plateNumber={formatVehicleNumber(_registerNumber)}
                 footerInfo={[
                   {
                     label: 'Mfg Year',

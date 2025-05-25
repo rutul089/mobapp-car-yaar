@@ -331,6 +331,9 @@ export const removeCountryCode = (phoneNumber, defaultCountryCode = '91') => {
 };
 
 export const formatVehicleNumber = (vehicleNumber = '') => {
+  if (!vehicleNumber || vehicleNumber.trim() === '') {
+    return '-';
+  }
   const clean = vehicleNumber.toUpperCase().replace(/\s+/g, '');
 
   // Format for Bharat Series (e.g., KABH1234AA)

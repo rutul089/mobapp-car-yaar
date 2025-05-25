@@ -12,6 +12,7 @@ import {
   formatDate,
   formatIndianCurrency,
   formatMonths,
+  formatVehicleNumber,
   safeGet,
 } from '../../utils/helper';
 import {
@@ -69,6 +70,7 @@ class ViewLoanDetailsScreen extends Component {
     let _occupation = safeGet(loading, customer?.customerDetails, 'occupation');
     let monthlyIncome =
       safeGet(loading, customer?.customerDetails, 'monthlyIncome') ?? '-';
+    const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
 
     return (
       <View_Loan_Details_Component
@@ -190,7 +192,7 @@ class ViewLoanDetailsScreen extends Component {
           {label: 'Vehicle Type', value: 'Private Car'},
           {
             label: 'Register Number',
-            value: safeGet(loading, usedVehicle, 'registerNumber'),
+            value: formatVehicleNumber(_registerNumber),
           },
           {
             label: 'Owner Name',

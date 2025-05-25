@@ -9,7 +9,11 @@ import ScreenNames from '../../constants/ScreenNames';
 import {connect} from 'react-redux';
 import {fetchVehicleFromIdThunk} from '../../redux/actions';
 import {get} from 'lodash';
-import {formatDate, formatVehicleDetails} from '../../utils/helper';
+import {
+  formatDate,
+  formatVehicleDetails,
+  formatVehicleNumber,
+} from '../../utils/helper';
 import {loanType} from '../../constants/enums';
 
 class VehicleDetail extends Component {
@@ -81,13 +85,14 @@ class VehicleDetail extends Component {
     let {model, trim, colour} = basicDetail || {};
     const status = basicDetail?.isDraft ? 'DRAFT' : 'SAVED';
     const lastUpdatedOn = this.safeGet(basicDetail, 'updatedAt');
+    const _registerNumber = this.safeGet(UsedVehicle, 'registerNumber') ?? '-';
 
     return (
       <Vehicle_Detail_Component
         onBackPress={this.onBackPress}
         onPressSecondaryButton={this.onPressSecondaryButton}
         onNextPress={this.onNextPress}
-        registerNumber={this.safeGet(UsedVehicle, 'registerNumber')}
+        registerNumber={formatVehicleNumber(_registerNumber)}
         make={this.safeGet(basicDetail, 'make')}
         lastUpdatedOn={formatDate(lastUpdatedOn, 'DD MMM YYYY, hh:mm A')}
         vehicleDetail={formatVehicleDetails({

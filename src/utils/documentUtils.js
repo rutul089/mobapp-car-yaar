@@ -2,7 +2,8 @@ import {pick, types} from '@react-native-documents/picker';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {documentImageType} from '../constants/enums';
+import {documentImageLabelMap, documentImageType} from '../constants/enums';
+import {showToast} from './helper';
 
 /**
  * Launches a file picker based on type: camera, gallery, or document.
@@ -228,4 +229,25 @@ export const generateImageUploadPayload = (
   });
 
   return payload;
+};
+
+export const validateRequiredDocuments = (documents, requiredFields) => {
+  if (!documents || Object.keys(documents).length === 0) {
+    showToast('error', 'Please upload required documents.');
+    return false;
+  }
+
+  const missingFields = requiredFields.filter(
+    field => !documents[field] || !documents[field].uri,
+  );
+
+  if (missingFields.length > 0) {
+    const missingLabels = missingFields
+      .map(field => documentImageLabelMap?.[field] || field)
+      .join(', ');
+    showToast('error', `Please upload: ${missingLabels}`, 'bottom', 3500);
+    return false;
+  }
+
+  return true;
 };

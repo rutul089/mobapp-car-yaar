@@ -11,6 +11,8 @@ import {navigate} from '../../navigation/NavigationUtils';
 import {
   fetchPartnerStatsThunk,
   fetchUser,
+  resetLoanApplication,
+  resetSelectedCustomer,
   selectedLoanType,
   setIsCreatingLoanApplication,
 } from '../../redux/actions';
@@ -66,6 +68,8 @@ class HomeScreen extends Component {
   handleLoanTypeSelection = chosenLoanType => {
     this.props.selectedLoanType(chosenLoanType);
     this.props.setIsCreatingLoanApplication(true);
+    this.props.resetLoanApplication();
+    this.props.resetSelectedCustomer();
     // VehicleFullScreen LoanAmount FinanceDetails
 
     navigate(ScreenNames.VehicleFullScreen, {
@@ -125,6 +129,8 @@ const mapDispatchToProps = {
   setIsCreatingLoanApplication,
   fetchUser,
   fetchPartnerStatsThunk,
+  resetLoanApplication,
+  resetSelectedCustomer,
 };
 
 const mapStateToProps = ({user, partnerPerformance}) => ({

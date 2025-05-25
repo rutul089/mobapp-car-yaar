@@ -12,9 +12,15 @@ import {documentImageLabelMap, documentImageType} from '../../constants/enums';
 import {
   generateImageUploadPayload,
   handleFileSelection,
+  validateRequiredDocuments,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
 import {postCustomerFinanceDocumentsThunk} from '../../redux/actions';
+
+const requiredFields = [
+  documentImageType.SANCTION_LETTER,
+  documentImageType.NOC,
+];
 
 class FinanceDocumentsScreen extends Component {
   constructor(props) {
@@ -35,6 +41,10 @@ class FinanceDocumentsScreen extends Component {
     const {documents} = this.state;
     const {selectedApplicationId} = this.props;
 
+    if (!validateRequiredDocuments(documents, requiredFields)) {
+      return;
+    }
+
     const payload = generateImageUploadPayload(documents, null, true, [
       documentImageType.SOA,
       documentImageType.SANCTION_LETTER,
@@ -45,7 +55,7 @@ class FinanceDocumentsScreen extends Component {
     delete payload.customerId;
 
     this.props.postCustomerFinanceDocumentsThunk(
-      '0556dc2a-a8bf-4747-a6d3-01dc7651f1b1',
+      selectedApplicationId,
       payload,
       success => {
         navigate(ScreenNames.LoanAmount);
@@ -191,6 +201,7 @@ class FinanceDocumentsScreen extends Component {
             onDeletePress: () => this.handleDeleteMedia(type),
             uploadMedia: () => this.handleUploadMedia(type),
             viewImage: () => this.handleViewImage(documents[type]?.uri),
+            isRequired: requiredFields.includes(type),
           }))}
           handleNextStepPress={this.handleNextStepPress}
           onNextPress={this.onNextPress}
