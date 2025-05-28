@@ -76,8 +76,11 @@ class Vehicles extends Component {
    * Navigates to vehicle detail screen when card is clicked
    */
   onWrapperClick = item => {
+    const {fullScreen} = this.state;
     this.props.resetSelectedVehicle();
-    // this.props.selectedLoanType(loanType.addVehicle);
+    if (!fullScreen) {
+      this.props.selectedLoanType(loanType.addVehicle);
+    }
     navigate(ScreenNames.VehicleDetail, {
       params: item,
     });

@@ -7,6 +7,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet} from 'react-native';
@@ -23,6 +24,7 @@ const Vehicle_Hypothecation_Component = ({
   onNextPress,
   headerProp,
   isCreatingLoanApplication,
+  loading,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -48,6 +50,7 @@ const Vehicle_Hypothecation_Component = ({
           hideSecondaryButton={true}
         />
       </KeyboardAwareScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

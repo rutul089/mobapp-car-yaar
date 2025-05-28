@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -14,17 +14,17 @@ import {
   Text,
   theme,
 } from '@caryaar/components';
-import {goBack} from '../../navigation/NavigationUtils';
 
 const CheckCIBIL_Component = ({
   params,
   onSendOTP,
-  handleMobileNumberInput,
+  onChangeMobileNumber,
   state,
   resendOTP,
   onConfirmPress,
   isOtpSend,
   headerProp,
+  restInputProps = {},
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -42,10 +42,10 @@ const CheckCIBIL_Component = ({
             maxLength={10}
             returnKeyType={'done'}
             onSubmitEditing={onSendOTP}
-            onChangeText={handleMobileNumberInput}
-            value={state.mobileNumber}
+            onChangeText={onChangeMobileNumber}
             statusMsg="OTP Sent Successfully!"
             showStatus={false}
+            {...(restInputProps?.mobileNumber || {})}
           />
           {isOtpSend ? (
             <>

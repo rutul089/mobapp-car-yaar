@@ -77,6 +77,8 @@ class VehiclePricingScreen extends Component {
       this.state;
     const {selectedVehicle, selectedLoanType} = this.props;
 
+    console.log({selectedLoanType});
+
     const isFormValid = this.validateAllFields();
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
 
@@ -94,6 +96,7 @@ class VehiclePricingScreen extends Component {
       if (selectedLoanType === loanType.refinance) {
         return navigate(ScreenNames.VehicleHypothecation);
       } else if (selectedLoanType === loanType.addVehicle) {
+        return navigate(ScreenNames.VehicleHypothecation);
         navigate(ScreenNames.SuccessScreen);
       } else {
         navigate(ScreenNames.CustomerDetail);

@@ -31,6 +31,7 @@ const View_Loan_Details_Component = ({
   handleUploadDocument,
   loading,
   loanOverviewCard = {},
+  handleEditLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -91,6 +92,16 @@ const View_Loan_Details_Component = ({
               <Button
                 label={'Upload Documents'}
                 onPress={handleUploadDocument}
+              />
+              <Spacing size="lg" />
+            </>
+          )}
+          {loanOverviewCard?.status !== applicationStatus.APPROVED && (
+            <>
+              <Spacing size="lg" />
+              <Button
+                label={'Edit Application'}
+                onPress={handleEditLoanApplication}
               />
               <Spacing size="lg" />
             </>

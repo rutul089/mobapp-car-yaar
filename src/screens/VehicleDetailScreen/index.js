@@ -1,20 +1,20 @@
+import {get} from 'lodash';
 import React, {Component} from 'react';
-import Vehicle_Detail_Component from './Vehicle_Detail_Component';
+import {connect} from 'react-redux';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {connect} from 'react-redux';
 import {fetchVehicleFromIdThunk} from '../../redux/actions';
-import {get} from 'lodash';
 import {
   formatDate,
   formatVehicleDetails,
   formatVehicleNumber,
 } from '../../utils/helper';
-import {loanType} from '../../constants/enums';
+import Vehicle_Detail_Component from './Vehicle_Detail_Component';
+import {currentLoanLabelMap, getLabelFromEnum} from '../../constants/enums';
 
 class VehicleDetail extends Component {
   constructor(props) {
@@ -39,7 +39,16 @@ class VehicleDetail extends Component {
   }
 
   fetchVehicleFromId = id => {
-    this.props.fetchVehicleFromIdThunk(id);
+    this.props.fetchVehicleFromIdThunk(id, response => {
+      this.setState({
+        basicDetail: {
+          make: response?.make,
+          model: response?.model,
+          trim: response?.trim,
+          colour: response?.colour,
+        },
+      });
+    });
   };
 
   safeGet = (obj, path) => {
@@ -86,6 +95,13 @@ class VehicleDetail extends Component {
     const status = basicDetail?.isDraft ? 'DRAFT' : 'SAVED';
     const lastUpdatedOn = this.safeGet(basicDetail, 'updatedAt');
     const _registerNumber = this.safeGet(UsedVehicle, 'registerNumber') ?? '-';
+    const puc = this.safeGet(UsedVehicle, 'PUCC');
+    const hypothecationStatus = this.safeGet(
+      UsedVehicle,
+      'hypothecationStatus',
+    );
+
+    console.log('selectedVehicle', JSON.stringify(selectedVehicle));
 
     return (
       <Vehicle_Detail_Component
@@ -140,7 +156,8 @@ class VehicleDetail extends Component {
           },
           {
             label: 'Hypothecation Status',
-            value: this.safeGet(UsedVehicle, 'hypothecationStatus') + '',
+            value:
+              getLabelFromEnum(currentLoanLabelMap, hypothecationStatus) || '-',
           },
           {
             label: 'Vehicle Status',
@@ -156,7 +173,7 @@ class VehicleDetail extends Component {
           },
           {
             label: 'PUC',
-            value: this.safeGet(UsedVehicle, 'PUCC') + '',
+            value: getLabelFromEnum(currentLoanLabelMap, puc) || '-',
           },
           {
             label: 'Ownership',

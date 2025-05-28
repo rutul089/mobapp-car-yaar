@@ -1,20 +1,19 @@
+import {get} from 'lodash';
 import React, {Component} from 'react';
-import Vehicle_Odometer_Component from './Vehicle_Odometer_Component';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
-import {pickImage} from '../../utils/imagePicker';
 import {Alert} from 'react-native';
-import ScreenNames from '../../constants/ScreenNames';
-import {handleFileSelection} from '../../utils/documentUtils';
+import {connect} from 'react-redux';
 import {
   getLabelFromEnum,
   vehicleConditionOptions,
   vehicleConditionValue,
 } from '../../constants/enums';
-import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {showToast} from '../../utils/helper';
-import {connect} from 'react-redux';
+import ScreenNames from '../../constants/ScreenNames';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {updateVehicleByIdThunk} from '../../redux/actions';
-import {get} from 'lodash';
+import {handleFileSelection} from '../../utils/documentUtils';
+import {showToast} from '../../utils/helper';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import Vehicle_Odometer_Component from './Vehicle_Odometer_Component';
 
 class VehicleOdometerScreen extends Component {
   constructor(props) {

@@ -4,13 +4,14 @@ import {currentLoanOptions, loanType} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Vehicle_Hypothecation_Component from './Vehicle_Hypothecation_Component';
-import {formatVehicleNumber} from '../../utils/helper';
+import {formatVehicleNumber, showToast} from '../../utils/helper';
+import {updateVehicleByIdThunk} from '../../redux/actions';
 
 class VehicleHypothecationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      carHypoStatus: currentLoanOptions.YES,
+      carHypoStatus: currentLoanOptions.NO,
     };
     this.onSelectedAnswer = this.onSelectedAnswer.bind(this);
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
@@ -28,23 +29,34 @@ class VehicleHypothecationScreen extends Component {
   saveAsDraftPress = () => {};
 
   onNextPress = () => {
-    const {selectedLoanType} = this.props;
+    const {selectedVehicle} = this.props;
+    const {carHypoStatus} = this.state;
 
-    switch (selectedLoanType) {
-      case loanType.refinance:
-        return navigate(ScreenNames.FinanceDetails);
+    let vehicleId = selectedVehicle?.UsedVehicle?.id;
 
-      case loanType.topUp:
-      case loanType.internalBT:
-      case loanType.externalBT:
-        return navigate(ScreenNames.CarFinanceDetails);
+    let payload = {
+      hypothecationStatus: carHypoStatus,
+    };
 
-      case loanType.loan:
-        return navigate(ScreenNames.CheckCIBIL);
+    this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
+      navigate(ScreenNames.SuccessScreen);
+    });
 
-      default:
-        return navigate(ScreenNames.LoanAmount);
-    }
+    // switch (selectedLoanType) {
+    //   case loanType.refinance:
+    //     return navigate(ScreenNames.FinanceDetails);
+
+    //   case loanType.topUp:
+    //   case loanType.internalBT:
+    //   case loanType.externalBT:
+    //     return navigate(ScreenNames.CarFinanceDetails);
+
+    //   case loanType.loan:
+    //     return navigate(ScreenNames.CheckCIBIL);
+
+    //   default:
+    //     return navigate(ScreenNames.LoanAmount);
+    // }
     // navigate(ScreenNames.CustomerDetail);
   };
 
@@ -77,20 +89,21 @@ class VehicleHypothecationScreen extends Component {
           onNextPress={this.onNextPress}
           saveAsDraftPress={this.saveAsDraftPress}
           isCreatingLoanApplication={isCreatingLoanApplication}
+          loading={loading}
         />
       </>
     );
   }
 }
 
-const mapActionCreators = {};
+const mapActionCreators = {updateVehicleByIdThunk};
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
   documentDetail: customerData?.documentDetail,
   selectedApplicationId: loanData?.selectedApplicationId,
-  loading: loanData?.loading,
+  loading: loanData?.loading || vehicleData?.loading,
   selectedVehicle: vehicleData?.selectedVehicle,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,
