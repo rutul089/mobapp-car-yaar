@@ -7,7 +7,11 @@ import {
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
-import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
+import {
+  addCustomerBasicDetail,
+  fetchLoanApplicationFromIdThunk,
+  selectedLoanType,
+} from '../../redux/actions';
 import {
   formatDate,
   formatIndianCurrency,
@@ -52,6 +56,21 @@ class ViewLoanDetailsScreen extends Component {
   };
 
   onTackLoanApplication = () => {};
+
+  handleEditLoanApplication = () => {
+    const {selectedLoanApplication} = this.props;
+    this.props.addCustomerBasicDetail(
+      selectedLoanApplication?.customer,
+      selectedLoanApplication?.customerId,
+    );
+    this.props.selectedLoanType(selectedLoanApplication?.loanType);
+
+    navigate(ScreenNames.LoanDocument, {
+      params: {
+        isEdit: true,
+      },
+    });
+  };
 
   render() {
     const {loading, selectedLoanApplication} = this.props;
@@ -247,12 +266,17 @@ class ViewLoanDetailsScreen extends Component {
         onBackToHomePress={this.onBackToHomePress}
         onTackLoanApplication={this.onTackLoanApplication}
         loading={loading}
+        handleEditLoanApplication={this.handleEditLoanApplication}
       />
     );
   }
 }
 
-const mapActionCreators = {fetchLoanApplicationFromIdThunk};
+const mapActionCreators = {
+  fetchLoanApplicationFromIdThunk,
+  selectedLoanType,
+  addCustomerBasicDetail,
+};
 // Redux: map state to props
 const mapStateToProps = ({loanData}) => {
   return {

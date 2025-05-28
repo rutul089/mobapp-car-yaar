@@ -319,3 +319,11 @@ export const resetSelectedCustomer = () => ({
 export const clearCustomerSearch = () => ({
   type: CLEAR_SEARCH.SUCCESS,
 });
+
+export const addCustomerBasicDetail = (customer, customerID) => ({
+  type: CREATE_CUSTOMER_BASIC_DETAIL.SUCCESS,
+  payload: {
+    data: customer,
+    customerId: customerID,
+  },
+});

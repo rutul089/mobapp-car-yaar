@@ -64,21 +64,18 @@ class LoanDocumentsScreen extends Component {
   }
 
   fetchCustomerDocuments = async () => {
-    const {selectedCustomerId} = this.props;
+    const {selectedApplicationId} = this.props;
 
     this.setState({isLoading: true}, async () => {
       try {
         await this.props.fetchCustomerDocumentsThunk(
-          selectedCustomerId,
+          selectedApplicationId,
           {},
           response => {
-            if (
-              response.success &&
-              Array.isArray(response.data) &&
-              response.data.length > 0
-            ) {
-              const data = response.data[0];
-              this.setState({documents: formatDocumentImages(data, '')});
+            if (response.success) {
+              this.setState({
+                documents: formatDocumentImages(response.data, ''),
+              });
             }
           },
         );
@@ -101,6 +98,9 @@ class LoanDocumentsScreen extends Component {
   };
 
   navigateToNextScreenBasedOnLoanType = selectedLoanType => {
+    let params = getScreenParam(this.props.route, 'params');
+    console.log({params});
+
     switch (selectedLoanType) {
       case loanType.refinance:
         // return navigate(ScreenNames.FinanceDetails);
@@ -115,7 +115,7 @@ class LoanDocumentsScreen extends Component {
         return navigate(ScreenNames.CheckCIBIL);
 
       default:
-        return navigate(ScreenNames.LoanAmount);
+        return navigate(ScreenNames.LoanAmount, {params: params});
     }
   };
 
@@ -235,7 +235,7 @@ class LoanDocumentsScreen extends Component {
     );
 
     const thunk = isEdit
-      ? this.props.updateCustomerDocumentsThunk
+      ? this.props.uploadCustomerDocumentsThunk
       : this.props.uploadCustomerDocumentsThunk;
 
     this.setState({isLoading: true}, () => {
@@ -270,9 +270,10 @@ class LoanDocumentsScreen extends Component {
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
           showRightContent: true,
-          rightLabel: isCreatingLoanApplication
-            ? selectedLoanApplication?.loanApplicationId || ''
-            : '',
+          // rightLabel: isCreatingLoanApplication
+          //   ? selectedLoanApplication?.loanApplicationId || ''
+          //   : '',
+          rightLabel: selectedLoanApplication?.loanApplicationId || '',
           rightLabelColor: '#F8A902',
           onBackPress: () => goBack(),
         }}

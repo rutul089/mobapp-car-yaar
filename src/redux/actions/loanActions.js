@@ -79,7 +79,7 @@ export const fetchLoanApplicationFromIdThunk = (
         type: FETCH_LOAN_APP_BY_ID.SUCCESS,
         payload: response.data,
       });
-      onSuccess?.(response);
+      onSuccess?.(response.data);
     } catch (error) {
       dispatch({
         type: FETCH_LOAN_APP_BY_ID.FAILURE,

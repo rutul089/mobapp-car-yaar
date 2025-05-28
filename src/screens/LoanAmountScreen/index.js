@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
+import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
 import {addCustomerLoanAmountThunk} from '../../redux/actions';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
@@ -14,14 +18,31 @@ class LoanAmountScreen extends Component {
       loanAmount: '',
       error: {loanAmount: ''},
       isFormValid: false,
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
     this.onNextButtonPress = this.onNextButtonPress.bind(this);
+  }
+
+  componentDidMount() {
+    const {isEdit} = this.state;
+    const {selectedLoanApplication} = this.props;
+    if (isEdit) {
+      this.setState({
+        loanAmount: selectedLoanApplication?.loanAmount,
+      });
+    }
+    console.log(
+      'selectedLoanApplication',
+      JSON.stringify(selectedLoanApplication),
+    );
   }
 
   onNextButtonPress = () => {
     const {loanAmount} = this.state;
     const {selectedApplicationId} = this.props;
     const isFormValid = this.validateAllFields();
+    let params = getScreenParam(this.props.route, 'params');
+    console.log('loanAmount', loanAmount);
 
     //d3e4354d-0703-4b88-a9ae-5b3956181a70
 
@@ -34,7 +55,7 @@ class LoanAmountScreen extends Component {
       payload,
       selectedApplicationId,
       success => {
-        navigate(ScreenNames.CheckCIBIL);
+        navigate(ScreenNames.CheckCIBIL, {params});
       },
       error => {},
     );
@@ -51,7 +72,7 @@ class LoanAmountScreen extends Component {
     let isFormValid = true;
 
     fieldsToValidate.forEach(key => {
-      const value = this.state[key];
+      const value = this.state[key] + '';
 
       const error = validateField(key, value);
       errors[key] = error;
@@ -65,7 +86,7 @@ class LoanAmountScreen extends Component {
   };
 
   render() {
-    const {loanAmount, errors} = this.state;
+    const {loanAmount, errors, isEdit} = this.state;
 
     const {
       selectedVehicle,
@@ -78,14 +99,15 @@ class LoanAmountScreen extends Component {
     return (
       <Loan_Amount_Component
         headerProp={{
-          title: 'Loan Amount',
+          title: `${isEdit ? 'Edit ' : ''}Loan Amount`,
           subtitle: isCreatingLoanApplication
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
           showRightContent: true,
-          rightLabel: isCreatingLoanApplication
-            ? selectedLoanApplication?.loanApplicationId || ''
-            : '',
+          rightLabel:
+            isCreatingLoanApplication || isEdit
+              ? selectedLoanApplication?.loanApplicationId || ''
+              : '',
           rightLabelColor: '#F8A902',
           onBackPress: () => goBack(),
         }}

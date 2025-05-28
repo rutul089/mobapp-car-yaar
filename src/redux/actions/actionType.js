@@ -76,3 +76,5 @@ export const CREATE_CUSTOMER_BASIC_DETAIL = createAsyncActionTypes(
 export const PARTNER_PERFORMANCE = createAsyncActionTypes(
   'PARTNER_PERFORMANCE',
 );
+
+export const CIBIL_SCORE = createAsyncActionTypes('CIBIL_SCORE');

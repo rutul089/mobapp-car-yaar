@@ -13,6 +13,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 
 const CheckCIBIL_Component = ({
@@ -25,6 +26,8 @@ const CheckCIBIL_Component = ({
   isOtpSend,
   headerProp,
   restInputProps = {},
+  loading,
+  onOtpComplete,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -56,6 +59,7 @@ const CheckCIBIL_Component = ({
                   left: Platform.OS === 'android' ? '-4%' : '-9%',
                   marginTop: 9,
                 }}
+                onOtpComplete={onOtpComplete}
               />
               <Spacing size={'smd'} />
               <Text type={'helper-text'} textAlign={'center'}>
@@ -78,6 +82,7 @@ const CheckCIBIL_Component = ({
           <Button label={'Confirm & Save'} onPress={onConfirmPress} />
         )}
       </KeyboardAwareScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

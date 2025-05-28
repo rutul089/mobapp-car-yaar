@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
+import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
 import CheckCIBIL_Component from './CheckCIBIL_Component';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import {
+  fetchLoanApplicationFromIdThunk,
+  sendOtpForCibilThunk,
+  verifyOtpForCibilThunk,
+} from '../../redux/actions';
 
 class CheckCIBILScreen extends Component {
   constructor(props) {
@@ -15,7 +24,9 @@ class CheckCIBILScreen extends Component {
       errors: {
         mobileNumber: '',
       },
+      otp: '',
       isFormValid: false,
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
 
     this.onSendOTP = this.onSendOTP.bind(this);
@@ -23,16 +34,27 @@ class CheckCIBILScreen extends Component {
   }
 
   componentDidMount() {
-    const {selectedCustomer} = this.props;
+    const {selectedCustomer, selectedApplicationId} = this.props;
+    const {isEdit} = this.state;
+    if (isEdit) {
+      this.props.fetchLoanApplicationFromIdThunk(
+        selectedApplicationId,
+        {},
+        response => {
+          this.setState({
+            mobileNumber: response?.customer?.mobileNumber,
+          });
+        },
+      );
+    }
+
     this.setState({
       mobileNumber: selectedCustomer?.mobileNumber || '',
     });
   }
 
   onSendOTP = () => {
-    this.setState({
-      isOTPSend: true,
-    });
+    this.sendOtpForCibil();
   };
 
   onConfirmPress = () => {
@@ -42,6 +64,8 @@ class CheckCIBILScreen extends Component {
       showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
       return;
     }
+
+    this.checkOtpForCibil();
     // navigate(ScreenNames.CustomerEnvelope);
   };
 
@@ -69,6 +93,69 @@ class CheckCIBILScreen extends Component {
     return isFormValid;
   };
 
+  sendOtpForCibil = () => {
+    const isFormValid = this.validateAllFields();
+
+    if (!isFormValid) {
+      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      return;
+    }
+
+    const {selectedCustomerId} = this.props;
+    const {mobileNumber} = this.state;
+    let payload = {
+      customerId: selectedCustomerId,
+      mobileNumber: mobileNumber,
+    };
+
+    this.props
+      .sendOtpForCibilThunk(
+        payload,
+        success => {},
+        error => {},
+      )
+      .finally(() => {
+        this.setState({
+          isOTPSend: true,
+        });
+      });
+  };
+
+  checkOtpForCibil = () => {
+    const {selectedCustomerId} = this.props;
+    const {mobileNumber, otp} = this.state;
+    if (otp.length !== 4) {
+      return showToast('error', 'Please enter 4 digit OTP.');
+    }
+    let payload = {
+      customerId: selectedCustomerId,
+      mobileNumber: mobileNumber,
+      code: otp,
+    };
+
+    this.props
+      .verifyOtpForCibilThunk(
+        payload,
+        success => {
+          navigate(ScreenNames.CustomerEnvelope);
+        },
+        error => {},
+      )
+      .finally(() => {
+        this.setState({
+          isOTPSend: true,
+        });
+      });
+  };
+
+  onOtpComplete = value => {
+    this.setState({otp: value, isError: false}, () => {
+      if (value.length === 4) {
+        this.checkOtpForCibil();
+      }
+    });
+  };
+
   render() {
     const {
       selectedVehicle,
@@ -77,7 +164,7 @@ class CheckCIBILScreen extends Component {
       loading,
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
-    const {errors, mobileNumber} = this.state;
+    const {errors, mobileNumber, isEdit} = this.state;
 
     return (
       <CheckCIBIL_Component
@@ -87,9 +174,10 @@ class CheckCIBILScreen extends Component {
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
           showRightContent: true,
-          rightLabel: isCreatingLoanApplication
-            ? selectedLoanApplication?.loanApplicationId || ''
-            : '',
+          rightLabel:
+            isCreatingLoanApplication || isEdit
+              ? selectedLoanApplication?.loanApplicationId || ''
+              : '',
           rightLabelColor: '#F8A902',
           onBackPress: () => goBack(),
         }}
@@ -107,18 +195,29 @@ class CheckCIBILScreen extends Component {
             value: mobileNumber,
           },
         }}
+        loading={loading}
+        onOtpComplete={this.onOtpComplete}
       />
     );
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
+const mapActionCreators = {
+  fetchLoanApplicationFromIdThunk,
+  sendOtpForCibilThunk,
+  verifyOtpForCibilThunk,
+};
+const mapStateToProps = ({
+  loanData,
+  customerData,
+  vehicleData,
+  cibilReducer,
+}) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
   documentDetail: customerData?.documentDetail,
   selectedApplicationId: loanData?.selectedApplicationId,
-  loading: loanData?.loading,
+  loading: loanData?.loading || cibilReducer?.loading,
   selectedVehicle: vehicleData?.selectedVehicle,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,

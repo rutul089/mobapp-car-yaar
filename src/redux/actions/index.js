@@ -7,3 +7,4 @@ export * from './vehicleActions';
 export * from './customerActions';
 export * from './bankActions';
 export * from './performanceAction';
+export * from './cibilScoreActions';
