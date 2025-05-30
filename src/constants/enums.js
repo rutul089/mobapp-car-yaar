@@ -314,3 +314,51 @@ export const userRoleValue = {
   [userRole.PARTNER]: 'Partner',
   [userRole.SALES_EXECUTIVE]: 'Sales Executive',
 };
+
+export const relationshipType = Object.freeze({
+  FATHER: 'FATHER',
+  MOTHER: 'MOTHER',
+  SPOUSE: 'SPOUSE',
+  BROTHER: 'BROTHER',
+  SISTER: 'SISTER',
+  SON: 'SON',
+  DAUGHTER: 'DAUGHTER',
+  FRIEND: 'FRIEND',
+  RELATIVE: 'RELATIVE',
+  COLLEAGUE: 'COLLEAGUE',
+  EMPLOYER: 'EMPLOYER',
+  NEIGHBOR: 'NEIGHBOR',
+  OTHER: 'OTHER',
+});
+
+export const relationshipTypeOptions = [
+  {label: 'Father', value: relationshipType.FATHER},
+  {label: 'Mother', value: relationshipType.MOTHER},
+  {label: 'Spouse', value: relationshipType.SPOUSE},
+  {label: 'Brother', value: relationshipType.BROTHER},
+  {label: 'Sister', value: relationshipType.SISTER},
+  {label: 'Son', value: relationshipType.SON},
+  {label: 'Daughter', value: relationshipType.DAUGHTER},
+  {label: 'Friend', value: relationshipType.FRIEND},
+  {label: 'Relative', value: relationshipType.RELATIVE},
+  {label: 'Colleague', value: relationshipType.COLLEAGUE},
+  {label: 'Employer', value: relationshipType.EMPLOYER},
+  {label: 'Neighbor', value: relationshipType.NEIGHBOR},
+  {label: 'Other', value: relationshipType.OTHER},
+];
+
+export const relationshipTypeValue = {
+  [relationshipType.FATHER]: 'Father',
+  [relationshipType.MOTHER]: 'Mother',
+  [relationshipType.SPOUSE]: 'Spouse',
+  [relationshipType.BROTHER]: 'Brother',
+  [relationshipType.SISTER]: 'Sister',
+  [relationshipType.SON]: 'Son',
+  [relationshipType.DAUGHTER]: 'Daughter',
+  [relationshipType.FRIEND]: 'Friend',
+  [relationshipType.RELATIVE]: 'Relative',
+  [relationshipType.COLLEAGUE]: 'Colleague',
+  [relationshipType.EMPLOYER]: 'Employer',
+  [relationshipType.NEIGHBOR]: 'Neighbor',
+  [relationshipType.OTHER]: 'Other',
+};

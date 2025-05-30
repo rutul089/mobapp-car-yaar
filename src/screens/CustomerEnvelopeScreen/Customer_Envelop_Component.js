@@ -16,6 +16,7 @@ const Customer_Envelop_Component = ({
   vehicleDetails,
   loanDetails,
   onViewLenderPress,
+  loanApplicationId,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -27,9 +28,11 @@ const Customer_Envelop_Component = ({
           style={styles.imageStyle}
         />
         <View style={styles.textWrapper}>
-          <Text hankenGroteskBold={true} color={'#F8A902'}>
-            #_ABC123
-          </Text>
+          {loanApplicationId && (
+            <Text hankenGroteskBold={true} color={'#F8A902'}>
+              {loanApplicationId}
+            </Text>
+          )}
           <Text hankenGroteskBold={true} size={'h3'} color={'white'}>
             Yay! Your Customer Envelope Is Now Ready!
           </Text>

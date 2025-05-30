@@ -58,6 +58,8 @@ export const validateField = (key, value, isOptional) => {
           '';
 
     case 'mobileNumber':
+    case 'mobileNumberHome':
+    case 'mobileNumberOffice':
       return trimmedValue === ''
         ? 'Please enter a mobile number'
         : !mobileNumberRegex.test(trimmedValue)
@@ -105,9 +107,13 @@ export const validateField = (key, value, isOptional) => {
         : '';
 
     case 'address':
+    case 'addressHome':
+    case 'addressOffice':
       return trimmedValue === '' ? 'Please enter address.' : '';
 
     case 'pincode':
+    case 'pincodeHome':
+    case 'pincodeOffice':
       return trimmedValue === ''
         ? 'Please enter a PIN code'
         : !pincodeRegex.test(trimmedValue)
@@ -224,6 +230,18 @@ export const validateField = (key, value, isOptional) => {
       }
       return '';
     }
+
+    case 'referenceNameHome':
+    case 'referenceNameOffice':
+      return trimmedValue === ''
+        ? 'Please enter Name'
+        : !nameRegex.test(trimmedValue)
+        ? 'Name should only contain alphabets and spaces'
+        : '';
+
+    case 'relationshipHome':
+    case 'relationshipOffice':
+      return trimmedValue === '' ? 'Please select a Relationship.' : '';
 
     default:
       return '';

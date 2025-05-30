@@ -91,6 +91,7 @@ class LoanOfferDetailScreen extends Component {
     super(props);
     this.state = {
       loanDetail: {},
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
     this.onProceedPress = this.onProceedPress.bind(this);
     this.onLoanOfferPress = this.onLoanOfferPress.bind(this);
@@ -104,7 +105,9 @@ class LoanOfferDetailScreen extends Component {
     });
   }
   onProceedPress = () => {
-    navigate(ScreenNames.AddReference);
+    let params = getScreenParam(this.props.route, 'params');
+
+    navigate(ScreenNames.AddReference, {params});
   };
 
   onLoanOfferPress = () => {

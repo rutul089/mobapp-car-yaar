@@ -124,6 +124,9 @@ class CheckCIBILScreen extends Component {
   checkOtpForCibil = () => {
     const {selectedCustomerId} = this.props;
     const {mobileNumber, otp} = this.state;
+
+    let params = getScreenParam(this.props.route, 'params');
+
     if (otp.length !== 4) {
       return showToast('error', 'Please enter 4 digit OTP.');
     }
@@ -137,7 +140,7 @@ class CheckCIBILScreen extends Component {
       .verifyOtpForCibilThunk(
         payload,
         success => {
-          navigate(ScreenNames.CustomerEnvelope);
+          navigate(ScreenNames.CustomerEnvelope, {params});
         },
         error => {},
       )

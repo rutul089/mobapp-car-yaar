@@ -7,19 +7,24 @@ import {
   Text,
   images,
   theme,
+  Loader,
 } from '@caryaar/components';
 
 import {goBack} from '../../navigation/NavigationUtils';
 import {formatIndianCurrency} from '../../utils/helper';
 
-const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
+const Lender_Selection_Component = ({
+  params,
+  onItemPress = () => {},
+  loading,
+}) => {
   const financeData = [
     {
       title: 'Fortune Finance',
       logo: images.hdfcImg,
 
       interestRate: '8.96',
-      tenure: '60 Months',
+      tenure: '60',
       emi: '11,093',
       processingFee: '1,000',
       badge: 1,
@@ -34,7 +39,7 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       title: 'Speed Loans',
       logo: images.hdfcImg,
       interestRate: '9.50',
-      tenure: '48 Months',
+      tenure: '48',
       emi: '12,420',
       processingFee: '1,250',
       badge: 2,
@@ -50,7 +55,7 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
     {
       title: 'HDB Financial Services',
       interestRate: '9.50',
-      tenure: '48 Months',
+      tenure: '48',
       emi: '12,420',
       processingFee: '1,250',
       badge: 4,
@@ -66,7 +71,7 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
       logo: images.hdfcImg,
       title: 'HDB Financial Services',
       interestRate: '9.50',
-      tenure: '48 Months',
+      tenure: '48',
       emi: '12,420',
       processingFee: '1,250',
       badge: 3,
@@ -121,6 +126,7 @@ const Lender_Selection_Component = ({params, onItemPress = () => {}}) => {
           </Text>
         }
       />
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

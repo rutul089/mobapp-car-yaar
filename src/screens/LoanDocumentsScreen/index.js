@@ -103,8 +103,8 @@ class LoanDocumentsScreen extends Component {
 
     switch (selectedLoanType) {
       case loanType.refinance:
-        // return navigate(ScreenNames.FinanceDetails);
-        return navigate(ScreenNames.VehicleHypothecation);
+        return navigate(ScreenNames.FinanceDetails, {params: params});
+      // return navigate(ScreenNames.VehicleHypothecation);
 
       case loanType.topUp:
       case loanType.internalBT:

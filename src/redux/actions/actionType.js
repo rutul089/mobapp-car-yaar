@@ -78,3 +78,5 @@ export const PARTNER_PERFORMANCE = createAsyncActionTypes(
 );
 
 export const CIBIL_SCORE = createAsyncActionTypes('CIBIL_SCORE');
+
+export const ADD_REFERENCE = createAsyncActionTypes('ADD_REFERENCE');

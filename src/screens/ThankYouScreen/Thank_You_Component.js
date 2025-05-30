@@ -19,6 +19,8 @@ const Thank_You_Component = ({
   partnerDetail,
   onTrackLoanStatusPress,
   onBackToHomePress,
+  loanApplicationId,
+  createdAt,
 }) => {
   return (
     <SafeAreaWrapper
@@ -36,9 +38,7 @@ const Thank_You_Component = ({
             {'Thank You for Trusting Us!'}
           </Text>
           <Spacing size="sm" />
-          <Text type={'helper-text'}>
-            {'Loan applied at - 12 Feb 2025, 10:45 AM'}
-          </Text>
+          <Text type={'helper-text'}>{`Loan applied at - ${createdAt}`}</Text>
           <Spacing size="sm" />
           <Text type={'helper-text'}>
             Application number -{' '}
@@ -46,7 +46,7 @@ const Thank_You_Component = ({
               size={'small'}
               color={theme.colors.primaryBlack}
               hankenGroteskSemiBold={true}>
-              #849363
+              {loanApplicationId}
             </Text>
           </Text>
         </View>

@@ -10,12 +10,16 @@ import ScreenNames from '../../constants/ScreenNames';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {documentImageLabelMap, documentImageType} from '../../constants/enums';
 import {
+  formatDocumentImages,
   generateImageUploadPayload,
   handleFileSelection,
   validateRequiredDocuments,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
-import {postCustomerFinanceDocumentsThunk} from '../../redux/actions';
+import {
+  fetchCustomerFinanceDocumentsThunk,
+  postCustomerFinanceDocumentsThunk,
+} from '../../redux/actions';
 
 const requiredFields = [
   documentImageType.SANCTION_LETTER,
@@ -35,7 +39,22 @@ class FinanceDocumentsScreen extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const {isEdit} = this.state;
+    const {selectedApplicationId} = this.props;
+    if (isEdit) {
+      this.props.fetchCustomerFinanceDocumentsThunk(
+        selectedApplicationId,
+        {},
+        response => {
+          this.setState({
+            documents: formatDocumentImages(response?.financeDocuments, ''),
+          });
+          console.log('response', JSON.stringify(response));
+        },
+      );
+    }
+  }
 
   onNextPress = () => {
     const {documents} = this.state;
@@ -58,7 +77,8 @@ class FinanceDocumentsScreen extends Component {
       selectedApplicationId,
       payload,
       success => {
-        navigate(ScreenNames.LoanAmount);
+        let params = getScreenParam(this.props.route, 'params');
+        navigate(ScreenNames.LoanAmount, {params});
       },
       error => {},
     );
@@ -183,9 +203,10 @@ class FinanceDocumentsScreen extends Component {
               ? formatVehicleNumber(UsedVehicle?.registerNumber)
               : '',
             showRightContent: true,
-            rightLabel: isCreatingLoanApplication
-              ? selectedLoanApplication?.loanApplicationId || ''
-              : '',
+            rightLabel:
+              isCreatingLoanApplication || isEdit
+                ? selectedLoanApplication?.loanApplicationId || ''
+                : '',
             rightLabelColor: '#F8A902',
             onBackPress: () => goBack(),
           }}
@@ -218,7 +239,10 @@ class FinanceDocumentsScreen extends Component {
   }
 }
 
-const mapActionCreators = {postCustomerFinanceDocumentsThunk};
+const mapActionCreators = {
+  postCustomerFinanceDocumentsThunk,
+  fetchCustomerFinanceDocumentsThunk,
+};
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanType: loanData.selectedLoanType,

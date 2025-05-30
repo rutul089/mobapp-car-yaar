@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Finance_Details_Component from './Finance_Details_Component';
-import {currentLoanOptions} from '../../constants/enums';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
+import {currentLoanLabelMap, currentLoanOptions} from '../../constants/enums';
+import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 import {
   convertToISODate,
+  formatDate,
   formatVehicleNumber,
   showToast,
 } from '../../utils/helper';
 import {
+  fetchCustomerFinanceDetailsThunk,
   postCustomerFinanceDetailsThunk,
   searchBanksThunk,
 } from '../../redux/actions';
@@ -37,13 +43,35 @@ class FinanceDetailsScreen extends Component {
         loanClosedDate: '',
       },
       isFormValid: false,
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
     this.onSelectAnswer = this.onSelectAnswer.bind(this);
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    const {isEdit} = this.state;
+    const {selectedLoanApplication, selectedApplicationId, financeDetails} =
+      this.props;
+    if (isEdit) {
+      await this.props.fetchCustomerFinanceDetailsThunk(
+        selectedApplicationId,
+        {},
+        response => {
+          this.setState({
+            isCarFinanced: response?.isCarFinanced,
+            bankName: response?.bankName,
+            loanAccountNumber: response?.loanAccountNumber,
+            loanAmount: response?.loanAmount + '',
+            tenure: response?.tenure + '',
+            monthlyEmi: response?.monthlyEmi + '',
+            loanClosedDate: formatDate(response?.loanClosedDate, 'DD/MM/yyyy'),
+          });
+        },
+      );
+    }
+  }
 
   onSelectAnswer = value => {
     this.onChangeField('isCarFinanced', value);
@@ -75,7 +103,7 @@ class FinanceDetailsScreen extends Component {
     let payLoad = {
       isCarFinanced: isCarFinanced,
       bankName: isCarFinanced ? bankName : '',
-      loanAccountNumber: isCarFinanced ? Number(loanAccountNumber) : '',
+      loanAccountNumber: isCarFinanced ? String(loanAccountNumber) : '',
       loanAmount: isCarFinanced ? Number(loanAmount) : '',
       monthlyEmi: isCarFinanced ? Number(monthlyEmi) : '',
       emiPaid: isCarFinanced ? Number(emiPaid) : '',
@@ -87,7 +115,8 @@ class FinanceDetailsScreen extends Component {
       selectedApplicationId,
       payLoad,
       response => {
-        navigate(ScreenNames.FinanceDocuments);
+        let params = getScreenParam(this.props.route, 'params');
+        navigate(ScreenNames.FinanceDocuments, {params});
       },
       error => {},
     );
@@ -177,6 +206,7 @@ class FinanceDetailsScreen extends Component {
       tenure,
       loanClosedDate,
       errors,
+      isEdit,
     } = this.state;
 
     const {
@@ -197,9 +227,10 @@ class FinanceDetailsScreen extends Component {
               ? formatVehicleNumber(UsedVehicle?.registerNumber)
               : '',
             showRightContent: true,
-            rightLabel: isCreatingLoanApplication
-              ? selectedLoanApplication?.loanApplicationId || ''
-              : '',
+            rightLabel:
+              isCreatingLoanApplication || isEdit
+                ? selectedLoanApplication?.loanApplicationId || ''
+                : '',
             rightLabelColor: '#F8A902',
             onBackPress: () => goBack(),
           }}
@@ -266,7 +297,11 @@ class FinanceDetailsScreen extends Component {
   }
 }
 
-const mapActionCreators = {searchBanksThunk, postCustomerFinanceDetailsThunk};
+const mapActionCreators = {
+  searchBanksThunk,
+  postCustomerFinanceDetailsThunk,
+  fetchCustomerFinanceDetailsThunk,
+};
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanType: loanData.selectedLoanType,
@@ -278,6 +313,7 @@ const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,
   selectedCustomer: loanData?.selectedCustomer,
+  financeDetails: loanData?.financeDetails,
 });
 
 export default connect(

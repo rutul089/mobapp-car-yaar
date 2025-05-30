@@ -4,6 +4,10 @@ import {
   FETCH_LOAN_APPLICATIONS,
   RESET_LOAN_APPLICATION,
   FETCH_LOAN_APP_BY_ID,
+  CUSTOMER_FINANCE_DETAILS,
+  CUSTOMER_FINANCE_DOCUMENT,
+  CUSTOMER_MORE_FINANCE,
+  ADD_REFERENCE,
 } from '../actions/actionType';
 
 const initialState = {
@@ -21,6 +25,10 @@ const initialState = {
   loading: false,
   error: null,
   isCreatingLoanApplication: false,
+  financeDetails: null,
+  financeDocuments: null,
+  moreOnFinance: null,
+  referenceDetail: null,
 };
 
 const loanReducer = (state = initialState, action) => {
@@ -29,11 +37,19 @@ const loanReducer = (state = initialState, action) => {
       return {...state, selectedLoanType: action.payload};
 
     case FETCH_LOAN_APPLICATIONS.REQUEST:
+    case CUSTOMER_FINANCE_DETAILS.REQUEST:
     case FETCH_LOAN_APP_BY_ID.REQUEST:
+    case CUSTOMER_FINANCE_DOCUMENT.REQUEST:
+    case CUSTOMER_MORE_FINANCE.REQUEST:
+    case ADD_REFERENCE.REQUEST:
       return {...state, loading: true};
 
     case FETCH_LOAN_APPLICATIONS.FAILURE:
     case FETCH_LOAN_APP_BY_ID.FAILURE:
+    case CUSTOMER_FINANCE_DETAILS.FAILURE:
+    case CUSTOMER_FINANCE_DOCUMENT.FAILURE:
+    case CUSTOMER_MORE_FINANCE.FAILURE:
+    case ADD_REFERENCE.FAILURE:
       return {...state, loading: false};
 
     case CLEAR_SEARCH_APPLICATION.SUCCESS:
@@ -107,6 +123,34 @@ const loanReducer = (state = initialState, action) => {
           : [action.payload, ...state.applications],
       };
     }
+
+    case CUSTOMER_FINANCE_DETAILS.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        financeDetails: action.payload,
+      };
+
+    case CUSTOMER_FINANCE_DOCUMENT.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        financeDocuments: action.payload,
+      };
+
+    case CUSTOMER_MORE_FINANCE.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        moreOnFinance: action.payload,
+      };
+
+    case ADD_REFERENCE.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        referenceDetail: action.payload,
+      };
 
     case types.RESET_APP_STATE:
       return {...initialState};

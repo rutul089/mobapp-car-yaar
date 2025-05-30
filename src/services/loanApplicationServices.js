@@ -160,6 +160,80 @@ export const postCustomerFinanceDetails = async (
   }
 };
 
+/**
+ * Fetches finance details for a given customer ID.
+ *
+ * @param {string} applicationId - The ID of the application.
+ * @param {object} [config={}] - Optional Axios request configuration.
+ * @returns {Promise<object>} The finance details of the customer.
+ * @throws Will throw an error if the customerId is missing or the request fails.
+ *
+ */
+export const fetchCustomerFinanceDetails = async (
+  applicationId,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `loan-applications/financeDetails/${applicationId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch finance details for customer ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const fetchCustomerFinanceDocuments = async (
+  applicationId,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `loan-applications/financeDocuments/${applicationId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch finance details for customer ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+/**
+ * Fetch more finance details for a specific customer.
+ *
+ * @param {string} applicationId - The ID of the application.
+ * @param {object} [config={}] - Optional Axios config.
+ * @returns {Promise<object>} Response data containing additional finance details.
+ * @throws Will throw an error if the request fails or applicationId is not provided.
+ */
+export const fetchCustomerMoreFinanceDetails = async (
+  applicationId,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `loan-applications/getCustomerMoreFinanceDetails/${applicationId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to fetch more finance details for customer ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
 export const postCustomerFinanceDocuments = async (
   applicationId,
   financeDocuments,
@@ -175,6 +249,48 @@ export const postCustomerFinanceDocuments = async (
   } catch (error) {
     console.error(
       `Failed to fetch finance details for customer ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const postCustomerLenderDetails = async (
+  applicationId,
+  lenderData,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.patch(
+      `loan-applications/${applicationId}`,
+      lenderData,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to set lender details for application ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const postCustomerReferenceDetails = async (
+  applicationId,
+  referenceData,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.post(
+      `loan-applications/add-reference/${applicationId}`,
+      referenceData,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to add reference details for application ID ${applicationId}:`,
       error,
     );
     throw error;

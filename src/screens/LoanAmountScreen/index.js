@@ -26,6 +26,7 @@ class LoanAmountScreen extends Component {
   componentDidMount() {
     const {isEdit} = this.state;
     const {selectedLoanApplication} = this.props;
+    console.log({selectedLoanApplication});
     if (isEdit) {
       this.setState({
         loanAmount: selectedLoanApplication?.loanAmount,

@@ -1,44 +1,98 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Customer_Envelop_Component from './Customer_Envelop_Component';
-import {navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
-import {loanType} from '../../constants/enums';
+import {
+  getLabelFromEnum,
+  loanType,
+  loanTypeLabelMap,
+} from '../../constants/enums';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
+import Customer_Envelop_Component from './Customer_Envelop_Component';
+import {
+  formatIndianCurrency,
+  formatVehicleDetails,
+  formatVehicleNumber,
+  safeGet,
+} from '../../utils/helper';
+import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
 
 class CustomerEnvelopeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+    };
     this.onViewLenderPress = this.onViewLenderPress.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const {selectedLoanApplication, selectedApplicationId} = this.props;
+    this.props.fetchLoanApplicationFromIdThunk(selectedApplicationId);
+  }
 
   onViewLenderPress = () => {
+    let params = getScreenParam(this.props.route, 'params');
     const {selectedLoanType} = this.props;
     if (selectedLoanType === loanType.internalBT) {
       return navigate(ScreenNames.LenderDetails);
     } else {
-      return navigate(ScreenNames.LenderSelection);
+      return navigate(ScreenNames.LenderSelection, {params});
     }
   };
 
   render() {
+    const {selectedLoanApplication, loading} = this.props;
+    let {
+      loanAmount,
+      loanApplicationId,
+      usedVehicle = {},
+      vehicle = {},
+      customer = {},
+    } = selectedLoanApplication || {};
+    const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
+
     return (
       <>
         <Customer_Envelop_Component
+          loanApplicationId={loanApplicationId}
           vehicleDetails={[
-            {label: 'Registrar Number', value: 'GJ 01 JR 0945'},
-            {label: 'Make', value: 'Maruti Suzuki'},
-            {label: 'Model', value: 'Vitara Brezza | ZDI'},
-            {label: 'Year', value: '2019'},
+            {
+              label: 'Registrar Number',
+              value: formatVehicleNumber(_registerNumber),
+            },
+            {label: 'Make', value: safeGet(loading, vehicle, 'make')},
+            {label: 'Model', value: formatVehicleDetails(vehicle)},
+            {
+              label: 'Year',
+              value: safeGet(loading, usedVehicle, 'manufactureYear'),
+            },
           ]}
           loanDetails={[
-            {label: 'Applicant Name', value: 'Vijay Dugar'},
-            {label: 'Mobile Number', value: '99421 39740'},
+            {
+              label: 'Applicant Name',
+              value: safeGet(
+                loading,
+                customer,
+                'customerDetails.applicantName',
+              ),
+            },
+            {
+              label: 'Mobile Number',
+              value: safeGet(loading, customer, 'customerDetails.mobileNumber'),
+            },
             {label: 'Vehicle Type', value: 'Used Car'},
-            {label: 'Loan Type', value: 'Purchase'},
-            {label: 'Desired Loan Amount', value: '₹9,00,000'},
+            {
+              label: 'Loan Type',
+              value:
+                getLabelFromEnum(
+                  loanTypeLabelMap,
+                  selectedLoanApplication?.loanType,
+                ) || '-',
+            },
+            {
+              label: 'Desired Loan Amount',
+              value: formatIndianCurrency(loanAmount),
+            },
           ]}
           onViewLenderPress={this.onViewLenderPress}
         />
@@ -47,10 +101,13 @@ class CustomerEnvelopeScreen extends Component {
   }
 }
 
-const mapActionCreators = {};
+const mapActionCreators = {fetchLoanApplicationFromIdThunk};
 const mapStateToProps = ({loanData}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
+    loading: loanData.loading,
+    selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
+    selectedApplicationId: loanData?.selectedApplicationId,
   };
 };
 export default connect(
