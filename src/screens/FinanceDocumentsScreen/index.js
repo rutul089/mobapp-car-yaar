@@ -20,6 +20,9 @@ import {
   fetchCustomerFinanceDocumentsThunk,
   postCustomerFinanceDocumentsThunk,
 } from '../../redux/actions';
+import RNFS from 'react-native-fs';
+import {Buffer} from 'buffer';
+import {getPresignedDownloadUrl, getPresignedUploadUrl} from '../../services';
 
 const requiredFields = [
   documentImageType.SANCTION_LETTER,
@@ -42,15 +45,17 @@ class FinanceDocumentsScreen extends Component {
   componentDidMount() {
     const {isEdit} = this.state;
     const {selectedApplicationId} = this.props;
+    console.log({isEdit});
     if (isEdit) {
       this.props.fetchCustomerFinanceDocumentsThunk(
         selectedApplicationId,
         {},
         response => {
-          this.setState({
-            documents: formatDocumentImages(response?.financeDocuments, ''),
-          });
-          console.log('response', JSON.stringify(response));
+          if (response.financeDocuments) {
+            this.setState({
+              documents: formatDocumentImages(response?.financeDocuments, ''),
+            });
+          }
         },
       );
     }
@@ -103,9 +108,16 @@ class FinanceDocumentsScreen extends Component {
 
     setTimeout(async () => {
       this.setState({isLoadingDocument: true});
+
+      const downloadUrlResponse = await getPresignedDownloadUrl({
+        objectKey: uri,
+      });
+
+      let downloadedUrl = downloadUrlResponse?.data?.url;
+
       try {
         await viewDocumentHelper(
-          uri,
+          downloadedUrl,
           imageUri => {
             navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
           },
@@ -132,52 +144,66 @@ class FinanceDocumentsScreen extends Component {
         return;
       }
 
-      const docObj = {
-        uri: asset.uri,
-        name: asset.fileName,
-        type: asset.type,
-        isLocal: true,
-        fileSize: asset.fileSize,
-        uploadedUrl: asset.uri,
-        // uploadedUrl:
-        //   'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock URL for now
-      };
+      try {
+        this.setState({isLoading: true});
+        const fileName = asset.name || asset.fileName || 'upload';
+        const mimeType = asset.type || 'application/octet-stream';
 
-      this.setState(prev => ({
-        documents: {
-          ...prev.documents,
-          [this.state.selectedDocType]: docObj,
-        },
-        selectedDocType: '',
-        showFilePicker: false,
-      }));
+        console.log({fileName});
+        console.log({asset});
+        // Step 1: Get the presigned upload URL
+        const uploadUrlResponse = await getPresignedUploadUrl({
+          objectKey: fileName,
+          prefix: this.state.selectedDocType,
+        });
 
-      // TODO: Upload logic placeholder, uncomment when implementing real upload
-      // try {
-      //   const formData = new FormData();
-      //   formData.append('file', {
-      //     uri: docObj.uri,
-      //     type: docObj.type,
-      //     name: docObj.name,
-      //   });
+        const presignedUrl = uploadUrlResponse?.data?.url;
+        const presignedKey = uploadUrlResponse?.data?.key;
 
-      //   const response = await uploadDocumentMultipart(formData);
-      //   const url = response?.data?.url;
+        console.log({presignedKey});
 
-      //   if (url) {
-      //     this.setState(prev => ({
-      //       documents: {
-      //         ...prev.documents,
-      //         [type]: {
-      //           ...prev.documents[type],
-      //           uploadedUrl: url,
-      //         },
-      //       },
-      //     }));
-      //   }
-      // } catch (error) {
-      //   showApiErrorToast(error);
-      // }
+        if (!presignedUrl) {
+          throw new Error('Presigned URL not received');
+        }
+        const fileBase64 = await RNFS.readFile(asset.uri, 'base64');
+        const fileBuffer = Buffer.from(fileBase64, 'base64');
+
+        await fetch(presignedUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': mimeType,
+            'Content-Length': fileBuffer.length.toString(),
+          },
+          body: fileBuffer,
+        });
+
+        const docObj = {
+          uri: asset.uri,
+          name: asset.fileName,
+          type: asset.type,
+          isLocal: true,
+          fileSize: asset.fileSize,
+          uploadedUrl: asset.uri,
+          uploadKey: presignedKey,
+        };
+
+        this.setState(prev => ({
+          documents: {
+            ...prev.documents,
+            [this.state.selectedDocType]: docObj,
+          },
+          selectedDocType: '',
+          showFilePicker: false,
+        }));
+      } catch (error) {
+        console.log({error});
+        this.closeFilePicker();
+        setTimeout(() => {
+          showToast('error', 'Image do not upload');
+        }, 100);
+      } finally {
+        this.setState({isLoading: false});
+      }
     });
   };
 
@@ -215,6 +241,7 @@ class FinanceDocumentsScreen extends Component {
             documentImageType.SANCTION_LETTER,
             documentImageType.NOC,
             documentImageType.FORM_34,
+            documentImageType.OTHER_DOCUMENTS,
           ].map(type => ({
             type,
             label: documentImageLabelMap[type],
@@ -232,7 +259,7 @@ class FinanceDocumentsScreen extends Component {
             onClose: this.closeFilePicker,
             autoCloseOnSelect: false,
           }}
-          loading={loading}
+          loading={loading || isLoading}
         />
       </>
     );

@@ -102,8 +102,10 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
       const response = await fetch(uri, {method: 'HEAD'});
       const contentType = response.headers.get('Content-Type') || '';
       const isImage = contentType.startsWith('image/');
+      const type = await detectFileType(uri);
+      console.log('File type:', type);
 
-      if (isImage) {
+      if (type === 'image') {
         onImage?.(uri);
         return;
       }
@@ -135,6 +137,62 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
   }
 };
 
+// export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
+//   try {
+//     if (
+//       !uri ||
+//       typeof uri !== 'string' ||
+//       !(
+//         uri.startsWith('http://') ||
+//         uri.startsWith('https://') ||
+//         uri.startsWith('file://') ||
+//         uri.startsWith(RNFS.DocumentDirectoryPath)
+//       )
+//     ) {
+//       throw new Error('Invalid document URI. Must be HTTP(S) or a local file.');
+//     }
+
+//     const isRemote = uri.startsWith('http');
+
+//     if (isRemote) {
+//       const type = await detectFileType(uri);
+//       console.log('Detected file type:', type);
+
+//       if (type === 'image') {
+//         onImage?.(uri);
+//         return;
+//       }
+
+//       // Get extension from URL (fallback)
+//       const extMatch = uri.split('?')[0].match(/\.(\w+)$/);
+//       const extension = extMatch ? extMatch[1] : 'pdf';
+//       const localFileName = `temp_${Date.now()}.${extension}`;
+//       const localPath = `${RNFS.DocumentDirectoryPath}/${localFileName}`;
+
+//       const downloadRes = await RNFS.downloadFile({
+//         fromUrl: uri,
+//         toFile: localPath,
+//       }).promise;
+
+//       if (downloadRes.statusCode === 200) {
+//         console.log('Downloaded to:', localPath);
+//         await FileViewer.open(localPath, {showOpenWithDialog: true});
+//       } else {
+//         throw new Error(
+//           `Download failed with status ${downloadRes.statusCode}`,
+//         );
+//       }
+//     } else {
+//       await FileViewer.open(uri, {showOpenWithDialog: true});
+//     }
+//   } catch (err) {
+//     console.warn('Error opening file:', err);
+//     onError?.(err);
+//   } finally {
+//     onLoading?.();
+//   }
+// };
+
 /**
  * Formats the document images by creating a consistent object structure
  * only for keys that are present in the response.
@@ -165,6 +223,7 @@ export const formatDocumentImages = (response = {}, baseUrl = '') => {
         isLocal: false,
         type: null,
         fileSize: null,
+        uploadKey: imageUrl,
       };
     }
   });
@@ -219,7 +278,7 @@ export const generateImageUploadPayload = (
   };
 
   imageKeys.forEach(key => {
-    const uploadedUrl = formattedImages?.[key]?.uploadedUrl;
+    const uploadedUrl = formattedImages?.[key]?.uploadKey;
     if (uploadedUrl) {
       payload[key] = uploadedUrl;
     } else if (isEdit) {
@@ -250,4 +309,48 @@ export const validateRequiredDocuments = (documents, requiredFields) => {
   }
 
   return true;
+};
+
+const detectFileType = async url => {
+  try {
+    const response = await fetch(url, {method: 'HEAD'});
+    const contentType = response.headers.get('Content-Type');
+
+    if (contentType && contentType !== 'text/plain') {
+      if (contentType.startsWith('image/')) {
+        return 'image';
+      }
+      if (contentType === 'application/pdf') {
+        return 'pdf';
+      }
+      return contentType;
+    }
+
+    // Fallback to file extension
+    return getMimeFromUrl(url);
+  } catch (error) {
+    console.error('File type detection failed:', error);
+    return 'error';
+  }
+};
+
+export const getMimeFromUrl = url => {
+  console.log({url});
+  if (!url) {
+    return;
+  }
+  const cleanUrl = url?.split('?')[0]; // Remove query params
+  const extension = cleanUrl.split('.').pop().toLowerCase();
+
+  const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+  const docExts = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
+
+  if (imageExts.includes(extension)) {
+    return 'image';
+  }
+  if (docExts.includes(extension)) {
+    return 'document';
+  }
+
+  return 'unknown';
 };

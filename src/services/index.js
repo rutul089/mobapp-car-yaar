@@ -6,3 +6,4 @@ export * from './notificationServices';
 export * from './bankServices';
 export * from './loanServices';
 export * from './partnersServices';
+export * from './imageUploadServices';

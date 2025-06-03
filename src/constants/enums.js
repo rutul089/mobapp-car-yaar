@@ -99,7 +99,7 @@ export const documentImageLabelMap = {
   [documentImageType.PASSPORT]: 'Passport',
   [documentImageType.PERMANENT_ADDRESS]: 'Permanent Address',
   [documentImageType.SANCTION_LETTER]: 'Sanction Letter',
-  [documentImageType.SOA]: 'SOA',
+  [documentImageType.SOA]: 'Form24 or SOA',
   [documentImageType.PASSPORT_SIZE_PHOTO]: 'Passport Image',
   [documentImageType.CO_APPLICANT_DOCUMENTS]: 'Co-applicant Image',
 };

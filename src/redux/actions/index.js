@@ -9,3 +9,4 @@ export * from './bankActions';
 export * from './performanceAction';
 export * from './cibilScoreActions';
 export * from './referenceActions';
+export * from './imageUploadActions';

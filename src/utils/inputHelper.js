@@ -243,6 +243,23 @@ export const validateField = (key, value, isOptional) => {
     case 'relationshipOffice':
       return trimmedValue === '' ? 'Please select a Relationship.' : '';
 
+    case 'emiPaid': {
+      if (trimmedValue === '') {
+        return 'Please enter EMI Paid.';
+      }
+      const emiValue = Number(trimmedValue);
+      if (isNaN(emiValue)) {
+        return 'EMI Paid must be a valid number.';
+      }
+      if (!Number.isInteger(emiValue)) {
+        return 'EMI Paid must be a whole number.';
+      }
+      if (emiValue < 0) {
+        return 'EMI Paid cannot be negative.';
+      }
+      return '';
+    }
+
     default:
       return '';
   }

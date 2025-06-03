@@ -1,25 +1,25 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Finance_Details_Component from './Finance_Details_Component';
-import {currentLoanLabelMap, currentLoanOptions} from '../../constants/enums';
+import {currentLoanOptions} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
+import {
+  fetchCustomerFinanceDetailsThunk,
+  postCustomerFinanceDetailsThunk,
+  searchBanksThunk,
+} from '../../redux/actions';
 import {
   convertToISODate,
   formatDate,
   formatVehicleNumber,
   showToast,
 } from '../../utils/helper';
-import {
-  fetchCustomerFinanceDetailsThunk,
-  postCustomerFinanceDetailsThunk,
-  searchBanksThunk,
-} from '../../redux/actions';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import Finance_Details_Component from './Finance_Details_Component';
 
 class FinanceDetailsScreen extends Component {
   constructor(props) {
@@ -38,7 +38,6 @@ class FinanceDetailsScreen extends Component {
         loanAccountNumber: '',
         loanAmount: '',
         monthlyEmi: '',
-        emiPaid: '',
         tenure: '',
         loanClosedDate: '',
       },
@@ -166,7 +165,6 @@ class FinanceDetailsScreen extends Component {
       'loanAccountNumber',
       'loanAmount',
       'monthlyEmi',
-      'emiPaid',
       'tenure',
       'loanClosedDate',
     ];

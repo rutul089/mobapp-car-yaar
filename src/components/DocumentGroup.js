@@ -30,7 +30,7 @@ const DocumentGroup = ({
                   isView={isView}
                   btnLabel={'Click to Upload\nImage or PDF'}
                   uploadMedia={doc.uploadMedia}
-                  isDocument={isDocument ? fileType !== 'image' : false}
+                  isDocument={isDocument}
                 />
               </View>
             );
