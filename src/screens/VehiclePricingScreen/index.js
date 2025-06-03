@@ -6,9 +6,13 @@ import {connect} from 'react-redux';
 import {loanType} from '../../constants/enums';
 import {get} from 'lodash';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {showToast} from '../../utils/helper';
+import {showApiErrorToast, showToast} from '../../utils/helper';
 import {updateVehicleByIdThunk} from '../../redux/actions';
-import {handleFileSelection} from '../../utils/documentUtils';
+import {
+  handleFileSelection,
+  viewDocumentHelper,
+} from '../../utils/documentUtils';
+import {uploadFileWithFormData} from '../../services';
 
 class VehiclePricingScreen extends Component {
   constructor(props) {
@@ -26,6 +30,7 @@ class VehiclePricingScreen extends Component {
       },
       isFormValid: false,
       showFilePicker: false,
+      isLoading: false,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
@@ -37,11 +42,14 @@ class VehiclePricingScreen extends Component {
     const salePrice = get(selectedVehicle, 'UsedVehicle.salePrice');
     const trueValuePrice = get(selectedVehicle, 'UsedVehicle.trueValuePrice');
     const additionalNotes = get(selectedVehicle, 'UsedVehicle.additionalNotes');
+    const valueReportUrl = get(selectedVehicle, 'UsedVehicle.valueReportUrl');
+
     this.setState({
       estimatedPrice: estimatedPrice != null ? `${estimatedPrice}` : '' + '',
       salePrice: salePrice != null ? `${salePrice}` : '' + '',
       trueValuePrice: trueValuePrice != null ? `${trueValuePrice}` : '' + '',
       additionalNotes,
+      valueReportUrl,
     });
   }
 
@@ -73,11 +81,14 @@ class VehiclePricingScreen extends Component {
   };
 
   onNextPress = () => {
-    const {estimatedPrice, salePrice, trueValuePrice, additionalNotes} =
-      this.state;
+    const {
+      estimatedPrice,
+      salePrice,
+      trueValuePrice,
+      additionalNotes,
+      valueReportUrl,
+    } = this.state;
     const {selectedVehicle, selectedLoanType} = this.props;
-
-    console.log({selectedLoanType});
 
     const isFormValid = this.validateAllFields();
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
@@ -91,13 +102,13 @@ class VehiclePricingScreen extends Component {
       salePrice: Number(salePrice),
       trueValuePrice: Number(trueValuePrice),
       additionalNotes,
+      valueReportUrl,
     };
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
       if (selectedLoanType === loanType.refinance) {
         return navigate(ScreenNames.VehicleHypothecation);
       } else if (selectedLoanType === loanType.addVehicle) {
         return navigate(ScreenNames.VehicleHypothecation);
-        navigate(ScreenNames.SuccessScreen);
       } else {
         navigate(ScreenNames.CustomerDetail);
       }
@@ -110,22 +121,37 @@ class VehiclePricingScreen extends Component {
         return;
       }
 
-      const docObj = {
+      const formData = new FormData();
+      formData.append('file', {
         uri: asset.uri,
-        name: asset.fileName,
         type: asset.type,
-        isLocal: true,
-        fileSize: asset.fileSize,
-        uploadedUrl:
-          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock
-      };
+        name: asset.fileName || asset.name || '',
+      });
 
       this.setState({
-        valueReportUrl: docObj.uri,
         showFilePicker: false,
       });
 
-      // TODO : Upload API call here to get the link
+      await new Promise(resolve => setTimeout(resolve, 200));
+      this.setState({isLoading: true});
+
+      try {
+        const response = await uploadFileWithFormData(formData);
+        const url = response?.data?.fileUrl;
+
+        this.setState(prev => ({
+          valueReportUrl: url,
+          showFilePicker: false,
+        }));
+      } catch (error) {
+        showApiErrorToast(error);
+      } finally {
+        this.setState({
+          isLoading: false,
+          selectedDocType: '',
+          showFilePicker: false,
+        });
+      }
     });
   };
 
@@ -133,6 +159,35 @@ class VehiclePricingScreen extends Component {
     this.setState({
       showFilePicker: false,
     });
+  };
+
+  onDeletePress = () => {
+    this.setState({valueReportUrl: ''});
+  };
+
+  handleViewImage = async () => {
+    const {valueReportUrl} = this.state;
+    if (!valueReportUrl) {
+      return;
+    }
+
+    setTimeout(async () => {
+      this.setState({isLoadingDocument: true});
+      try {
+        await viewDocumentHelper(
+          valueReportUrl,
+          imageUri => {
+            navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+          },
+          error => {
+            console.warn('Error opening file:', error);
+            showToast('error', 'Could not open the document.', 'bottom', 3000);
+          },
+        );
+      } finally {
+        this.setState({isLoadingDocument: false});
+      }
+    }, 50);
   };
 
   render() {
@@ -144,6 +199,7 @@ class VehiclePricingScreen extends Component {
       errors,
       showFilePicker,
       valueReportUrl,
+      isLoading,
     } = this.state;
     const {loading} = this.props;
     return (
@@ -192,10 +248,12 @@ class VehiclePricingScreen extends Component {
             handleFile: this.handleFile,
             closeFilePicker: this.closeFilePicker,
           }}
-          loading={loading}
+          loading={loading || isLoading}
           handleOdometerImageSelect={() =>
             this.setState({showFilePicker: true})
           }
+          onDeletePress={this.onDeletePress}
+          viewImage={this.handleViewImage}
         />
       </>
     );

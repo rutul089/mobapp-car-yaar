@@ -37,6 +37,8 @@ const Vehicle_Pricing_Component = ({
   loading,
   uploadValueReport,
   fileModalProps,
+  onDeletePress,
+  viewImage,
 }) => {
   const [editingStates, setEditingStates] = React.useState({
     estimatedPrice: false,
@@ -139,6 +141,8 @@ const Vehicle_Pricing_Component = ({
             handleImagePick={handleOdometerImageSelect}
             btnLabel={'Click to Upload Value Report PDF'}
             label={'Value Report'}
+            onDeletePress={onDeletePress}
+            viewImage={viewImage}
           />
           <Spacing size="md_lg" />
           <TextAreaInput

@@ -24,7 +24,7 @@ export const handleFileSelection = async (type, callback) => {
     } else if (type === 'gallery') {
       const result = await launchImageLibrary({
         mediaType: 'photo',
-        quality: 0.8,
+        quality: 0.3,
       });
 
       if (!result.didCancel && result.assets?.length > 0) {
@@ -335,7 +335,6 @@ const detectFileType = async url => {
 };
 
 export const getMimeFromUrl = url => {
-  console.log({url});
   if (!url) {
     return;
   }

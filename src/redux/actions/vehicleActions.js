@@ -106,26 +106,30 @@ export const fetchVehicleFromIdThunk = (id, onSuccess, onFailure) => {
   };
 };
 
-export const resetSelectedVehicle = () => ({
-  type: RESET_SELECTED_VEHICLE.SUCCESS,
-});
-
 export const updateVehicleByIdThunk = (id, payload, onSuccess, onFailure) => {
   return async dispatch => {
     dispatch({type: UPDATE.REQUEST});
 
     try {
       const response = await updateVehicleById(id, payload);
+      const {data, success} = response;
+
       dispatch({
         type: UPDATE.SUCCESS,
-        payload: response.data,
+        payload: data,
       });
+
+      if (success && data?.vehicleId) {
+        await dispatch(fetchVehicleFromIdThunk(data.vehicleId));
+      }
+
       onSuccess?.(response);
     } catch (error) {
       dispatch({
         type: UPDATE.FAILURE,
         payload: error.message,
       });
+
       showApiErrorToast(error);
       onFailure?.(error.message);
     }
@@ -183,3 +187,7 @@ export const getVehicleByRegisterNumberThunk = (
     }
   };
 };
+
+export const resetSelectedVehicle = () => ({
+  type: RESET_SELECTED_VEHICLE.SUCCESS,
+});

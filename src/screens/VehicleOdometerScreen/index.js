@@ -10,10 +10,14 @@ import {
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {updateVehicleByIdThunk} from '../../redux/actions';
-import {handleFileSelection} from '../../utils/documentUtils';
-import {showToast} from '../../utils/helper';
+import {
+  handleFileSelection,
+  viewDocumentHelper,
+} from '../../utils/documentUtils';
+import {showApiErrorToast, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Vehicle_Odometer_Component from './Vehicle_Odometer_Component';
+import {uploadFileWithFormData} from '../../services';
 
 class VehicleOdometerScreen extends Component {
   constructor(props) {
@@ -28,6 +32,7 @@ class VehicleOdometerScreen extends Component {
         vehicleCondition: '',
       },
       isFormValid: false,
+      isLoading: false,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.handleOdometerImageSelect = this.handleOdometerImageSelect.bind(this);
@@ -40,6 +45,12 @@ class VehicleOdometerScreen extends Component {
   componentDidMount() {
     const {selectedVehicle} = this.props;
     const odometer = get(selectedVehicle, 'UsedVehicle.odometerReading');
+    console.log(
+      'selectedVehicle',
+      JSON.stringify(
+        selectedVehicle?.UsedVehicle?.images?.[0]?.odometerReading,
+      ),
+    );
     this.setState({
       odometerReading: odometer != null ? `${odometer}` : '' + '',
       vehicleCondition: get(
@@ -47,6 +58,7 @@ class VehicleOdometerScreen extends Component {
         'UsedVehicle.vehicleCondition',
         '',
       ),
+      odometerImage: selectedVehicle?.UsedVehicle?.images?.[0]?.odometerReading,
     });
   }
 
@@ -68,22 +80,38 @@ class VehicleOdometerScreen extends Component {
         return;
       }
 
-      const docObj = {
+      const formData = new FormData();
+      formData.append('file', {
         uri: asset.uri,
-        name: asset.fileName,
         type: asset.type,
-        isLocal: true,
-        fileSize: asset.fileSize,
-        uploadedUrl:
-          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock
-      };
+        name: asset.fileName || asset.name || '',
+      });
 
       this.setState({
-        odometerImage: docObj.uri,
         showFilePicker: false,
       });
 
-      // TODO : Upload API call here to get the link
+      await new Promise(resolve => setTimeout(resolve, 110));
+      this.setState({isLoading: true});
+
+      try {
+        const response = await uploadFileWithFormData(formData);
+        const url = response?.data?.fileUrl;
+
+        this.setState(prev => ({
+          selectedDocType: '',
+          odometerImage: url,
+          showFilePicker: false,
+        }));
+      } catch (error) {
+        showApiErrorToast(error);
+      } finally {
+        this.setState({
+          isLoading: false,
+          selectedDocType: '',
+          showFilePicker: false,
+        });
+      }
     });
   };
 
@@ -118,7 +146,7 @@ class VehicleOdometerScreen extends Component {
     }
 
     let payload = {
-      odometerReadingImage: 'https://example.com/images/odometer.jpg',
+      odometerReadingImage: odometerImage,
       odometerReading: Number(odometerReading),
       vehicleCondition: vehicleCondition,
     };
@@ -147,6 +175,37 @@ class VehicleOdometerScreen extends Component {
     return isFormValid;
   };
 
+  onDeletePress = () => {
+    this.setState({
+      odometerImage: '',
+    });
+  };
+
+  handleViewImage = async () => {
+    const {odometerImage} = this.state;
+    if (!odometerImage) {
+      return;
+    }
+
+    setTimeout(async () => {
+      this.setState({isLoadingDocument: true});
+      try {
+        await viewDocumentHelper(
+          odometerImage,
+          imageUri => {
+            navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+          },
+          error => {
+            console.warn('Error opening file:', error);
+            showToast('error', 'Could not open the document.', 'bottom', 3000);
+          },
+        );
+      } finally {
+        this.setState({isLoadingDocument: false});
+      }
+    }, 50);
+  };
+
   render() {
     const {
       showFilePicker,
@@ -154,6 +213,7 @@ class VehicleOdometerScreen extends Component {
       odometerReading,
       vehicleCondition,
       errors,
+      isLoading,
     } = this.state;
 
     const {loading} = this.props;
@@ -190,7 +250,9 @@ class VehicleOdometerScreen extends Component {
               statusMsg: errors.vehicleCondition,
             },
           }}
-          loading={loading}
+          loading={loading || isLoading}
+          onDeletePress={this.onDeletePress}
+          viewImage={this.handleViewImage}
         />
       </>
     );

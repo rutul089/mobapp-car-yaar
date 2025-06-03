@@ -32,12 +32,24 @@ class VehicleDetail extends Component {
   }
 
   componentDidMount() {
+    const {navigation} = this.props;
     const {vehicleId} = this.state;
     if (vehicleId) {
       this.fetchVehicleFromId(vehicleId);
     }
+    this.focusListener = navigation.addListener('focus', () => {
+      // const {vehicleId} = this.state;
+      // if (vehicleId) {
+      //   this.fetchVehicleFromId(vehicleId);
+      // }
+    });
   }
 
+  componentWillUnmount() {
+    if (this.focusListener) {
+      this.focusListener();
+    }
+  }
   fetchVehicleFromId = id => {
     this.props.fetchVehicleFromIdThunk(id, response => {
       this.setState({
@@ -100,8 +112,6 @@ class VehicleDetail extends Component {
       UsedVehicle,
       'hypothecationStatus',
     );
-
-    console.log('selectedVehicle', JSON.stringify(selectedVehicle));
 
     return (
       <Vehicle_Detail_Component

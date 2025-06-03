@@ -12,8 +12,13 @@ import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
-import {formatVehicleNumber, showToast} from '../../utils/helper';
+import {
+  formatVehicleNumber,
+  showApiErrorToast,
+  showToast,
+} from '../../utils/helper';
 import Vehicle_Images_Component from './Vehicle_Images_Component';
+import {uploadFileWithFormData} from '../../services';
 
 class VehicleImagesScreen extends Component {
   constructor(props) {
@@ -25,6 +30,7 @@ class VehicleImagesScreen extends Component {
       isLoadingDocument: false,
       showFilePicker: false,
       selectedDocType: null,
+      isLoading: false,
     };
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
@@ -51,7 +57,6 @@ class VehicleImagesScreen extends Component {
       acc[key] = this.state.documents[key].uploadedUrl;
       return acc;
     }, {});
-
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
       return navigate(ScreenNames.VehicleOdometer);
     });
@@ -105,51 +110,50 @@ class VehicleImagesScreen extends Component {
         return;
       }
 
-      const docObj = {
+      const formData = new FormData();
+      formData.append('file', {
         uri: asset.uri,
-        name: asset.fileName,
         type: asset.type,
-        isLocal: true,
-        fileSize: asset.fileSize,
-        uploadedUrl:
-          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock URL for now
-      };
+        name: asset.fileName || asset.name || '',
+      });
 
-      this.setState(prev => ({
-        documents: {
-          ...prev.documents,
-          [this.state.selectedDocType]: docObj,
-        },
-        selectedDocType: '',
+      this.setState({
         showFilePicker: false,
-      }));
+        isLoading: true,
+      });
 
-      // TODO: Upload logic placeholder, uncomment when implementing real upload
-      // try {
-      //   const formData = new FormData();
-      //   formData.append('file', {
-      //     uri: docObj.uri,
-      //     type: docObj.type,
-      //     name: docObj.name,
-      //   });
+      await new Promise(resolve => setTimeout(resolve, 110));
 
-      //   const response = await uploadDocumentMultipart(formData);
-      //   const url = response?.data?.url;
+      try {
+        const response = await uploadFileWithFormData(formData);
+        const url = response?.data?.fileUrl;
 
-      //   if (url) {
-      //     this.setState(prev => ({
-      //       documents: {
-      //         ...prev.documents,
-      //         [type]: {
-      //           ...prev.documents[type],
-      //           uploadedUrl: url,
-      //         },
-      //       },
-      //     }));
-      //   }
-      // } catch (error) {
-      //   showApiErrorToast(error);
-      // }
+        const docObj = {
+          uri: asset.uri,
+          name: asset.fileName || asset.name || '',
+          type: asset.type,
+          isLocal: true,
+          fileSize: asset.fileSize,
+          uploadedUrl: url,
+        };
+
+        this.setState(prev => ({
+          documents: {
+            ...prev.documents,
+            [this.state.selectedDocType]: docObj,
+          },
+          selectedDocType: '',
+          showFilePicker: false,
+        }));
+      } catch (error) {
+        showApiErrorToast(error);
+      } finally {
+        this.setState({
+          isLoading: false,
+          selectedDocType: '',
+          showFilePicker: false,
+        });
+      }
     });
   };
 
@@ -179,7 +183,8 @@ class VehicleImagesScreen extends Component {
   };
 
   render() {
-    const {documents, isLoadingDocument, showFilePicker} = this.state;
+    const {documents, isLoadingDocument, showFilePicker, isLoading} =
+      this.state;
     const {loading, selectedVehicle} = this.props;
 
     return (
@@ -203,7 +208,7 @@ class VehicleImagesScreen extends Component {
           handleFile: this.handleFile,
           closeFilePicker: this.closeFilePicker,
         }}
-        isLoadingDocument={isLoadingDocument}
+        isLoadingDocument={isLoadingDocument || isLoading}
         loading={loading}
       />
     );

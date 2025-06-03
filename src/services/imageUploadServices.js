@@ -58,13 +58,6 @@ export const uploadFileToPresignedUrl = async (
   contentType = 'application/octet-stream',
 ) => {
   try {
-    // const response = await axiosInstance.post(presignedUrl, file, {
-    //   headers: {
-    //     'Content-Type': contentType,
-    //   },
-    // });
-    // return response.data; // usually includes `url`
-
     let response = await axios.put(presignedUrl, file, {
       headers: {
         'Content-Type': contentType,
@@ -72,6 +65,21 @@ export const uploadFileToPresignedUrl = async (
     });
     console.log('response', JSON.stringify(response));
   } catch (error) {
+    throw error;
+  }
+};
+
+export const uploadFileWithFormData = async formData => {
+  try {
+    const response = await axiosInstance.post('/upload/image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log('error', JSON.stringify(error));
     throw error;
   }
 };

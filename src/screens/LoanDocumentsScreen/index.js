@@ -108,7 +108,6 @@ class LoanDocumentsScreen extends Component {
 
   navigateToNextScreenBasedOnLoanType = selectedLoanType => {
     let params = getScreenParam(this.props.route, 'params');
-    console.log({params});
 
     switch (selectedLoanType) {
       case loanType.refinance:
@@ -145,8 +144,6 @@ class LoanDocumentsScreen extends Component {
         const fileName = asset.name || asset.fileName || 'upload';
         const mimeType = asset.type || 'application/octet-stream';
 
-        console.log({fileName});
-        console.log({asset});
         // Step 1: Get the presigned upload URL
         const uploadUrlResponse = await getPresignedUploadUrl({
           objectKey: fileName,
@@ -155,8 +152,6 @@ class LoanDocumentsScreen extends Component {
 
         const presignedUrl = uploadUrlResponse?.data?.url;
         const presignedKey = uploadUrlResponse?.data?.key;
-
-        console.log({presignedKey});
 
         if (!presignedUrl) {
           throw new Error('Presigned URL not received');
@@ -192,7 +187,6 @@ class LoanDocumentsScreen extends Component {
           showFilePicker: false,
         }));
       } catch (error) {
-        console.log({error});
         this.closeFilePicker();
         setTimeout(() => {
           showToast('error', 'Image do not upload');

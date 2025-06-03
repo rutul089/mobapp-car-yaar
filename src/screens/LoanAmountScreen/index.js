@@ -26,16 +26,11 @@ class LoanAmountScreen extends Component {
   componentDidMount() {
     const {isEdit} = this.state;
     const {selectedLoanApplication} = this.props;
-    console.log({selectedLoanApplication});
     if (isEdit) {
       this.setState({
         loanAmount: selectedLoanApplication?.loanAmount,
       });
     }
-    console.log(
-      'selectedLoanApplication',
-      JSON.stringify(selectedLoanApplication),
-    );
   }
 
   onNextButtonPress = () => {
@@ -43,7 +38,6 @@ class LoanAmountScreen extends Component {
     const {selectedApplicationId} = this.props;
     const isFormValid = this.validateAllFields();
     let params = getScreenParam(this.props.route, 'params');
-    console.log('loanAmount', loanAmount);
 
     //d3e4354d-0703-4b88-a9ae-5b3956181a70
 

@@ -45,7 +45,6 @@ class FinanceDocumentsScreen extends Component {
   componentDidMount() {
     const {isEdit} = this.state;
     const {selectedApplicationId} = this.props;
-    console.log({isEdit});
     if (isEdit) {
       this.props.fetchCustomerFinanceDocumentsThunk(
         selectedApplicationId,
@@ -149,8 +148,6 @@ class FinanceDocumentsScreen extends Component {
         const fileName = asset.name || asset.fileName || 'upload';
         const mimeType = asset.type || 'application/octet-stream';
 
-        console.log({fileName});
-        console.log({asset});
         // Step 1: Get the presigned upload URL
         const uploadUrlResponse = await getPresignedUploadUrl({
           objectKey: fileName,
@@ -159,8 +156,6 @@ class FinanceDocumentsScreen extends Component {
 
         const presignedUrl = uploadUrlResponse?.data?.url;
         const presignedKey = uploadUrlResponse?.data?.key;
-
-        console.log({presignedKey});
 
         if (!presignedUrl) {
           throw new Error('Presigned URL not received');
@@ -196,7 +191,6 @@ class FinanceDocumentsScreen extends Component {
           showFilePicker: false,
         }));
       } catch (error) {
-        console.log({error});
         this.closeFilePicker();
         setTimeout(() => {
           showToast('error', 'Image do not upload');

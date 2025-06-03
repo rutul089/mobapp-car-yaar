@@ -33,6 +33,8 @@ const Vehicle_Odometer_Component = ({
   vehicleCondition,
   restInputProps,
   loading,
+  onDeletePress,
+  viewImage,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
 
@@ -52,6 +54,8 @@ const Vehicle_Odometer_Component = ({
             btnLabel={strings.clickToCaptureOrUploadImage}
             image={odometerImage}
             handleImagePick={handleOdometerImageSelect}
+            onDeletePress={onDeletePress}
+            viewImage={viewImage}
           />
           <Spacing size="md_lg" />
           <Input
