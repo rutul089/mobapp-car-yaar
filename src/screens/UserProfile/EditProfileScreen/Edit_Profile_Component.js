@@ -18,6 +18,7 @@ import {Image, StyleSheet, View} from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
 
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {FullLoader} from '../../../components';
 
 const Edit_Profile_Component = ({
   state,
@@ -31,6 +32,7 @@ const Edit_Profile_Component = ({
   fileModalProps,
   restInputProps = {},
   loading,
+  isLoading,
 }) => {
   const refs = {
     fullName: useRef(null),
@@ -144,6 +146,7 @@ const Edit_Profile_Component = ({
       />
 
       {loading && <Loader visible={loading} />}
+      {isLoading && <FullLoader />}
     </SafeAreaWrapper>
   );
 };

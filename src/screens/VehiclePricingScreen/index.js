@@ -248,12 +248,13 @@ class VehiclePricingScreen extends Component {
             handleFile: this.handleFile,
             closeFilePicker: this.closeFilePicker,
           }}
-          loading={loading || isLoading}
+          loading={loading}
           handleOdometerImageSelect={() =>
             this.setState({showFilePicker: true})
           }
           onDeletePress={this.onDeletePress}
           viewImage={this.handleViewImage}
+          isLoading={isLoading}
         />
       </>
     );

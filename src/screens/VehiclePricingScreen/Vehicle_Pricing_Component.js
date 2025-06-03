@@ -18,6 +18,7 @@ import {
 } from '@caryaar/components';
 import strings from '../../locales/strings';
 import {formatIndianCurrency} from '../../utils/helper';
+import {FullLoader} from '../../components';
 
 const Vehicle_Pricing_Component = ({
   params,
@@ -39,6 +40,7 @@ const Vehicle_Pricing_Component = ({
   fileModalProps,
   onDeletePress,
   viewImage,
+  isLoading,
 }) => {
   const [editingStates, setEditingStates] = React.useState({
     estimatedPrice: false,
@@ -176,6 +178,7 @@ const Vehicle_Pricing_Component = ({
       />
 
       {loading && <Loader visible={loading} />}
+      {isLoading && <FullLoader />}
     </SafeAreaWrapper>
   );
 };

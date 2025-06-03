@@ -177,7 +177,7 @@ class VehicleOdometerScreen extends Component {
 
   onDeletePress = () => {
     this.setState({
-      odometerImage: '',
+      odometerImage: null,
     });
   };
 
@@ -250,9 +250,10 @@ class VehicleOdometerScreen extends Component {
               statusMsg: errors.vehicleCondition,
             },
           }}
-          loading={loading || isLoading}
+          loading={loading}
           onDeletePress={this.onDeletePress}
           viewImage={this.handleViewImage}
+          isLoading={isLoading}
         />
       </>
     );

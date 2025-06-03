@@ -16,6 +16,7 @@ import {
 import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
+import {FullLoader} from '../../components';
 
 const Vehicle_Odometer_Component = ({
   params,
@@ -35,6 +36,7 @@ const Vehicle_Odometer_Component = ({
   loading,
   onDeletePress,
   viewImage,
+  isLoading,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
 
@@ -110,6 +112,7 @@ const Vehicle_Odometer_Component = ({
         ]}
       />
       {loading && <Loader visible={loading} />}
+      {isLoading && <FullLoader />}
     </SafeAreaWrapper>
   );
 };

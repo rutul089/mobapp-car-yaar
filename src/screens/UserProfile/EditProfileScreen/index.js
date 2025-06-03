@@ -1,16 +1,17 @@
+import {get} from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Edit_Profile_Component from './Edit_Profile_Component';
-import {get} from 'lodash';
+import ScreenNames from '../../../constants/ScreenNames';
+import {navigate} from '../../../navigation/NavigationUtils';
+import {updateProfileThunk} from '../../../redux/actions';
 import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../../utils/documentUtils';
-import ScreenNames from '../../../constants/ScreenNames';
-import {goBack, navigate} from '../../../navigation/NavigationUtils';
-import {showToast} from '../../../utils/helper';
+import {showApiErrorToast, showToast} from '../../../utils/helper';
 import {handleFieldChange, validateField} from '../../../utils/inputHelper';
-import {updateProfileThunk} from '../../../redux/actions';
+import Edit_Profile_Component from './Edit_Profile_Component';
+import {uploadFileWithFormData} from '../../../services';
 
 class EditProfileScreen extends Component {
   state = {
@@ -25,6 +26,7 @@ class EditProfileScreen extends Component {
       email: '',
     },
     isFormValid: false,
+    isLoading: false,
   };
 
   componentDidMount() {
@@ -39,11 +41,12 @@ class EditProfileScreen extends Component {
   }
 
   handleSavePress = () => {
+    const {fullName, profileImage, email, mobileNumber} = this.state;
     let param = {
-      name: this.state.fullName,
-      profileImage: 'https://randomuser.me/api/portraits/men/70.jpg',
-      email: this.state.email,
-      mobileNumber: this.state.mobileNumber,
+      name: fullName,
+      profileImage,
+      email,
+      mobileNumber,
     };
     const isFormValid = this.validateAllFields();
     if (!isFormValid) {
@@ -60,7 +63,7 @@ class EditProfileScreen extends Component {
 
   onEditProfilePicPress = () => this.setState({showFilePicker: true});
 
-  onDeleteProfileImage = () => this.setState({profileImage: ''});
+  onDeleteProfileImage = () => this.setState({profileImage: null});
 
   handleFile = type => {
     handleFileSelection(type, async asset => {
@@ -68,22 +71,36 @@ class EditProfileScreen extends Component {
         return;
       }
 
-      const docObj = {
+      const formData = new FormData();
+      formData.append('file', {
         uri: asset.uri,
-        name: asset.fileName,
         type: asset.type,
-        isLocal: true,
-        fileSize: asset.fileSize,
-        uploadedUrl:
-          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock
-      };
-
-      this.setState({
-        profileImage: docObj.uri,
-        showFilePicker: false,
+        name: asset.fileName || asset.name || 'profileImage',
       });
 
-      // TODO : Upload API call here to get the link
+      this.setState({
+        showFilePicker: false,
+        isLoading: true,
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 110));
+
+      try {
+        const response = await uploadFileWithFormData(formData);
+        const url = response?.data?.fileUrl;
+
+        this.setState({
+          profileImage: url,
+          showFilePicker: false,
+        });
+      } catch (error) {
+        showApiErrorToast(error);
+      } finally {
+        this.setState({
+          isLoading: false,
+          showFilePicker: false,
+        });
+      }
     });
   };
 
@@ -143,6 +160,7 @@ class EditProfileScreen extends Component {
       profileImage,
       showFilePicker,
       errors,
+      isLoading,
     } = this.state;
 
     const {loading} = this.props;
@@ -184,6 +202,7 @@ class EditProfileScreen extends Component {
             },
           }}
           loading={loading}
+          isLoading={isLoading}
         />
       </>
     );
