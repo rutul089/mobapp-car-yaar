@@ -29,7 +29,7 @@ class VehicleHypothecationScreen extends Component {
   saveAsDraftPress = () => {};
 
   onNextPress = () => {
-    const {selectedVehicle} = this.props;
+    const {selectedVehicle, isCreatingLoanApplication} = this.props;
     const {carHypoStatus} = this.state;
 
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
@@ -39,7 +39,11 @@ class VehicleHypothecationScreen extends Component {
     };
 
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
-      navigate(ScreenNames.SuccessScreen);
+      if (isCreatingLoanApplication) {
+        navigate(ScreenNames.CustomerFullScreen);
+      } else {
+        navigate(ScreenNames.SuccessScreen);
+      }
     });
 
     // switch (selectedLoanType) {

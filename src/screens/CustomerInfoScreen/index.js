@@ -80,7 +80,7 @@ class CustomerInfoScreen extends Component {
   };
 
   render() {
-    const {loading, selectedCustomer} = this.props;
+    const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
     const {details = {}} = selectedCustomer || {};
 
     let customerNote = `${capitalizeFirstLetter(
@@ -199,6 +199,7 @@ class CustomerInfoScreen extends Component {
         onNextPress={this.onNextPress}
         handleEditDetailPress={this.handleEditDetailPress}
         loading={loading}
+        isCreatingLoanApplication={isCreatingLoanApplication}
       />
     );
   }

@@ -10,15 +10,26 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
+  PaginationFooter,
+  Dropdown,
 } from '@caryaar/components';
 import React from 'react';
-import {FlatList, Image, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
+import {InitialsAvatar, NoDataFound} from '../../../components';
+import {getLabelFromEnum, salesExecutiveValue} from '../../../constants/enums';
+import {formatMobileNumber} from '../../../utils/helper';
 
 const Manage_Members_Component = ({
   handleAddNewMemberPress,
   handleDeleteMemberPress,
-  memberList,
   isVisible,
   onCloseVerifyOTP,
   onModalHide,
@@ -27,61 +38,118 @@ const Manage_Members_Component = ({
   mobileNumber,
   onChangeFullName,
   onChangeMobileNumber,
+  onChangeEmail,
+  selectedSalesExec,
+  setSelectedSalesExec = () => {},
+  salesExecOptions,
+  salesExecutives,
+  handleLoadMore,
+  isLoading,
+  restInputProps = {},
+  onRefresh,
+  refreshing,
+  currentPage,
+  totalPages,
+  loadingMore,
 }) => {
   const [showModal, setShowModal] = React.useState(false);
+
+  const [showDropdown, setShowDropdown] = React.useState(false);
+
+  const handleModalHide = () => {
+    setShowDropdown(false);
+    onModalHide?.();
+  };
 
   const renderItem = ({item, index}) => (
     <>
       <Card cardContainerStyle={styles.cardWrapper} padding={12}>
-        <Image source={{uri: item.avatar}} style={styles.avatar} />
+        {item.avatar ? (
+          <Image
+            source={item.avatar ? {uri: item.avatar} : images.placeholder_image}
+            style={styles.avatar}
+            defaultSource={images.placeholder_image}
+          />
+        ) : (
+          <InitialsAvatar
+            name={item?.user?.name || 'Car Yaar'}
+            fontSize="body"
+            size={48}
+          />
+        )}
         <View style={styles.textWrapper}>
-          <Text>{item.name}</Text>
-          <Text size={'small'} color={theme.colors.textSecondary}>
-            {item.phone}
+          <Text
+            lineHeight={'caption'}
+            size={'caption'}
+            hankenGroteskBold
+            color={theme.colors.primary}>
+            {getLabelFromEnum(salesExecutiveValue, item?.position)}
+          </Text>
+          <Text lineHeight={'body'}>{item?.user?.name}</Text>
+          <Text
+            size={'small'}
+            lineHeight={'small'}
+            hankenGroteskMedium
+            color={theme.colors.textSecondary}>
+            {formatMobileNumber(item?.user?.mobileNumber)}
           </Text>
         </View>
-        <Pressable
-          onPress={() =>
-            handleDeleteMemberPress && handleDeleteMemberPress(item, index)
-          }>
+        <Pressable onPress={() => handleDeleteMemberPress?.(item, index)}>
           <Image source={images.icon_delete} style={styles.deleteIcon} />
         </Pressable>
       </Card>
       <Spacing size="md" />
     </>
   );
+
   return (
     <SafeAreaWrapper>
       <Header title="Manage Members" onBackPress={() => goBack()} />
       <FlatList
-        bounces={false}
-        data={memberList}
+        data={salesExecutives}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.wrapper}
+        ListEmptyComponent={
+          !isLoading && <NoDataFound text="No data available." />
+        }
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
         ListFooterComponent={
-          <>
-            <Spacing size="xl" />
-            <Button
-              label={'Add New Member'}
-              onPress={handleAddNewMemberPress}
-            />
-          </>
+          <PaginationFooter
+            loadingMore={loadingMore}
+            loading={isLoading}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            footerMessage={'All members loaded.'}
+          />
         }
       />
       <CommonModal
         isVisible={isVisible}
-        onModalHide={onModalHide}
+        onModalHide={handleModalHide}
         primaryButtonLabel={'Send Invite'}
         isScrollableContent={true}
         isPrimaryButtonVisible={true}
+        modalHeight={'75%'}
         onPressPrimaryButton={onPressPrimaryButton}
         title="Add New Member">
-        <View style={{paddingVertical: 15}}>
+        <View style={styles.modalContent}>
+          {isLoading && (
+            <View style={styles.loaderOverlay}>
+              <ActivityIndicator size={'large'} />
+            </View>
+          )}
           <Input
             label="Full Name"
             value={fullName}
             onChangeText={onChangeFullName}
+            onFocus={() => {
+              setShowDropdown(false);
+            }}
+            {...(restInputProps.fullName || {})}
           />
           <Spacing size="lg" />
           <Input
@@ -90,9 +158,48 @@ const Manage_Members_Component = ({
             value={mobileNumber}
             onChangeText={onChangeMobileNumber}
             maxLength={10}
+            onFocus={() => {
+              setShowDropdown(false);
+            }}
+            {...(restInputProps.mobileNumber || {})}
           />
+          <Spacing size="lg" />
+          <Input
+            label="Email"
+            keyboardType="email-address"
+            onChangeText={onChangeEmail}
+            onFocus={() => {
+              setShowDropdown(false);
+            }}
+            {...(restInputProps.email || {})}
+          />
+          <Spacing size="lg" />
+          <Input
+            label="Select Sales Executive Position"
+            keyboardType="default"
+            isRightIconVisible
+            isAsDropdown
+            onPress={() => setShowDropdown(!showDropdown)}
+            value={selectedSalesExec}
+            {...(restInputProps.selectedSalesExec || {})}
+          />
+          <Dropdown
+            options={salesExecOptions}
+            selectedValue={selectedSalesExec}
+            onSelect={item => {
+              setShowDropdown(false);
+              setSelectedSalesExec?.(item);
+            }}
+            isVisible={showDropdown}
+            multiSelect={false}
+          />
+          <Spacing size="lg" />
         </View>
       </CommonModal>
+      {/* <View style={styles.buttonWrapper}>
+        <Button label={'Add New Member'} onPress={handleAddNewMemberPress} />
+      </View> */}
+      {isLoading && <Loader visible={isLoading} />}
     </SafeAreaWrapper>
   );
 };
@@ -114,6 +221,11 @@ const styles = StyleSheet.create({
     width: 24,
   },
   textWrapper: {flex: 1, marginHorizontal: 12},
+  buttonWrapper: {
+    paddingHorizontal: theme.sizes.padding,
+    paddingVertical: theme.sizes.padding - 10,
+    backgroundColor: theme.colors.background,
+  },
 });
 
 export default Manage_Members_Component;

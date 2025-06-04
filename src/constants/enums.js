@@ -362,3 +362,39 @@ export const relationshipTypeValue = {
   [relationshipType.NEIGHBOR]: 'Neighbor',
   [relationshipType.OTHER]: 'Other',
 };
+
+export const salesExecutivePosition = Object.freeze({
+  SALES_EXECUTIVE: 'SALES_EXECUTIVE',
+  SENIOR_SALES_EXECUTIVE: 'SENIOR_SALES_EXECUTIVE',
+  TEAM_LEAD: 'TEAM_LEAD',
+  MANAGER: 'MANAGER',
+});
+
+/**
+ * Dropdown options for Sales Executive Position selection.
+ * Used in forms, UI dropdowns, or selectors.
+ */
+export const salesExecOptions = [
+  {
+    id: '1',
+    label: 'Sales Executive',
+    value: salesExecutivePosition.SALES_EXECUTIVE,
+  },
+  {
+    id: '2',
+    label: 'Senior Sales Executive',
+    value: salesExecutivePosition.SENIOR_SALES_EXECUTIVE,
+  },
+  {id: '3', label: 'Team Lead', value: salesExecutivePosition.TEAM_LEAD},
+  {id: '4', label: 'Manager', value: salesExecutivePosition.MANAGER},
+];
+
+/**
+ * Mapping of Sales Executive Position value to its display label.
+ */
+export const salesExecutiveValue = {
+  [salesExecutivePosition.SALES_EXECUTIVE]: 'Sales Executive',
+  [salesExecutivePosition.SENIOR_SALES_EXECUTIVE]: 'Senior Sales Executive',
+  [salesExecutivePosition.TEAM_LEAD]: 'Team Lead',
+  [salesExecutivePosition.MANAGER]: 'Manager',
+};

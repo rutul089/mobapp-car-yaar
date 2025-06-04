@@ -62,13 +62,13 @@ export const getFileType = fileUri => {
   const ext = fileUri.split('.').pop().toLowerCase();
 
   if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-    return 'image';
+    return 'Image';
   }
   if (ext === 'pdf') {
-    return 'pdf';
+    return 'PDF';
   }
   if (['doc', 'docx'].includes(ext)) {
-    return 'doc';
+    return 'Doc';
   }
 
   return null;
@@ -82,6 +82,7 @@ export const getFileType = fileUri => {
  * @param {(error: Error) => void} [onError] - Callback if an error occurs.
  * @param {() => void} [onLoading] - Callback when loading finishes.
  */
+
 export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
   try {
     if (
@@ -99,11 +100,7 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
 
     // Check for image
     if (uri.startsWith('http')) {
-      const response = await fetch(uri, {method: 'HEAD'});
-      const contentType = response.headers.get('Content-Type') || '';
-      const isImage = contentType.startsWith('image/');
       const type = await detectFileType(uri);
-      console.log('File type:', type);
 
       if (type === 'image') {
         onImage?.(uri);
@@ -111,7 +108,7 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
       }
 
       // Otherwise, download and open
-      const extension = contentType.split('/')[1] || 'pdf';
+      const extension = 'pdf';
       const localFileName = `temp_file_${Date.now()}.${extension}`;
       const localPath = `${RNFS.DocumentDirectoryPath}/${localFileName}`;
 
@@ -136,62 +133,6 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
     onLoading?.();
   }
 };
-
-// export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
-//   try {
-//     if (
-//       !uri ||
-//       typeof uri !== 'string' ||
-//       !(
-//         uri.startsWith('http://') ||
-//         uri.startsWith('https://') ||
-//         uri.startsWith('file://') ||
-//         uri.startsWith(RNFS.DocumentDirectoryPath)
-//       )
-//     ) {
-//       throw new Error('Invalid document URI. Must be HTTP(S) or a local file.');
-//     }
-
-//     const isRemote = uri.startsWith('http');
-
-//     if (isRemote) {
-//       const type = await detectFileType(uri);
-//       console.log('Detected file type:', type);
-
-//       if (type === 'image') {
-//         onImage?.(uri);
-//         return;
-//       }
-
-//       // Get extension from URL (fallback)
-//       const extMatch = uri.split('?')[0].match(/\.(\w+)$/);
-//       const extension = extMatch ? extMatch[1] : 'pdf';
-//       const localFileName = `temp_${Date.now()}.${extension}`;
-//       const localPath = `${RNFS.DocumentDirectoryPath}/${localFileName}`;
-
-//       const downloadRes = await RNFS.downloadFile({
-//         fromUrl: uri,
-//         toFile: localPath,
-//       }).promise;
-
-//       if (downloadRes.statusCode === 200) {
-//         console.log('Downloaded to:', localPath);
-//         await FileViewer.open(localPath, {showOpenWithDialog: true});
-//       } else {
-//         throw new Error(
-//           `Download failed with status ${downloadRes.statusCode}`,
-//         );
-//       }
-//     } else {
-//       await FileViewer.open(uri, {showOpenWithDialog: true});
-//     }
-//   } catch (err) {
-//     console.warn('Error opening file:', err);
-//     onError?.(err);
-//   } finally {
-//     onLoading?.();
-//   }
-// };
 
 /**
  * Formats the document images by creating a consistent object structure

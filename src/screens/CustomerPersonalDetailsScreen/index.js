@@ -10,6 +10,7 @@ import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
+  navigate,
   navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
@@ -17,15 +18,30 @@ import {
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
 } from '../../redux/actions';
-import {handleFileSelection} from '../../utils/documentUtils';
+import {
+  handleFileSelection,
+  viewDocumentHelper,
+} from '../../utils/documentUtils';
 import {
   convertToISODate,
   formatDate,
+  formatVehicleNumber,
   showApiErrorToast,
   showToast,
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
+import RNFS from 'react-native-fs';
+import {Buffer} from 'buffer';
+import {
+  getPresignedDownloadUrl,
+  getPresignedUploadUrl,
+  uploadFileWithFormData,
+} from '../../services';
+import {
+  uploadApplicantPhoto,
+  uploadDocumentViaPresignedUrl,
+} from '../../utils/fileUploadUtils';
 
 const initialState = {
   applicantPhoto: '',
@@ -101,6 +117,7 @@ class CustomerPersonalDetails extends Component {
       showFilePicker: false,
       selectionType: '',
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+      isLoadingDocument: false,
     };
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
@@ -292,35 +309,42 @@ class CustomerPersonalDetails extends Component {
     handleFieldChange(this, key, value, isOptional);
   };
 
-  handleFile = type => {
+  handleFileUpload = type => {
     const {selectionType} = this.state;
+
     handleFileSelection(type, async asset => {
       if (!asset?.uri) {
         return;
       }
 
-      const docObj = {
-        uri: asset.uri,
-        name: asset.fileName,
-        type: asset.type,
-        isLocal: true,
-        fileSize: asset.fileSize,
-        uploadedUrl:
-          'https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf', // mock
-      };
+      this.setState({showFilePicker: false, isLoadingDocument: true});
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-      this.setState(
-        {
-          [selectionType]: docObj.uri,
-          // [selectionType]: docObj,  // Save the whole object here
-          showFilePicker: false,
-        },
-        () => {
-          this.onChangeField(selectionType, this.state[selectionType]);
-        },
-      );
+      const fileName = asset.name || asset.fileName || 'upload';
+      const mimeType = asset.type || 'application/octet-stream';
 
-      // TODO : Upload API call here to get the link
+      try {
+        if (selectionType === 'applicantPhoto') {
+          const url = await uploadApplicantPhoto(asset, fileName, mimeType);
+          this.setState({applicantPhoto: url}, () => {
+            this.onChangeField('applicantPhoto', url);
+          });
+        } else {
+          const uploadedKey = await uploadDocumentViaPresignedUrl(
+            asset,
+            fileName,
+            mimeType,
+            selectionType,
+          );
+          this.setState({[selectionType]: uploadedKey}, () => {
+            this.onChangeField(selectionType, uploadedKey);
+          });
+        }
+      } catch (error) {
+        showToast('error', 'Upload failed');
+      } finally {
+        this.setState({isLoadingDocument: false, showFilePicker: false});
+      }
     });
   };
 
@@ -351,6 +375,45 @@ class CustomerPersonalDetails extends Component {
     this.onChangeField('bankName', item?.bank);
   };
 
+  handleViewImage = async (uri, type) => {
+    if (!uri) {
+      return;
+    }
+
+    let downloadedUrl = uri;
+
+    this.setState({isLoadingDocument: true});
+
+    if (type !== 'applicantPhoto') {
+      const downloadUrlResponse = await getPresignedDownloadUrl({
+        objectKey: uri,
+      });
+
+      downloadedUrl = downloadUrlResponse?.data?.url;
+    }
+
+    try {
+      await viewDocumentHelper(
+        downloadedUrl,
+        imageUri => {
+          navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+        },
+        error => {
+          console.warn('Error opening file:', error);
+          showToast('error', 'Could not open the document.', 'bottom', 3000);
+        },
+      );
+    } finally {
+      this.setState({isLoadingDocument: false});
+    }
+  };
+
+  handleDeleteDocument = type => {
+    this.setState({
+      [type]: null,
+    });
+  };
+
   render() {
     const {
       gender,
@@ -363,18 +426,22 @@ class CustomerPersonalDetails extends Component {
       showFilePicker,
       isEdit,
       bankName,
+      isLoadingDocument,
     } = this.state;
 
-    const {loading} = this.props;
+    const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
+    const {UsedVehicle = {}} = selectedVehicle || {};
 
     return (
       <Customer_Personal_Details_Component
         isEdit={isEdit}
         headerProp={{
           title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
-          subtitle: isOnboard ? '' : '',
+          subtitle: isCreatingLoanApplication
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
+            : '',
           showRightContent: true,
-          rightLabel: isOnboard ? '' : registrationNumber,
+          // rightLabel: isOnboard ? '' : registrationNumber,
           rightLabelColor: '#F8A902',
           onBackPress: () => goBack(),
         }}
@@ -524,7 +591,7 @@ class CustomerPersonalDetails extends Component {
         filePickerProps={{
           isVisible: showFilePicker,
           autoCloseOnSelect: true,
-          onSelect: this.handleFile,
+          onSelect: this.handleFileUpload,
           onClose: this.closeFilePicker,
           restModalProp: {
             isCancellable: false,
@@ -532,6 +599,9 @@ class CustomerPersonalDetails extends Component {
         }}
         handleFilePicker={this.handleFilePicker}
         loading={loading}
+        isLoadingDocument={isLoadingDocument}
+        handleViewDocument={this.handleViewImage}
+        handleDeleteDocument={this.handleDeleteDocument}
       />
     );
   }
@@ -543,10 +613,11 @@ const mapActionCreators = {
   searchBanksThunk,
 };
 
-const mapStateToProps = ({customerData}) => ({
+const mapStateToProps = ({customerData, vehicleData}) => ({
   loading: customerData.loading,
   selectedCustomerId: customerData?.selectedCustomerId,
   selectedCustomer: customerData?.selectedCustomer,
+  selectedVehicle: vehicleData?.selectedVehicle,
 });
 
 export default connect(

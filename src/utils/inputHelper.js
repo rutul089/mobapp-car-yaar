@@ -260,6 +260,9 @@ export const validateField = (key, value, isOptional) => {
       return '';
     }
 
+    case 'selectedSalesExecValue':
+      return trimmedValue === '' ? 'Please select a valid Position' : '';
+
     default:
       return '';
   }

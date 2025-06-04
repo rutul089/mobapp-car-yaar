@@ -80,3 +80,11 @@ export const PARTNER_PERFORMANCE = createAsyncActionTypes(
 export const CIBIL_SCORE = createAsyncActionTypes('CIBIL_SCORE');
 
 export const ADD_REFERENCE = createAsyncActionTypes('ADD_REFERENCE');
+
+export const FETCH_SALES_EXECUTIVE = createAsyncActionTypes(
+  'FETCH_SALES_EXECUTIVE',
+);
+
+export const REMOVE_SALES_EXECUTIVE = createAsyncActionTypes(
+  'REMOVE_SALES_EXECUTIVE',
+);

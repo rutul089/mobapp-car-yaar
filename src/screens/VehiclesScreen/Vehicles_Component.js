@@ -21,6 +21,7 @@ import {
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
+import {currentLoanLabelMap} from '../../constants/enums';
 
 const Vehicles_Component = ({
   vehicleData,
@@ -110,7 +111,10 @@ const Vehicles_Component = ({
                   },
                   {
                     label: 'Hypothecation Status',
-                    value: safeGet(UsedVehicle, 'hypothecationStatus') + '',
+                    value:
+                      currentLoanLabelMap[
+                        safeGet(UsedVehicle, 'hypothecationStatus')
+                      ] || '-',
                     style: {flex: 2},
                   },
                 ]}

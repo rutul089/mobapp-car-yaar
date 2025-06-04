@@ -7,3 +7,4 @@ export * from './bankServices';
 export * from './loanServices';
 export * from './partnersServices';
 export * from './imageUploadServices';
+export * from './salesExecutiveService';

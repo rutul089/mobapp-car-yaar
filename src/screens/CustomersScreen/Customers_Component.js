@@ -86,7 +86,7 @@ const Customers_Component = ({
 
           return (
             <CardWrapper
-              onPress={() => onWrapperClick && onWrapperClick(item)}
+              onPress={() => onWrapperClick?.(item)}
               leftText={item?.applicationNumber}
               showLeftText
               showTrailingIcon
@@ -108,8 +108,8 @@ const Customers_Component = ({
                   },
                 ]}
                 logo={
-                  item.profileImage
-                    ? {uri: item.profileImage}
+                  item?.customerDetails?.applicantPhoto
+                    ? {uri: item?.customerDetails?.applicantPhoto}
                     : images.placeholder_image
                 }
                 noMargin

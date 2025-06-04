@@ -290,12 +290,14 @@ class AddReferencesScreen extends Component {
 }
 
 const mapActionCreators = {postCustomerReferenceDetailsThunk};
-const mapStateToProps = ({loanData}) => {
+const mapStateToProps = ({loanData, vehicleData}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
     loading: loanData.loading,
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
+    isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+    selectedVehicle: vehicleData?.selectedVehicle,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(AddReferencesScreen);

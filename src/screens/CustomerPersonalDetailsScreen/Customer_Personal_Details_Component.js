@@ -3,6 +3,7 @@ import {Alert, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
+  AutocompleteInput,
   DropdownModal,
   FilePickerModal,
   FormFooterButtons,
@@ -17,14 +18,14 @@ import {
   Spacing,
   Text,
   theme,
-  AutocompleteInput,
 } from '@caryaar/components';
+import {FullLoader} from '../../components';
 import {
   currentLoanTypes,
   genderTypes,
   occupationOptions,
 } from '../../constants/enums';
-import strings from '../../locales/strings';
+import {getFileType} from '../../utils/documentUtils';
 import {formatIndianCurrency} from '../../utils/helper';
 import {
   formatInputDate,
@@ -68,6 +69,9 @@ const Customer_Personal_Details_Component = ({
   searchBankNameFromAPI,
   onSelectSuggestion,
   isEdit,
+  isLoadingDocument,
+  handleViewDocument,
+  handleDeleteDocument,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'panCardNumber',
@@ -127,6 +131,10 @@ const Customer_Personal_Details_Component = ({
             btnLabel={'Click to Upload Photo'}
             image={state.applicantPhoto}
             handleImagePick={() => handleFilePicker?.('applicantPhoto')}
+            viewImage={() =>
+              handleViewDocument?.(state.applicantPhoto, 'applicantPhoto')
+            }
+            onDeletePress={() => handleDeleteDocument?.('applicantPhoto')}
             {...(restInputProps?.applicantPhoto || {})}
           />
           <Spacing size="md" />
@@ -135,6 +143,10 @@ const Customer_Personal_Details_Component = ({
             btnLabel={'Click to Upload PAN Card Photo'}
             image={state.pancardPhoto}
             handleImagePick={() => handleFilePicker?.('pancardPhoto')}
+            viewImage={() => handleViewDocument?.(state.pancardPhoto)}
+            onDeletePress={() => handleDeleteDocument?.('pancardPhoto')}
+            isDocument={true}
+            fileType={getFileType(state.pancardPhoto)}
             {...(restInputProps?.pancardPhoto || {})}
           />
           <Spacing size="md" />
@@ -163,6 +175,10 @@ const Customer_Personal_Details_Component = ({
               wrapperStyle={styles.halfWidth}
               image={state.aadharFrontPhoto}
               handleImagePick={() => handleFilePicker?.('aadharFrontPhoto')}
+              viewImage={() => handleViewDocument?.(state.aadharFrontPhoto)}
+              onDeletePress={() => handleDeleteDocument?.('aadharFrontPhoto')}
+              isDocument={true}
+              fileType={getFileType(state.aadharFrontPhoto)}
               {...(restInputProps?.aadharFrontPhoto || {})}
             />
             <ImageUploadButton
@@ -170,6 +186,10 @@ const Customer_Personal_Details_Component = ({
               wrapperStyle={styles.halfWidth}
               image={state.aadharBackphoto}
               handleImagePick={() => handleFilePicker?.('aadharBackphoto')}
+              viewImage={() => handleViewDocument?.(state.aadharBackphoto)}
+              onDeletePress={() => handleDeleteDocument?.('aadharBackphoto')}
+              isDocument={true}
+              fileType={getFileType(state.aadharBackphoto)}
               {...(restInputProps?.aadharBackphoto || {})}
             />
           </View>
@@ -530,6 +550,7 @@ const Customer_Personal_Details_Component = ({
       <FilePickerModal {...filePickerProps} autoCloseOnSelect={false} />
 
       {loading && <Loader visible={loading} />}
+      {isLoadingDocument && <FullLoader />}
     </SafeAreaWrapper>
   );
 };

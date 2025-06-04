@@ -50,6 +50,7 @@ class HomeScreen extends Component {
    * Navigates to the notifications screen.
    */
   onNotificationPress = () => {
+    // navigate(ScreenNames.CustomerEnvelope);
     navigate(ScreenNames.Notification);
   };
 

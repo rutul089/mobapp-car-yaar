@@ -24,6 +24,7 @@ const Customer_Info_Component = ({
   onNextPress,
   handleEditDetailPress,
   loading,
+  isCreatingLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -78,8 +79,12 @@ const Customer_Info_Component = ({
             data={bankDetails}
             isSemiBold={false}
           />
-          <Spacing size="xl" />
-          <Button label={strings.next} onPress={onNextPress} />
+          {isCreatingLoanApplication && (
+            <>
+              <Spacing size="xl" />
+              <Button label={strings.next} onPress={onNextPress} />
+            </>
+          )}
         </View>
       </ScrollView>
       {loading && <Loader visible={loading} />}

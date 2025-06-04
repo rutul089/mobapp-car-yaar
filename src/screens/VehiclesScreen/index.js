@@ -167,8 +167,7 @@ class Vehicles extends Component {
       userData,
     } = this.props;
 
-    const {refreshing, apiTrigger, searchText, isSearch, fullScreen} =
-      this.state;
+    const {refreshing, apiTrigger, searchText, isSearch} = this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
 

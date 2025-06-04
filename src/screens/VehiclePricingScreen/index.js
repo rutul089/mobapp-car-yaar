@@ -110,7 +110,7 @@ class VehiclePricingScreen extends Component {
       } else if (selectedLoanType === loanType.addVehicle) {
         return navigate(ScreenNames.VehicleHypothecation);
       } else {
-        navigate(ScreenNames.CustomerDetail);
+        navigate(ScreenNames.VehicleHypothecation);
       }
     });
   };

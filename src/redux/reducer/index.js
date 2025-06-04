@@ -9,6 +9,7 @@ import customerReducer from './customerReducer';
 import bankReducer from './bankReducer';
 import performanceReducer from './performanceReducer';
 import sendCustomerOtpForCibilReducer from './sendCustomerOtpForCibilReducer';
+import salesExecutiveReducer from './salesExecutiveReducer';
 
 const rootReducer = combineReducers({
   appState: appStateReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   bankData: bankReducer,
   partnerPerformance: performanceReducer,
   cibilReducer: sendCustomerOtpForCibilReducer,
+  salesExecutives: salesExecutiveReducer,
 });
 
 export default rootReducer;
