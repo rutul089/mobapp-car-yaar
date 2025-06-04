@@ -194,6 +194,7 @@ class VehicleDetail extends Component {
         status={status}
         loading={loading}
         isCreatingLoanApplication={isCreatingLoanApplication}
+        carImage={UsedVehicle?.images?.[0]?.frontView?.[0]}
       />
     );
   }

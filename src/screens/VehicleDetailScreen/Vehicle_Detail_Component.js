@@ -27,6 +27,7 @@ const Vehicle_Detail_Component = ({
   status,
   isCreatingLoanApplication,
   onPressSecondaryButton,
+  carImage,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -53,7 +54,7 @@ const Vehicle_Detail_Component = ({
               lastUpdateStatus={`Last updated on ${lastUpdatedOn}`}
               showButton
               buttonLabel={'Refresh Details'}
-              logo={{uri: ''}}
+              logo={{uri: carImage}}
             />
           </CardWrapper>
         </View>

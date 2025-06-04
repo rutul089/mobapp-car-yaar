@@ -225,12 +225,12 @@ const Customer_Personal_Details_Component = ({
             onChangeText={onChangeApplicantName}
             value={state.applicantName}
             returnKeyType="next"
-            onSubmitEditing={() => focusNext('mobileNumber')}
-            onFocus={() => scrollToInput('mobileNumber')}
+            onSubmitEditing={() => focusNext('fatherName')}
+            onFocus={() => scrollToInput('applicantName')}
             {...(restInputProps?.applicantName || {})}
           />
           <Spacing size="md" />
-          <Input
+          {/* <Input
             ref={refs?.mobileNumber}
             placeholder=""
             isLeftIconVisible
@@ -245,7 +245,7 @@ const Customer_Personal_Details_Component = ({
             onFocus={() => scrollToInput('fatherName')}
             {...(restInputProps?.mobileNumber || {})}
           />
-          <Spacing size="md" />
+          <Spacing size="md" /> */}
           <RadioGroupRow
             label={'Gender'}
             options={genderTypes}

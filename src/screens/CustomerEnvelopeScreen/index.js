@@ -14,7 +14,10 @@ import {
   formatVehicleNumber,
   safeGet,
 } from '../../utils/helper';
-import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
+import {
+  fetchLoanApplicationFromIdThunk,
+  fetchPartnerEmployeeByIdThunk,
+} from '../../redux/actions';
 
 class CustomerEnvelopeScreen extends Component {
   constructor(props) {
@@ -25,8 +28,9 @@ class CustomerEnvelopeScreen extends Component {
     this.onViewLenderPress = this.onViewLenderPress.bind(this);
   }
 
-  componentDidMount() {
-    const {selectedLoanApplication, selectedApplicationId} = this.props;
+  async componentDidMount() {
+    const {selectedApplicationId, partnerId} = this.props;
+    await this.props.fetchPartnerEmployeeByIdThunk(partnerId);
     this.props.fetchLoanApplicationFromIdThunk(selectedApplicationId);
   }
 
@@ -52,62 +56,61 @@ class CustomerEnvelopeScreen extends Component {
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
 
     return (
-      <>
-        <Customer_Envelop_Component
-          loanApplicationId={loanApplicationId}
-          vehicleDetails={[
-            {
-              label: 'Registrar Number',
-              value: formatVehicleNumber(_registerNumber),
-            },
-            {label: 'Make', value: safeGet(loading, vehicle, 'make')},
-            {label: 'Model', value: formatVehicleDetails(vehicle)},
-            {
-              label: 'Year',
-              value: safeGet(loading, usedVehicle, 'manufactureYear'),
-            },
-          ]}
-          loanDetails={[
-            {
-              label: 'Applicant Name',
-              value: safeGet(
-                loading,
-                customer,
-                'customerDetails.applicantName',
-              ),
-            },
-            {
-              label: 'Mobile Number',
-              value: safeGet(loading, customer, 'customerDetails.mobileNumber'),
-            },
-            {label: 'Vehicle Type', value: 'Used Car'},
-            {
-              label: 'Loan Type',
-              value:
-                getLabelFromEnum(
-                  loanTypeLabelMap,
-                  selectedLoanApplication?.loanType,
-                ) || '-',
-            },
-            {
-              label: 'Desired Loan Amount',
-              value: formatIndianCurrency(loanAmount),
-            },
-          ]}
-          onViewLenderPress={this.onViewLenderPress}
-        />
-      </>
+      <Customer_Envelop_Component
+        loanApplicationId={loanApplicationId}
+        vehicleDetails={[
+          {
+            label: 'Registrar Number',
+            value: formatVehicleNumber(_registerNumber),
+          },
+          {label: 'Make', value: safeGet(loading, vehicle, 'make')},
+          {label: 'Model', value: formatVehicleDetails(vehicle)},
+          {
+            label: 'Year',
+            value: safeGet(loading, usedVehicle, 'manufactureYear'),
+          },
+        ]}
+        loanDetails={[
+          {
+            label: 'Applicant Name',
+            value: safeGet(loading, customer, 'customerDetails.applicantName'),
+          },
+          {
+            label: 'Mobile Number',
+            value: safeGet(loading, customer, 'customerDetails.mobileNumber'),
+          },
+          {label: 'Vehicle Type', value: 'Used Car'},
+          {
+            label: 'Loan Type',
+            value:
+              getLabelFromEnum(
+                loanTypeLabelMap,
+                selectedLoanApplication?.loanType,
+              ) || '-',
+          },
+          {
+            label: 'Desired Loan Amount',
+            value: formatIndianCurrency(loanAmount),
+          },
+        ]}
+        onViewLenderPress={this.onViewLenderPress}
+      />
     );
   }
 }
 
-const mapActionCreators = {fetchLoanApplicationFromIdThunk};
-const mapStateToProps = ({loanData}) => {
+const mapActionCreators = {
+  fetchLoanApplicationFromIdThunk,
+  fetchPartnerEmployeeByIdThunk,
+};
+const mapStateToProps = ({loanData, user}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
     loading: loanData.loading,
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
+    partnerId: user?.userProfile?.partnerUser?.partnerId,
+    userProfile: user?.userProfile,
   };
 };
 export default connect(

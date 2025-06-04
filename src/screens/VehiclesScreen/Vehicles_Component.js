@@ -71,6 +71,7 @@ const Vehicles_Component = ({
           onAddButtonPress={onAddButtonPress}
           hideHeader
           hideSubHeaderTop={false}
+          onRightIconPress={() => navigate(ScreenNames.Notification)}
         />
       )}
       <FlatList
@@ -118,7 +119,7 @@ const Vehicles_Component = ({
                     style: {flex: 2},
                   },
                 ]}
-                logo={{uri: ''}}
+                logo={{uri: UsedVehicle?.images?.[0]?.frontView?.[0]}}
                 noMargin
                 noShadow
               />

@@ -26,6 +26,7 @@ import {
   customerIndividualTypeOptions,
   loanType,
 } from '../../constants/enums';
+import {FullLoader} from '../../components';
 
 const Customer_Detail_Component = ({
   onBackPress,
@@ -137,7 +138,7 @@ const Customer_Detail_Component = ({
       />
       <OTPModal {...otpModalProp} />
 
-      {loading && <Loader visible={loading} />}
+      {loading && <FullLoader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

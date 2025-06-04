@@ -14,3 +14,23 @@ export const fetchPartnerStats = async () => {
     throw error;
   }
 };
+
+/**
+ * Fetch partner employee details by employee ID, with optional query parameters.
+ * @param {string} employeeId - The ID of the partner employee.
+ * @param {Object} [params] - Optional query parameters to include in the request.
+ * @returns {Promise<Object>} - Partner employee details data.
+ */
+export const fetchPartnerEmployeeById = async (employeeId, params = null) => {
+  try {
+    const config = params ? {params} : {};
+    const response = await axiosInstance.get(
+      `/partners/partner-employees/${employeeId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch partner employee details:', error);
+    throw error;
+  }
+};

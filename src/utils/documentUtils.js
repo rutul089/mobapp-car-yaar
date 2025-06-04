@@ -144,6 +144,9 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
  */
 
 export const formatDocumentImages = (response = {}, baseUrl = '') => {
+  if (response === null || response === undefined) {
+    return {};
+  }
   const formatted = {};
 
   const otherDocumentTypeMap = {

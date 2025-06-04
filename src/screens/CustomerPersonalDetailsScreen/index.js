@@ -18,10 +18,15 @@ import {
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
 } from '../../redux/actions';
+import {getPresignedDownloadUrl} from '../../services';
 import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
+import {
+  uploadApplicantPhoto,
+  uploadDocumentViaPresignedUrl,
+} from '../../utils/fileUploadUtils';
 import {
   convertToISODate,
   formatDate,
@@ -31,17 +36,6 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
-import RNFS from 'react-native-fs';
-import {Buffer} from 'buffer';
-import {
-  getPresignedDownloadUrl,
-  getPresignedUploadUrl,
-  uploadFileWithFormData,
-} from '../../services';
-import {
-  uploadApplicantPhoto,
-  uploadDocumentViaPresignedUrl,
-} from '../../utils/fileUploadUtils';
 
 const initialState = {
   applicantPhoto: '',
@@ -49,7 +43,6 @@ const initialState = {
   panCardNumber: '',
   aadharNumber: '',
   applicantName: '',
-  mobileNumber: '',
   fatherName: '',
   spouseName: '',
   email: '',
@@ -97,7 +90,6 @@ class CustomerPersonalDetails extends Component {
         panCardNumber: '',
         aadharNumber: '',
         applicantName: '',
-        mobileNumber: '',
         fatherName: '',
         spouseName: '',
         email: '',
@@ -135,7 +127,7 @@ class CustomerPersonalDetails extends Component {
         panCardNumber: customerDetail?.panCardNumber,
         aadharNumber: customerDetail?.aadharNumber,
         applicantName: customerDetail?.applicantName,
-        mobileNumber: customerDetail?.mobileNumber,
+        // mobileNumber: customerDetail?.mobileNumber,
         gender: customerDetail?.gender,
         fatherName: customerDetail?.fatherName,
         spouseName: customerDetail?.spouseName,
@@ -226,7 +218,7 @@ class CustomerPersonalDetails extends Component {
       aadharBackphoto: state.aadharBackphoto,
       aadharNumber: state.aadharNumber,
       applicantName: state.applicantName,
-      mobileNumber: state.mobileNumber,
+      // mobileNumber: state.mobileNumber,
       gender: state.gender,
       fatherName: state.fatherName,
       spouseName: state.spouseName,
@@ -260,7 +252,6 @@ class CustomerPersonalDetails extends Component {
       'panCardNumber',
       'aadharNumber',
       'applicantName',
-      'mobileNumber',
       'fatherName',
       'spouseName',
       'email',

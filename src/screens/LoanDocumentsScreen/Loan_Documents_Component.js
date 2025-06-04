@@ -11,7 +11,7 @@ import {ScrollView} from 'react-native';
 
 import strings from '../../locales/strings';
 
-import {DocumentGroup} from '../../components';
+import {DocumentGroup, FullLoader} from '../../components';
 import {styles} from '../../styles/Vehicle.Image.style';
 
 const Loan_Documents_Component = ({
@@ -23,6 +23,7 @@ const Loan_Documents_Component = ({
   fileModalProps,
   isOnboard,
   loading,
+  isLoadingDocument,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -50,6 +51,7 @@ const Loan_Documents_Component = ({
       <FilePickerModal {...fileModalProps} />
 
       {loading && <Loader visible={loading} />}
+      {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}
     </SafeAreaWrapper>
   );
 };

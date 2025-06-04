@@ -85,6 +85,7 @@ const Applications_Component = ({
         onSubmitEditing={setSearch}
         hideHeader
         hideSubHeaderTop={false}
+        onRightIconPress={() => navigate(ScreenNames.Notification)}
       />
       <FlatList
         data={dataToShow}

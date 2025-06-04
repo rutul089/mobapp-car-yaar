@@ -184,11 +184,7 @@ class CustomerDetailView extends Component {
   };
 
   showOTPAfterDelay = () => {
-    this.setState({loading: false}, () => {
-      setTimeout(() => {
-        this.setState({showVerifyOTP: true});
-      }, 500);
-    });
+    this.setState({loading: false, showVerifyOTP: true});
   };
 
   onOtpComplete = value => {

@@ -13,11 +13,10 @@ import {
 } from '../../navigation/NavigationUtils';
 import {
   fetchCustomerDocumentsThunk,
-  getPresignedUploadUrlThunk,
   updateCustomerDocumentsThunk,
   uploadCustomerDocumentsThunk,
-  uploadFileToPresignedUrlThunk,
 } from '../../redux/actions';
+import {getPresignedDownloadUrl} from '../../services';
 import {
   formatDocumentImages,
   generateImageUploadPayload,
@@ -25,19 +24,13 @@ import {
   validateRequiredDocuments,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
+import {uploadDocumentViaPresignedUrl} from '../../utils/fileUploadUtils';
 import {
   formatVehicleNumber,
   showApiErrorToast,
   showToast,
 } from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
-import {
-  getPresignedDownloadUrl,
-  getPresignedUploadUrl,
-  uploadFileToPresignedUrl,
-} from '../../services';
-import RNFS from 'react-native-fs';
-import {Buffer} from 'buffer';
 
 const requiredFields = [
   'addressProofImage',
@@ -62,10 +55,7 @@ class LoanDocumentsScreen extends Component {
   }
 
   componentDidMount() {
-    const {isOnboard, isEdit} = this.state;
-    const {documentDetail} = this.props;
-    const isEmpty =
-      Array.isArray(documentDetail) && documentDetail.length === 0;
+    const {isEdit} = this.state;
 
     if (isEdit) {
       this.fetchCustomerDocuments();
@@ -81,7 +71,7 @@ class LoanDocumentsScreen extends Component {
           selectedApplicationId,
           {},
           response => {
-            if (response.success) {
+            if (response.success && response !== null) {
               this.setState({
                 documents: formatDocumentImages(response.data, ''),
               });
@@ -139,42 +129,26 @@ class LoanDocumentsScreen extends Component {
         return;
       }
 
+      this.setState({showFilePicker: false, isLoadingDocument: true});
+
       try {
-        this.setState({isLoading: true});
         const fileName = asset.name || asset.fileName || 'upload';
         const mimeType = asset.type || 'application/octet-stream';
 
-        // Step 1: Get the presigned upload URL
-        const uploadUrlResponse = await getPresignedUploadUrl({
-          objectKey: fileName,
-          prefix: this.state.selectedDocType,
-        });
-
-        const presignedUrl = uploadUrlResponse?.data?.url;
-        const presignedKey = uploadUrlResponse?.data?.key;
-
-        if (!presignedUrl) {
-          throw new Error('Presigned URL not received');
-        }
-        const fileBase64 = await RNFS.readFile(asset.uri, 'base64');
-        const fileBuffer = Buffer.from(fileBase64, 'base64');
-
-        await fetch(presignedUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': mimeType,
-            'Content-Length': fileBuffer.length.toString(),
-          },
-          body: fileBuffer,
-        });
+        const presignedKey = await uploadDocumentViaPresignedUrl(
+          asset,
+          fileName,
+          mimeType,
+          this.state.selectedDocType,
+        );
 
         const docObj = {
-          uri: asset.uri,
+          uri: presignedKey,
           name: asset.fileName,
           type: asset.type,
           isLocal: true,
           fileSize: asset.fileSize,
-          uploadedUrl: asset.uri,
+          uploadedUrl: presignedKey,
           uploadKey: presignedKey,
         };
 
@@ -187,12 +161,11 @@ class LoanDocumentsScreen extends Component {
           showFilePicker: false,
         }));
       } catch (error) {
-        this.closeFilePicker();
         setTimeout(() => {
-          showToast('error', 'Image do not upload');
+          showToast('error', 'Something went wrong please try again..');
         }, 100);
       } finally {
-        this.setState({isLoading: false});
+        this.setState({isLoadingDocument: false, showFilePicker: false});
       }
     });
   };
@@ -283,8 +256,14 @@ class LoanDocumentsScreen extends Component {
       selectedLoanApplication,
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
-    const {documents, showFilePicker, isOnboard, isLoading, isEdit} =
-      this.state;
+    const {
+      documents,
+      showFilePicker,
+      isOnboard,
+      isLoading,
+      isEdit,
+      isLoadingDocument,
+    } = this.state;
     return (
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}
@@ -338,6 +317,7 @@ class LoanDocumentsScreen extends Component {
           autoCloseOnSelect: false,
         }}
         loading={isLoading}
+        isLoadingDocument={isLoadingDocument}
       />
     );
   }
@@ -347,8 +327,6 @@ const mapActionCreators = {
   uploadCustomerDocumentsThunk,
   fetchCustomerDocumentsThunk,
   updateCustomerDocumentsThunk,
-  getPresignedUploadUrlThunk,
-  uploadFileToPresignedUrlThunk,
 };
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
