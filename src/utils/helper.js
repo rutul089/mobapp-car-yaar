@@ -1,7 +1,7 @@
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import {applicationStatus} from '../constants/enums';
-import {theme} from '@caryaar/components';
+import {theme, images} from '@caryaar/components';
 
 export const formatIndianCurrency = (
   value,
@@ -354,3 +354,26 @@ export const formatVehicleNumber = (vehicleNumber = '') => {
   // Return original if it doesn't match known formats
   return vehicleNumber;
 };
+
+/**
+ * Shortens a UUID or string by keeping the first 4 and last 4 characters.
+ * @param {string} id - The full UUID or string to shorten.
+ * @returns {string} - The shortened string in the format XXXX...YYYY.
+ */
+export const formatShortId = id => {
+  if (typeof id !== 'string' || id.length < 14) {
+    return id;
+  }
+  return `${id.slice(0, 6)}...${id.slice(-6)}`;
+};
+
+export const photoSourceOptions = [
+  {label: 'Camera', value: 'camera', icon: images.file_camera},
+  {label: 'Photo Gallery', value: 'gallery', icon: images.file_gallery},
+];
+
+export const uploadOptions = [
+  {label: 'Camera', value: 'camera', icon: images.file_camera},
+  {label: 'Photo Gallery', value: 'gallery', icon: images.file_gallery},
+  {label: 'Documents', value: 'document', icon: images.file_documents},
+];

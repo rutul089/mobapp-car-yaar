@@ -19,6 +19,7 @@ import {goBack} from '../../../navigation/NavigationUtils';
 
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {FullLoader} from '../../../components';
+import {photoSourceOptions} from '../../../utils/helper';
 
 const Edit_Profile_Component = ({
   state,
@@ -139,10 +140,7 @@ const Edit_Profile_Component = ({
       <FilePickerModal
         {...fileModalProps}
         autoCloseOnSelect={false}
-        options={[
-          {label: 'Camera', value: 'camera', icon: images.file_camera},
-          {label: 'Photo Gallery', value: 'gallery', icon: images.file_gallery},
-        ]}
+        options={photoSourceOptions}
       />
 
       {loading && <Loader visible={loading} />}

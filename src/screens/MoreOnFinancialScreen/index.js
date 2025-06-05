@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import MoreOn_Financial_Component from './MoreOn_Financial_Component';
-import {formatIndianCurrency} from '../../utils/helper';
-import {navigateAndSimpleReset} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {navigateAndSimpleReset} from '../../navigation/NavigationUtils';
 import {fetchCustomerMoreFinanceDetailThunk} from '../../redux/actions';
-import {get} from 'lodash';
+import {formatIndianCurrency, formatShortId, safeGet} from '../../utils/helper';
+import MoreOn_Financial_Component from './MoreOn_Financial_Component';
 
 class MoreOnFinancialScreen extends Component {
   constructor(props) {
@@ -31,27 +30,28 @@ class MoreOnFinancialScreen extends Component {
     navigateAndSimpleReset(ScreenNames.HomeTab);
   };
 
-  safeGet = (obj, path) => {
-    return this.props.loading ? '-' : get(obj, path, '-');
-  };
-
   render() {
     const {loading, moreOnFinance} = this.props;
+    let partnerId = safeGet(loading, moreOnFinance, 'partnerId');
+    let salesExecutiveId = safeGet(loading, moreOnFinance, 'salesExecutiveId');
     return (
       <MoreOn_Financial_Component
-        cibilScore={this.safeGet(moreOnFinance, 'cibilScore') || '-'}
+        cibilScore={safeGet(loading, moreOnFinance, 'cibilScore') || '-'}
         lastUpdatedOn={null}
         cibilList={[
           {
             label: 'Desired Loan Amount',
             value: formatIndianCurrency(
-              this.safeGet(moreOnFinance, 'loanAmount'),
+              safeGet(loading, moreOnFinance, 'loanAmount'),
             ),
           },
-          {label: 'CarYaar Partner ID', value: '#TV9089'},
-          {label: 'CarYaar Sale Executive ID', value: '#SE9031'},
+          {label: 'CarYaar Partner ID', value: formatShortId(partnerId)},
+          {
+            label: 'CarYaar Sale Executive ID',
+            value: formatShortId(salesExecutiveId),
+          },
         ]}
-        loanAddReferences={moreOnFinance?.loanAddReferences}
+        loanReferences={moreOnFinance?.loanReferences}
         onClosePress={this.onClosePress}
         loading={loading}
       />

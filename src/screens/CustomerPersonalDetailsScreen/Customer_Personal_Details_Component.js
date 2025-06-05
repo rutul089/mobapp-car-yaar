@@ -230,7 +230,7 @@ const Customer_Personal_Details_Component = ({
             {...(restInputProps?.applicantName || {})}
           />
           <Spacing size="md" />
-          {/* <Input
+          <Input
             ref={refs?.mobileNumber}
             placeholder=""
             isLeftIconVisible
@@ -243,9 +243,10 @@ const Customer_Personal_Details_Component = ({
             maxLength={10}
             onSubmitEditing={() => focusNext('fatherName')}
             onFocus={() => scrollToInput('fatherName')}
+            isDisabled
             {...(restInputProps?.mobileNumber || {})}
           />
-          <Spacing size="md" /> */}
+          <Spacing size="md" />
           <RadioGroupRow
             label={'Gender'}
             options={genderTypes}
@@ -391,7 +392,7 @@ const Customer_Personal_Details_Component = ({
             }}
             keyboardType="decimal-pad"
             returnKeyType="next"
-            onSubmitEditing={() => focusNext('accountNumber')}
+            onSubmitEditing={() => focusNext('bankName')}
             onFocus={() => {
               scrollToInput('monthlyIncome');
               setFieldEditing('monthlyIncome', true);

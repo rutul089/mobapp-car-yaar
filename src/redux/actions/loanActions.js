@@ -318,6 +318,7 @@ export const fetchCustomerMoreFinanceDetailThunk =
         customerId,
         config,
       );
+      console.log('response', JSON.stringify(response));
       dispatch({
         type: CUSTOMER_MORE_FINANCE.SUCCESS,
         payload: response?.data,

@@ -149,12 +149,12 @@ export const vehicleConditionValue = {
 
 export const vehicleImageType = Object.freeze({
   FRONT_VIEW: 'frontView',
-  INTERIOR_VIEW: 'interiorView',
-  LEFT_VIEW: 'leftView',
-  RC_BOOK: 'rcBook',
   REAR_VIEW: 'rearView',
+  LEFT_VIEW: 'leftView',
   RIGHT_VIEW: 'rightView',
+  INTERIOR_VIEW: 'interiorView',
   VISIBLE_DAMAGE: 'visibleDamage',
+  RC_BOOK: 'rcBook',
 });
 
 export const vehicleImageLabelMap = {
@@ -167,7 +167,7 @@ export const vehicleImageLabelMap = {
   [vehicleImageType.RC_BOOK]: 'RC Book',
 };
 
-export const vehicleImageTypes = Object.values(vehicleImageType).map(v => [v]);
+export const vehicleImageTypes = Object.values(vehicleImageType).map(v => v);
 
 export const occupationType = Object.freeze({
   SALARIED: 'SALARIED',

@@ -41,7 +41,7 @@ class CustomerInfoScreen extends Component {
     const {isCreatingLoanApplication} = this.props;
     isCreatingLoanApplication
       ? this.createLoanApplication()
-      : navigate(ScreenNames.CustomerDocuments);
+      : navigate(ScreenNames.MoreOnFinancial);
   };
 
   handleEditDetailPress = () => {
@@ -83,6 +83,8 @@ class CustomerInfoScreen extends Component {
     const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
     const {details = {}} = selectedCustomer || {};
 
+    console.log('selectedCustomer', JSON.stringify(selectedCustomer));
+
     let customerNote = `${capitalizeFirstLetter(
       selectedCustomer?.customerCategory,
     )} - ${capitalizeFirstLetter(selectedCustomer?.customerType)}`;
@@ -119,7 +121,10 @@ class CustomerInfoScreen extends Component {
         personalDetail={[
           {
             label: 'Mobile Number',
-            value: this.safeGet(details, 'mobileNumber'),
+            value:
+              this.safeGet(details, 'mobileNumber') ||
+              selectedCustomer?.mobileNumber ||
+              '-',
           },
           {label: 'Gender', value: this.safeGet(details, 'gender')},
           {
@@ -199,7 +204,7 @@ class CustomerInfoScreen extends Component {
         onNextPress={this.onNextPress}
         handleEditDetailPress={this.handleEditDetailPress}
         loading={loading}
-        isCreatingLoanApplication={isCreatingLoanApplication}
+        isCreatingLoanApplication={true}
       />
     );
   }

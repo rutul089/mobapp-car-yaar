@@ -31,11 +31,14 @@ import {
   convertToISODate,
   formatDate,
   formatVehicleNumber,
+  photoSourceOptions,
   showApiErrorToast,
   showToast,
+  uploadOptions,
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
+import {get} from 'lodash';
 
 const initialState = {
   applicantPhoto: '',
@@ -122,26 +125,32 @@ class CustomerPersonalDetails extends Component {
     const {isEdit} = this.state;
     const {selectedCustomer} = this.props;
     let customerDetail = selectedCustomer?.details;
+
     if (isEdit) {
       this.setState({
         panCardNumber: customerDetail?.panCardNumber,
         aadharNumber: customerDetail?.aadharNumber,
         applicantName: customerDetail?.applicantName,
-        // mobileNumber: customerDetail?.mobileNumber,
-        gender: customerDetail?.gender,
+        mobileNumber:
+          customerDetail?.mobileNumber || selectedCustomer?.mobileNumber,
+        gender: customerDetail?.gender ?? genderType.MALE,
         fatherName: customerDetail?.fatherName,
         spouseName: customerDetail?.spouseName,
         email: customerDetail?.email,
         dob: formatDate(customerDetail?.dob, 'DD/MM/YYYY'),
         address: customerDetail?.address,
         pincode: customerDetail?.pincode,
-        monthlyIncome: String(customerDetail?.monthlyIncome),
+        monthlyIncome: get(customerDetail, 'monthlyIncome', '').toString(),
         bankName: customerDetail?.bankName,
         accountNumber: customerDetail?.accountNumber,
-        currentLoan: customerDetail?.currentLoan,
-        currentEmi: String(customerDetail?.currentEmi),
-        maxEmiAfford: String(customerDetail?.maxEmiAfford),
-        avgMonthlyBankBalance: String(customerDetail?.avgMonthlyBankBalance),
+        currentLoan: customerDetail?.currentLoan ?? currentLoanOptions.YES,
+        currentEmi: get(customerDetail, 'currentEmi', '').toString(),
+        maxEmiAfford: get(customerDetail, 'maxEmiAfford', '').toString(),
+        avgMonthlyBankBalance: get(
+          customerDetail,
+          'avgMonthlyBankBalance',
+          '',
+        ).toString(),
         occupation: customerDetail?.occupation,
         incomeSource: customerDetail?.incomeSource,
         aadharBackphoto: customerDetail?.aadharBackphoto,
@@ -418,6 +427,7 @@ class CustomerPersonalDetails extends Component {
       isEdit,
       bankName,
       isLoadingDocument,
+      selectionType,
     } = this.state;
 
     const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
@@ -587,6 +597,10 @@ class CustomerPersonalDetails extends Component {
           restModalProp: {
             isCancellable: false,
           },
+          options:
+            selectionType === 'applicantPhoto'
+              ? photoSourceOptions
+              : uploadOptions,
         }}
         handleFilePicker={this.handleFilePicker}
         loading={loading}

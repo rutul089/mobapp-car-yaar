@@ -79,12 +79,9 @@ const Customer_Info_Component = ({
             data={bankDetails}
             isSemiBold={false}
           />
-          {isCreatingLoanApplication && (
-            <>
-              <Spacing size="xl" />
-              <Button label={strings.next} onPress={onNextPress} />
-            </>
-          )}
+
+          <Spacing size="xl" />
+          <Button label={strings.next} onPress={onNextPress} />
         </View>
       </ScrollView>
       {loading && <Loader visible={loading} />}

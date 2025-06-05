@@ -9,6 +9,7 @@ import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {updateVehicleByIdThunk} from '../../redux/actions';
 import {
+  generateImageUploadPayload,
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
@@ -53,10 +54,20 @@ class VehicleImagesScreen extends Component {
     const {selectedVehicle} = this.props;
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
 
-    const payload = Object.keys(this.state.documents).reduce((acc, key) => {
-      acc[key] = this.state.documents[key].uploadedUrl;
-      return acc;
-    }, {});
+    // const payload = Object.keys(this.state.documents).reduce((acc, key) => {
+    //   acc[key] = this.state.documents[key].uploadKey;
+    //   return acc;
+    // }, {});
+
+    const payload = generateImageUploadPayload(
+      this.state.documents,
+      '',
+      true,
+      vehicleImageTypes,
+    );
+
+    delete payload.customerId;
+
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
       return navigate(ScreenNames.VehicleOdometer);
     });
@@ -134,7 +145,7 @@ class VehicleImagesScreen extends Component {
           type: asset.type,
           isLocal: true,
           fileSize: asset.fileSize,
-          uploadedUrl: url,
+          uploadKey: url,
         };
 
         this.setState(prev => ({
@@ -173,8 +184,8 @@ class VehicleImagesScreen extends Component {
           fileSize: null,
           isLocal: false,
           type: null,
-          uploadedUrl: url,
           uri: url,
+          uploadKey: url,
         };
       }
     });

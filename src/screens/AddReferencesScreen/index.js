@@ -69,8 +69,6 @@ class AddReferencesScreen extends Component {
       pincodeOffice,
     } = this.state;
 
-    navigate(ScreenNames.ThankYouView);
-    return;
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
@@ -82,9 +80,9 @@ class AddReferencesScreen extends Component {
       references: [
         {
           referenceType: 'HOME',
-          referenceName: relationshipHome,
+          referenceName: referenceNameHome,
           mobileNumber: mobileNumberHome + '',
-          relationship: referenceNameHome,
+          relationship: relationshipHome,
           address: addressHome,
           pincode: pincodeHome + '',
         },

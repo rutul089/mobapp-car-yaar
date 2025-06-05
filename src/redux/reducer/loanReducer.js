@@ -1,13 +1,12 @@
 import {types} from '../actions';
 import {
+  ADD_REFERENCE,
   CLEAR_SEARCH_APPLICATION,
-  FETCH_LOAN_APPLICATIONS,
-  RESET_LOAN_APPLICATION,
-  FETCH_LOAN_APP_BY_ID,
   CUSTOMER_FINANCE_DETAILS,
   CUSTOMER_FINANCE_DOCUMENT,
-  CUSTOMER_MORE_FINANCE,
-  ADD_REFERENCE,
+  FETCH_LOAN_APP_BY_ID,
+  FETCH_LOAN_APPLICATIONS,
+  RESET_LOAN_APPLICATION,
 } from '../actions/actionType';
 
 const initialState = {
@@ -27,7 +26,6 @@ const initialState = {
   isCreatingLoanApplication: false,
   financeDetails: null,
   financeDocuments: null,
-  moreOnFinance: null,
   referenceDetail: null,
 };
 
@@ -40,7 +38,6 @@ const loanReducer = (state = initialState, action) => {
     case CUSTOMER_FINANCE_DETAILS.REQUEST:
     case FETCH_LOAN_APP_BY_ID.REQUEST:
     case CUSTOMER_FINANCE_DOCUMENT.REQUEST:
-    case CUSTOMER_MORE_FINANCE.REQUEST:
     case ADD_REFERENCE.REQUEST:
       return {...state, loading: true};
 
@@ -48,7 +45,6 @@ const loanReducer = (state = initialState, action) => {
     case FETCH_LOAN_APP_BY_ID.FAILURE:
     case CUSTOMER_FINANCE_DETAILS.FAILURE:
     case CUSTOMER_FINANCE_DOCUMENT.FAILURE:
-    case CUSTOMER_MORE_FINANCE.FAILURE:
     case ADD_REFERENCE.FAILURE:
       return {...state, loading: false};
 
@@ -136,13 +132,6 @@ const loanReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         financeDocuments: action.payload,
-      };
-
-    case CUSTOMER_MORE_FINANCE.SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        moreOnFinance: action.payload,
       };
 
     case ADD_REFERENCE.SUCCESS:

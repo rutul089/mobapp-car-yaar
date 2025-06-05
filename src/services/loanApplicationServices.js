@@ -210,24 +210,24 @@ export const fetchCustomerFinanceDocuments = async (
 /**
  * Fetch more finance details for a specific customer.
  *
- * @param {string} applicationId - The ID of the application.
+ * @param {string} customerId - The ID of the customer.
  * @param {object} [config={}] - Optional Axios config.
  * @returns {Promise<object>} Response data containing additional finance details.
  * @throws Will throw an error if the request fails or applicationId is not provided.
  */
 export const fetchCustomerMoreFinanceDetails = async (
-  applicationId,
+  customerId,
   config = {},
 ) => {
   try {
     const response = await axiosInstance.get(
-      `loan-applications/getCustomerMoreFinanceDetails/${applicationId}`,
+      `customers/getCustomerMoreFinanceDetails/${customerId}`,
       config,
     );
     return response.data;
   } catch (error) {
     console.error(
-      `Failed to fetch more finance details for customer ID ${applicationId}:`,
+      `Failed to fetch more finance details for customer ID ${customerId}:`,
       error,
     );
     throw error;

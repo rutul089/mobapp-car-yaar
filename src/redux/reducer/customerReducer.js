@@ -3,6 +3,7 @@ import {
   CLEAR_SEARCH,
   CLEAR_SELECTED_CUSTOMER,
   CREATE_CUSTOMER_BASIC_DETAIL,
+  CUSTOMER_MORE_FINANCE,
   FETCH_CUSTOMER_DETAIL,
   FETCH_CUSTOMER_DOCUMENT,
   FETCH_CUSTOMERS,
@@ -21,6 +22,7 @@ const initialState = {
   searchCustomer: [], // For Get all Search Vehicle
   searchPage: 1,
   searchTotalPages: 1,
+  moreOnFinance: null,
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -29,12 +31,14 @@ const customerReducer = (state = initialState, action) => {
     case FETCH_CUSTOMER_DETAIL.REQUEST:
     case FETCH_CUSTOMER_DOCUMENT.REQUEST:
     case CREATE_CUSTOMER_BASIC_DETAIL.REQUEST:
+    case CUSTOMER_MORE_FINANCE.REQUEST:
       return {
         ...state,
         loading: true,
       };
 
     case CREATE_CUSTOMER_BASIC_DETAIL.FAILURE:
+    case CUSTOMER_MORE_FINANCE.FAILURE:
       return {
         ...state,
         loading: false,
@@ -118,6 +122,13 @@ const customerReducer = (state = initialState, action) => {
         loanDetail: null,
         financeDocuments: null,
         moreOnFinance: null,
+      };
+
+    case CUSTOMER_MORE_FINANCE.SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        moreOnFinance: action.payload,
       };
 
     case types.RESET_APP_STATE:
