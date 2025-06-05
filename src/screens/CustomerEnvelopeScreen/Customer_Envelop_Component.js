@@ -1,23 +1,36 @@
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 
 import {
+  AutocompleteInput,
   Button,
   Card,
   DetailInfoCard,
-  RadioButton,
+  images,
   SafeAreaWrapper,
   Spacing,
   Text,
   theme,
-  images,
 } from '@caryaar/components';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useInputRefs} from '../../utils/useInputRefs';
 
 const Customer_Envelop_Component = ({
   vehicleDetails,
   loanDetails,
   onViewLenderPress,
   loanApplicationId,
+  onPartnerChange,
+  searchPartnerFromAPI,
+  onSelectPartner,
+  onSalesExecutiveChange,
+  searchSalesExecutiveFromAPI,
+  onSelectSalesExecutive,
+  restInputProps = {},
 }) => {
+  const {refs, focusNext, scrollToInput} = useInputRefs([
+    'partner',
+    'salesExecutive',
+  ]);
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       {/* Header */}
@@ -38,7 +51,9 @@ const Customer_Envelop_Component = ({
           </Text>
         </View>
       </View>
-      <ScrollView contentContainerStyle={styles.wrapper} bounces={false}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.wrapper}
+        bounces={false}>
         <View style={{padding: 0}}>
           <DetailInfoCard
             label={'Vehicle Details'}
@@ -53,18 +68,44 @@ const Customer_Envelop_Component = ({
           />
           <Spacing size="lg" />
           <Card>
-            <Text type={'label'} size={'caption'}>
-              Select your CarYaar Sale Partner
-            </Text>
-            <Spacing size="smd" />
-            <RadioButton label={'0123 - Partner Name'} selected={true} />
-            <RadioButton label={'0123 - Partner Name'} />
-            <RadioButton label={'0123 - Partner Name'} marginBottom={0} />
+            <AutocompleteInput
+              ref={refs.partner}
+              restProps={{
+                label: 'CarYaar Partner *',
+                isLeftIconVisible: true,
+                leftIconName: images.user,
+                returnKeyType: 'next',
+                onSubmitEditing: () => focusNext('salesExecutive'),
+                onFocus: () => scrollToInput('partner'),
+              }}
+              onChangeText={onPartnerChange}
+              fetchSuggestions={searchPartnerFromAPI}
+              onSelectSuggestion={onSelectPartner}
+              value={restInputProps?.carYarPartner?.value || ''}
+              suggestionTextKey={'name'}
+              {...(restInputProps?.carYarPartner || {})}
+            />
+            <Spacing size="md" />
+            <AutocompleteInput
+              ref={refs.salesExecutive}
+              restProps={{
+                label: 'CarYaar Sales Exec *',
+                isLeftIconVisible: true,
+                leftIconName: images.user,
+                returnKeyType: 'next',
+              }}
+              onChangeText={onSalesExecutiveChange}
+              fetchSuggestions={searchSalesExecutiveFromAPI}
+              onSelectSuggestion={onSelectSalesExecutive}
+              value={restInputProps?.salesExecutive?.value || ''}
+              suggestionTextKey={'user.name'}
+              {...(restInputProps?.salesExecutive || {})}
+            />
           </Card>
           <Spacing size="xl" />
           <Button label={'View Lenders'} onPress={onViewLenderPress} />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaWrapper>
   );
 };

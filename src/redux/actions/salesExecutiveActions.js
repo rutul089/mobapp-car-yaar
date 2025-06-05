@@ -174,3 +174,30 @@ export const createSalesExecutiveThunk = (param, onSuccess, onFailure) => {
     }
   };
 };
+
+/**
+ * Thunk to search sales executives based on a search query.
+ *
+ * @param {string} searchText - The search text to query sales executives.
+ * @param {function} [onSuccess] - Optional callback function to be called with the API response on success.
+ * @param {function} [onFailure] - Optional callback function to be called with the error message on failure.
+ * @returns {function} Thunk function to be used by Redux Thunk middleware.
+ */
+export const searchSalesExecutivesThunk = (
+  searchText,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    try {
+      const response = await fetchSalesExecutives(
+        `search=${searchText}&isActive=true`,
+      );
+      onSuccess?.(response);
+      return response;
+    } catch (error) {
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};

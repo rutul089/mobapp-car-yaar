@@ -9,7 +9,10 @@ import {
   postCustomerFinanceDocuments,
   postCustomerLenderDetails,
 } from '../../services';
-import {initiateLoanApplication} from '../../services/loanServices';
+import {
+  initiateLoanApplication,
+  setPartnerAndSalesExecutive,
+} from '../../services/loanServices';
 import {showApiErrorToast} from '../../utils/helper';
 import {
   CLEAR_SEARCH_APPLICATION,
@@ -329,6 +332,39 @@ export const fetchCustomerMoreFinanceDetailThunk =
       showApiErrorToast(error);
     }
   };
+
+export const setPartnerAndSalesExecutiveThunk = (
+  applicationId,
+  financeDetails,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: CUSTOMER_FINANCE_DETAILS.REQUEST});
+    // dispatch({type: FETCH_LOAN_APP_BY_ID.REQUEST});
+
+    try {
+      const response = await setPartnerAndSalesExecutive(
+        applicationId,
+        financeDetails,
+      );
+
+      dispatch({
+        type: CUSTOMER_FINANCE_DETAILS.SUCCESS,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CUSTOMER_FINANCE_DETAILS.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
 
 export const setIsCreatingLoanApplication = isCreating => ({
   type: types.SET_IS_CREATING_LOAN_APPLICATION,

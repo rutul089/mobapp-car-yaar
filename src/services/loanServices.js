@@ -102,3 +102,24 @@ export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
     throw error;
   }
 };
+
+/**
+ * Set the partner and sales executive for a loan application.
+ *
+ * @param {Object} payload - Data containing partner and sales executive IDs.
+ * @param {string} applicationId - The ID of the loan application.
+ * @returns {Promise<Object>} - The updated loan application data from the server.
+ * @throws Will throw an error if the API request fails.
+ */
+export const setPartnerAndSalesExecutive = async (payload, applicationId) => {
+  try {
+    const response = await axiosInstance.post(
+      `loan-applications/set-partner-and-sales-executive/${applicationId}`,
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error setting partner and sales executive:', error);
+    throw error;
+  }
+};

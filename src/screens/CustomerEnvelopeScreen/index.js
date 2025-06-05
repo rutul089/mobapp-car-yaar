@@ -7,46 +7,144 @@ import {
   loanTypeLabelMap,
 } from '../../constants/enums';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
-import Customer_Envelop_Component from './Customer_Envelop_Component';
+import {
+  fetchLoanApplicationFromIdThunk,
+  fetchPartnerEmployeeByIdThunk,
+  searchSalesExecutivesThunk,
+} from '../../redux/actions';
 import {
   formatIndianCurrency,
   formatVehicleDetails,
   formatVehicleNumber,
   safeGet,
+  showToast,
 } from '../../utils/helper';
-import {
-  fetchLoanApplicationFromIdThunk,
-  fetchPartnerEmployeeByIdThunk,
-} from '../../redux/actions';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import Customer_Envelop_Component from './Customer_Envelop_Component';
 
 class CustomerEnvelopeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      carYarPartner: '',
+      salesExecutive: '',
+      salesExecutiveUserId: '',
+      partnerUserId: '',
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+      errors: {},
     };
-    this.onViewLenderPress = this.onViewLenderPress.bind(this);
   }
 
-  async componentDidMount() {
-    const {selectedApplicationId, partnerId} = this.props;
-    await this.props.fetchPartnerEmployeeByIdThunk(partnerId);
+  componentDidMount() {
+    const {selectedApplicationId} = this.props;
     this.props.fetchLoanApplicationFromIdThunk(selectedApplicationId);
   }
 
-  onViewLenderPress = () => {
-    let params = getScreenParam(this.props.route, 'params');
-    const {selectedLoanType} = this.props;
-    if (selectedLoanType === loanType.internalBT) {
-      return navigate(ScreenNames.LenderDetails);
-    } else {
-      return navigate(ScreenNames.LenderSelection, {params});
+  onChangeField = (key, value, isOptional = false) => {
+    handleFieldChange(this, key, value, isOptional);
+  };
+
+  resetSalesExecutiveFields = () => {
+    this.onChangeField('salesExecutive', '');
+    this.onChangeField('salesExecutiveUserId', '');
+  };
+
+  resetPartnerFields = () => {
+    this.onChangeField('carYarPartner', '');
+    this.onChangeField('partnerUserId', '');
+  };
+
+  searchSalesExecutiveFromAPI = async query => {
+    this.onChangeField('salesExecutive', query);
+    try {
+      const response = await this.props.searchSalesExecutivesThunk(query);
+      const data = response?.data ?? [];
+      if (!response?.success || data.length === 0) {
+        this.resetSalesExecutiveFields();
+      } else {
+        this.onChangeField('salesExecutiveUserId', '');
+      }
+      return data;
+    } catch (error) {
+      this.resetSalesExecutiveFields();
+      return [];
     }
+  };
+
+  searchPartnerFromAPI = async query => {
+    const {partnerId} = this.props;
+    this.onChangeField('carYarPartner', query);
+    try {
+      const response = await this.props.fetchPartnerEmployeeByIdThunk(
+        partnerId,
+        {
+          search: query,
+        },
+      );
+      const employees = response?.data?.employees ?? [];
+      if (!response?.success || employees.length === 0) {
+        this.resetPartnerFields();
+      } else {
+        this.onChangeField('partnerUserId', '');
+      }
+      return employees;
+    } catch (error) {
+      this.resetPartnerFields();
+      return [];
+    }
+  };
+
+  onSelectSalesExecutive = value => {
+    this.onChangeField('salesExecutiveUserId', value?.userId);
+    this.onChangeField('salesExecutive', value?.user?.name);
+  };
+
+  onSelectPartner = value => {
+    this.onChangeField('carYarPartner', value?.name);
+    this.onChangeField('partnerUserId', value?.id);
+  };
+
+  validateAllFields = () => {
+    const requiredFields = [
+      'carYarPartner',
+      'salesExecutive',
+      'salesExecutiveUserId',
+    ];
+    const errors = {};
+    let isFormValid = true;
+
+    requiredFields.forEach(key => {
+      const error = validateField(key, this.state[key]);
+      if (error) {
+        errors[key] = error;
+        isFormValid = false;
+      }
+    });
+
+    this.setState({errors});
+    return isFormValid;
+  };
+
+  onViewLenderPress = () => {
+    if (!this.validateAllFields()) {
+      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      return;
+    }
+
+    const {selectedLoanType} = this.props;
+    const params = getScreenParam(this.props.route, 'params');
+
+    const targetScreen =
+      selectedLoanType === loanType.internalBT
+        ? ScreenNames.LenderDetails
+        : ScreenNames.LenderSelection;
+
+    navigate(targetScreen, {params});
   };
 
   render() {
     const {selectedLoanApplication, loading} = this.props;
-    let {
+    const {
       loanAmount,
       loanApplicationId,
       usedVehicle = {},
@@ -54,6 +152,7 @@ class CustomerEnvelopeScreen extends Component {
       customer = {},
     } = selectedLoanApplication || {};
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
+    const {errors, salesExecutive, carYarPartner} = this.state;
 
     return (
       <Customer_Envelop_Component
@@ -94,26 +193,51 @@ class CustomerEnvelopeScreen extends Component {
           },
         ]}
         onViewLenderPress={this.onViewLenderPress}
+        onSalesExecutiveChange={value => {
+          this.onChangeField('salesExecutive', value);
+          this.onChangeField('salesExecutiveUserId', '');
+        }}
+        onPartnerChange={value => {
+          this.onChangeField('carYarPartner', value);
+          this.onChangeField('partnerUserId', '');
+        }}
+        searchSalesExecutiveFromAPI={this.searchSalesExecutiveFromAPI}
+        searchPartnerFromAPI={this.searchPartnerFromAPI}
+        onSelectSalesExecutive={this.onSelectSalesExecutive}
+        onSelectPartner={this.onSelectPartner}
+        restInputProps={{
+          salesExecutive: {
+            value: salesExecutive,
+            // isError: errors.salesExecutiveUserId,
+            // statusMsg: errors.salesExecutiveUserId,
+          },
+          carYarPartner: {
+            value: carYarPartner,
+            // isError: errors.carYarPartner,
+            // statusMsg: errors.carYarPartner,
+          },
+        }}
       />
     );
   }
 }
 
-const mapActionCreators = {
+const mapStateToProps = ({loanData, user}) => ({
+  selectedLoanType: loanData.selectedLoanType,
+  loading: loanData.loading,
+  selectedLoanApplication: loanData.selectedLoanApplication,
+  selectedApplicationId: loanData.selectedApplicationId,
+  partnerId: user?.userProfile?.partnerUser?.partnerId,
+  userProfile: user?.userProfile,
+});
+
+const mapDispatchToProps = {
   fetchLoanApplicationFromIdThunk,
   fetchPartnerEmployeeByIdThunk,
+  searchSalesExecutivesThunk,
 };
-const mapStateToProps = ({loanData, user}) => {
-  return {
-    selectedLoanType: loanData.selectedLoanType,
-    loading: loanData.loading,
-    selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
-    selectedApplicationId: loanData?.selectedApplicationId,
-    partnerId: user?.userProfile?.partnerUser?.partnerId,
-    userProfile: user?.userProfile,
-  };
-};
+
 export default connect(
   mapStateToProps,
-  mapActionCreators,
+  mapDispatchToProps,
 )(CustomerEnvelopeScreen);
