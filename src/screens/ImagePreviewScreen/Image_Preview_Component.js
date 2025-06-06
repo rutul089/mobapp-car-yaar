@@ -3,7 +3,7 @@ import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
-const Image_Preview_Component = ({onCancel, uri, isVisible}) => {
+const Image_Preview_Component = ({onCancel, uri, isVisible, imageList}) => {
   return (
     <SafeAreaWrapper statusBarColor={'black'} background={'black'} hideBottom>
       <View style={styles.backButtonContainer}>
@@ -16,7 +16,7 @@ const Image_Preview_Component = ({onCancel, uri, isVisible}) => {
         </Pressable>
       </View>
       <ImageViewer
-        imageUrls={[{url: uri}]}
+        imageUrls={imageList ? imageList : [{url: uri}]}
         enableSwipeDown
         onSwipeDown={onCancel}
         saveToLocalByLongPress={false}

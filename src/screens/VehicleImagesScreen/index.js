@@ -13,13 +13,13 @@ import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
+import {uploadApplicantPhoto} from '../../utils/fileUploadUtils';
 import {
   formatVehicleNumber,
   showApiErrorToast,
   showToast,
 } from '../../utils/helper';
 import Vehicle_Images_Component from './Vehicle_Images_Component';
-import {uploadFileWithFormData} from '../../services';
 
 class VehicleImagesScreen extends Component {
   constructor(props) {
@@ -54,11 +54,6 @@ class VehicleImagesScreen extends Component {
     const {selectedVehicle} = this.props;
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
 
-    // const payload = Object.keys(this.state.documents).reduce((acc, key) => {
-    //   acc[key] = this.state.documents[key].uploadKey;
-    //   return acc;
-    // }, {});
-
     const payload = generateImageUploadPayload(
       this.state.documents,
       '',
@@ -86,8 +81,28 @@ class VehicleImagesScreen extends Component {
   };
 
   handleUploadMedia = async type => {
-    // Trigger file picker modal
     this.setState({showFilePicker: true, selectedDocType: type});
+  };
+
+  formatImageUploadData = (imageData, selectedUri) => {
+    const formatted = Object.entries(imageData).map(([key, value]) => ({
+      url: value.uploadKey,
+      type: key,
+      uri: value.uri,
+    }));
+
+    if (!selectedUri) {
+      return formatted;
+    }
+
+    // Move the selected item to the top
+    const index = formatted.findIndex(item => item.uri === selectedUri);
+    if (index > -1) {
+      const [selectedItem] = formatted.splice(index, 1);
+      formatted.unshift(selectedItem);
+    }
+
+    return formatted;
   };
 
   handleViewImage = async uri => {
@@ -101,7 +116,12 @@ class VehicleImagesScreen extends Component {
         await viewDocumentHelper(
           uri,
           imageUri => {
-            navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+            navigate(ScreenNames.ImagePreviewScreen, {
+              imageList: this.formatImageUploadData(
+                this.state.documents,
+                imageUri,
+              ),
+            });
           },
           error => {
             console.warn('Error opening file:', error);
@@ -121,28 +141,23 @@ class VehicleImagesScreen extends Component {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('file', {
-        uri: asset.uri,
-        type: asset.type,
-        name: asset.fileName || asset.name || '',
-      });
+      const fileName = asset.name || asset.fileName || 'upload';
+      const mimeType = asset.type || 'application/octet-stream';
 
       this.setState({
         showFilePicker: false,
         isLoading: true,
       });
 
-      await new Promise(resolve => setTimeout(resolve, 110));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       try {
-        const response = await uploadFileWithFormData(formData);
-        const url = response?.data?.fileUrl;
+        const url = await uploadApplicantPhoto(asset, fileName, mimeType);
 
         const docObj = {
           uri: asset.uri,
-          name: asset.fileName || asset.name || '',
-          type: asset.type,
+          name: fileName,
+          type: mimeType,
           isLocal: true,
           fileSize: asset.fileSize,
           uploadKey: url,

@@ -27,8 +27,14 @@ class ImagePreviewScreen extends Component {
   };
 
   render() {
-    const {uri} = this.props.route.params;
-    return <Image_Preview_Component onCancel={this.onCancel} uri={uri} />;
+    const {uri, imageList} = this.props.route.params;
+    return (
+      <Image_Preview_Component
+        onCancel={this.onCancel}
+        uri={uri}
+        imageList={imageList}
+      />
+    );
   }
 }
 
