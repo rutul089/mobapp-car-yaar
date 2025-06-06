@@ -266,6 +266,7 @@ export const validateField = (key, value, isOptional) => {
     case 'carYarPartner':
     case 'salesExecutive':
     case 'salesExecutiveUserId':
+    case 'partnerUserId':
       return trimmedValue === '' ? 'Please select required field.' : '';
 
     default:

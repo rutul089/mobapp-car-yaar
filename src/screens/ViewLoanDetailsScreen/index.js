@@ -16,6 +16,7 @@ import {
   formatDate,
   formatIndianCurrency,
   formatMonths,
+  formatShortId,
   formatVehicleNumber,
   safeGet,
 } from '../../utils/helper';
@@ -76,11 +77,8 @@ class ViewLoanDetailsScreen extends Component {
     const {loading, selectedLoanApplication} = this.props;
     const {
       customer = {},
-      partner = {},
       vehicle = {},
       usedVehicle = {},
-      partnerUser = {},
-      salesExecutive = {},
     } = selectedLoanApplication || {};
 
     let dob = safeGet(loading, customer?.customerDetails, 'dob');
@@ -90,6 +88,7 @@ class ViewLoanDetailsScreen extends Component {
     let monthlyIncome =
       safeGet(loading, customer?.customerDetails, 'monthlyIncome') ?? '-';
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
+    let customerID = safeGet(loading, customer, 'id') ?? '-';
 
     return (
       <View_Loan_Details_Component
@@ -154,7 +153,7 @@ class ViewLoanDetailsScreen extends Component {
             label: 'Customer Name',
             value: safeGet(loading, customer?.customerDetails, 'applicantName'),
           },
-          {label: 'Customer ID', value: '#968040'},
+          {label: 'Customer ID', value: formatShortId(customerID)},
           {
             label: 'Customer Type',
             value: getLabelFromEnum(customerCategoryValue, _customerCategory),
@@ -165,7 +164,10 @@ class ViewLoanDetailsScreen extends Component {
           },
           {
             label: 'Mobile Number',
-            value: safeGet(loading, customer?.customerDetails, 'mobileNumber'),
+            value:
+              safeGet(loading, customer?.customerDetails, 'mobileNumber') ||
+              safeGet(loading, customer, 'mobileNumber') ||
+              '-',
           },
           {
             label: 'Gender',

@@ -27,7 +27,6 @@ const MoreOn_Financial_Component = ({
   lastUpdatedOn,
   loanReferences,
 }) => {
-  console.log('loanReferences', loanReferences);
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header

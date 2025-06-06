@@ -79,7 +79,6 @@ export const fetchUser = (onSuccess, onFailure) => {
           data: response?.data,
         },
       });
-      console.log('213312312312123', JSON.stringify(response?.data));
       onSuccess?.(response?.data);
       return response?.data;
     } catch (error) {

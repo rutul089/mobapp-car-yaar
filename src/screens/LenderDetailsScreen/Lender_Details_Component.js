@@ -8,6 +8,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
@@ -16,7 +17,7 @@ import {goBack} from '../../navigation/NavigationUtils';
 import images from '../../assets/images';
 import {formatIndianCurrency} from '../../utils/helper';
 
-const Lender_Details_Component = ({onHoldProceedPress}) => {
+const Lender_Details_Component = ({onHoldProceedPress, loading}) => {
   const result = 1.2 * 1000000 - 600000 - 10000; // 590000
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -74,6 +75,7 @@ const Lender_Details_Component = ({onHoldProceedPress}) => {
         <Spacing size="xl" />
         <Button label={'Proceed'} onPress={onHoldProceedPress} />
       </ScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

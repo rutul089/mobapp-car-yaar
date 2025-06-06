@@ -71,6 +71,7 @@ const CarFinance_Details_Component = ({
       <Header {...headerProp} />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
+        keyboardShouldPersistTaps="handled"
         bounces={false}>
         <Text>Basic Details</Text>
         <Spacing size="smd" />

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Lender_Details_Component from './Lender_Details_Component';
-import {navigate} from '../../navigation/NavigationUtils';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {postCustomerLenderDetailsThunk} from '../../redux/actions';
 
 class index extends Component {
   constructor(props) {
@@ -13,7 +14,24 @@ class index extends Component {
   }
 
   onHoldProceedPress = () => {
-    navigate(ScreenNames.LoanOfferDetail);
+    const {selectedApplicationId} = this.props;
+
+    let param = {
+      lenderName: 'HDFC Bank',
+      interesetRate: 8.9,
+      tenure: 60,
+      emi: 50000,
+      processingFee: 1200,
+      principalAmount: 1000,
+    };
+    this.props.postCustomerLenderDetailsThunk(
+      selectedApplicationId,
+      param,
+      success => {
+        let params = getScreenParam(this.props.route, 'params');
+        navigate(ScreenNames.LoanOfferDetail, {params});
+      },
+    );
   };
 
   onLoanOfferPress = () => {
@@ -21,19 +39,25 @@ class index extends Component {
   };
 
   render() {
+    const {loading} = this.props;
     return (
-      <>
-        <Lender_Details_Component
-          onHoldProceedPress={this.onHoldProceedPress}
-          onLoanOfferPress={this.onLoanOfferPress}
-        />
-      </>
+      <Lender_Details_Component
+        onHoldProceedPress={this.onHoldProceedPress}
+        onLoanOfferPress={this.onLoanOfferPress}
+        loading={loading}
+      />
     );
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
-};
+const mapActionCreators = {postCustomerLenderDetailsThunk};
+const mapStateToProps = ({loanData, user}) => ({
+  selectedLoanType: loanData.selectedLoanType,
+  loading: loanData.loading,
+  selectedLoanApplication: loanData.selectedLoanApplication,
+  selectedApplicationId: loanData.selectedApplicationId,
+  partnerId: user?.userProfile?.partnerUser?.partnerId,
+  userProfile: user?.userProfile,
+});
+
 export default connect(mapStateToProps, mapActionCreators)(index);

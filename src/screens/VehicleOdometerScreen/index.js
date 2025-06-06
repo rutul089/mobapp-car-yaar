@@ -45,12 +45,7 @@ class VehicleOdometerScreen extends Component {
   componentDidMount() {
     const {selectedVehicle} = this.props;
     const odometer = get(selectedVehicle, 'UsedVehicle.odometerReading');
-    console.log(
-      'selectedVehicle',
-      JSON.stringify(
-        selectedVehicle?.UsedVehicle?.images?.[0]?.odometerReading,
-      ),
-    );
+
     this.setState({
       odometerReading: odometer != null ? `${odometer}` : '' + '',
       vehicleCondition: get(

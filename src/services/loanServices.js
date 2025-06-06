@@ -111,7 +111,7 @@ export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
  * @returns {Promise<Object>} - The updated loan application data from the server.
  * @throws Will throw an error if the API request fails.
  */
-export const setPartnerAndSalesExecutive = async (payload, applicationId) => {
+export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
   try {
     const response = await axiosInstance.post(
       `loan-applications/set-partner-and-sales-executive/${applicationId}`,

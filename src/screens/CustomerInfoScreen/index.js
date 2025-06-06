@@ -62,8 +62,11 @@ class CustomerInfoScreen extends Component {
   };
 
   createLoanApplication = () => {
-    const {vehicleId, loanType, selectedCustomerId} = this.props;
-
+    const {vehicleId, loanType, selectedCustomerId, selectedApplicationId} =
+      this.props;
+    if (selectedApplicationId) {
+      return navigate(ScreenNames.LoanDocument);
+    }
     let payload = {
       vehicleId,
       loanType,
@@ -82,8 +85,6 @@ class CustomerInfoScreen extends Component {
   render() {
     const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
     const {details = {}} = selectedCustomer || {};
-
-    console.log('selectedCustomer', JSON.stringify(selectedCustomer));
 
     let customerNote = `${capitalizeFirstLetter(
       selectedCustomer?.customerCategory,
@@ -222,6 +223,7 @@ const mapStateToProps = ({customerData, loanData, vehicleData}) => {
     isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
     vehicleId: vehicleData?.selectedVehicle?.id,
     loanType: loanData?.selectedLoanType,
+    selectedApplicationId: loanData?.selectedApplicationId,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(CustomerInfoScreen);

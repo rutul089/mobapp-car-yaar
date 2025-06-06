@@ -10,6 +10,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useInputRefs} from '../../utils/useInputRefs';
@@ -26,6 +27,7 @@ const Customer_Envelop_Component = ({
   searchSalesExecutiveFromAPI,
   onSelectSalesExecutive,
   restInputProps = {},
+  loading,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'partner',
@@ -53,6 +55,7 @@ const Customer_Envelop_Component = ({
       </View>
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
+        keyboardShouldPersistTaps="handled"
         bounces={false}>
         <View style={{padding: 0}}>
           <DetailInfoCard
@@ -106,6 +109,7 @@ const Customer_Envelop_Component = ({
           <Button label={'View Lenders'} onPress={onViewLenderPress} />
         </View>
       </KeyboardAwareScrollView>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

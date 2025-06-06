@@ -58,12 +58,11 @@ export const uploadFileToPresignedUrl = async (
   contentType = 'application/octet-stream',
 ) => {
   try {
-    let response = await axios.put(presignedUrl, file, {
+    await axios.put(presignedUrl, file, {
       headers: {
         'Content-Type': contentType,
       },
     });
-    console.log('response', JSON.stringify(response));
   } catch (error) {
     throw error;
   }

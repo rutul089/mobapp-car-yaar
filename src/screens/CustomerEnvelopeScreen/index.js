@@ -11,6 +11,7 @@ import {
   fetchLoanApplicationFromIdThunk,
   fetchPartnerEmployeeByIdThunk,
   searchSalesExecutivesThunk,
+  setPartnerAndSalesExecutiveThunk,
 } from '../../redux/actions';
 import {
   formatIndianCurrency,
@@ -45,12 +46,12 @@ class CustomerEnvelopeScreen extends Component {
   };
 
   resetSalesExecutiveFields = () => {
-    this.onChangeField('salesExecutive', '');
+    // this.onChangeField('salesExecutive', '');
     this.onChangeField('salesExecutiveUserId', '');
   };
 
   resetPartnerFields = () => {
-    this.onChangeField('carYarPartner', '');
+    // this.onChangeField('carYarPartner', '');
     this.onChangeField('partnerUserId', '');
   };
 
@@ -60,7 +61,7 @@ class CustomerEnvelopeScreen extends Component {
       const response = await this.props.searchSalesExecutivesThunk(query);
       const data = response?.data ?? [];
       if (!response?.success || data.length === 0) {
-        this.resetSalesExecutiveFields();
+        // this.resetSalesExecutiveFields();
       } else {
         this.onChangeField('salesExecutiveUserId', '');
       }
@@ -109,6 +110,7 @@ class CustomerEnvelopeScreen extends Component {
       'carYarPartner',
       'salesExecutive',
       'salesExecutiveUserId',
+      'partnerUserId',
     ];
     const errors = {};
     let isFormValid = true;
@@ -131,15 +133,33 @@ class CustomerEnvelopeScreen extends Component {
       return;
     }
 
-    const {selectedLoanType} = this.props;
+    const {selectedLoanType, selectedApplicationId} = this.props;
     const params = getScreenParam(this.props.route, 'params');
+    let payload = {
+      partnerUserId: this.state.partnerUserId,
+      salesExecutiveUserId: this.state.salesExecutiveUserId,
+    };
 
-    const targetScreen =
-      selectedLoanType === loanType.internalBT
-        ? ScreenNames.LenderDetails
-        : ScreenNames.LenderSelection;
+    this.props.setPartnerAndSalesExecutiveThunk(
+      selectedApplicationId,
+      payload,
+      response => {
+        const targetScreen =
+          selectedLoanType === loanType.internalBT
+            ? ScreenNames.LenderDetails
+            : ScreenNames.LenderSelection;
 
-    navigate(targetScreen, {params});
+        navigate(targetScreen, {params});
+      },
+      error => {
+        const targetScreen =
+          selectedLoanType === loanType.internalBT
+            ? ScreenNames.LenderDetails
+            : ScreenNames.LenderSelection;
+
+        navigate(targetScreen, {params});
+      },
+    );
   };
 
   render() {
@@ -217,6 +237,7 @@ class CustomerEnvelopeScreen extends Component {
             // statusMsg: errors.carYarPartner,
           },
         }}
+        loading={loading}
       />
     );
   }
@@ -235,6 +256,7 @@ const mapDispatchToProps = {
   fetchLoanApplicationFromIdThunk,
   fetchPartnerEmployeeByIdThunk,
   searchSalesExecutivesThunk,
+  setPartnerAndSalesExecutiveThunk,
 };
 
 export default connect(

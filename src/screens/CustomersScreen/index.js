@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {
   clearCustomerSearch,
   fetchAllCustomersThunk,
+  resetLoanApplication,
   resetSelectedCustomer,
 } from '../../redux/actions';
 import {API_TRIGGER} from '../../constants/enums';
@@ -101,7 +102,13 @@ class CustomersScreen extends Component {
    * On customer list item click
    */
   onWrapperClick = item => {
+    const {selectedCustomerId} = this.props;
+
+    if (selectedCustomerId === item?.id) {
+      return navigate(ScreenNames.CustomerInfo, {param: item});
+    }
     this.props.resetSelectedCustomer();
+    this.props.resetLoanApplication();
     navigate(ScreenNames.CustomerInfo, {param: item});
   };
 
@@ -193,6 +200,7 @@ const mapDispatchToProps = {
   fetchAllCustomersThunk,
   clearCustomerSearch,
   resetSelectedCustomer,
+  resetLoanApplication,
 };
 
 const mapStateToProps = ({customerData, loanData, user}) => {
@@ -206,6 +214,7 @@ const mapStateToProps = ({customerData, loanData, user}) => {
     searchTotalPages: customerData.searchTotalPages,
     isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
     userData: user?.userProfile,
+    selectedCustomerId: customerData?.selectedCustomerId,
   };
 };
 
