@@ -8,7 +8,7 @@ import {
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView} from 'react-native';
-import {DocumentGroup} from '../../components';
+import {DocumentGroup, FullLoader} from '../../components';
 import strings from '../../locales/strings';
 import {styles} from '../../styles/Vehicle.Image.style';
 
@@ -25,6 +25,7 @@ const Finance_Documents_Component = ({
   documentList,
   fileModalProps,
   loading,
+  isLoadingDocument,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -49,6 +50,7 @@ const Finance_Documents_Component = ({
       <FilePickerModal {...fileModalProps} />
 
       {loading && <Loader visible={loading} />}
+      {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}
     </SafeAreaWrapper>
   );
 };

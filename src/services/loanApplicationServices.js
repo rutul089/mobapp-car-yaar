@@ -275,7 +275,7 @@ export const postCustomerLenderDetails = async (
     throw error;
   }
 };
-
+//loan-applications/add-reference
 export const postCustomerReferenceDetails = async (
   applicationId,
   referenceData,
@@ -284,6 +284,46 @@ export const postCustomerReferenceDetails = async (
   try {
     const response = await axiosInstance.post(
       `loan-applications/add-reference/${applicationId}`,
+      referenceData,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to add reference details for application ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const getCustomerReferenceDetails = async (
+  applicationId,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `loan-applications/loan-references/${applicationId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Failed to add reference details for application ID ${applicationId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const editCustomerReferenceDetails = async (
+  applicationId,
+  referenceData,
+  config = {},
+) => {
+  try {
+    const response = await axiosInstance.patch(
+      `loan-applications/loan-references/${applicationId}`,
       referenceData,
       config,
     );

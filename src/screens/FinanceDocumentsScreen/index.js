@@ -23,6 +23,7 @@ import {
 import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
 import {getPresignedDownloadUrl, getPresignedUploadUrl} from '../../services';
+import {uploadDocumentViaPresignedUrl} from '../../utils/fileUploadUtils';
 
 const requiredFields = [
   documentImageType.SANCTION_LETTER,
@@ -143,34 +144,19 @@ class FinanceDocumentsScreen extends Component {
         return;
       }
 
+      this.setState({showFilePicker: false, isLoadingDocument: true});
+      await new Promise(resolve => setTimeout(resolve, 110));
+
       try {
-        this.setState({isLoading: true});
         const fileName = asset.name || asset.fileName || 'upload';
         const mimeType = asset.type || 'application/octet-stream';
 
-        // Step 1: Get the presigned upload URL
-        const uploadUrlResponse = await getPresignedUploadUrl({
-          objectKey: fileName,
-          prefix: this.state.selectedDocType,
-        });
-
-        const presignedUrl = uploadUrlResponse?.data?.url;
-        const presignedKey = uploadUrlResponse?.data?.key;
-
-        if (!presignedUrl) {
-          throw new Error('Presigned URL not received');
-        }
-        const fileBase64 = await RNFS.readFile(asset.uri, 'base64');
-        const fileBuffer = Buffer.from(fileBase64, 'base64');
-
-        await fetch(presignedUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': mimeType,
-            'Content-Length': fileBuffer.length.toString(),
-          },
-          body: fileBuffer,
-        });
+        const presignedKey = await uploadDocumentViaPresignedUrl(
+          asset,
+          fileName,
+          mimeType,
+          this.state.selectedDocType,
+        );
 
         const docObj = {
           uri: asset.uri,
@@ -188,7 +174,6 @@ class FinanceDocumentsScreen extends Component {
             [this.state.selectedDocType]: docObj,
           },
           selectedDocType: '',
-          showFilePicker: false,
         }));
       } catch (error) {
         this.closeFilePicker();
@@ -196,7 +181,10 @@ class FinanceDocumentsScreen extends Component {
           showToast('error', 'Image do not upload');
         }, 100);
       } finally {
-        this.setState({isLoading: false});
+        this.setState({
+          isLoadingDocument: false,
+          showFilePicker: false,
+        });
       }
     });
   };
@@ -211,51 +199,49 @@ class FinanceDocumentsScreen extends Component {
 
     const {UsedVehicle = {}} = selectedVehicle || {};
 
-    const {documents, showFilePicker, isOnboard, isLoading, isEdit} =
-      this.state;
+    const {documents, showFilePicker, isLoadingDocument, isEdit} = this.state;
 
     return (
-      <>
-        <Finance_Documents_Component
-          headerProp={{
-            title: 'Finance Document',
-            subtitle: isCreatingLoanApplication
-              ? formatVehicleNumber(UsedVehicle?.registerNumber)
+      <Finance_Documents_Component
+        headerProp={{
+          title: 'Finance Document',
+          subtitle: isCreatingLoanApplication
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
+            : '',
+          showRightContent: true,
+          rightLabel:
+            isCreatingLoanApplication || isEdit
+              ? selectedLoanApplication?.loanApplicationId || ''
               : '',
-            showRightContent: true,
-            rightLabel:
-              isCreatingLoanApplication || isEdit
-                ? selectedLoanApplication?.loanApplicationId || ''
-                : '',
-            rightLabelColor: '#F8A902',
-            onBackPress: () => goBack(),
-          }}
-          documentList={[
-            documentImageType.SOA,
-            documentImageType.SANCTION_LETTER,
-            documentImageType.NOC,
-            documentImageType.FORM_34,
-            documentImageType.OTHER_DOCUMENTS,
-          ].map(type => ({
-            type,
-            label: documentImageLabelMap[type],
-            docObject: documents[type],
-            onDeletePress: () => this.handleDeleteMedia(type),
-            uploadMedia: () => this.handleUploadMedia(type),
-            viewImage: () => this.handleViewImage(documents[type]?.uri),
-            isRequired: requiredFields.includes(type),
-          }))}
-          handleNextStepPress={this.handleNextStepPress}
-          onNextPress={this.onNextPress}
-          fileModalProps={{
-            isVisible: showFilePicker,
-            onSelect: this.handleFile,
-            onClose: this.closeFilePicker,
-            autoCloseOnSelect: false,
-          }}
-          loading={loading || isLoading}
-        />
-      </>
+          rightLabelColor: '#F8A902',
+          onBackPress: () => goBack(),
+        }}
+        documentList={[
+          documentImageType.SOA,
+          documentImageType.SANCTION_LETTER,
+          documentImageType.NOC,
+          documentImageType.FORM_34,
+          documentImageType.OTHER_DOCUMENTS,
+        ].map(type => ({
+          type,
+          label: documentImageLabelMap[type],
+          docObject: documents[type],
+          onDeletePress: () => this.handleDeleteMedia(type),
+          uploadMedia: () => this.handleUploadMedia(type),
+          viewImage: () => this.handleViewImage(documents[type]?.uri),
+          isRequired: requiredFields.includes(type),
+        }))}
+        handleNextStepPress={this.handleNextStepPress}
+        onNextPress={this.onNextPress}
+        fileModalProps={{
+          isVisible: showFilePicker,
+          onSelect: this.handleFile,
+          onClose: this.closeFilePicker,
+          autoCloseOnSelect: false,
+        }}
+        loading={loading}
+        isLoadingDocument={isLoadingDocument}
+      />
     );
   }
 }

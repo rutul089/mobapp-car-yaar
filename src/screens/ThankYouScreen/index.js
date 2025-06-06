@@ -1,20 +1,6 @@
 import React, {Component} from 'react';
+import {BackHandler} from 'react-native';
 import {connect} from 'react-redux';
-import Thank_You_Component from './Thank_You_Component';
-import {
-  navigate,
-  navigateAndSimpleReset,
-} from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
-import {
-  formatAmount,
-  formatDate,
-  formatIndianCurrency,
-  formatMonths,
-  formatVehicleNumber,
-  safeGet,
-} from '../../utils/helper';
 import {
   customerCategoryValue,
   customerIndividualTypeValue,
@@ -22,6 +8,22 @@ import {
   loanTypeLabelMap,
   occupationLabelMap,
 } from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
+import {
+  navigate,
+  navigateAndSimpleReset,
+} from '../../navigation/NavigationUtils';
+import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
+import {
+  formatDate,
+  formatIndianCurrency,
+  formatMonths,
+  formatShortId,
+  formatVehicleNumber,
+  safeGet,
+} from '../../utils/helper';
+
+import Thank_You_Component from './Thank_You_Component';
 
 class ThankYouScreen extends Component {
   constructor(props) {
@@ -32,9 +34,13 @@ class ThankYouScreen extends Component {
   }
 
   componentDidMount() {
-    const {selectedLoanApplication, selectedApplicationId} = this.props;
+    const {selectedApplicationId} = this.props;
 
     this.props.fetchLoanApplicationFromIdThunk(selectedApplicationId);
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true,
+    );
   }
 
   onBackToHomePress = () => {
@@ -44,6 +50,10 @@ class ThankYouScreen extends Component {
   onTrackLoanStatusPress = () => {
     navigate(ScreenNames.TrackApplication);
   };
+
+  componentWillUnmount() {
+    this.backHandler?.remove();
+  }
 
   render() {
     const {selectedLoanApplication, loading} = this.props;
@@ -137,7 +147,10 @@ class ThankYouScreen extends Component {
           ]}
           customerDetail={[
             {label: 'Customer Name', value: loading ? '-' : applicantName},
-            {label: 'Customer ID', value: '#968040'},
+            {
+              label: 'Customer ID',
+              value: formatShortId(selectedLoanApplication?.customerId) ?? '-',
+            },
             {
               label: 'Customer Type',
               value: getLabelFromEnum(
@@ -223,8 +236,17 @@ class ThankYouScreen extends Component {
             {label: 'Ownership', value: ownershipCount},
           ]}
           partnerDetail={[
-            {label: 'Partner ID', value: '0123'},
-            {label: 'Partner Name', value: 'Partner Name'},
+            {
+              label: 'Partner ID',
+              value:
+                formatShortId(
+                  selectedLoanApplication?.partnerUser?.partnerId,
+                ) ?? '-',
+            },
+            {
+              label: 'Partner Name',
+              value: selectedLoanApplication?.partnerUser?.user?.name || '-',
+            },
             {
               label: 'Sales Executive Name',
               value: 'Mahmood Butala',

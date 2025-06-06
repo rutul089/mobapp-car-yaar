@@ -123,6 +123,10 @@ const StackRoutes = () => {
       <Stack.Screen
         name={ScreenNames.ThankYouView}
         component={Screens.ThankYouScreen}
+        options={{
+          gestureEnabled: false,
+          headerLeft: () => null, // hides the back arrow
+        }}
       />
       <Stack.Screen
         name={ScreenNames.TrackApplication}

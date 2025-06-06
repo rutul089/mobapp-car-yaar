@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Add_References_Component from './Add_References_Component';
+import {getLabelFromEnum, relationshipTypeValue} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {
-  getLabelFromEnum,
-  occupationLabelMap,
-  relationshipTypeValue,
-} from '../../constants/enums';
+  editCustomerReferenceDetailsThunk,
+  getCustomerReferenceDetailsThunk,
+  postCustomerReferenceDetailsThunk,
+} from '../../redux/actions';
+import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {postCustomerReferenceDetailsThunk} from '../../redux/actions';
+import Add_References_Component from './Add_References_Component';
 
 class AddReferencesScreen extends Component {
   constructor(props) {
@@ -31,6 +31,8 @@ class AddReferencesScreen extends Component {
       addressOffice: '',
       pincodeOffice: '',
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+      idHome: '',
+      idOffice: '',
       errors: {
         relationshipHome: '',
         relationshipOffice: '',
@@ -44,30 +46,65 @@ class AddReferencesScreen extends Component {
         pincodeOffice: '',
       },
       isFormValid: false,
+      isNoReference: false,
     };
     this.onConfirmLoanPress = this.onConfirmLoanPress.bind(this);
   }
 
   componentDidMount() {
     const {isEdit} = this.state;
-    console.log({isEdit});
+    const {selectedApplicationId} = this.props;
+    if (isEdit) {
+      this.props.getCustomerReferenceDetailsThunk(
+        selectedApplicationId,
+        response => {
+          if (response?.success) {
+            this.setState({
+              isNoReference: !response.data.length > 0,
+            });
+            this.formatReferenceData(response.data);
+          }
+        },
+        error => {},
+      );
+    }
   }
+
+  formatReferenceData = data => {
+    const setStateFromRef = (ref, prefix) => {
+      this.setState({
+        [`relationship${prefix}`]: ref.relationship,
+        [`referenceName${prefix}`]: ref.referenceName,
+        [`mobileNumber${prefix}`]: String(ref.mobileNumber),
+        [`address${prefix}`]: ref.address,
+        [`pincode${prefix}`]: String(ref.pincode),
+        [`id${prefix}`]: ref.id,
+      });
+    };
+
+    let homeRefSet = false;
+    let officeRefSet = false;
+
+    for (const item of data) {
+      const type = item.type?.toUpperCase();
+
+      if (type === 'HOME' && !homeRefSet) {
+        setStateFromRef(item, 'Home');
+        homeRefSet = true;
+      } else if (type === 'OFFICE' && !officeRefSet) {
+        setStateFromRef(item, 'Office');
+        officeRefSet = true;
+      }
+
+      if (homeRefSet && officeRefSet) {
+        break;
+      }
+    }
+  };
 
   onConfirmLoanPress = () => {
     const {selectedApplicationId} = this.props;
-
-    const {
-      relationshipHome,
-      referenceNameHome,
-      mobileNumberHome,
-      addressHome,
-      pincodeHome,
-      referenceNameOffice,
-      mobileNumberOffice,
-      relationshipOffice,
-      addressOffice,
-      pincodeOffice,
-    } = this.state;
+    const {isEdit, isNoReference} = this.state;
 
     const isFormValid = this.validateAllFields();
 
@@ -76,36 +113,37 @@ class AddReferencesScreen extends Component {
       return;
     }
 
-    let payload = {
-      references: [
-        {
-          referenceType: 'HOME',
-          referenceName: referenceNameHome,
-          mobileNumber: mobileNumberHome + '',
-          relationship: relationshipHome,
-          address: addressHome,
-          pincode: pincodeHome + '',
-        },
-        {
-          referenceType: 'OFFICE',
-          referenceName: referenceNameOffice,
-          mobileNumber: mobileNumberOffice + '',
-          relationship: relationshipOffice,
-          address: addressOffice,
-          pincode: pincodeOffice + '',
-        },
-      ],
+    const references = ['Home', 'Office'].map(prefix => {
+      const reference = {
+        referenceType: prefix.toUpperCase(),
+        referenceName: this.state[`referenceName${prefix}`],
+        mobileNumber: String(this.state[`mobileNumber${prefix}`]),
+        relationship: this.state[`relationship${prefix}`],
+        address: this.state[`address${prefix}`],
+        pincode: String(this.state[`pincode${prefix}`]),
+      };
+
+      if (isEdit && !isNoReference) {
+        reference.id = this.state[`id${prefix}`];
+      }
+
+      return reference;
+    });
+
+    const payload = {references};
+
+    const callback = response => {
+      if (response?.success) {
+        navigate(ScreenNames.ThankYouView);
+      }
     };
 
-    this.props.postCustomerReferenceDetailsThunk(
-      selectedApplicationId,
-      payload,
-      response => {
-        if (response?.success) {
-          navigate(ScreenNames.ThankYouView);
-        }
-      },
-    );
+    const action =
+      isEdit && !isNoReference
+        ? this.props.editCustomerReferenceDetailsThunk
+        : this.props.postCustomerReferenceDetailsThunk;
+
+    action(selectedApplicationId, payload, callback);
   };
 
   onReferenceSelected = (item, type) => {
@@ -179,7 +217,9 @@ class AddReferencesScreen extends Component {
       selectedLoanApplication,
       loading,
     } = this.props;
+
     const {UsedVehicle = {}} = selectedVehicle || {};
+
     return (
       <Add_References_Component
         headerProp={{
@@ -287,7 +327,11 @@ class AddReferencesScreen extends Component {
   }
 }
 
-const mapActionCreators = {postCustomerReferenceDetailsThunk};
+const mapActionCreators = {
+  postCustomerReferenceDetailsThunk,
+  getCustomerReferenceDetailsThunk,
+  editCustomerReferenceDetailsThunk,
+};
 const mapStateToProps = ({loanData, vehicleData}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,

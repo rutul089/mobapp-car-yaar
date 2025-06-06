@@ -113,7 +113,7 @@ export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
  */
 export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
   try {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.patch(
       `loan-applications/set-partner-and-sales-executive/${applicationId}`,
       payload,
     );

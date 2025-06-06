@@ -38,6 +38,7 @@ class VehiclePricingScreen extends Component {
 
   componentDidMount() {
     const {selectedVehicle} = this.props;
+    console.log('selectedVehicle', selectedVehicle);
     const estimatedPrice = get(selectedVehicle, 'UsedVehicle.estimatedPrice');
     const salePrice = get(selectedVehicle, 'UsedVehicle.salePrice');
     const trueValuePrice = get(selectedVehicle, 'UsedVehicle.trueValuePrice');
