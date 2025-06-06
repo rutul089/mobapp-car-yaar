@@ -1,103 +1,62 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Track_Application_Component from './Track_Application_Component';
+import {fetchLoanTrackingDetailsByAppId} from '../../services';
+import {getParams, getScreenParam} from '../../navigation/NavigationUtils';
+import {showApiErrorToast} from '../../utils/helper';
 
 class TrackApplicationScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loading: false,
+      trackingSteps: [],
+      loanApplicationId: '',
+    };
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    let navState = getScreenParam(this.props.route, 'params');
+    let applicationId = navState?.id || '676f4163-3980-4fd0-a0ce-81802935eb8d';
+
+    this.setState({
+      loading: true,
+      loanApplicationId: navState?.loanApplicationId,
+    });
+    try {
+      const response = await fetchLoanTrackingDetailsByAppId(applicationId);
+      if (response?.success) {
+        this.setState({
+          trackingSteps: response?.data,
+        });
+      }
+    } catch (error) {
+      showApiErrorToast(error);
+    } finally {
+      this.setState({loading: false});
+    }
+  }
 
   render() {
+    const {loading, trackingSteps, loanApplicationId} = this.state;
     return (
-      <>
-        <Track_Application_Component
-          timelineData={[
-            {
-              title: 'Vehicle onboarding',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Customer onboarding',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Lender selection',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Credit - Document verification & approval',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Lender submission',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Lender approval',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'DO released',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Ops verifies the DO',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Loan disbursement',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Collection of RC & other docs by PDA',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'RTO charge calculation',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {
-              title: 'Customer agrees to the RTO charges',
-              date: '12 Jan 2025, 3:30 PM',
-              completed: true,
-            },
-            {title: 'Ops ledgers all the invoices', completed: false},
-            {title: 'Finance team transfers the amount', completed: false},
-            {title: 'RC transfer is complete', completed: false},
-            {
-              title: 'Ops verifies the RC transfer & approves',
-              completed: false,
-            },
-            {title: 'Held back amount is now released', completed: false},
-            {
-              title: 'Finance marks the ticket as closed',
-              completed: false,
-              isFinal: true,
-            },
-          ]}
-        />
-      </>
+      <Track_Application_Component
+        loading={loading}
+        trackingSteps={trackingSteps}
+        loanApplicationId={loanApplicationId}
+      />
     );
   }
 }
 
 const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
+// Redux: map state to props
+const mapStateToProps = ({loanData}) => {
+  return {
+    loading: loanData.loading,
+    selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
+    selectedApplicationId: loanData?.selectedApplicationId,
+  };
 };
 export default connect(
   mapStateToProps,

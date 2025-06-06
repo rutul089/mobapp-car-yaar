@@ -53,7 +53,9 @@ class ViewLoanDetailsScreen extends Component {
   };
 
   onTrackLoanStatusPress = () => {
-    navigate(ScreenNames.TrackApplication);
+    navigate(ScreenNames.TrackApplication, {
+      params: this.props.selectedLoanApplication,
+    });
   };
 
   onTackLoanApplication = () => {};

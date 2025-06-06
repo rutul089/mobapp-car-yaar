@@ -123,3 +123,15 @@ export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
     throw error;
   }
 };
+
+export const fetchLoanTrackingDetailsByAppId = async applicationId => {
+  try {
+    const response = await axiosInstance.get(
+      `loan-applications/tracking/${applicationId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error setting partner and sales executive:', error);
+    throw error;
+  }
+};

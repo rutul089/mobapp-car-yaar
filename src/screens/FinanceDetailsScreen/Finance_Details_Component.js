@@ -74,7 +74,9 @@ const Finance_Details_Component = ({
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header {...headerProp} />
-      <KeyboardAwareScrollView contentContainerStyle={styles.wrapper}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.wrapper}
+        keyboardShouldPersistTaps="handled">
         <Text>Was this car financed?</Text>
         <Spacing size="smd" />
         <Card>
