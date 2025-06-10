@@ -154,6 +154,7 @@ export const updateProfileThunk = (param, onSuccess, onFailure) => {
           data: response?.data,
         },
       });
+      dispatch(fetchUser());
       if (response?.success) {
         showApiSuccessToast(response);
       }

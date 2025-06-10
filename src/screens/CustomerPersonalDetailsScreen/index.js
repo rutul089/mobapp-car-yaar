@@ -204,8 +204,14 @@ class CustomerPersonalDetails extends Component {
     }
 
     const payload = this.getPayload();
-    const onSuccess = () => {
-      isEdit ? goBack() : navigateToTab(ScreenNames.Customer);
+    const onSuccess = response => {
+      if (isEdit) {
+        if (response?.success) {
+          showToast('success', 'Customer detail updated successfully');
+        }
+      } else {
+        navigateToTab(ScreenNames.Customer);
+      }
     };
     const onError = error => showApiErrorToast(error);
 

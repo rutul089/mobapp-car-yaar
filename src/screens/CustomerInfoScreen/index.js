@@ -21,7 +21,7 @@ class CustomerInfoScreen extends Component {
     super(props);
     this.state = {
       customerInfo: {},
-      customerId: getScreenParam(this.props.route, 'param')?.id,
+      customerId: getScreenParam(this.props.route, 'param')?.customerId,
     };
     this.onNextPress = this.onNextPress.bind(this);
     this.handleEditDetailPress = this.handleEditDetailPress.bind(this);
@@ -118,6 +118,8 @@ class CustomerInfoScreen extends Component {
           ],
           profileImage: applicantPhoto,
           isValidUri: isValidUri,
+          status: selectedCustomer?.isMobileVerified ? 'SAVED' : 'DRAFT',
+          customerId: details?.customerId,
         }}
         personalDetail={[
           {

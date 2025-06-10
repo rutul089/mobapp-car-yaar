@@ -13,7 +13,10 @@ import {
   navigate,
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
-import {fetchLoanApplicationFromIdThunk} from '../../redux/actions';
+import {
+  fetchLoanApplicationFromIdThunk,
+  setIsCreatingLoanApplication,
+} from '../../redux/actions';
 import {
   formatDate,
   formatIndianCurrency,
@@ -44,6 +47,7 @@ class ThankYouScreen extends Component {
   }
 
   onBackToHomePress = () => {
+    this.props.setIsCreatingLoanApplication(false);
     navigateAndSimpleReset(ScreenNames.HomeTab);
   };
 
@@ -110,158 +114,154 @@ class ThankYouScreen extends Component {
     let loanType = safeGet(loading, selectedLoanApplication, 'loanType');
 
     return (
-      <>
-        <Thank_You_Component
-          createdAt={formatDate(createdAt, 'DD MMM YYYY, hh:mm A')}
-          loanApplicationId={loanApplicationId}
-          loanDetails={[
-            {
-              label: 'Lender Name',
-              value: safeGet(loading, selectedLoanApplication, 'lenderName'),
-            },
-            {
-              label: 'Interest Rate',
-              value: `${
-                safeGet(loading, selectedLoanApplication, 'interesetRate') ||
-                '0'
-              }%`,
-            },
-            {
-              label: 'Loan Amount',
-              value: formatIndianCurrency(loanAmount),
-            },
-            {label: 'Tenure', value: formatMonths(tenure, loading)},
-            {label: 'EMI', value: formatIndianCurrency(emi)},
-            {
-              label: 'Processing Fee',
-              value: formatIndianCurrency(processingFee),
-            },
-            {
-              label: 'Principal Amount',
-              value: formatIndianCurrency(principalAmount),
-            },
-            {
-              label: 'Loan Type',
-              value: getLabelFromEnum(loanTypeLabelMap, loanType),
-            },
-          ]}
-          customerDetail={[
-            {label: 'Customer Name', value: loading ? '-' : applicantName},
-            {
-              label: 'Customer ID',
-              value: formatShortId(selectedLoanApplication?.customerId) ?? '-',
-            },
-            {
-              label: 'Customer Type',
-              value: getLabelFromEnum(
-                customerIndividualTypeValue,
-                customerType,
-              ),
-            },
-            {
-              label: 'Individual Type',
-              value: getLabelFromEnum(customerCategoryValue, customerCategory),
-            },
-            {label: 'Mobile Number', value: loading ? '-' : mobileNumber},
-            {label: 'Gender', value: loading ? '-' : gender},
-            {
-              label: 'Father/Mother Name',
-              value: safeGet(
-                loading,
-                selectedLoanApplication?.customer?.customerDetails,
-                'fatherName',
-              ),
-            },
-            {
-              label: 'Spouse Name',
-              value: safeGet(
-                loading,
-                selectedLoanApplication?.customer?.customerDetails,
-                'spouseName',
-              ),
-            },
-            {
-              label: 'Email address',
-              value: safeGet(
-                loading,
-                selectedLoanApplication?.customer?.customerDetails,
-                'email',
-              ),
-              full: true,
-            },
-            {label: 'Date of Birth', value: formatDate(dob)},
-            {
-              label: 'Current Address',
-              value: safeGet(
-                loading,
-                selectedLoanApplication?.customer?.customerDetails,
-                'address',
-              ),
-              full: true,
-            },
-            {label: 'Current Pincode', value: pincode},
-            {
-              label: 'Occupation',
-              value: getLabelFromEnum(occupationLabelMap, occupation),
-            },
-            {label: 'Income Source', value: incomeSource},
-            {
-              label: 'Monthly Income',
-              value: formatIndianCurrency(monthlyIncome),
-            },
-          ]}
-          vehicleDetail={[
-            {label: 'Vehicle Type', value: '-'},
-            {
-              label: 'Register Number',
-              value: formatVehicleNumber(registerNumber),
-            },
-            {label: 'Owner Name', value: ownerName},
-            {label: 'Manufacture Year', value: manufactureYear},
-            {label: 'Chassis Number', value: chassisNumber},
-            {label: 'Engine Number', value: engineNumber},
-            {label: 'Registration Date', value: formatDate(registrationDate)},
-            {label: 'Registration Authority', value: registrationAuthority},
-            {label: 'Fuel Type', value: fuelType},
-            {label: 'Emission Norm', value: emissionNorm},
-            {label: 'Vehicle Age', value: vehicleAge},
-            {label: 'Hypothecated', value: hypothecationStatus ? 'Yes' : 'No'},
-            {label: 'Vehicle Status', value: vehicleStatus},
-            {
-              label: 'Insurance Valid Upto',
-              value: formatDate(insuranceValidUpto),
-            },
-            {label: 'Fitness Valid Upto', value: formatDate(fitnessValidUpto)},
-            {label: 'PUCC', value: PUCC ? 'Yes' : 'No'},
-            {label: 'Ownership', value: ownershipCount},
-          ]}
-          partnerDetail={[
-            {
-              label: 'Partner ID',
-              value:
-                formatShortId(
-                  selectedLoanApplication?.partnerUser?.partnerId,
-                ) ?? '-',
-            },
-            {
-              label: 'Partner Name',
-              value: selectedLoanApplication?.partnerUser?.user?.name || '-',
-            },
-            {
-              label: 'Sales Executive Name',
-              value: 'Mahmood Butala',
-              full: true,
-            },
-          ]}
-          onTrackLoanStatusPress={this.onTrackLoanStatusPress}
-          onBackToHomePress={this.onBackToHomePress}
-        />
-      </>
+      <Thank_You_Component
+        createdAt={formatDate(createdAt, 'DD MMM YYYY, hh:mm A')}
+        loanApplicationId={loanApplicationId}
+        loanDetails={[
+          {
+            label: 'Lender Name',
+            value: safeGet(loading, selectedLoanApplication, 'lenderName'),
+          },
+          {
+            label: 'Interest Rate',
+            value: `${
+              safeGet(loading, selectedLoanApplication, 'interesetRate') || '0'
+            }%`,
+          },
+          {
+            label: 'Loan Amount',
+            value: formatIndianCurrency(loanAmount),
+          },
+          {label: 'Tenure', value: formatMonths(tenure, loading)},
+          {label: 'EMI', value: formatIndianCurrency(emi)},
+          {
+            label: 'Processing Fee',
+            value: formatIndianCurrency(processingFee),
+          },
+          {
+            label: 'Principal Amount',
+            value: formatIndianCurrency(principalAmount),
+          },
+          {
+            label: 'Loan Type',
+            value: getLabelFromEnum(loanTypeLabelMap, loanType),
+          },
+        ]}
+        customerDetail={[
+          {label: 'Customer Name', value: loading ? '-' : applicantName},
+          {
+            label: 'Customer ID',
+            value: formatShortId(selectedLoanApplication?.customerId) ?? '-',
+          },
+          {
+            label: 'Customer Type',
+            value: getLabelFromEnum(customerIndividualTypeValue, customerType),
+          },
+          {
+            label: 'Individual Type',
+            value: getLabelFromEnum(customerCategoryValue, customerCategory),
+          },
+          {label: 'Mobile Number', value: loading ? '-' : mobileNumber},
+          {label: 'Gender', value: loading ? '-' : gender},
+          {
+            label: 'Father/Mother Name',
+            value: safeGet(
+              loading,
+              selectedLoanApplication?.customer?.customerDetails,
+              'fatherName',
+            ),
+          },
+          {
+            label: 'Spouse Name',
+            value: safeGet(
+              loading,
+              selectedLoanApplication?.customer?.customerDetails,
+              'spouseName',
+            ),
+          },
+          {
+            label: 'Email address',
+            value: safeGet(
+              loading,
+              selectedLoanApplication?.customer?.customerDetails,
+              'email',
+            ),
+            full: true,
+          },
+          {label: 'Date of Birth', value: formatDate(dob)},
+          {
+            label: 'Current Address',
+            value: safeGet(
+              loading,
+              selectedLoanApplication?.customer?.customerDetails,
+              'address',
+            ),
+            full: true,
+          },
+          {label: 'Current Pincode', value: pincode},
+          {
+            label: 'Occupation',
+            value: getLabelFromEnum(occupationLabelMap, occupation),
+          },
+          {label: 'Income Source', value: incomeSource},
+          {
+            label: 'Monthly Income',
+            value: formatIndianCurrency(monthlyIncome),
+          },
+        ]}
+        vehicleDetail={[
+          {label: 'Vehicle Type', value: '-'},
+          {
+            label: 'Register Number',
+            value: formatVehicleNumber(registerNumber),
+          },
+          {label: 'Owner Name', value: ownerName},
+          {label: 'Manufacture Year', value: manufactureYear},
+          {label: 'Chassis Number', value: chassisNumber},
+          {label: 'Engine Number', value: engineNumber},
+          {label: 'Registration Date', value: formatDate(registrationDate)},
+          {label: 'Registration Authority', value: registrationAuthority},
+          {label: 'Fuel Type', value: fuelType},
+          {label: 'Emission Norm', value: emissionNorm},
+          {label: 'Vehicle Age', value: vehicleAge},
+          {label: 'Hypothecated', value: hypothecationStatus ? 'Yes' : 'No'},
+          {label: 'Vehicle Status', value: vehicleStatus},
+          {
+            label: 'Insurance Valid Upto',
+            value: formatDate(insuranceValidUpto),
+          },
+          {label: 'Fitness Valid Upto', value: formatDate(fitnessValidUpto)},
+          {label: 'PUCC', value: PUCC ? 'Yes' : 'No'},
+          {label: 'Ownership', value: ownershipCount},
+        ]}
+        partnerDetail={[
+          {
+            label: 'Partner ID',
+            value:
+              formatShortId(selectedLoanApplication?.partnerUser?.partnerId) ??
+              '-',
+          },
+          {
+            label: 'Partner Name',
+            value: selectedLoanApplication?.partnerUser?.user?.name || '-',
+          },
+          {
+            label: 'Sales Executive Name',
+            value: 'Mahmood Butala',
+            full: true,
+          },
+        ]}
+        onTrackLoanStatusPress={this.onTrackLoanStatusPress}
+        onBackToHomePress={this.onBackToHomePress}
+      />
     );
   }
 }
 
-const mapActionCreators = {fetchLoanApplicationFromIdThunk};
+const mapActionCreators = {
+  fetchLoanApplicationFromIdThunk,
+  setIsCreatingLoanApplication,
+};
 const mapStateToProps = ({loanData}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,

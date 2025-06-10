@@ -25,6 +25,7 @@ class CustomersScreen extends Component {
 
       // Optional full-screen toggle state
       fullScreen: false,
+      stopLoading: false,
     };
 
     this.limit = 10; // Items per page
@@ -42,7 +43,11 @@ class CustomersScreen extends Component {
    */
   fetchAllCustomer = (page = 1, param = {}) => {
     this.props.fetchAllCustomersThunk(page, this.limit, param).finally(() => {
-      this.setState({refreshing: false, apiTrigger: API_TRIGGER.DEFAULT});
+      this.setState({
+        refreshing: false,
+        apiTrigger: API_TRIGGER.DEFAULT,
+        stopLoading: false,
+      });
     });
   };
 
@@ -104,7 +109,7 @@ class CustomersScreen extends Component {
   onWrapperClick = item => {
     const {selectedCustomerId} = this.props;
 
-    if (selectedCustomerId === item?.id) {
+    if (selectedCustomerId === item?.customerId) {
       return navigate(ScreenNames.CustomerInfo, {param: item});
     }
     this.props.resetSelectedCustomer();
@@ -117,10 +122,14 @@ class CustomersScreen extends Component {
    */
   onSearchText = value => {
     const trimmed = value.trim();
+    console.log({trimmed});
     this.setState({searchText: value, apiTrigger: API_TRIGGER.DEFAULT}, () => {
       if (trimmed === '') {
         this.setState({isSearch: false});
         this.props.clearCustomerSearch();
+      } else {
+        this.setState({stopLoading: true});
+        this.searchFromAPI(value);
       }
     });
   };
@@ -157,7 +166,8 @@ class CustomersScreen extends Component {
   };
 
   render() {
-    const {apiTrigger, refreshing, searchText, isSearch} = this.state;
+    const {apiTrigger, refreshing, searchText, isSearch, stopLoading} =
+      this.state;
     const {
       customers,
       loading,
@@ -168,7 +178,10 @@ class CustomersScreen extends Component {
 
     const [currentPage, totalPages] = this.getPageInfo();
     const initialLoading =
-      loading && apiTrigger === API_TRIGGER.DEFAULT && !refreshing;
+      loading &&
+      apiTrigger === API_TRIGGER.DEFAULT &&
+      !refreshing &&
+      !stopLoading;
 
     const dataToShow = isSearch ? searchCustomers : customers;
 

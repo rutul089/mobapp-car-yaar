@@ -10,9 +10,11 @@ import {
   getScreenParam,
   goBack,
   navigate,
+  navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
   fetchCustomerDocumentsThunk,
+  setIsCreatingLoanApplication,
   updateCustomerDocumentsThunk,
   uploadCustomerDocumentsThunk,
 } from '../../redux/actions';
@@ -31,6 +33,8 @@ import {
   showToast,
 } from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
+import {loan_document_requirements} from '../../constants/loan_document_requirements';
+import {Alert, BackHandler} from 'react-native';
 
 const requiredFields = [
   'addressProofImage',
@@ -56,10 +60,27 @@ class LoanDocumentsScreen extends Component {
 
   componentDidMount() {
     const {isEdit} = this.state;
+    const {isCreatingLoanApplication} = this.props;
+    this.backHandlerListener = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.backHandler,
+    );
+
+    this.props.navigation.setOptions({
+      gestureEnabled: !isCreatingLoanApplication,
+    });
 
     if (isEdit) {
       this.fetchCustomerDocuments();
     }
+  }
+
+  backHandler = () => {
+    return !this.props.isCreatingLoanApplication;
+  };
+
+  componentWillUnmount() {
+    this.backHandlerListener.remove();
   }
 
   fetchCustomerDocuments = async () => {
@@ -123,6 +144,24 @@ class LoanDocumentsScreen extends Component {
   };
 
   handleFile = type => {
+    const {selectedLoanApplication} = this.props;
+    let typeOfIndividual =
+      selectedLoanApplication?.customer?.customerDetails?.occupation;
+    let documentType = this.state.selectedDocType;
+    let loadProduct = selectedLoanApplication?.loanType;
+
+    const matched = loan_document_requirements.find(
+      item =>
+        item.loadProduct === loadProduct &&
+        item.typeOfIndividual === typeOfIndividual &&
+        item.documentType === documentType,
+    );
+
+    const acceptedDocuments = matched?.acceptedDocuments || [];
+
+    console.log({typeOfIndividual, documentType, loadProduct});
+    console.log(acceptedDocuments);
+
     // Handles file selected from FilePickerModal
     handleFileSelection(type, async asset => {
       if (!asset?.uri) {
@@ -144,10 +183,6 @@ class LoanDocumentsScreen extends Component {
 
         const docObj = {
           uri: presignedKey,
-          name: asset.fileName,
-          type: asset.type,
-          isLocal: true,
-          fileSize: asset.fileSize,
           uploadedUrl: presignedKey,
           uploadKey: presignedKey,
         };
@@ -161,9 +196,7 @@ class LoanDocumentsScreen extends Component {
           showFilePicker: false,
         }));
       } catch (error) {
-        setTimeout(() => {
-          showToast('error', 'Something went wrong please try again..');
-        }, 100);
+        showToast('error', 'Something went wrong please try again..');
       } finally {
         this.setState({isLoadingDocument: false, showFilePicker: false});
       }
@@ -187,30 +220,27 @@ class LoanDocumentsScreen extends Component {
       return;
     }
 
-    setTimeout(async () => {
-      this.setState({isLoadingDocument: true});
+    this.setState({isLoadingDocument: true});
 
-      const downloadUrlResponse = await getPresignedDownloadUrl({
-        objectKey: uri,
-      });
+    const downloadUrlResponse = await getPresignedDownloadUrl({
+      objectKey: uri,
+    });
 
-      let downloadedUrl = downloadUrlResponse?.data?.url;
+    let downloadedUrl = downloadUrlResponse?.data?.url;
 
-      try {
-        await viewDocumentHelper(
-          downloadedUrl,
-          imageUri => {
-            navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
-          },
-          error => {
-            console.warn('Error opening file:', error);
-            showToast('error', 'Could not open the document.', 'bottom', 3000);
-          },
-        );
-      } finally {
-        this.setState({isLoadingDocument: false});
-      }
-    }, 50);
+    try {
+      await viewDocumentHelper(
+        downloadedUrl,
+        imageUri => {
+          navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+        },
+        error => {
+          showToast('error', 'Could not open the document.', 'bottom', 3000);
+        },
+      );
+    } finally {
+      this.setState({isLoadingDocument: false});
+    }
   };
 
   handleCustomerDocumentSubmission = () => {
@@ -249,6 +279,33 @@ class LoanDocumentsScreen extends Component {
     });
   };
 
+  handleBackPress = () => {
+    const {isCreatingLoanApplication} = this.props;
+    if (!isCreatingLoanApplication) {
+      return goBack();
+    }
+
+    Alert.alert(
+      'Warning',
+      "You're in the middle of your loan application. If you exit now, your progress may be lost.",
+      [
+        {
+          text: 'Continue',
+          onPress: () => console.log('Exit cancelled'), // or navigate back to form
+          style: 'cancel',
+        },
+        {
+          text: 'Exit Anyway',
+          onPress: () => {
+            navigateToTab(ScreenNames.Applications);
+            this.props.setIsCreatingLoanApplication(false);
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  };
+
   render() {
     const {
       selectedVehicle,
@@ -264,6 +321,7 @@ class LoanDocumentsScreen extends Component {
       isEdit,
       isLoadingDocument,
     } = this.state;
+
     return (
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}
@@ -278,7 +336,7 @@ class LoanDocumentsScreen extends Component {
           //   : '',
           rightLabel: selectedLoanApplication?.loanApplicationId || '',
           rightLabelColor: '#F8A902',
-          onBackPress: () => goBack(),
+          onBackPress: this.handleBackPress,
         }}
         documentList={[
           documentImageType.ID_PROOF,
@@ -327,6 +385,7 @@ const mapActionCreators = {
   uploadCustomerDocumentsThunk,
   fetchCustomerDocumentsThunk,
   updateCustomerDocumentsThunk,
+  setIsCreatingLoanApplication,
 };
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({

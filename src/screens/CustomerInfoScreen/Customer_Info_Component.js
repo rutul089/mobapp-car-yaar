@@ -15,6 +15,11 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
+import {
+  formatShortId,
+  getGradientColors,
+  getStatusColor,
+} from '../../utils/helper';
 
 const Customer_Info_Component = ({
   customerInfo,
@@ -32,15 +37,12 @@ const Customer_Info_Component = ({
       <ScrollView contentContainerStyle={styles.scrollWrapper} bounces={false}>
         <View style={styles.headerWrapper}>
           <CardWrapper
-            leftText={customerInfo?.applicationNumber}
+            leftText={customerInfo?.status}
             showLeftText
-            statusTextColor={'#1D95F0'}
-            gradientColors={[
-              'rgba(29, 149, 240, 0.24)',
-              'rgba(61, 173, 255, 0.24)',
-            ]}>
+            statusTextColor={getStatusColor(customerInfo?.status)}
+            gradientColors={getGradientColors(customerInfo?.status)}>
             <CustomerCard
-              customerId={customerInfo.customerId}
+              customerId={formatShortId(customerInfo.customerId)}
               customerName={customerInfo.customerName}
               customerNote={customerInfo.customerNote}
               footerInfo={customerInfo.footerInfo}

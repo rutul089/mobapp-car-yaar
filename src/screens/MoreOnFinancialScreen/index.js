@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
-import {navigateAndSimpleReset} from '../../navigation/NavigationUtils';
+import {goBack, navigateAndSimpleReset} from '../../navigation/NavigationUtils';
 import {fetchCustomerMoreFinanceDetailThunk} from '../../redux/actions';
 import {formatIndianCurrency, formatShortId, safeGet} from '../../utils/helper';
 import MoreOn_Financial_Component from './MoreOn_Financial_Component';
@@ -27,7 +27,8 @@ class MoreOnFinancialScreen extends Component {
   };
 
   onClosePress = () => {
-    navigateAndSimpleReset(ScreenNames.HomeTab);
+    goBack();
+    // navigateAndSimpleReset(ScreenNames.HomeTab);
   };
 
   render() {

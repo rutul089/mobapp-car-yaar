@@ -11,7 +11,8 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const fetchAllCustomers = async (page = 1, limit = 10, payload = {}) => {
   try {
-    const response = await axiosInstance.get('/customers/all', {
+    //customers/all
+    const response = await axiosInstance.get('/partners/customers', {
       ...payload,
       params: {
         page,

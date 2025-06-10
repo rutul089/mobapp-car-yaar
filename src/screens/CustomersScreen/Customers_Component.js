@@ -19,6 +19,7 @@ import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
   capitalizeFirstLetter,
+  formatShortId,
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
@@ -80,36 +81,37 @@ const Customers_Component = ({
         keyExtractor={item => item.id}
         contentContainerStyle={styles.wrapper}
         renderItem={({item}) => {
+          let customerDetails = item?.customer?.customerDetails;
           let customerNote = `${capitalizeFirstLetter(
-            item.customerCategory,
-          )} - ${capitalizeFirstLetter(item.customerType)}`;
-
+            item?.customer?.customerCategory,
+          )} - ${capitalizeFirstLetter(item?.customer?.customerType)}`;
+          let status = item?.customer?.isMobileVerified ? 'SAVED' : 'DRAFT';
           return (
             <CardWrapper
               onPress={() => onWrapperClick?.(item)}
-              leftText={item?.applicationNumber}
+              leftText={status}
               showLeftText
               showTrailingIcon
-              statusTextColor={getStatusColor(item.applicationNumber)}
-              gradientColors={getGradientColors(item.applicationNumber)}
+              statusTextColor={getStatusColor(status)}
+              gradientColors={getGradientColors(status)}
               disableMargin={false}>
               <CustomerCard
-                customerId={item.customerId}
-                customerName={item?.customerDetails?.applicantName}
+                customerId={formatShortId(item.customerId)}
+                customerName={customerDetails?.applicantName}
                 customerNote={customerNote}
                 footerInfo={[
                   {
                     label: 'PAN Card',
-                    value: item?.customerDetails?.panCardNumber || '-',
+                    value: customerDetails?.panCardNumber || '-',
                   },
                   {
                     label: 'Aadhar Card',
-                    value: item?.customerDetails?.aadharNumber || '-',
+                    value: customerDetails?.aadharNumber || '-',
                   },
                 ]}
                 logo={
-                  item?.customerDetails?.applicantPhoto
-                    ? {uri: item?.customerDetails?.applicantPhoto}
+                  customerDetails?.applicantPhoto
+                    ? {uri: customerDetails?.applicantPhoto}
                     : images.placeholder_image
                 }
                 noMargin

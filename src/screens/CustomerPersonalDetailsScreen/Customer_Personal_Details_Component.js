@@ -112,7 +112,7 @@ const Customer_Personal_Details_Component = ({
   };
 
   const getDisplayValue = (isEditing, value) => {
-    return isEditing ? value + '' : formatIndianCurrency(value, false, true);
+    return formatIndianCurrency(value, false, true);
   };
 
   return (
@@ -164,7 +164,7 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             ref={refs?.panCardNumber}
             onSubmitEditing={() => focusNext('aadharNumber')}
-            onFocus={() => scrollToInput('aadharNumber')}
+            onFocus={() => !isEdit && scrollToInput('aadharNumber')}
             {...(restInputProps?.panCardNumber || {})}
           />
           <Spacing size="md" />
@@ -212,7 +212,7 @@ const Customer_Personal_Details_Component = ({
             maxLength={12}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('applicantName')}
-            onFocus={() => scrollToInput('applicantName')}
+            onFocus={() => !isEdit && scrollToInput('applicantName')}
             {...(restInputProps?.aadharNumber || {})}
           />
           <Spacing size="md" />
@@ -226,7 +226,7 @@ const Customer_Personal_Details_Component = ({
             value={state.applicantName}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('fatherName')}
-            onFocus={() => scrollToInput('applicantName')}
+            onFocus={() => !isEdit && scrollToInput('applicantName')}
             {...(restInputProps?.applicantName || {})}
           />
           <Spacing size="md" />
@@ -242,7 +242,7 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             maxLength={10}
             onSubmitEditing={() => focusNext('fatherName')}
-            onFocus={() => scrollToInput('fatherName')}
+            onFocus={() => !isEdit && scrollToInput('fatherName')}
             isDisabled
             {...(restInputProps?.mobileNumber || {})}
           />
@@ -264,7 +264,7 @@ const Customer_Personal_Details_Component = ({
             value={state.fatherName}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('spouseName')}
-            onFocus={() => scrollToInput('spouseName')}
+            onFocus={() => !isEdit && scrollToInput('spouseName')}
             {...(restInputProps?.fatherName || {})}
           />
           <Spacing size="md" />
@@ -278,7 +278,7 @@ const Customer_Personal_Details_Component = ({
             value={state.spouseName}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('email')}
-            onFocus={() => scrollToInput('email')}
+            onFocus={() => !isEdit && scrollToInput('email')}
             {...(restInputProps?.spouseName || {})}
           />
           <Spacing size="md" />
@@ -293,7 +293,7 @@ const Customer_Personal_Details_Component = ({
             value={state.email}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('dob')}
-            onFocus={() => scrollToInput('address')}
+            onFocus={() => !isEdit && scrollToInput('email')}
             {...(restInputProps?.email || {})}
           />
           <Spacing size="md" />
@@ -313,7 +313,7 @@ const Customer_Personal_Details_Component = ({
             keyboardType="number-pad"
             returnKeyType="next"
             onSubmitEditing={() => focusNext('address')}
-            onFocus={() => scrollToInput('dob')}
+            onFocus={() => !isEdit && scrollToInput('dob')}
             {...(restInputProps?.dob || {})}
           />
           <Spacing size="md" />
@@ -327,7 +327,7 @@ const Customer_Personal_Details_Component = ({
             value={state.address}
             returnKeyType="next"
             onSubmitEditing={() => focusNext('pincode')}
-            onFocus={() => scrollToInput('pincode')}
+            onFocus={() => !isEdit && scrollToInput('address')}
             {...(restInputProps?.address || {})}
           />
           <Spacing size="md" />
@@ -344,7 +344,7 @@ const Customer_Personal_Details_Component = ({
             maxLength={6}
             keyboardType="number-pad"
             onSubmitEditing={() => focusNext('monthlyIncome')}
-            onFocus={() => scrollToInput('monthlyIncome')}
+            onFocus={() => !isEdit && scrollToInput('pincode')}
             {...(restInputProps?.pincode || {})}
           />
         </GroupWrapper>
@@ -394,7 +394,7 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             onSubmitEditing={() => focusNext('bankName')}
             onFocus={() => {
-              scrollToInput('monthlyIncome');
+              !isEdit && scrollToInput('monthlyIncome');
               setFieldEditing('monthlyIncome', true);
             }}
             onBlur={() => setFieldEditing('monthlyIncome', false)}
@@ -412,7 +412,7 @@ const Customer_Personal_Details_Component = ({
               leftIconName: images.bank,
               returnKeyType: 'next',
               onSubmitEditing: () => focusNext('accountNumber'),
-              onFocus: () => scrollToInput('bankName'),
+              onFocus: () => !isEdit && scrollToInput('bankName'),
             }}
             onChangeText={onBankNameChange}
             fetchSuggestions={searchBankNameFromAPI}
@@ -436,7 +436,7 @@ const Customer_Personal_Details_Component = ({
               onChangeAccountNumber?.(sanitizedText);
             }}
             onSubmitEditing={() => focusNext('currentEmi')}
-            onFocus={() => scrollToInput('currentEmi')}
+            onFocus={() => !isEdit && scrollToInput('currentEmi')}
             {...(restInputProps?.accountNumber || {})}
           />
           <Spacing size="md" />
@@ -458,14 +458,17 @@ const Customer_Personal_Details_Component = ({
                   label="Current EMI"
                   keyboardType="decimal-pad"
                   returnKeyType="next"
-                  onChangeText={onChangeCurrentEMI}
+                  onChangeText={value => {
+                    const sanitizedText = sanitizeAmount(value);
+                    onChangeCurrentEMI?.(sanitizedText);
+                  }}
                   value={getDisplayValue(
                     editingStates.currentEmi,
                     state.currentEmi,
                   )}
                   onSubmitEditing={() => focusNext('maxEmiAfford')}
                   onFocus={() => {
-                    scrollToInput('currentEmi');
+                    !isEdit && scrollToInput('currentEmi');
                     setFieldEditing('currentEmi', true);
                   }}
                   onBlur={() => setFieldEditing('currentEmi', false)}
@@ -487,10 +490,13 @@ const Customer_Personal_Details_Component = ({
                   state.maxEmiAfford,
                 )}
                 returnKeyType="next"
-                onChangeText={onChangeMaxEMIAfford}
+                onChangeText={value => {
+                  const sanitizedText = sanitizeAmount(value);
+                  onChangeMaxEMIAfford?.(sanitizedText);
+                }}
                 onSubmitEditing={() => focusNext('avgMonthlyBankBalance')}
                 onFocus={() => {
-                  scrollToInput('maxEmiAfford');
+                  !isEdit && scrollToInput('maxEmiAfford');
                   setFieldEditing('maxEmiAfford', true);
                 }}
                 onBlur={() => setFieldEditing('maxEmiAfford', false)}
@@ -511,10 +517,13 @@ const Customer_Personal_Details_Component = ({
               state.avgMonthlyBankBalance,
             )}
             returnKeyType="done"
-            onChangeText={onChangeMonthlyBankBalance}
+            onChangeText={value => {
+              const sanitizedText = sanitizeAmount(value);
+              onChangeMonthlyBankBalance?.(sanitizedText);
+            }}
             onSubmitEditing={onNextPress}
             onFocus={() => {
-              scrollToInput('avgMonthlyBankBalance');
+              !isEdit && scrollToInput('avgMonthlyBankBalance');
               setFieldEditing('avgMonthlyBankBalance', true);
             }}
             onBlur={() => setFieldEditing('avgMonthlyBankBalance', false)}

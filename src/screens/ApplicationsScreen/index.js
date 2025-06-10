@@ -7,6 +7,7 @@ import {
   clearSearchApplication,
   fetchLoanApplicationsThunk,
   resetLoanApplication,
+  setIsCreatingLoanApplication,
 } from '../../redux/actions';
 import Applications_Component from './Applications_Component';
 
@@ -200,6 +201,7 @@ const mapDispatchToProps = {
   fetchLoanApplicationsThunk,
   clearSearchApplication,
   resetLoanApplication,
+  setIsCreatingLoanApplication,
 };
 
 // Redux: map state to props
