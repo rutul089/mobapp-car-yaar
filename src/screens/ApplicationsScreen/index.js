@@ -28,6 +28,7 @@ class ApplicationsScreen extends Component {
 
       // Optional full-screen view toggle (unused but reserved)
       fullScreen: false,
+      stopLoading: false,
     };
 
     this.limit = 10; // Pagination limit
@@ -51,7 +52,11 @@ class ApplicationsScreen extends Component {
     this.props
       .fetchLoanApplicationsThunk(page, this.limit, param)
       .finally(() => {
-        this.setState({refreshing: false, apiTrigger: API_TRIGGER.DEFAULT});
+        this.setState({
+          refreshing: false,
+          apiTrigger: API_TRIGGER.DEFAULT,
+          stopLoading: false,
+        });
       });
   };
 
@@ -107,6 +112,9 @@ class ApplicationsScreen extends Component {
       if (trimmed === '') {
         this.setState({isSearch: false});
         this.props.clearSearchApplication();
+      } else {
+        this.setState({stopLoading: true});
+        this.searchFromAPI(value);
       }
     });
   };
@@ -165,12 +173,16 @@ class ApplicationsScreen extends Component {
    * Renders the UI with Application_Component
    */
   render() {
-    const {apiTrigger, refreshing, searchText, isSearch} = this.state;
+    const {apiTrigger, refreshing, searchText, isSearch, stopLoading} =
+      this.state;
     const {applications, loading, searchApplications, userData} = this.props;
 
     const [currentPage, totalPages] = this.getPageInfo();
     const initialLoading =
-      loading && apiTrigger === API_TRIGGER.DEFAULT && !refreshing;
+      loading &&
+      apiTrigger === API_TRIGGER.DEFAULT &&
+      !refreshing &&
+      !stopLoading;
 
     const dataToShow = isSearch ? searchApplications : applications;
 

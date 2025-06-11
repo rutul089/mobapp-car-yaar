@@ -253,6 +253,8 @@ export const getApplicationGradientColors = status => {
     case applicationStatus.REJECTED:
     case applicationStatus.QUERY:
       return theme.colors.onHoldGradient;
+    case applicationStatus.DRAFT:
+      return ['#E8E8E8', '#E8E8E8'];
     default:
       return theme.colors.appliedGradient;
   }
@@ -265,12 +267,14 @@ export const getApplicationGradientColors = status => {
  */
 export const getApplicationStatusColor = status => {
   switch (status) {
-    case 'SAVED':
-      return '#1D95F0';
-    case 'IN_PROGRESS':
-      return 'rgba(243, 105, 110, 0.12)';
-    case 'COMPLETED':
-      return 'rgba(110, 238, 135, 0.2)';
+    case applicationStatus.PENDING:
+    case applicationStatus.IN_REVIEW:
+    case applicationStatus.APPROVED:
+    case applicationStatus.REJECTED:
+    case applicationStatus.QUERY:
+      return 'rgba(0, 0, 0, 0.36)';
+    case applicationStatus.DRAFT:
+      return '#828282';
     default:
       return theme.colors.textPrimary;
   }

@@ -24,6 +24,7 @@ const Loan_Documents_Component = ({
   isOnboard,
   loading,
   isLoadingDocument,
+  acceptedDocuments,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>

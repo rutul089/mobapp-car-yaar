@@ -21,7 +21,7 @@ import {
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
-import {currentLoanLabelMap} from '../../constants/enums';
+import {API_TRIGGER, currentLoanLabelMap} from '../../constants/enums';
 
 const Vehicles_Component = ({
   vehicleData,
@@ -132,7 +132,7 @@ const Vehicles_Component = ({
         refreshing={refreshing}
         ListFooterComponent={
           <PaginationFooter
-            loadingMore={apiTrigger === 'loadMore'}
+            loadingMore={apiTrigger === API_TRIGGER.LOAD_MORE}
             loading={loading}
             currentPage={currentPage}
             totalPages={totalPages}

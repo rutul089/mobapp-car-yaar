@@ -4,6 +4,7 @@ export const applicationStatus = Object.freeze({
   PENDING: 'PENDING',
   QUERY: 'QUERY',
   REJECTED: 'REJECTED',
+  DRAFT: 'DRAFT',
 });
 
 export const applicationStatusOptions = [
@@ -20,6 +21,7 @@ export const applicationStatusValue = {
   [applicationStatus.PENDING]: 'Pending',
   [applicationStatus.QUERY]: 'Query',
   [applicationStatus.IN_REVIEW]: 'In Review',
+  [applicationStatus.DRAFT]: 'Draft',
 };
 
 export const customerCategory = Object.freeze({

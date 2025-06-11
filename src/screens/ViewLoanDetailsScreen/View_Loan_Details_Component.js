@@ -14,6 +14,7 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import {goBack} from '../../navigation/NavigationUtils';
 import {
   getApplicationGradientColors,
+  getApplicationStatusColor,
   getGradientColors,
   getGradientColorsLoan,
 } from '../../utils/helper';
@@ -50,6 +51,9 @@ const View_Loan_Details_Component = ({
               loanOverviewCard?.status,
             )?.toUpperCase()}
             gradientColors={getApplicationGradientColors(
+              loanOverviewCard?.status,
+            )}
+            statusTextColor={getApplicationStatusColor(
               loanOverviewCard?.status,
             )}
             leftText={loanOverviewCard?.loanApplicationId}>

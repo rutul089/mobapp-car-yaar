@@ -16,6 +16,7 @@ import {navigate} from '../../navigation/NavigationUtils';
 import {
   formatIndianCurrency,
   getApplicationGradientColors,
+  getApplicationStatusColor,
 } from '../../utils/helper';
 
 const Applications_Component = ({
@@ -44,6 +45,7 @@ const Applications_Component = ({
       isStatusBold
       status={getApplicationStatusLabel(item?.status)?.toUpperCase()}
       gradientColors={getApplicationGradientColors(item?.status)}
+      statusTextColor={getApplicationStatusColor(item?.status)}
       leftText={item?.loanApplicationId}>
       <FinanceCard
         bankName={item?.lenderName}

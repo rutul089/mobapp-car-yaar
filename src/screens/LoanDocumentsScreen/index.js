@@ -54,6 +54,8 @@ class LoanDocumentsScreen extends Component {
       selectedDocType: null,
       isLoading: false,
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+      acceptedDocuments: [],
+      selectedAcceptedDocument: '',
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -139,15 +141,10 @@ class LoanDocumentsScreen extends Component {
   };
 
   handleUploadMedia = async type => {
-    // Trigger file picker modal
-    this.setState({showFilePicker: true, selectedDocType: type});
-  };
-
-  handleFile = type => {
     const {selectedLoanApplication} = this.props;
     let typeOfIndividual =
       selectedLoanApplication?.customer?.customerDetails?.occupation;
-    let documentType = this.state.selectedDocType;
+    let documentType = type;
     let loadProduct = selectedLoanApplication?.loanType;
 
     const matched = loan_document_requirements.find(
@@ -157,11 +154,20 @@ class LoanDocumentsScreen extends Component {
         item.documentType === documentType,
     );
 
-    const acceptedDocuments = matched?.acceptedDocuments || [];
+    let acceptedDocuments = matched?.acceptedDocuments || [];
 
     console.log({typeOfIndividual, documentType, loadProduct});
     console.log(acceptedDocuments);
 
+    // Trigger file picker modal
+    this.setState({
+      showFilePicker: true,
+      selectedDocType: type,
+      acceptedDocuments,
+    });
+  };
+
+  handleFile = type => {
     // Handles file selected from FilePickerModal
     handleFileSelection(type, async asset => {
       if (!asset?.uri) {
@@ -320,6 +326,7 @@ class LoanDocumentsScreen extends Component {
       isLoading,
       isEdit,
       isLoadingDocument,
+      acceptedDocuments,
     } = this.state;
 
     return (
@@ -376,6 +383,7 @@ class LoanDocumentsScreen extends Component {
         }}
         loading={isLoading}
         isLoadingDocument={isLoadingDocument}
+        acceptedDocuments={acceptedDocuments}
       />
     );
   }

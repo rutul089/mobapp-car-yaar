@@ -10,17 +10,18 @@ import {
   selectedLoanType,
 } from '../../redux/actions';
 import Vehicles_Component from './Vehicles_Component';
-import {loanType} from '../../constants/enums';
+import {API_TRIGGER, loanType} from '../../constants/enums';
 
 class Vehicles extends Component {
   constructor(props) {
     super(props);
     this.state = {
       refreshing: false,
-      apiTrigger: 'default',
+      apiTrigger: API_TRIGGER.DEFAULT,
       isSearch: false,
       searchText: '',
       fullScreen: false,
+      stopLoading: false,
     };
     this.limit = 10;
   }
@@ -40,7 +41,7 @@ class Vehicles extends Component {
    */
   fetchVehicles = (page = 1) => {
     this.props.fetchVehiclesThunk(page, this.limit).finally(() => {
-      this.setState({refreshing: false, apiTrigger: 'default'});
+      this.setState({refreshing: false, apiTrigger: API_TRIGGER.DEFAULT});
     });
   };
 
@@ -61,12 +62,12 @@ class Vehicles extends Component {
     }
 
     const nextPage = currentPage + 1;
-    this.setState({apiTrigger: 'loadMore'});
+    this.setState({apiTrigger: API_TRIGGER.LOAD_MORE});
 
     if (isSearch) {
       this.props
         .searchVehiclesByKeywordThunk(searchText.trim(), nextPage, this.limit)
-        .finally(() => this.setState({apiTrigger: 'default'}));
+        .finally(() => this.setState({apiTrigger: API_TRIGGER.DEFAULT}));
     } else {
       this.fetchVehicles(nextPage);
     }
@@ -94,7 +95,7 @@ class Vehicles extends Component {
       refreshing: true,
       searchText: '',
       isSearch: false,
-      apiTrigger: 'pullToRefresh',
+      apiTrigger: API_TRIGGER.PULL_TO_REFRESH,
     });
 
     this.props.clearVehicleSearch();
@@ -118,10 +119,13 @@ class Vehicles extends Component {
    */
   onSearchText = text => {
     const trimmed = text.trim();
-    this.setState({searchText: text, apiTrigger: 'default'}, () => {
+    this.setState({searchText: text, apiTrigger: API_TRIGGER.DEFAULT}, () => {
       if (trimmed === '') {
         this.setState({isSearch: false});
         this.props.clearVehicleSearch();
+      } else {
+        this.setState({stopLoading: true});
+        this.searchFromAPI(trimmed);
       }
     });
   };
@@ -145,10 +149,16 @@ class Vehicles extends Component {
       return;
     }
 
-    this.setState({isSearch: true, apiTrigger: 'default'});
+    this.setState({isSearch: true, apiTrigger: API_TRIGGER.DEFAULT});
     this.props
       .searchVehiclesByKeywordThunk(trimmed, 1, this.limit)
-      .finally(() => this.setState({refreshing: false, apiTrigger: 'default'}));
+      .finally(() =>
+        this.setState({
+          refreshing: false,
+          apiTrigger: API_TRIGGER.DEFAULT,
+          stopLoading: false,
+        }),
+      );
   };
 
   /**
@@ -167,11 +177,17 @@ class Vehicles extends Component {
       userData,
     } = this.props;
 
-    const {refreshing, apiTrigger, searchText, isSearch} = this.state;
+    const {refreshing, apiTrigger, searchText, isSearch, stopLoading} =
+      this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
 
-    const initialLoading = loading && apiTrigger === 'default' && !refreshing;
+    const initialLoading =
+      loading &&
+      apiTrigger === API_TRIGGER.DEFAULT &&
+      !refreshing &&
+      !stopLoading;
+
     const vehiclesToShow = isSearch ? searchVehicles : vehicleList;
 
     return (
