@@ -19,6 +19,7 @@ import {
 import strings from '../../locales/strings';
 import {formatIndianCurrency} from '../../utils/helper';
 import {FullLoader} from '../../components';
+import {sanitizeAmount} from '../../utils/inputHelper';
 
 const Vehicle_Pricing_Component = ({
   params,
@@ -64,12 +65,12 @@ const Vehicle_Pricing_Component = ({
   };
 
   const handleNumericChange = setter => text => {
-    const numericValue = text.replace(/\D/g, '');
-    setter?.(numericValue);
+    const sanitizedText = sanitizeAmount(text);
+    setter?.(sanitizedText);
   };
 
   const getDisplayValue = (isEditing, value) => {
-    return isEditing ? value + '' : formatIndianCurrency(value, true, true);
+    return formatIndianCurrency(value, false, true);
   };
 
   return (

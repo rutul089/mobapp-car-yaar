@@ -34,23 +34,16 @@ class CheckCIBILScreen extends Component {
   }
 
   componentDidMount() {
-    const {selectedCustomer, selectedApplicationId} = this.props;
-    const {isEdit} = this.state;
-    if (isEdit) {
-      this.props.fetchLoanApplicationFromIdThunk(
-        selectedApplicationId,
-        {},
-        response => {
-          this.setState({
-            mobileNumber: response?.customer?.mobileNumber,
-          });
-        },
-      );
-    }
-
-    this.setState({
-      mobileNumber: selectedCustomer?.mobileNumber || '',
-    });
+    const {selectedApplicationId} = this.props;
+    this.props.fetchLoanApplicationFromIdThunk(
+      selectedApplicationId,
+      {},
+      response => {
+        this.setState({
+          mobileNumber: response?.customer?.mobileNumber,
+        });
+      },
+    );
   }
 
   onSendOTP = () => {

@@ -49,7 +49,7 @@ const Customers_Component = ({
           <Header title="Select Customer" onBackPress={() => goBack()} />
           <View style={styles.searchWrapper}>
             <SearchBar
-              showAddBtn={!isCreatingLoanApplication}
+              showAddBtn={isCreatingLoanApplication}
               onChangeText={onSearchText}
               value={searchText}
               onCancelIconPress={clearSearch}

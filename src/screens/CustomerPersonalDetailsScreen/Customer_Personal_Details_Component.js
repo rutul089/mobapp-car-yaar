@@ -72,6 +72,7 @@ const Customer_Personal_Details_Component = ({
   isLoadingDocument,
   handleViewDocument,
   handleDeleteDocument,
+  isCreatingLoanApplication,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'panCardNumber',
@@ -531,7 +532,7 @@ const Customer_Personal_Details_Component = ({
           />
         </GroupWrapper>
         <FormFooterButtons
-          primaryButtonLabel={'Save'}
+          primaryButtonLabel={isCreatingLoanApplication ? 'Next' : 'Save'}
           // secondaryButtonLabel={strings.next}
           onPressPrimaryButton={onNextPress}
           // onPressSecondaryButton={onNextPress}

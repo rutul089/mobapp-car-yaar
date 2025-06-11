@@ -61,6 +61,10 @@ class ThankYouScreen extends Component {
 
   render() {
     const {selectedLoanApplication, loading} = this.props;
+    console.log(
+      'selectedLoanApplication',
+      JSON.stringify(selectedLoanApplication),
+    );
     const {
       loanApplicationId,
       createdAt,
@@ -245,9 +249,15 @@ class ThankYouScreen extends Component {
             label: 'Partner Name',
             value: selectedLoanApplication?.partnerUser?.user?.name || '-',
           },
+          // {
+          //   label: 'Sales Executive ID',
+          //   value:
+          //     formatShortId(selectedLoanApplication?.salesExecutive?.userId) ??
+          //     '-',
+          // },
           {
             label: 'Sales Executive Name',
-            value: 'Mahmood Butala',
+            value: selectedLoanApplication?.salesExecutive?.user?.name || '-',
             full: true,
           },
         ]}

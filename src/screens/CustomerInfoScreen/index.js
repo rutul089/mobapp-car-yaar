@@ -1,4 +1,3 @@
-import {get} from 'lodash';
 import React, {Component} from 'react';
 import {Alert} from 'react-native';
 import {connect} from 'react-redux';
@@ -13,6 +12,7 @@ import {
   capitalizeFirstLetter,
   formatDate,
   formatIndianCurrency,
+  safeGet,
 } from '../../utils/helper';
 import Customer_Info_Component from './Customer_Info_Component';
 
@@ -57,8 +57,8 @@ class CustomerInfoScreen extends Component {
     Alert.alert('viewIncomeProof');
   };
 
-  safeGet = (obj, path) => {
-    return this.props.loading ? '-' : get(obj, path, '-');
+  _safeGet = (obj, path) => {
+    return safeGet(this.props.loading, obj, path, '-');
   };
 
   createLoanApplication = () => {
@@ -90,30 +90,30 @@ class CustomerInfoScreen extends Component {
       selectedCustomer?.customerCategory,
     )} - ${capitalizeFirstLetter(selectedCustomer?.customerType)}`;
 
-    let dob = this.safeGet(details, 'dob');
-    let applicantPhoto = this.safeGet(details, 'applicantPhoto');
+    let dob = this._safeGet(details, 'dob');
+    let applicantPhoto = this._safeGet(details, 'applicantPhoto');
 
     const isValidUri =
       applicantPhoto?.startsWith('http') ||
       applicantPhoto?.startsWith('https') ||
       applicantPhoto?.startsWith('file://');
 
-    const occupation = this.safeGet(details, 'occupation');
+    const occupation = this._safeGet(details, 'occupation');
 
     return (
       <Customer_Info_Component
         state={this.state}
         customerInfo={{
-          customerName: this.safeGet(details, 'applicantName'),
+          customerName: this._safeGet(details, 'applicantName'),
           customerNote: customerNote,
           footerInfo: [
             {
               label: 'PAN Card',
-              value: this.safeGet(details, 'panCardNumber') || '-',
+              value: this._safeGet(details, 'panCardNumber') || '-',
             },
             {
               label: 'Aadhar Card',
-              value: this.safeGet(details, 'aadharNumber') || '-',
+              value: this._safeGet(details, 'aadharNumber') || '-',
             },
           ],
           profileImage: applicantPhoto,
@@ -125,28 +125,28 @@ class CustomerInfoScreen extends Component {
           {
             label: 'Mobile Number',
             value:
-              this.safeGet(details, 'mobileNumber') ||
+              this._safeGet(details, 'mobileNumber') ||
               selectedCustomer?.mobileNumber ||
               '-',
           },
-          {label: 'Gender', value: this.safeGet(details, 'gender')},
+          {label: 'Gender', value: this._safeGet(details, 'gender')},
           {
             label: 'Father/Mother Name',
-            value: this.safeGet(details, 'fatherName'),
+            value: this._safeGet(details, 'fatherName'),
           },
-          {label: 'Spouse Name', value: this.safeGet(details, 'spouseName')},
+          {label: 'Spouse Name', value: this._safeGet(details, 'spouseName')},
           {
             label: 'Email address',
-            value: this.safeGet(details, 'email'),
+            value: this._safeGet(details, 'email'),
             full: true,
           },
           {label: 'Date of Birth', value: formatDate(dob), full: true},
           {
             label: 'Current Address',
-            value: this.safeGet(details, 'address'),
+            value: this._safeGet(details, 'address'),
             full: true,
           },
-          {label: 'Current Pincode', value: this.safeGet(details, 'pincode')},
+          {label: 'Current Pincode', value: this._safeGet(details, 'pincode')},
         ]}
         professionalDetails={[
           {
@@ -156,45 +156,45 @@ class CustomerInfoScreen extends Component {
           },
           {
             label: 'Income Source',
-            value: this.safeGet(details, 'incomeSource'),
+            value: this._safeGet(details, 'incomeSource'),
           },
           {
             label: 'Monthly Income',
             value:
               formatIndianCurrency(
-                this.safeGet(details, 'monthlyIncome'),
+                this._safeGet(details, 'monthlyIncome'),
                 true,
                 true,
               ) || '-',
           },
         ]}
         bankDetails={[
-          {label: 'Bank Name', value: this.safeGet(details, 'bankName')},
+          {label: 'Bank Name', value: this._safeGet(details, 'bankName')},
           {
             label: 'Account Number',
-            value: this.safeGet(details, 'accountNumber'),
+            value: this._safeGet(details, 'accountNumber'),
           },
           {
             label: 'Current Loan?',
-            value: this.safeGet(details, 'currentLoan') ? 'Yes' : 'No',
+            value: this._safeGet(details, 'currentLoan') ? 'Yes' : 'No',
           },
           {
             label: 'Current EMI',
             value:
-              formatIndianCurrency(this.safeGet(details, 'currentEmi') + '') ||
+              formatIndianCurrency(this._safeGet(details, 'currentEmi') + '') ||
               '-',
           },
           {
             label: 'Max EMI Afford',
             value:
-              formatIndianCurrency(this.safeGet(details, 'maxEmiAfford')) ||
+              formatIndianCurrency(this._safeGet(details, 'maxEmiAfford')) ||
               '-',
           },
           {
             label: 'Avg Monthly Bank Bal',
             value:
               formatIndianCurrency(
-                this.safeGet(details, 'avgMonthlyBankBalance'),
+                this._safeGet(details, 'avgMonthlyBankBalance'),
               ) || '-',
           },
           {

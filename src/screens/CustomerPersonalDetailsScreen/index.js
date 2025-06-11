@@ -14,6 +14,7 @@ import {
   navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
+  initiateLoanApplicationThunk,
   searchBanksThunk,
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
@@ -43,16 +44,17 @@ import {get} from 'lodash';
 const initialState = {
   applicantPhoto: '',
   pancardPhoto: '',
-  panCardNumber: '',
-  aadharNumber: '',
-  applicantName: '',
-  fatherName: '',
-  spouseName: '',
-  email: '',
+  panCardNumber: 'YKGWJ8413A',
+  aadharNumber: '958296232328',
+  applicantName: 'Raju Shah',
+  fatherName: 'Raja Shah',
+  spouseName: 'Kavisha Brooks',
+  email: 'ashk@cardenas.org',
   dob: '',
-  address: '',
-  pincode: '',
-  monthlyIncome: '',
+  address: '9957 Lucero Path Suite 683, Humphreymouth, NE 02200',
+  pincode: '380015',
+  monthlyIncome: '910454',
+  bankName: 'State Bank of India',
   accountNumber: '',
   currentEmi: '',
   maxEmiAfford: '',
@@ -64,7 +66,6 @@ const initialState = {
   currentState: '',
   occupation: null,
   incomeSource: null,
-  bankName: '',
 };
 
 class CustomerPersonalDetails extends Component {
@@ -80,12 +81,6 @@ class CustomerPersonalDetails extends Component {
         {label: 'Investment', value: 'Investment'},
         {label: 'Pension', value: 'Pension'},
         {label: 'Other', value: 'Other'},
-      ],
-      bankOptions: [
-        {label: 'HDFC Bank', value: 'hdfc'},
-        {label: 'ICICI Bank', value: 'icici'},
-        {label: 'State Bank of India', value: 'sbi'},
-        {label: 'Axis Bank', value: 'axis'},
       ],
       isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
       registrationNumber: '',
@@ -195,6 +190,7 @@ class CustomerPersonalDetails extends Component {
 
   onNextPress = () => {
     const {isEdit} = this.state;
+    const {isCreatingLoanApplication} = this.props;
 
     const isFormValid = this.validateAllFields();
 
@@ -210,6 +206,9 @@ class CustomerPersonalDetails extends Component {
           showToast('success', 'Customer detail updated successfully');
         }
       } else {
+        if (isCreatingLoanApplication) {
+          return this.createLoanApplication();
+        }
         navigateToTab(ScreenNames.Customer);
       }
     };
@@ -220,6 +219,27 @@ class CustomerPersonalDetails extends Component {
     } else {
       this.props.submitCustomerDetailsThunk(payload, onSuccess, onError);
     }
+  };
+
+  createLoanApplication = () => {
+    const {vehicleId, loanType, selectedCustomerId, selectedApplicationId} =
+      this.props;
+    if (selectedApplicationId) {
+      return navigate(ScreenNames.LoanDocument);
+    }
+    let payload = {
+      vehicleId,
+      loanType,
+      customerId: selectedCustomerId,
+    };
+
+    this.props.initiateLoanApplicationThunk(
+      payload,
+      success => {
+        navigate(ScreenNames.LoanDocument);
+      },
+      error => {},
+    );
   };
 
   getPayload = () => {
@@ -613,6 +633,7 @@ class CustomerPersonalDetails extends Component {
         isLoadingDocument={isLoadingDocument}
         handleViewDocument={this.handleViewImage}
         handleDeleteDocument={this.handleDeleteDocument}
+        isCreatingLoanApplication={isCreatingLoanApplication}
       />
     );
   }
@@ -622,13 +643,18 @@ const mapActionCreators = {
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
   searchBanksThunk,
+  initiateLoanApplicationThunk,
 };
 
-const mapStateToProps = ({customerData, vehicleData}) => ({
-  loading: customerData.loading,
+const mapStateToProps = ({customerData, vehicleData, loanData}) => ({
   selectedCustomerId: customerData?.selectedCustomerId,
   selectedCustomer: customerData?.selectedCustomer,
   selectedVehicle: vehicleData?.selectedVehicle,
+  isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
+  loading: customerData?.loading || loanData?.loading,
+  vehicleId: vehicleData?.selectedVehicle?.id,
+  loanType: loanData?.selectedLoanType,
+  selectedApplicationId: loanData?.selectedApplicationId,
 });
 
 export default connect(

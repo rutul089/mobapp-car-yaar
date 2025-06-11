@@ -96,7 +96,8 @@ class CustomerEnvelopeScreen extends Component {
   };
 
   onSelectSalesExecutive = value => {
-    this.onChangeField('salesExecutiveUserId', value?.userId);
+    console.log({value});
+    this.onChangeField('salesExecutiveUserId', value?.id);
     this.onChangeField('salesExecutive', value?.user?.name);
   };
 
