@@ -1,18 +1,18 @@
+import {get} from 'lodash';
 import React, {Component} from 'react';
-import Vehicle_Pricing_Component from './Vehicle_Pricing_Component';
-import {goBack, navigate} from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
 import {connect} from 'react-redux';
 import {loanType} from '../../constants/enums';
-import {get} from 'lodash';
-import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {showApiErrorToast, showToast} from '../../utils/helper';
+import ScreenNames from '../../constants/ScreenNames';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {updateVehicleByIdThunk} from '../../redux/actions';
 import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
-import {uploadFileWithFormData} from '../../services';
+import {uploadApplicantPhoto} from '../../utils/fileUploadUtils';
+import {showApiErrorToast, showToast} from '../../utils/helper';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import Vehicle_Pricing_Component from './Vehicle_Pricing_Component';
 
 class VehiclePricingScreen extends Component {
   constructor(props) {
@@ -38,7 +38,6 @@ class VehiclePricingScreen extends Component {
 
   componentDidMount() {
     const {selectedVehicle} = this.props;
-    console.log('selectedVehicle', selectedVehicle);
     const estimatedPrice = get(selectedVehicle, 'UsedVehicle.estimatedPrice');
     const salePrice = get(selectedVehicle, 'UsedVehicle.salePrice');
     const trueValuePrice = get(selectedVehicle, 'UsedVehicle.trueValuePrice');
@@ -122,13 +121,6 @@ class VehiclePricingScreen extends Component {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('file', {
-        uri: asset.uri,
-        type: asset.type,
-        name: asset.fileName || asset.name || '',
-      });
-
       this.setState({
         showFilePicker: false,
       });
@@ -137,8 +129,11 @@ class VehiclePricingScreen extends Component {
       this.setState({isLoading: true});
 
       try {
-        const response = await uploadFileWithFormData(formData);
-        const url = response?.data?.fileUrl;
+        const url = await uploadApplicantPhoto(
+          asset,
+          asset.fileName || asset.name || '',
+          asset.type,
+        );
 
         this.setState(prev => ({
           valueReportUrl: url,

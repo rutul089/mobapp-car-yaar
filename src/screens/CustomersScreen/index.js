@@ -122,7 +122,6 @@ class CustomersScreen extends Component {
    */
   onSearchText = value => {
     const trimmed = value.trim();
-    console.log({trimmed});
     this.setState({searchText: value, apiTrigger: API_TRIGGER.DEFAULT}, () => {
       if (trimmed === '') {
         this.setState({isSearch: false});

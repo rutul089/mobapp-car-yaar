@@ -17,6 +17,8 @@ const Lender_Selection_Component = ({
   params,
   onItemPress = () => {},
   loading,
+  loanApplicationId,
+  registerNumber,
 }) => {
   const financeData = [
     {
@@ -107,7 +109,7 @@ const Lender_Selection_Component = ({
     <SafeAreaWrapper>
       <Header
         title="Lender Selection"
-        subtitle="GJ 01 JR 0945"
+        subtitle={registerNumber}
         onBackPress={() => goBack()}
       />
       <FlatList
@@ -121,7 +123,7 @@ const Lender_Selection_Component = ({
           <Text>
             Tailored Loans for{' '}
             <Text color={'#F8A902'} hankenGroteskBold>
-              #ABC123
+              {loanApplicationId}
             </Text>
           </Text>
         }

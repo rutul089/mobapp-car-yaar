@@ -21,6 +21,7 @@ const Loan_Offer_Detail_Component = ({
   onLoanOfferPress,
   loanDetail = {},
   emiData,
+  registerNumber,
 }) => {
   const renderCellHeader = (value, style) => {
     return (
@@ -54,7 +55,7 @@ const Loan_Offer_Detail_Component = ({
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
         title="Loan Offer Details"
-        subtitle="GJ 01 JR 0945"
+        subtitle={registerNumber}
         onBackPress={() => goBack()}
       />
 

@@ -4,6 +4,7 @@ import Lender_Selection_Component from './Lender_Selection_Component';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 import {postCustomerLenderDetailsThunk} from '../../redux/actions';
+import {formatVehicleNumber} from '../../utils/helper';
 
 class LenderSelection extends Component {
   constructor(props) {
@@ -12,11 +13,6 @@ class LenderSelection extends Component {
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
     };
     this.onItemPress = this.onItemPress.bind(this);
-  }
-
-  componentDidMount() {
-    const {isEdit} = this.state;
-    console.log({isEdit});
   }
 
   onItemPress = item => {
@@ -40,10 +36,15 @@ class LenderSelection extends Component {
   };
 
   render() {
-    const {loading} = this.props;
+    const {selectedLoanApplication, loading} = this.props;
+    const _registerNumber =
+      selectedLoanApplication?.usedVehicle?.registerNumber || '-';
+
     return (
       <>
         <Lender_Selection_Component
+          registerNumber={formatVehicleNumber(_registerNumber)}
+          loanApplicationId={selectedLoanApplication?.loanApplicationId}
           onItemPress={this.onItemPress}
           loading={loading}
         />

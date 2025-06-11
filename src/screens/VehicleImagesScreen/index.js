@@ -157,9 +157,7 @@ class VehicleImagesScreen extends Component {
         const docObj = {
           uri: asset.uri,
           name: fileName,
-          type: mimeType,
           isLocal: true,
-          fileSize: asset.fileSize,
           uploadKey: url,
         };
 

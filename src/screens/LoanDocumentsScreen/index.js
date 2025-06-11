@@ -56,6 +56,7 @@ class LoanDocumentsScreen extends Component {
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
       acceptedDocuments: [],
       selectedAcceptedDocument: '',
+      showAcceptedDocModal: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -154,7 +155,8 @@ class LoanDocumentsScreen extends Component {
         item.documentType === documentType,
     );
 
-    let acceptedDocuments = matched?.acceptedDocuments || [];
+    let acceptedDocuments =
+      matched?.acceptedDocuments?.map(doc => ({label: doc})) || [];
 
     console.log({typeOfIndividual, documentType, loadProduct});
     console.log(acceptedDocuments);
@@ -162,6 +164,8 @@ class LoanDocumentsScreen extends Component {
     // Trigger file picker modal
     this.setState({
       showFilePicker: true,
+      // showFilePicker: !acceptedDocuments.length,
+      // showAcceptedDocModal: acceptedDocuments.length,
       selectedDocType: type,
       acceptedDocuments,
     });
@@ -312,6 +316,25 @@ class LoanDocumentsScreen extends Component {
     );
   };
 
+  setSelectedAcceptedDocument = async item => {
+    this.setState(
+      {
+        selectedAcceptedDocument: item?.label,
+        showAcceptedDocModal: false,
+      },
+      async () => {
+        await new Promise(resolve => setTimeout(resolve, 330));
+        console.log('--------------------');
+        this.setState({
+          showAcceptedDocModal: false,
+          showFilePicker: true,
+        });
+      },
+    );
+
+    console.log({item});
+  };
+
   render() {
     const {
       selectedVehicle,
@@ -327,6 +350,8 @@ class LoanDocumentsScreen extends Component {
       isEdit,
       isLoadingDocument,
       acceptedDocuments,
+      showAcceptedDocModal,
+      selectedAcceptedDocument,
     } = this.state;
 
     return (
@@ -384,6 +409,15 @@ class LoanDocumentsScreen extends Component {
         loading={isLoading}
         isLoadingDocument={isLoadingDocument}
         acceptedDocuments={acceptedDocuments}
+        dropdownModalProps={{
+          data: acceptedDocuments,
+          visible: showAcceptedDocModal,
+          selectedItem: selectedAcceptedDocument,
+          onSelect: this.setSelectedAcceptedDocument,
+          onClose: () => {
+            this.setState({showAcceptedDocModal: false});
+          },
+        }}
       />
     );
   }

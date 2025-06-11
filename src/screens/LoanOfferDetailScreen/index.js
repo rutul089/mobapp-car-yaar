@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Loan_Offer_Detail_Component from './Loan_Offer_Detail_Component';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import {formatVehicleNumber} from '../../utils/helper';
 const emiData = [
   {
     sno: 1,
@@ -115,22 +116,29 @@ class LoanOfferDetailScreen extends Component {
   };
 
   render() {
+    const {selectedLoanApplication} = this.props;
+    const _registerNumber =
+      selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     return (
-      <>
-        <Loan_Offer_Detail_Component
-          onProceedPress={this.onProceedPress}
-          onLoanOfferPress={this.onLoanOfferPress}
-          loanDetail={this.state.loanDetail}
-          emiData={emiData}
-        />
-      </>
+      <Loan_Offer_Detail_Component
+        onProceedPress={this.onProceedPress}
+        onLoanOfferPress={this.onLoanOfferPress}
+        loanDetail={this.state.loanDetail}
+        emiData={emiData}
+        registerNumber={formatVehicleNumber(_registerNumber)}
+      />
     );
   }
 }
 
 const mapActionCreators = {};
-const mapStateToProps = state => {
-  return {};
+const mapStateToProps = ({loanData}) => {
+  return {
+    selectedLoanType: loanData.selectedLoanType,
+    loading: loanData.loading,
+    selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
+    selectedApplicationId: loanData?.selectedApplicationId,
+  };
 };
 export default connect(
   mapStateToProps,

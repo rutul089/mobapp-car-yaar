@@ -14,10 +14,10 @@ import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
+import {uploadApplicantPhoto} from '../../utils/fileUploadUtils';
 import {showApiErrorToast, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Vehicle_Odometer_Component from './Vehicle_Odometer_Component';
-import {uploadFileWithFormData} from '../../services';
 
 class VehicleOdometerScreen extends Component {
   constructor(props) {
@@ -75,13 +75,6 @@ class VehicleOdometerScreen extends Component {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('file', {
-        uri: asset.uri,
-        type: asset.type,
-        name: asset.fileName || asset.name || '',
-      });
-
       this.setState({
         showFilePicker: false,
       });
@@ -90,8 +83,11 @@ class VehicleOdometerScreen extends Component {
       this.setState({isLoading: true});
 
       try {
-        const response = await uploadFileWithFormData(formData);
-        const url = response?.data?.fileUrl;
+        const url = await uploadApplicantPhoto(
+          asset,
+          asset.fileName || asset.name || '',
+          asset.type,
+        );
 
         this.setState(prev => ({
           selectedDocType: '',

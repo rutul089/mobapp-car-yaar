@@ -51,7 +51,7 @@ export const getGradientColors = status => {
 export const getStatusColor = status => {
   switch (status) {
     case 'SAVED':
-      return '#1D95F0';
+      return '#3DADFF';
     case 'IN_PROGRESS':
       return 'rgba(243, 105, 110, 0.12)';
     case 'COMPLETED':

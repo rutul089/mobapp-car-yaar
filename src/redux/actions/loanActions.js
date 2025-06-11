@@ -245,10 +245,7 @@ export const postCustomerLenderDetailsThunk = (
         lenderData,
       );
 
-      dispatch({
-        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
-        payload: response.data,
-      });
+      dispatch(fetchLoanApplicationFromIdThunk(applicationId));
 
       onSuccess?.(response);
     } catch (error) {

@@ -38,7 +38,25 @@ class CustomerEnvelopeScreen extends Component {
 
   componentDidMount() {
     const {selectedApplicationId} = this.props;
-    this.props.fetchLoanApplicationFromIdThunk(selectedApplicationId);
+    this.props.fetchLoanApplicationFromIdThunk(
+      selectedApplicationId,
+      {},
+      response => {
+        if (response?.partnerUser) {
+          this.setState({
+            carYarPartner: response?.partnerUser?.user?.name || '',
+            partnerUserId: response?.partnerUser?.id || '',
+          });
+        }
+
+        if (response?.salesExecutive) {
+          this.setState({
+            salesExecutive: response?.salesExecutive?.user?.name || '',
+            salesExecutiveUserId: response?.salesExecutive?.id || '',
+          });
+        }
+      },
+    );
   }
 
   onChangeField = (key, value, isOptional = false) => {
@@ -96,7 +114,6 @@ class CustomerEnvelopeScreen extends Component {
   };
 
   onSelectSalesExecutive = value => {
-    console.log({value});
     this.onChangeField('salesExecutiveUserId', value?.id);
     this.onChangeField('salesExecutive', value?.user?.name);
   };

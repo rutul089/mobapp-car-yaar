@@ -11,7 +11,7 @@ import {
 import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
-import {getGradientColors} from '../../utils/helper';
+import {getGradientColors, getStatusColor} from '../../utils/helper';
 
 const Vehicle_Detail_Component = ({
   onBackPress,
@@ -37,8 +37,7 @@ const Vehicle_Detail_Component = ({
           <CardWrapper
             showLeftText
             leftText={status}
-            statusTextColor={'black'}
-            // statusColor={getStatusColor(status)}
+            statusTextColor={getStatusColor(status)}
             gradientColors={getGradientColors(status)}>
             <VehicleCard
               noMargin

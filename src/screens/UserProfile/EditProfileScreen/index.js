@@ -8,10 +8,10 @@ import {
   handleFileSelection,
   viewDocumentHelper,
 } from '../../../utils/documentUtils';
+import {uploadApplicantPhoto} from '../../../utils/fileUploadUtils';
 import {showApiErrorToast, showToast} from '../../../utils/helper';
 import {handleFieldChange, validateField} from '../../../utils/inputHelper';
 import Edit_Profile_Component from './Edit_Profile_Component';
-import {uploadFileWithFormData} from '../../../services';
 
 class EditProfileScreen extends Component {
   state = {
@@ -71,12 +71,8 @@ class EditProfileScreen extends Component {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('file', {
-        uri: asset.uri,
-        type: asset.type,
-        name: asset.fileName || asset.name || 'profileImage',
-      });
+      const fileName = asset.name || asset.fileName || 'upload';
+      const mimeType = asset.type || 'application/octet-stream';
 
       this.setState({
         showFilePicker: false,
@@ -86,8 +82,7 @@ class EditProfileScreen extends Component {
       await new Promise(resolve => setTimeout(resolve, 110));
 
       try {
-        const response = await uploadFileWithFormData(formData);
-        const url = response?.data?.fileUrl;
+        const url = await uploadApplicantPhoto(asset, fileName, mimeType);
 
         this.setState({
           profileImage: url,

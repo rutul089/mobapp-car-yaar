@@ -48,7 +48,7 @@ const Vehicles_Component = ({
           <Header title="Select Vehicle" onBackPress={() => goBack()} />
           <View style={styles.searchWrapper}>
             <SearchBar
-              showAddBtn={!isCreatingLoanApplication}
+              showAddBtn={isCreatingLoanApplication}
               onChangeText={onSearchText}
               value={searchText}
               onCancelIconPress={clearSearch}
@@ -92,7 +92,7 @@ const Vehicles_Component = ({
               onPress={() => onWrapperClick?.(item)}
               leftText={status}
               showTrailingIcon
-              statusColor={getStatusColor(status)}
+              statusTextColor={getStatusColor(status)}
               gradientColors={getGradientColors(status)}
               disableMargin={false}>
               <VehicleCard

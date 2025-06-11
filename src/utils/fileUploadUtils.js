@@ -16,7 +16,7 @@ export const uploadApplicantPhoto = (asset, fileName, mimeType) => {
       formData.append('file', {
         uri: asset.uri,
         type: mimeType,
-        name: fileName,
+        name: fileName || 'filename',
       });
 
       const response = await uploadFileWithFormData(formData);

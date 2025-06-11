@@ -48,11 +48,6 @@ class CustomerDetailView extends Component {
     // applicationId: getScreenParam(props.route, 'params')?.id || '',
   }
 
-  componentDidMount() {
-    const {isOnboard} = this.state;
-    console.log({isOnboard});
-  }
-
   onBackPress = () => {
     goBack();
   };

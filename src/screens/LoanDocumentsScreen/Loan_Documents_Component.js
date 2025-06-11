@@ -6,6 +6,7 @@ import {
   theme,
   FilePickerModal,
   Loader,
+  DropdownModal,
 } from '@caryaar/components';
 import {ScrollView} from 'react-native';
 
@@ -25,6 +26,7 @@ const Loan_Documents_Component = ({
   loading,
   isLoadingDocument,
   acceptedDocuments,
+  dropdownModalProps,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -41,15 +43,13 @@ const Loan_Documents_Component = ({
           isDocument={true}
         />
         <Spacing size="smd" />
-        <Button
-          variant="link"
-          onPress={onNextPress}
-          label={isOnboard ? 'Save' : strings.next}
-        />
+        <Button variant="link" onPress={onNextPress} label={strings.next} />
         <Spacing size="md" />
       </ScrollView>
 
       <FilePickerModal {...fileModalProps} />
+
+      <DropdownModal {...dropdownModalProps} />
 
       {loading && <Loader visible={loading} />}
       {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}

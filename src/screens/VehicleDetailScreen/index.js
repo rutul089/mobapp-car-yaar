@@ -104,7 +104,7 @@ class VehicleDetail extends Component {
     let {UsedVehicle} = selectedVehicle || {};
     let manufactureYear = UsedVehicle?.manufactureYear;
     let {model, trim, colour} = basicDetail || {};
-    const status = basicDetail?.isDraft ? 'DRAFT' : 'SAVED';
+    const status = selectedVehicle?.isDraft ? 'DRAFT' : 'SAVED';
     const lastUpdatedOn = this.safeGet(basicDetail, 'updatedAt');
     const _registerNumber = this.safeGet(UsedVehicle, 'registerNumber') ?? '-';
     const puc = this.safeGet(UsedVehicle, 'PUCC');
