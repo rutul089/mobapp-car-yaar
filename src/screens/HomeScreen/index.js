@@ -107,6 +107,7 @@ class HomeScreen extends Component {
 
   render() {
     const {userData, partnerStats} = this.props;
+    console.log({userData});
     return (
       <Home_Component
         onSelectedCarType={this.onSelectedCarType}
@@ -119,6 +120,7 @@ class HomeScreen extends Component {
         profileImage={userData?.profileImage}
         userName={userData?.name || ''}
         userRole={getLabelFromEnum(userRoleValue, userData?.role)}
+        partnerID={userData?.id}
         partnerStats={partnerStats}
       />
     );

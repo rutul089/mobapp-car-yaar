@@ -103,8 +103,12 @@ class AddReferencesScreen extends Component {
   };
 
   onConfirmLoanPress = () => {
-    const {selectedApplicationId} = this.props;
+    const {selectedApplicationId, isReadOnlyLoanApplication} = this.props;
     const {isEdit, isNoReference} = this.state;
+
+    if (isReadOnlyLoanApplication) {
+      return navigate(ScreenNames.ThankYouView);
+    }
 
     const isFormValid = this.validateAllFields();
 
@@ -216,6 +220,7 @@ class AddReferencesScreen extends Component {
       isCreatingLoanApplication,
       selectedLoanApplication,
       loading,
+      isReadOnlyLoanApplication,
     } = this.props;
 
     const {UsedVehicle = {}} = selectedVehicle || {};
@@ -223,7 +228,9 @@ class AddReferencesScreen extends Component {
     return (
       <Add_References_Component
         headerProp={{
-          title: `${isEdit ? 'Edit ' : 'Add '}References`,
+          title: `${
+            isReadOnlyLoanApplication ? '' : isEdit ? 'Edit ' : 'Add '
+          }References`,
           subtitle: isCreatingLoanApplication
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
@@ -271,57 +278,68 @@ class AddReferencesScreen extends Component {
             statusMsg: errors?.referenceNameHome,
             autoCapitalize: 'words',
             value: referenceNameHome,
+            isDisabled: isReadOnlyLoanApplication,
           },
           mobileNumberHome: {
             isError: errors?.mobileNumberHome,
             statusMsg: errors?.mobileNumberHome,
             value: mobileNumberHome,
             maxLength: 10,
+            isDisabled: isReadOnlyLoanApplication,
           },
           addressHome: {
             isError: errors?.addressHome,
             statusMsg: errors?.addressHome,
             value: addressHome,
+            isDisabled: isReadOnlyLoanApplication,
           },
           pincodeHome: {
             isError: errors?.pincodeHome,
             statusMsg: errors?.pincodeHome,
             value: pincodeHome,
             maxLength: 6,
+            isDisabled: isReadOnlyLoanApplication,
           },
           referenceNameOffice: {
             isError: errors?.referenceNameOffice,
             statusMsg: errors?.referenceNameOffice,
             autoCapitalize: 'words',
             value: referenceNameOffice,
+            isDisabled: isReadOnlyLoanApplication,
           },
           mobileNumberOffice: {
             isError: errors?.mobileNumberOffice,
             statusMsg: errors?.mobileNumberOffice,
             value: mobileNumberOffice,
             maxLength: 10,
+            isDisabled: isReadOnlyLoanApplication,
           },
           addressOffice: {
             isError: errors?.addressOffice,
             statusMsg: errors?.addressOffice,
             value: addressOffice,
+            isDisabled: isReadOnlyLoanApplication,
           },
           pincodeOffice: {
             isError: errors?.pincodeOffice,
             statusMsg: errors?.pincodeOffice,
             value: pincodeOffice,
             maxLength: 6,
+            isDisabled: isReadOnlyLoanApplication,
           },
           relationshipHome: {
             isError: errors?.relationshipHome,
             statusMsg: errors?.relationshipHome,
+            isDisabled: isReadOnlyLoanApplication,
           },
           relationshipOffice: {
             isError: errors?.relationshipOffice,
             statusMsg: errors?.relationshipOffice,
+            isDisabled: isReadOnlyLoanApplication,
           },
         }}
         loading={loading}
+        isReadOnlyLoanApplication={isReadOnlyLoanApplication}
       />
     );
   }
@@ -340,6 +358,7 @@ const mapStateToProps = ({loanData, vehicleData}) => {
     selectedApplicationId: loanData?.selectedApplicationId,
     isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
     selectedVehicle: vehicleData?.selectedVehicle,
+    isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(AddReferencesScreen);

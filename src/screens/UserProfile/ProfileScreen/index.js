@@ -4,9 +4,14 @@ import ScreenNames from '../../../constants/ScreenNames';
 import {navigate} from '../../../navigation/NavigationUtils';
 import {fetchUser, logoutUser} from '../../../redux/actions';
 import Profile_Component from './Profile_Component';
-import {getLabelFromEnum, userRoleValue} from '../../../constants/enums';
+import {
+  dealershipTypeLabels,
+  getLabelFromEnum,
+  partnerUserPositionValue,
+  userRoleValue,
+} from '../../../constants/enums';
 import {removeCountryCode} from '../../../utils/helper';
-
+import {get} from 'lodash';
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -58,23 +63,28 @@ class ProfileScreen extends Component {
   render() {
     const {showLogoutModal} = this.state;
     const {loading, profileDetail} = this.props;
+    let dealerType = get(profileDetail, 'partnerUser.partner.partnerType', '');
 
     return (
-      <>
-        <Profile_Component
-          onPressRightContent={this.onPressRightContent}
-          handleMenuPress={this.handleMenuPress}
-          showLogoutModal={showLogoutModal}
-          onModalHide={this.onModalHide}
-          onPressPrimaryButton={this.onPressPrimaryButton}
-          loading={loading}
-          name={profileDetail?.name}
-          email={profileDetail?.email}
-          phone={removeCountryCode(profileDetail?.mobileNumber)}
-          designation={getLabelFromEnum(userRoleValue, profileDetail?.role)}
-          avatar={profileDetail?.profileImage}
-        />
-      </>
+      <Profile_Component
+        onPressRightContent={this.onPressRightContent}
+        handleMenuPress={this.handleMenuPress}
+        showLogoutModal={showLogoutModal}
+        onModalHide={this.onModalHide}
+        onPressPrimaryButton={this.onPressPrimaryButton}
+        loading={loading}
+        name={profileDetail?.name}
+        email={profileDetail?.email}
+        phone={removeCountryCode(profileDetail?.mobileNumber)}
+        designation={getLabelFromEnum(
+          partnerUserPositionValue,
+          profileDetail?.partnerUser?.position,
+          '-',
+        )}
+        avatar={profileDetail?.profileImage}
+        partnerId={profileDetail?.id}
+        dealerType={getLabelFromEnum(dealershipTypeLabels, dealerType)}
+      />
     );
   }
 }

@@ -35,11 +35,15 @@ class LoanAmountScreen extends Component {
 
   onNextButtonPress = () => {
     const {loanAmount} = this.state;
-    const {selectedApplicationId} = this.props;
-    const isFormValid = this.validateAllFields();
+    const {selectedApplicationId, isReadOnlyLoanApplication} = this.props;
     let params = getScreenParam(this.props.route, 'params');
 
     //d3e4354d-0703-4b88-a9ae-5b3956181a70
+    if (isReadOnlyLoanApplication) {
+      return navigate(ScreenNames.AddReference, {params});
+    }
+
+    const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
       showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
@@ -88,13 +92,16 @@ class LoanAmountScreen extends Component {
       isCreatingLoanApplication,
       selectedLoanApplication,
       loading,
+      isReadOnlyLoanApplication,
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
 
     return (
       <Loan_Amount_Component
         headerProp={{
-          title: `${isEdit ? 'Edit ' : ''}Loan Amount`,
+          title: `${
+            isEdit && !isReadOnlyLoanApplication ? 'Edit ' : ''
+          }Loan Amount`,
           subtitle: isCreatingLoanApplication
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
@@ -113,6 +120,7 @@ class LoanAmountScreen extends Component {
           loanAmount: {
             isError: errors?.loanAmount,
             statusMsg: errors?.loanAmount,
+            isDisabled: isReadOnlyLoanApplication,
           },
         }}
         loading={loading}
@@ -132,6 +140,7 @@ const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedVehicle: vehicleData?.selectedVehicle,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,
+  isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(LoanAmountScreen);

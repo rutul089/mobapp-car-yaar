@@ -1,5 +1,6 @@
 import {
   CommonActions,
+  StackActions,
   useNavigationState,
   useRoute,
 } from '@react-navigation/native';
@@ -13,6 +14,9 @@ export const goBack = () => {
 };
 
 export const navigate = (name, params) => {
+  // if (navigationRef.current?.isReady()) {
+  //   navigationRef.current?.dispatch(StackActions.replace(name, params));
+  // }
   if (navigationRef.current?.isReady()) {
     navigationRef.current?.navigate(name, params);
   }

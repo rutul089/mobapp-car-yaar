@@ -256,9 +256,16 @@ class LoanDocumentsScreen extends Component {
   handleCustomerDocumentSubmission = () => {
     const {isEdit} = this.state;
     const {documents} = this.state;
-    const {selectedCustomerId, selectedApplicationId, selectedLoanType} =
-      this.props;
+    const {
+      selectedCustomerId,
+      selectedApplicationId,
+      selectedLoanType,
+      isReadOnlyLoanApplication,
+    } = this.props;
 
+    if (isReadOnlyLoanApplication) {
+      return this.navigateToNextScreenBasedOnLoanType(selectedLoanType);
+    }
     const customerId = isEdit ? selectedCustomerId : selectedApplicationId;
 
     if (!validateRequiredDocuments(documents, requiredFields)) {
@@ -337,6 +344,7 @@ class LoanDocumentsScreen extends Component {
       selectedVehicle,
       isCreatingLoanApplication,
       selectedLoanApplication,
+      isReadOnlyLoanApplication,
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
     const {
@@ -355,7 +363,9 @@ class LoanDocumentsScreen extends Component {
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}
         headerProp={{
-          title: `${isEdit ? 'Edit ' : ''}Loan Documents`,
+          title: `${
+            isEdit && !isReadOnlyLoanApplication ? 'Edit ' : ''
+          }Loan Documents`,
           subtitle: isCreatingLoanApplication
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
@@ -415,6 +425,7 @@ class LoanDocumentsScreen extends Component {
             this.setState({showAcceptedDocModal: false});
           },
         }}
+        isReadOnlyLoanApplication={isReadOnlyLoanApplication}
       />
     );
   }
@@ -435,6 +446,7 @@ const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedVehicle: vehicleData?.selectedVehicle,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,
+  isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(LoanDocumentsScreen);

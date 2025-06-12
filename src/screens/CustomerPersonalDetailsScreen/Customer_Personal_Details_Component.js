@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, Platform, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -33,6 +33,7 @@ import {
   sanitizeAmount,
 } from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const Customer_Personal_Details_Component = ({
   selectedGender,
@@ -73,6 +74,7 @@ const Customer_Personal_Details_Component = ({
   handleViewDocument,
   handleDeleteDocument,
   isCreatingLoanApplication,
+  dob,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'panCardNumber',
@@ -108,6 +110,8 @@ const Customer_Personal_Details_Component = ({
     monthlyIncome: false,
   });
 
+  const [showPicker, setShowPicker] = React.useState(false);
+
   const setFieldEditing = (field, value) => {
     setEditingStates(prev => ({...prev, [field]: value}));
   };
@@ -115,6 +119,13 @@ const Customer_Personal_Details_Component = ({
   const getDisplayValue = (isEditing, value) => {
     return formatIndianCurrency(value, false, true);
   };
+
+  const _onChangeDob = selectedDate => {
+    setShowPicker(false);
+    console.log('selectedDate', selectedDate);
+  };
+
+  console.log('dob', dob);
 
   return (
     <SafeAreaWrapper>
@@ -315,6 +326,7 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             onSubmitEditing={() => focusNext('address')}
             onFocus={() => !isEdit && scrollToInput('dob')}
+            onPress={() => setShowPicker(true)}
             {...(restInputProps?.dob || {})}
           />
           <Spacing size="md" />
@@ -561,7 +573,19 @@ const Customer_Personal_Details_Component = ({
       <FilePickerModal {...filePickerProps} autoCloseOnSelect={false} />
 
       {loading && <Loader visible={loading} />}
+
       {isLoadingDocument && <FullLoader />}
+
+      {showPicker && (
+        <DateTimePickerModal
+          isVisible={showPicker}
+          mode="date"
+          onConfirm={_onChangeDob}
+          onCancel={() => setShowPicker(false)}
+          maximumDate={new Date(Date.now() - 86400000)} // yesterday
+          date={new Date(state.date)}
+        />
+      )}
     </SafeAreaWrapper>
   );
 };

@@ -29,6 +29,10 @@ const screenOptions = {
   },
 };
 
+// options={{
+//   unmountOnBlur: true,
+// }}
+
 const StackRoutes = () => {
   return (
     <Stack.Navigator
@@ -115,6 +119,9 @@ const StackRoutes = () => {
       <Stack.Screen
         name={ScreenNames.FinanceDetails}
         component={Screens.FinanceDetailsScreen}
+        options={{
+          unmountOnBlur: true,
+        }}
       />
       <Stack.Screen
         name={ScreenNames.FinanceDocuments}

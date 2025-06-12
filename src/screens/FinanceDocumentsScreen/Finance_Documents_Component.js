@@ -26,6 +26,7 @@ const Finance_Documents_Component = ({
   fileModalProps,
   loading,
   isLoadingDocument,
+  isReadOnlyLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -35,6 +36,7 @@ const Finance_Documents_Component = ({
           title={'Documents'}
           documents={documentList}
           isDocument={true}
+          isView={isReadOnlyLoanApplication}
         />
         <Spacing size="smd" />
         <FormFooterButtons

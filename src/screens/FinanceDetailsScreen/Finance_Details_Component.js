@@ -85,6 +85,7 @@ const Finance_Details_Component = ({
             options={currentLoanTypes}
             selectedValue={state.isCarFinanced}
             onChange={onSelectAnswer}
+            restInputProps={restInputProps?.radioGroup}
           />
           <Spacing size="md" />
           {state.isCarFinanced && (

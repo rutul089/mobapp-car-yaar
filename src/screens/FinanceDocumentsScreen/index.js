@@ -63,7 +63,17 @@ class FinanceDocumentsScreen extends Component {
 
   onNextPress = () => {
     const {documents} = this.state;
-    const {selectedApplicationId} = this.props;
+    const {selectedApplicationId, isReadOnlyLoanApplication, route} =
+      this.props;
+
+    const goToFinanceDocuments = () => {
+      let params = getScreenParam(route, 'params');
+      navigate(ScreenNames.LoanAmount, {params});
+    };
+
+    if (isReadOnlyLoanApplication) {
+      return goToFinanceDocuments();
+    }
 
     if (!validateRequiredDocuments(documents, requiredFields)) {
       return;
@@ -82,8 +92,7 @@ class FinanceDocumentsScreen extends Component {
       selectedApplicationId,
       payload,
       success => {
-        let params = getScreenParam(this.props.route, 'params');
-        navigate(ScreenNames.LoanAmount, {params});
+        goToFinanceDocuments();
       },
       error => {},
     );
@@ -195,6 +204,7 @@ class FinanceDocumentsScreen extends Component {
       isCreatingLoanApplication,
       selectedLoanApplication,
       loading,
+      isReadOnlyLoanApplication,
     } = this.props;
 
     const {UsedVehicle = {}} = selectedVehicle || {};
@@ -241,6 +251,7 @@ class FinanceDocumentsScreen extends Component {
         }}
         loading={loading}
         isLoadingDocument={isLoadingDocument}
+        isReadOnlyLoanApplication={isReadOnlyLoanApplication}
       />
     );
   }
@@ -261,6 +272,7 @@ const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,
   selectedCustomer: loanData?.selectedCustomer,
+  isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
 });
 
 export default connect(

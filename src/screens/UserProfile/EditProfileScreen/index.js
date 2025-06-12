@@ -9,9 +9,17 @@ import {
   viewDocumentHelper,
 } from '../../../utils/documentUtils';
 import {uploadApplicantPhoto} from '../../../utils/fileUploadUtils';
-import {showApiErrorToast, showToast} from '../../../utils/helper';
+import {
+  formatMobileNumber,
+  showApiErrorToast,
+  showToast,
+} from '../../../utils/helper';
 import {handleFieldChange, validateField} from '../../../utils/inputHelper';
 import Edit_Profile_Component from './Edit_Profile_Component';
+import {
+  getLabelFromEnum,
+  partnerUserPositionValue,
+} from '../../../constants/enums';
 
 class EditProfileScreen extends Component {
   state = {
@@ -31,11 +39,16 @@ class EditProfileScreen extends Component {
 
   componentDidMount() {
     const {profileDetail} = this.props;
+    console.log('profileDetail', JSON.stringify(profileDetail));
     this.setState({
       fullName: get(profileDetail, 'name', ''),
       email: get(profileDetail, 'email', ''),
       mobileNumber: get(profileDetail, 'mobileNumber', ''),
-      salesExecutivePosition: get(profileDetail, 'role', ''),
+      salesExecutivePosition: get(
+        profileDetail,
+        'partnerUser.partner.partnerType',
+        '',
+      ),
       profileImage: get(profileDetail, 'profileImage', ''),
     });
   }
@@ -158,48 +171,51 @@ class EditProfileScreen extends Component {
       isLoading,
     } = this.state;
 
-    const {loading} = this.props;
+    const {loading, profileDetail} = this.props;
 
     return (
-      <>
-        <Edit_Profile_Component
-          profileImage={profileImage}
-          state={{fullName, email, mobileNumber, salesExecutivePosition}}
-          onEmailChange={value => this.onChangeField('email', value)}
-          onFullNameChange={value => this.onChangeField('fullName', value)}
-          onMobileChange={value => this.onChangeField('mobileNumber', value)}
-          handleSavePress={this.handleSavePress}
-          onEditProfilePicPress={this.onEditProfilePicPress}
-          viewProfileImage={this.handleViewImage}
-          onDeleteProfileImage={this.onDeleteProfileImage}
-          fileModalProps={{
-            isVisible: showFilePicker,
-            onSelect: this.handleFile,
-            onClose: this.closeFilePicker,
-            autoCloseOnSelect: false,
-          }}
-          restInputProps={{
-            fullName: {
-              value: fullName,
-              isError: errors.fullName,
-              statusMsg: errors.fullName,
-              autoCapitalize: 'words',
-            },
-            mobileNumber: {
-              value: mobileNumber,
-              isError: errors.mobileNumber,
-              statusMsg: errors.mobileNumber,
-            },
-            email: {
-              value: email,
-              isError: errors.email,
-              statusMsg: errors.email,
-            },
-          }}
-          loading={loading}
-          isLoading={isLoading}
-        />
-      </>
+      <Edit_Profile_Component
+        profileImage={profileImage}
+        state={{fullName, email, mobileNumber, salesExecutivePosition}}
+        onEmailChange={value => this.onChangeField('email', value)}
+        onFullNameChange={value => this.onChangeField('fullName', value)}
+        onMobileChange={value => this.onChangeField('mobileNumber', value)}
+        handleSavePress={this.handleSavePress}
+        onEditProfilePicPress={this.onEditProfilePicPress}
+        viewProfileImage={this.handleViewImage}
+        onDeleteProfileImage={this.onDeleteProfileImage}
+        fileModalProps={{
+          isVisible: showFilePicker,
+          onSelect: this.handleFile,
+          onClose: this.closeFilePicker,
+          autoCloseOnSelect: false,
+        }}
+        restInputProps={{
+          fullName: {
+            value: fullName,
+            isError: errors.fullName,
+            statusMsg: errors.fullName,
+            autoCapitalize: 'words',
+          },
+          mobileNumber: {
+            value: formatMobileNumber(mobileNumber),
+            isError: errors.mobileNumber,
+            statusMsg: errors.mobileNumber,
+          },
+          email: {
+            value: email,
+            isError: errors.email,
+            statusMsg: errors.email,
+          },
+        }}
+        loading={loading}
+        isLoading={isLoading}
+        designation={getLabelFromEnum(
+          partnerUserPositionValue,
+          profileDetail?.partnerUser?.position,
+          '-',
+        )}
+      />
     );
   }
 }

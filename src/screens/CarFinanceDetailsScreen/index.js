@@ -64,7 +64,8 @@ class CarFinanceDetails extends Component {
   }
 
   handleNextStepPress = () => {
-    const {selectedApplicationId} = this.props;
+    const {selectedApplicationId, isReadOnlyLoanApplication, route} =
+      this.props;
 
     const {
       bankName,
@@ -74,6 +75,17 @@ class CarFinanceDetails extends Component {
       emiPaid,
       tenure,
     } = this.state;
+
+    const goToFinanceDocuments = () => {
+      const params = getScreenParam(route, 'params');
+      navigate(ScreenNames.FinanceDocuments, {params});
+    };
+
+    if (isReadOnlyLoanApplication) {
+      goToFinanceDocuments();
+
+      return;
+    }
 
     const isFormValid = this.validateAllFields();
 
@@ -96,8 +108,7 @@ class CarFinanceDetails extends Component {
       selectedApplicationId,
       payLoad,
       response => {
-        let params = getScreenParam(this.props.route, 'params');
-        navigate(ScreenNames.FinanceDocuments, {params});
+        goToFinanceDocuments();
       },
       error => {},
     );
@@ -177,6 +188,7 @@ class CarFinanceDetails extends Component {
       isCreatingLoanApplication,
       selectedLoanApplication,
       loading,
+      isReadOnlyLoanApplication,
     } = this.props;
 
     const {UsedVehicle = {}} = selectedVehicle || {};
@@ -224,27 +236,33 @@ class CarFinanceDetails extends Component {
               value: bankName,
               isError: errors.bankName,
               statusMsg: errors.bankName,
+              isDisabled: isReadOnlyLoanApplication,
             },
             loanAccountNumber: {
               value: loanAccountNumber,
               isError: errors.loanAccountNumber,
               statusMsg: errors.loanAccountNumber,
+              isDisabled: isReadOnlyLoanApplication,
             },
             loanAmount: {
               isError: errors.loanAmount,
               statusMsg: errors.loanAmount,
+              isDisabled: isReadOnlyLoanApplication,
             },
             tenure: {
               isError: errors.tenure,
               statusMsg: errors.tenure,
+              isDisabled: isReadOnlyLoanApplication,
             },
             monthlyEmi: {
               isError: errors.monthlyEmi,
               statusMsg: errors.monthlyEmi,
+              isDisabled: isReadOnlyLoanApplication,
             },
             emiPaid: {
               isError: errors.emiPaid,
               statusMsg: errors.emiPaid,
+              isDisabled: isReadOnlyLoanApplication,
             },
           }}
           handleNextStepPress={this.handleNextStepPress}
@@ -272,6 +290,7 @@ const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanApplication: loanData?.selectedLoanApplication,
   selectedCustomer: loanData?.selectedCustomer,
   financeDetails: loanData?.financeDetails,
+  isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
 });
 
 export default connect(mapStateToProps, mapActionCreators)(CarFinanceDetails);

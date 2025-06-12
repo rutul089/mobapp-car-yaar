@@ -634,6 +634,7 @@ class CustomerPersonalDetails extends Component {
         handleViewDocument={this.handleViewImage}
         handleDeleteDocument={this.handleDeleteDocument}
         isCreatingLoanApplication={isCreatingLoanApplication}
+        dob={this.state.dob}
       />
     );
   }

@@ -1,3 +1,4 @@
+import {applicationStatus} from '../../constants/enums';
 import {types} from '../actions';
 import {
   ADD_REFERENCE,
@@ -27,6 +28,7 @@ const initialState = {
   financeDetails: null,
   financeDocuments: null,
   referenceDetail: null,
+  isReadOnlyLoanApplication: false,
 };
 
 const loanReducer = (state = initialState, action) => {
@@ -92,6 +94,10 @@ const loanReducer = (state = initialState, action) => {
         loading: false,
         selectedLoanApplication: action.payload,
         selectedApplicationId: action.payload?.id,
+        isReadOnlyLoanApplication: ![
+          applicationStatus.DRAFT,
+          applicationStatus.QUERY,
+        ].includes(action.payload?.status),
       };
 
     case RESET_LOAN_APPLICATION.SUCCESS:
@@ -99,6 +105,7 @@ const loanReducer = (state = initialState, action) => {
         ...state,
         selectedLoanApplication: null,
         selectedApplicationId: null,
+        isReadOnlyLoanApplication: false,
       };
 
     case types.SET_IS_CREATING_LOAN_APPLICATION:

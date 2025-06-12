@@ -15,6 +15,7 @@ import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
 import ScreenNames from '../../../constants/ScreenNames';
 import DeviceInfo from 'react-native-device-info';
+import {formatShortId} from '../../../utils/helper';
 
 const Profile_Component = ({
   onPressRightContent,
@@ -30,6 +31,8 @@ const Profile_Component = ({
   userID,
   avatar,
   designation,
+  partnerId,
+  dealerType,
 }) => {
   const version = DeviceInfo.getVersion();
   const build = DeviceInfo.getBuildNumber();
@@ -46,7 +49,7 @@ const Profile_Component = ({
             size={'small'}
             hankenGroteskSemiBold={true}
             color={theme.colors.primary}>
-            {designation}
+            {formatShortId(partnerId)}
           </Text>
           <Text hankenGroteskExtraBold={true} color={theme.colors.white}>
             {name}
@@ -68,9 +71,9 @@ const Profile_Component = ({
         {[
           {
             icon: images.businessSuitcase,
-            label: 'CarYaar Designation Name',
+            label: designation,
           },
-          {icon: images.user, label: designation},
+          {icon: images.user, label: dealerType},
           {icon: images.email, label: email},
           {icon: images.callOutline, label: phone},
         ].map((item, index) => (
@@ -109,11 +112,11 @@ const Profile_Component = ({
               icon: images.icon_users,
               screenName: ScreenNames.ManageMember,
             },
-            {
-              label: 'Change Password',
-              icon: images.icon_access,
-              screenName: ScreenNames.ChangePassword,
-            },
+            // {
+            //   label: 'Change Password',
+            //   icon: images.icon_access,
+            //   screenName: ScreenNames.ChangePassword,
+            // },
             {
               label: 'FAQs',
               icon: images.icon_help,

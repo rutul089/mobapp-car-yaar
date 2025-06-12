@@ -20,6 +20,11 @@ import {goBack} from '../../../navigation/NavigationUtils';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {FullLoader} from '../../../components';
 import {photoSourceOptions} from '../../../utils/helper';
+import {
+  dealershipTypeLabels,
+  getLabelFromEnum,
+  partnerUserPositionValue,
+} from '../../../constants/enums';
 
 const Edit_Profile_Component = ({
   state,
@@ -34,6 +39,7 @@ const Edit_Profile_Component = ({
   restInputProps = {},
   loading,
   isLoading,
+  designation,
 }) => {
   const refs = {
     fullName: useRef(null),
@@ -109,27 +115,29 @@ const Edit_Profile_Component = ({
               isLeftIconVisible
               value={state.mobileNumber}
               keyboardType="phone-pad"
-              maxLength={10}
               returnKeyType="next"
               onSubmitEditing={() => focusNext('salesExecutivePosition')}
               {...(restInputProps.mobileNumber || {})}
             />
-            {/* <Spacing size="smd" />
+            <Spacing size="smd" />
             <Input
               label="CarYaar Designation"
               leftIconName={images.businessSuitcase}
               isLeftIconVisible
-              isAsDropdown
+              isDisabled
               isRightIconVisible
-              value="Name"
-            /> */}
+              value={designation}
+            />
             <Spacing size="smd" />
             <Input
               label="Dealer Type"
               leftIconName={images.user}
               isLeftIconVisible
               isDisabled
-              value={state.salesExecutivePosition}
+              value={getLabelFromEnum(
+                dealershipTypeLabels,
+                state.salesExecutivePosition,
+              )}
             />
           </Card>
           <Spacing size="xl" />

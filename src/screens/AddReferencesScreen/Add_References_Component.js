@@ -33,6 +33,7 @@ const Add_References_Component = ({
   onPincodeOfficeChange,
   loading,
   restInputProps = {},
+  isReadOnlyLoanApplication,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'referenceNameHome',
@@ -203,7 +204,9 @@ const Add_References_Component = ({
         </GroupWrapper>
         <Spacing size="xl" />
         <Button
-          label={'Confirm & Apply for Loan'}
+          label={
+            isReadOnlyLoanApplication ? 'Next' : 'Confirm & Apply for Loan'
+          }
           onPress={onConfirmLoanPress}
         />
       </KeyboardAwareScrollView>

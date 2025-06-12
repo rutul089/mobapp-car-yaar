@@ -405,3 +405,49 @@ export const vehicleFilterOption = Object.freeze({
   SAVED: 'SAVED',
   DRAFT: 'DRAFT',
 });
+
+export const partnerUserPosition = Object.freeze({
+  DEALER_PRINCIPLE: 'DEALER_PRINCIPLE',
+  SENIOR_MANAGEMENT: 'SENIOR_MANAGEMENT',
+  EMPLOYEE: 'EMPLOYEE',
+});
+
+/**
+ * Dropdown options for Partner User Position selection.
+ */
+export const partnerUserPositionOptions = [
+  {
+    id: '1',
+    label: 'Dealer Principle',
+    value: partnerUserPosition.DEALER_PRINCIPLE,
+  },
+  {
+    id: '2',
+    label: 'Senior Management',
+    value: partnerUserPosition.SENIOR_MANAGEMENT,
+  },
+  {id: '3', label: 'Employee', value: partnerUserPosition.EMPLOYEE},
+];
+
+export const partnerUserPositionValue = {
+  [partnerUserPosition.DEALER_PRINCIPLE]: 'Dealer Principle',
+  [partnerUserPosition.SENIOR_MANAGEMENT]: 'Senior Management',
+  [partnerUserPosition.EMPLOYEE]: 'Employee',
+};
+
+export const dealershipTypeEnum = Object.freeze({
+  OEM: 'OEM',
+  MULTI_BRAND: 'MULTI_BRAND',
+  DSA: 'DSA',
+  BROKER: 'BROKER',
+});
+
+/**
+ * Mapping of Dealership Type value to its display label.
+ */
+export const dealershipTypeLabels = {
+  [dealershipTypeEnum.OEM]: 'OEM Dealer',
+  [dealershipTypeEnum.MULTI_BRAND]: 'Multi-Brand Deaker',
+  [dealershipTypeEnum.DSA]: 'DSA',
+  [dealershipTypeEnum.BROKER]: 'Broker',
+};

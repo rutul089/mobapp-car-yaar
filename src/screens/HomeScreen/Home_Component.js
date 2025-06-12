@@ -15,6 +15,7 @@ import {loanType, vehicleType} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {styles} from '../../styles/Home.style';
+import {formatShortId} from '../../utils/helper';
 
 const Home_Component = ({
   onSelectedCarType,
@@ -28,6 +29,7 @@ const Home_Component = ({
   userName,
   userRole,
   partnerStats,
+  partnerID,
 }) => {
   /**
    * Render a small stat card (e.g., Loans Pending/Approved)
@@ -77,7 +79,7 @@ const Home_Component = ({
         {/* ---------- Welcome & Stats ---------- */}
         <View style={styles.header}>
           <View style={styles.profileRow}>
-            <Text hankenGroteskSemiBold color="white" style={{width: '80%'}}>
+            <Text hankenGroteskSemiBold color="white" style={{width: '75%'}}>
               {`Welcome Back ${userName}!`}
             </Text>
             <Text
@@ -86,7 +88,7 @@ const Home_Component = ({
               textAlign="right"
               color={theme.colors.textLabel}
               size={theme.typography.fontSizes.small}>
-              {userRole}
+              {formatShortId(partnerID, 4)}
             </Text>
           </View>
 

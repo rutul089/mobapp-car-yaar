@@ -364,11 +364,11 @@ export const formatVehicleNumber = (vehicleNumber = '') => {
  * @param {string} id - The full UUID or string to shorten.
  * @returns {string} - The shortened string in the format XXXX...YYYY.
  */
-export const formatShortId = id => {
+export const formatShortId = (id, length = 6) => {
   if (typeof id !== 'string' || id.length < 14) {
     return id;
   }
-  return `${id.slice(0, 6)}...${id.slice(-6)}`;
+  return `${id.slice(0, length)}...${id.slice(-length)}`;
 };
 
 export const photoSourceOptions = [

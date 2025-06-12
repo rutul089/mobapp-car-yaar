@@ -27,6 +27,7 @@ const Loan_Documents_Component = ({
   isLoadingDocument,
   acceptedDocuments,
   dropdownModalProps,
+  isReadOnlyLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -36,11 +37,13 @@ const Loan_Documents_Component = ({
           title={'Documents'}
           documents={documentList}
           isDocument={true}
+          isView={isReadOnlyLoanApplication}
         />
         <DocumentGroup
           title={'Other Documents'}
           documents={otherDocuments}
           isDocument={true}
+          isView={isReadOnlyLoanApplication}
         />
         <Spacing size="smd" />
         <Button variant="link" onPress={onNextPress} label={strings.next} />
