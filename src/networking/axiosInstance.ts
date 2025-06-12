@@ -41,9 +41,9 @@ axiosInstance.interceptors.request.use(
 
     try {
       if (!config?.skipAuth) {
-        // const token = await getCachedToken();
-        const token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NjUyYzg3LWRlNjYtNDU2Zi1hNmZhLWNhYjc3ZmNjOGQxMCIsInJvbGVJZCI6Ijk4ZDk3ZGZmLTNhODYtNDVhNy1iYmE2LWY3ZDU4NzA2YzMwNiIsInJvbGUiOiJQQVJUTkVSIiwiaWF0IjoxNzQ3MDU4MzA3LCJleHAiOjE3NDk2NTAzMDd9.Zcj7eGgH4jallSUZPmK3RskjVxHnexnNKgbk6r3BUVU';
+        const token = await getCachedToken();
+        // const token =
+        //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NjUyYzg3LWRlNjYtNDU2Zi1hNmZhLWNhYjc3ZmNjOGQxMCIsInJvbGVJZCI6Ijk4ZDk3ZGZmLTNhODYtNDVhNy1iYmE2LWY3ZDU4NzA2YzMwNiIsInJvbGUiOiJQQVJUTkVSIiwiaWF0IjoxNzQ3MDU4MzA3LCJleHAiOjE3NDk2NTAzMDd9.Zcj7eGgH4jallSUZPmK3RskjVxHnexnNKgbk6r3BUVU';
         if (token) {
           config.headers = {
             ...config.headers,

@@ -1,10 +1,10 @@
+import {Toast, toastConfig} from '@caryaar/components';
 import React from 'react';
+import {View} from 'react-native';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import RootNavigator from './src/navigation/RootNavigator';
 import {persistor, store} from './src/redux';
-import {View} from 'react-native';
-import {Toast, toastConfig} from '@caryaar/components';
 
 export default function App() {
   return (

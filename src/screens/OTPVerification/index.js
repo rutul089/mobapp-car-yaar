@@ -94,6 +94,7 @@ class OTPVerification extends Component {
       type,
       param,
       async response => {
+        console.log('----------------TOKEN', JSON.stringify(response));
         if (response.success && response?.data?.token) {
           const token = response.data.token;
           await setLoginStatus(true);

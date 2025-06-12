@@ -400,3 +400,8 @@ export const salesExecutiveValue = {
   [salesExecutivePosition.TEAM_LEAD]: 'Team Lead',
   [salesExecutivePosition.MANAGER]: 'Manager',
 };
+
+export const vehicleFilterOption = Object.freeze({
+  SAVED: 'SAVED',
+  DRAFT: 'DRAFT',
+});

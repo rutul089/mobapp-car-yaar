@@ -10,7 +10,12 @@ import {
   selectedLoanType,
 } from '../../redux/actions';
 import Vehicles_Component from './Vehicles_Component';
-import {API_TRIGGER, loanType} from '../../constants/enums';
+import {
+  API_TRIGGER,
+  loanType,
+  vehicleFilterOption,
+} from '../../constants/enums';
+import debounce from 'lodash.debounce';
 
 class Vehicles extends Component {
   constructor(props) {
@@ -22,8 +27,12 @@ class Vehicles extends Component {
       searchText: '',
       fullScreen: false,
       stopLoading: false,
+      showFilterVehicles: false,
+      activeFilterOption: '',
+      previousSearch: '',
     };
     this.limit = 10;
+    this.debouncedSearch = debounce(this.searchFromAPI, 500);
   }
 
   componentDidMount() {
@@ -31,7 +40,6 @@ class Vehicles extends Component {
     this.setState({
       fullScreen: navState?.fullScreen,
     });
-
     this.fetchVehicles();
   }
 
@@ -39,8 +47,8 @@ class Vehicles extends Component {
    * Fetch vehicles list for a given page
    * @param {number} [page=1]
    */
-  fetchVehicles = (page = 1) => {
-    this.props.fetchVehiclesThunk(page, this.limit).finally(() => {
+  fetchVehicles = (page = 1, payload = {}) => {
+    this.props.fetchVehiclesThunk(page, this.limit, payload).finally(() => {
       this.setState({refreshing: false, apiTrigger: API_TRIGGER.DEFAULT});
     });
   };
@@ -50,7 +58,7 @@ class Vehicles extends Component {
    */
   handleLoadMore = () => {
     const {loading} = this.props;
-    const {isSearch, searchText} = this.state;
+    const {isSearch, searchText, activeFilterOption} = this.state;
 
     if (loading) {
       return;
@@ -64,12 +72,18 @@ class Vehicles extends Component {
     const nextPage = currentPage + 1;
     this.setState({apiTrigger: API_TRIGGER.LOAD_MORE});
 
+    let payload = {
+      params: {
+        isDraft: activeFilterOption === vehicleFilterOption.DRAFT,
+      },
+    };
+
     if (isSearch) {
       this.props
         .searchVehiclesByKeywordThunk(searchText.trim(), nextPage, this.limit)
         .finally(() => this.setState({apiTrigger: API_TRIGGER.DEFAULT}));
     } else {
-      this.fetchVehicles(nextPage);
+      this.fetchVehicles(nextPage, activeFilterOption ? payload : {});
     }
   };
 
@@ -117,15 +131,34 @@ class Vehicles extends Component {
    * Handles search input change
    * @param {string} text
    */
+  // onSearchText = text => {
+  //   const trimmed = text.trim();
+  //   this.setState({searchText: text, apiTrigger: API_TRIGGER.DEFAULT}, () => {
+  //     if (trimmed === '') {
+  //       this.setState({isSearch: false});
+  //       this.fetchVehicles();
+  //       this.props.clearVehicleSearch();
+  //     } else {
+  //       this.setState({stopLoading: true});
+  //       this.searchFromAPI(trimmed);
+  //     }
+  //   });
+  // };
+
   onSearchText = text => {
     const trimmed = text.trim();
+
     this.setState({searchText: text, apiTrigger: API_TRIGGER.DEFAULT}, () => {
       if (trimmed === '') {
-        this.setState({isSearch: false});
+        this.setState({isSearch: false, previousSearch: ''});
         this.props.clearVehicleSearch();
-      } else {
-        this.setState({stopLoading: true});
-        this.searchFromAPI(trimmed);
+        this.fetchVehicles(); // fallback to default
+        return;
+      }
+
+      if (trimmed !== this.state.previousSearch) {
+        this.setState({stopLoading: true, previousSearch: trimmed});
+        this.debouncedSearch(trimmed);
       }
     });
   };
@@ -149,7 +182,11 @@ class Vehicles extends Component {
       return;
     }
 
-    this.setState({isSearch: true, apiTrigger: API_TRIGGER.DEFAULT});
+    this.setState({
+      isSearch: true,
+      apiTrigger: API_TRIGGER.DEFAULT,
+      activeFilterOption: '',
+    });
     this.props
       .searchVehiclesByKeywordThunk(trimmed, 1, this.limit)
       .finally(() =>
@@ -168,6 +205,47 @@ class Vehicles extends Component {
     navigate(ScreenNames.SearchView);
   };
 
+  handleFilterVehicles = () => {
+    this.setState({showFilterVehicles: true});
+  };
+
+  onPressPrimaryButton = value => {
+    this.setState({
+      showFilterVehicles: false,
+      activeFilterOption: value,
+    }); // fetch will be handled by componentDidUpdate
+  };
+
+  onClearFilterButton = () => {
+    this.setState({
+      showFilterVehicles: false,
+      activeFilterOption: '',
+    });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const {activeFilterOption, isSearch, searchText} = this.state;
+    console.log('activeFilterOption', prevState.activeFilterOption);
+
+    // Run filter fetch if activeFilterOption changes and it's not a search
+    if (prevState.activeFilterOption !== activeFilterOption && !isSearch) {
+      let payload = {};
+      if (
+        [vehicleFilterOption.DRAFT, vehicleFilterOption.SAVED].includes(
+          activeFilterOption,
+        )
+      ) {
+        payload = {
+          params: {
+            isDraft: activeFilterOption === vehicleFilterOption.DRAFT,
+          },
+        };
+      }
+
+      this.fetchVehicles(1, payload);
+    }
+  }
+
   render() {
     const {
       loading,
@@ -177,8 +255,15 @@ class Vehicles extends Component {
       userData,
     } = this.props;
 
-    const {refreshing, apiTrigger, searchText, isSearch, stopLoading} =
-      this.state;
+    const {
+      refreshing,
+      apiTrigger,
+      searchText,
+      isSearch,
+      stopLoading,
+      showFilterVehicles,
+      activeFilterOption,
+    } = this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
 
@@ -208,6 +293,15 @@ class Vehicles extends Component {
         onAddButtonPress={this.onAddButtonPress}
         isCreatingLoanApplication={isCreatingLoanApplication}
         profileImage={userData?.profileImage}
+        handleFilterVehicles={this.handleFilterVehicles}
+        filterVehicleProps={{
+          isVisible: showFilterVehicles,
+          handleCloseFilter: () => this.setState({showFilterVehicles: false}),
+          onPressPrimaryButton: value => this.onPressPrimaryButton(value),
+          onClearFilterButton: this.onClearFilterButton,
+        }}
+        activeFilterOption={activeFilterOption}
+        stopLoading={stopLoading}
       />
     );
   }

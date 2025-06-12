@@ -7,11 +7,14 @@ import axiosInstance from '../networking/axiosInstance';
  * @returns {Promise<Object>} The response data containing the vehicles and pagination details.
  * @throws {Error} Throws an error if the request fails.
  */
-export const fetchVehicles = async (page = 1, limit = 10) => {
+export const fetchVehicles = async (page = 1, limit = 10, payload = {}) => {
   try {
-    const response = await axiosInstance.get('/vehicles/', {
-      params: {page, limit},
-    });
+    const response = await axiosInstance.get(
+      '/vehicles/getVehicleByPartnerId',
+      {
+        params: {page, limit, ...(payload.params || {})},
+      },
+    );
     return response.data;
   } catch (error) {
     console.error('Failed to fetch vehicles:', error);
@@ -145,7 +148,10 @@ export const onboardUsedVehicle = async vehicleData => {
 export const searchVehiclesByKeyword = async (search, page = 1, limit = 10) => {
   try {
     const params = {search, page, limit};
-    const response = await axiosInstance.get('/vehicles', {params});
+    const response = await axiosInstance.get(
+      '/vehicles/getVehicleByPartnerId',
+      {params},
+    );
     return response.data;
   } catch (error) {
     throw error;

@@ -18,12 +18,12 @@ import {
 import types from './types';
 
 export const fetchVehiclesThunk =
-  (page = 1, limit = 5, onSuccess, onFailure) =>
+  (page = 1, limit = 5, payload = {}, onSuccess, onFailure) =>
   async dispatch => {
     dispatch({type: types.FETCH_VEHICLES_REQUEST});
 
     try {
-      const response = await fetchVehicles(page, limit);
+      const response = await fetchVehicles(page, limit, payload);
       dispatch({
         type: types.FETCH_VEHICLES_SUCCESS,
         payload: {

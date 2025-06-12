@@ -6,3 +6,4 @@ export {default as NoDataFound} from './NoDataFound';
 export {default as DocumentGroup} from './DocumentGroup';
 export {default as FullLoader} from './FullLoader';
 export {default as InitialsAvatar} from './InitialsAvatar';
+export {default as StatusChip} from './StatusChip';

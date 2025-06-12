@@ -1,17 +1,28 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   CardWrapper,
+  CommonModal,
   Header,
   ImageHeader,
   Loader,
   PaginationFooter,
+  RadioButton,
   SafeAreaWrapper,
   SearchBar,
+  Spacing,
+  Text,
   theme,
   VehicleCard,
 } from '@caryaar/components';
 import {get} from 'lodash';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {NoDataFound} from '../../components';
+import {NoDataFound, StatusChip} from '../../components';
+import {
+  API_TRIGGER,
+  currentLoanLabelMap,
+  vehicleFilterOption,
+} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
@@ -21,7 +32,6 @@ import {
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
-import {API_TRIGGER, currentLoanLabelMap} from '../../constants/enums';
 
 const Vehicles_Component = ({
   vehicleData,
@@ -40,7 +50,27 @@ const Vehicles_Component = ({
   onAddButtonPress,
   isCreatingLoanApplication,
   profileImage,
+  handleFilterVehicles,
+  filterVehicleProps,
+  activeFilterOption,
+  stopLoading,
 }) => {
+  const [localActiveFilterOption, setLocalActiveFilterOption] =
+    React.useState(activeFilterOption);
+
+  useEffect(() => {
+    setLocalActiveFilterOption(activeFilterOption);
+  }, [activeFilterOption]);
+
+  const handleApplyFilter = () => {
+    filterVehicleProps?.onPressPrimaryButton?.(localActiveFilterOption);
+  };
+
+  const handleClearFilter = () => {
+    setLocalActiveFilterOption('');
+    filterVehicleProps?.onClearFilterButton?.();
+  };
+
   return (
     <SafeAreaWrapper hideBottom>
       {isCreatingLoanApplication ? (
@@ -72,7 +102,21 @@ const Vehicles_Component = ({
           hideHeader
           hideSubHeaderTop={false}
           onRightIconPress={() => navigate(ScreenNames.Notification)}
+          onFilterPress={handleFilterVehicles}
         />
+      )}
+      {activeFilterOption && (
+        <View style={styles.filterWrapper}>
+          <Text type="helper-text">FilterView</Text>
+          <StatusChip
+            label={`${
+              activeFilterOption === vehicleFilterOption.DRAFT
+                ? 'Draft'
+                : 'Saved'
+            } Vehicles`}
+            onRemove={handleClearFilter}
+          />
+        </View>
       )}
       <FlatList
         data={vehicleData}
@@ -141,7 +185,7 @@ const Vehicles_Component = ({
           />
         }
         ListEmptyComponent={
-          !loading && (
+          (!loading || stopLoading) && (
             <NoDataFound
               text="No Search Result Found"
               btnLabel="Add Vehicle"
@@ -151,6 +195,39 @@ const Vehicles_Component = ({
           )
         }
       />
+
+      <CommonModal
+        isVisible={filterVehicleProps?.isVisible}
+        onModalHide={() => {
+          filterVehicleProps?.handleCloseFilter?.();
+        }}
+        primaryButtonLabel={'Apply'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        showSecondaryButton
+        secondaryButtonText={'Clear'}
+        onPressPrimaryButton={handleApplyFilter}
+        onSecondaryPress={handleClearFilter}
+        isTextCenter={false}
+        title="Filter by">
+        <View style={{paddingVertical: 10, marginBottom: -12}}>
+          <RadioButton
+            label={'Saved Vehicles'}
+            selected={localActiveFilterOption === vehicleFilterOption.SAVED}
+            onPress={() =>
+              setLocalActiveFilterOption(vehicleFilterOption.SAVED)
+            }
+          />
+          <Spacing />
+          <RadioButton
+            label={'Draft Vehicles'}
+            selected={localActiveFilterOption === vehicleFilterOption.DRAFT}
+            onPress={() =>
+              setLocalActiveFilterOption(vehicleFilterOption.DRAFT)
+            }
+          />
+        </View>
+      </CommonModal>
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
@@ -167,6 +244,48 @@ const styles = StyleSheet.create({
     padding: theme.sizes.spacing.md,
     paddingTop: 0,
   },
+
+  filterWrapper: {
+    paddingHorizontal: 25,
+    paddingTop: 15,
+    paddingBottom: 5,
+    backgroundColor: theme.colors.background,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default Vehicles_Component;
+
+// Code in case of multiple filter choice
+{
+  /* <View
+style={{
+  paddingHorizontal: 25,
+  paddingTop: 15,
+  paddingBottom: 5,
+  backgroundColor: theme.colors.background,
+  flexDirection: 'row',
+  alignContent: 'center',
+  alignItems: 'center',
+}}>
+<Text type="helper-text">FilterView</Text>
+<View
+  style={{
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 10,
+    gap: 8,
+  }}>
+  {statuses.map((status, index) => (
+    <View key={index} style={styles.chip}>
+      <Text type="helper-text" hankenGroteskBold color={'black'}>
+        {status}
+      </Text>
+      <Image source={images.icFilterClose} style={styles.closeIcon} />
+    </View>
+  ))}
+</View>
+</View> */
+}
