@@ -110,6 +110,7 @@ class Vehicles extends Component {
       searchText: '',
       isSearch: false,
       apiTrigger: API_TRIGGER.PULL_TO_REFRESH,
+      activeFilterOption: '',
     });
 
     this.props.clearVehicleSearch();
@@ -213,7 +214,7 @@ class Vehicles extends Component {
     this.setState({
       showFilterVehicles: false,
       activeFilterOption: value,
-    }); // fetch will be handled by componentDidUpdate
+    });
   };
 
   onClearFilterButton = () => {

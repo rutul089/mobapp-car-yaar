@@ -10,6 +10,7 @@ import {
   setIsCreatingLoanApplication,
 } from '../../redux/actions';
 import Applications_Component from './Applications_Component';
+import debounce from 'lodash.debounce';
 
 /**
  * Screen that displays and manages a paginated and searchable list of loan applications.
@@ -29,11 +30,15 @@ class ApplicationsScreen extends Component {
       // Optional full-screen view toggle (unused but reserved)
       fullScreen: false,
       stopLoading: false,
+      showFilterApplications: false,
+      activeFilterOption: '',
+      previousSearch: '',
     };
 
     this.limit = 10; // Pagination limit
     this.onItemPress = this.onItemPress.bind(this);
     this.handleTrackApplication = this.handleTrackApplication.bind(this);
+    this.debouncedSearch = debounce(this.searchFromAPI, 500);
   }
 
   /**
@@ -69,6 +74,7 @@ class ApplicationsScreen extends Component {
       searchText: '',
       isSearch: false,
       apiTrigger: API_TRIGGER.PULL_TO_REFRESH,
+      activeFilterOption: '',
     });
 
     this.props.clearSearchApplication();
@@ -80,7 +86,7 @@ class ApplicationsScreen extends Component {
    */
   handleLoadMore = () => {
     const {loading} = this.props;
-    const {isSearch, searchText} = this.state;
+    const {isSearch, searchText, activeFilterOption} = this.state;
 
     if (loading) {
       return;
@@ -94,10 +100,20 @@ class ApplicationsScreen extends Component {
     const nextPage = currentPage + 1;
     this.setState({apiTrigger: API_TRIGGER.LOAD_MORE});
 
+    let payload = {};
+
+    if (activeFilterOption) {
+      payload = {
+        params: {
+          status: activeFilterOption,
+        },
+      };
+    }
+
     if (isSearch) {
       this.fetchAllApplication(nextPage, {params: {search: searchText.trim()}});
     } else {
-      this.fetchAllApplication(nextPage);
+      this.fetchAllApplication(nextPage, payload);
     }
   };
 
@@ -106,15 +122,33 @@ class ApplicationsScreen extends Component {
    * Clears search if text is empty.
    * @param {string} value - Input text.
    */
-  onSearchText = value => {
-    const trimmed = value.trim();
-    this.setState({searchText: value, apiTrigger: API_TRIGGER.DEFAULT}, () => {
+  // onSearchText = value => {
+  //   const trimmed = value.trim();
+  //   this.setState({searchText: value, apiTrigger: API_TRIGGER.DEFAULT}, () => {
+  //     if (trimmed === '') {
+  //       this.setState({isSearch: false});
+  //       this.props.clearSearchApplication();
+  //     } else {
+  //       this.setState({stopLoading: true});
+  //       this.searchFromAPI(value);
+  //     }
+  //   });
+  // };
+
+  onSearchText = text => {
+    const trimmed = text.trim();
+
+    this.setState({searchText: text, apiTrigger: API_TRIGGER.DEFAULT}, () => {
       if (trimmed === '') {
-        this.setState({isSearch: false});
+        this.setState({isSearch: false, previousSearch: ''});
         this.props.clearSearchApplication();
-      } else {
-        this.setState({stopLoading: true});
-        this.searchFromAPI(value);
+        this.fetchAllApplication(); // fallback to default
+        return;
+      }
+
+      if (trimmed !== this.state.previousSearch) {
+        this.setState({stopLoading: true, previousSearch: trimmed});
+        this.debouncedSearch(trimmed);
       }
     });
   };
@@ -138,7 +172,11 @@ class ApplicationsScreen extends Component {
       return;
     }
 
-    this.setState({isSearch: true, apiTrigger: API_TRIGGER.DEFAULT});
+    this.setState({
+      isSearch: true,
+      apiTrigger: API_TRIGGER.DEFAULT,
+      activeFilterOption: '',
+    });
     this.fetchAllApplication(1, {params: {search: trimmed}});
   };
 
@@ -169,12 +207,59 @@ class ApplicationsScreen extends Component {
     return isSearch ? [searchPage, searchTotalPages] : [page, totalPage];
   };
 
+  handleFilterApplications = () => {
+    this.setState({showFilterApplications: true});
+  };
+
+  onPressPrimaryButton = value => {
+    this.setState(
+      {
+        showFilterApplications: false,
+        activeFilterOption: value,
+        isSearch: false,
+        searchText: '',
+      },
+      () => this.clearSearch(),
+    );
+  };
+
+  onClearFilterButton = () => {
+    this.setState({
+      showFilterApplications: false,
+      activeFilterOption: '',
+    });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const {activeFilterOption, isSearch, searchText} = this.state;
+
+    // Run filter fetch if activeFilterOption changes and it's not a search
+    if (prevState.activeFilterOption !== activeFilterOption && !isSearch) {
+      let payload = {};
+      if (activeFilterOption) {
+        payload = {
+          params: {
+            status: activeFilterOption,
+          },
+        };
+      }
+      this.fetchAllApplication(1, payload);
+    }
+  }
+
   /**
    * Renders the UI with Application_Component
    */
   render() {
-    const {apiTrigger, refreshing, searchText, isSearch, stopLoading} =
-      this.state;
+    const {
+      apiTrigger,
+      refreshing,
+      searchText,
+      isSearch,
+      stopLoading,
+      showFilterApplications,
+      activeFilterOption,
+    } = this.state;
     const {applications, loading, searchApplications, userData} = this.props;
 
     const [currentPage, totalPages] = this.getPageInfo();
@@ -203,6 +288,16 @@ class ApplicationsScreen extends Component {
         setSearch={this.searchFromAPI}
         loading={initialLoading}
         profileImage={userData?.profileImage}
+        handleFilterApplications={this.handleFilterApplications}
+        filterApplicationProps={{
+          isVisible: showFilterApplications,
+          handleCloseFilter: () =>
+            this.setState({showFilterApplications: false}),
+          onPressPrimaryButton: value => this.onPressPrimaryButton(value),
+          onClearFilterButton: this.onClearFilterButton,
+        }}
+        activeFilterOption={activeFilterOption}
+        stopLoading={stopLoading}
       />
     );
   }

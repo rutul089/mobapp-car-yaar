@@ -1,27 +1,27 @@
 export const applicationStatus = Object.freeze({
   APPROVED: 'APPROVED',
   IN_REVIEW: 'IN_REVIEW',
-  PENDING: 'PENDING',
   QUERY: 'QUERY',
   REJECTED: 'REJECTED',
   DRAFT: 'DRAFT',
+  DISBURSED: 'DISBURSED',
 });
 
 export const applicationStatusOptions = [
   {id: '1', label: 'Approved', value: applicationStatus.APPROVED},
   {id: '2', label: 'Rejected', value: applicationStatus.REJECTED},
-  {id: '3', label: 'Pending', value: applicationStatus.PENDING},
   {id: '4', label: 'Query', value: applicationStatus.QUERY},
   {id: '5', label: 'In Review', value: applicationStatus.IN_REVIEW},
+  {id: '6', label: 'Disbursed', value: applicationStatus.DISBURSED},
 ];
 
 export const applicationStatusValue = {
   [applicationStatus.APPROVED]: 'Approved',
   [applicationStatus.REJECTED]: 'Rejected',
-  [applicationStatus.PENDING]: 'Pending',
   [applicationStatus.QUERY]: 'Query',
   [applicationStatus.IN_REVIEW]: 'In Review',
   [applicationStatus.DRAFT]: 'Draft',
+  [applicationStatus.DISBURSED]: 'Disbursed',
 };
 
 export const customerCategory = Object.freeze({

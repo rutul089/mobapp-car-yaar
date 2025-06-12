@@ -245,10 +245,10 @@ export const capitalizeFirstLetter = str => {
  */
 export const getApplicationGradientColors = status => {
   switch (status) {
-    case applicationStatus.PENDING:
     case applicationStatus.IN_REVIEW:
       return theme.colors.appliedGradient;
     case applicationStatus.APPROVED:
+    case applicationStatus.DISBURSED:
       return theme.colors.lenderApprovedGradient;
     case applicationStatus.REJECTED:
     case applicationStatus.QUERY:
@@ -267,11 +267,11 @@ export const getApplicationGradientColors = status => {
  */
 export const getApplicationStatusColor = status => {
   switch (status) {
-    case applicationStatus.PENDING:
     case applicationStatus.IN_REVIEW:
     case applicationStatus.APPROVED:
     case applicationStatus.REJECTED:
     case applicationStatus.QUERY:
+    case applicationStatus.DISBURSED:
       return 'rgba(0, 0, 0, 0.36)';
     case applicationStatus.DRAFT:
       return '#828282';

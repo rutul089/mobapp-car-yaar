@@ -158,8 +158,8 @@ class LoanDocumentsScreen extends Component {
     let acceptedDocuments =
       matched?.acceptedDocuments?.map(doc => ({label: doc})) || [];
 
-    console.log({typeOfIndividual, documentType, loadProduct});
-    console.log(acceptedDocuments);
+    // console.log({typeOfIndividual, documentType, loadProduct});
+    // console.log(acceptedDocuments);
 
     // Trigger file picker modal
     this.setState({
@@ -324,15 +324,12 @@ class LoanDocumentsScreen extends Component {
       },
       async () => {
         await new Promise(resolve => setTimeout(resolve, 330));
-        console.log('--------------------');
         this.setState({
           showAcceptedDocModal: false,
           showFilePicker: true,
         });
       },
     );
-
-    console.log({item});
   };
 
   render() {

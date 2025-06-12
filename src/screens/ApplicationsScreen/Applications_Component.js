@@ -6,11 +6,22 @@ import {
   PaginationFooter,
   SafeAreaWrapper,
   theme,
+  CommonModal,
+  RadioButton,
+  Spacing,
+  Text,
 } from '@caryaar/components';
 import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
-import {NoDataFound} from '../../components';
-import {API_TRIGGER, getApplicationStatusLabel} from '../../constants/enums';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {NoDataFound, StatusChip} from '../../components';
+import {
+  API_TRIGGER,
+  applicationStatus,
+  applicationStatusOptions,
+  applicationStatusValue,
+  getApplicationStatusLabel,
+  getLabelFromEnum,
+} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {navigate} from '../../navigation/NavigationUtils';
 import {
@@ -36,7 +47,27 @@ const Applications_Component = ({
   clearSearch,
   setSearch,
   profileImage,
+  filterApplicationProps,
+  activeFilterOption,
+  handleFilterApplications,
+  stopLoading,
 }) => {
+  const [localActiveFilterOption, setLocalActiveFilterOption] =
+    React.useState(activeFilterOption);
+
+  React.useEffect(() => {
+    setLocalActiveFilterOption(activeFilterOption);
+  }, [activeFilterOption]);
+
+  const handleApplyFilter = () => {
+    filterApplicationProps?.onPressPrimaryButton?.(localActiveFilterOption);
+  };
+
+  const handleClearFilter = () => {
+    setLocalActiveFilterOption('');
+    filterApplicationProps?.onClearFilterButton?.();
+  };
+
   const renderItem = ({item}) => (
     <CardWrapper
       disableMargin={false}
@@ -74,6 +105,7 @@ const Applications_Component = ({
       />
     </CardWrapper>
   );
+
   return (
     <SafeAreaWrapper hideBottom>
       <ImageHeader
@@ -88,13 +120,23 @@ const Applications_Component = ({
         hideHeader
         hideSubHeaderTop={false}
         onRightIconPress={() => navigate(ScreenNames.Notification)}
+        onFilterPress={handleFilterApplications}
       />
+      {activeFilterOption && (
+        <View style={styles.filterWrapper}>
+          <Text type="helper-text">FilterView</Text>
+          <StatusChip
+            label={getLabelFromEnum(applicationStatusValue, activeFilterOption)}
+            onRemove={handleClearFilter}
+          />
+        </View>
+      )}
       <FlatList
         data={dataToShow}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.wrapper}
-        ListEmptyComponent={!loading && <NoDataFound />}
+        ListEmptyComponent={(!loading || stopLoading) && <NoDataFound />}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         onRefresh={onRefresh}
@@ -110,6 +152,33 @@ const Applications_Component = ({
           />
         }
       />
+      <CommonModal
+        isVisible={filterApplicationProps?.isVisible}
+        onModalHide={() => {
+          filterApplicationProps?.handleCloseFilter?.();
+        }}
+        primaryButtonLabel={'Apply'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        showSecondaryButton
+        secondaryButtonText={'Clear'}
+        onPressPrimaryButton={handleApplyFilter}
+        onSecondaryPress={handleClearFilter}
+        isTextCenter={false}
+        title="Filter by">
+        <View style={{paddingVertical: 10, marginBottom: -20}}>
+          {applicationStatusOptions.map((option, index) => (
+            <React.Fragment key={`${option.label}-${index}`}>
+              <RadioButton
+                label={option.label}
+                selected={localActiveFilterOption === option.value}
+                onPress={() => setLocalActiveFilterOption(option.value)}
+              />
+              <Spacing />
+            </React.Fragment>
+          ))}
+        </View>
+      </CommonModal>
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
@@ -119,6 +188,16 @@ const styles = StyleSheet.create({
   wrapper: {
     flexGrow: 1,
     padding: theme.sizes.padding,
+    backgroundColor: theme.colors.background,
+  },
+  filterWrapper: {
+    paddingHorizontal: 25,
+    paddingTop: 15,
+    paddingBottom: 5,
+    backgroundColor: theme.colors.background,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
 
