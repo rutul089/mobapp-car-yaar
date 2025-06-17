@@ -7,6 +7,7 @@ import Profile_Component from './Profile_Component';
 import {
   dealershipTypeLabels,
   getLabelFromEnum,
+  partnerUserPosition,
   partnerUserPositionValue,
   userRoleValue,
 } from '../../../constants/enums';
@@ -84,6 +85,10 @@ class ProfileScreen extends Component {
         avatar={profileDetail?.profileImage}
         partnerId={profileDetail?.id}
         dealerType={getLabelFromEnum(dealershipTypeLabels, dealerType)}
+        showMangeMember={
+          profileDetail?.partnerUser?.position ===
+          partnerUserPosition.SENIOR_MANAGEMENT
+        }
       />
     );
   }

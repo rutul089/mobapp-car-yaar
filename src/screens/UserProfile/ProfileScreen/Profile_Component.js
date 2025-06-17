@@ -33,6 +33,7 @@ const Profile_Component = ({
   designation,
   partnerId,
   dealerType,
+  showMangeMember,
 }) => {
   const version = DeviceInfo.getVersion();
   const build = DeviceInfo.getBuildNumber();
@@ -134,27 +135,38 @@ const Profile_Component = ({
               hideRightArrow: true,
               screenName: ScreenNames.Logout,
             },
-          ].map((item, index) => (
-            <React.Fragment key={index}>
-              <Card
-                onPress={() => handleMenuPress(index, item)}
-                padding={15}
-                noShadow={true}
-                cardContainerStyle={{flexDirection: 'row'}}>
-                <Image
-                  source={item.icon}
-                  style={[styles.menuIcon, {tintColor: item?.themeColor}]}
-                />
-                <Text style={{flex: 1}} color={item?.themeColor}>
-                  {item.label}
-                </Text>
-                {!item?.hideRightArrow && (
-                  <Image source={images.arrow_right} style={styles.menuIcon} />
-                )}
-              </Card>
-              <Spacing size="smd" />
-            </React.Fragment>
-          ))}
+          ].map((item, index) => {
+            if (
+              item.screenName === ScreenNames.ManageMember &&
+              !showMangeMember
+            ) {
+              return;
+            }
+            return (
+              <React.Fragment key={index}>
+                <Card
+                  onPress={() => handleMenuPress(index, item)}
+                  padding={15}
+                  noShadow={true}
+                  cardContainerStyle={{flexDirection: 'row'}}>
+                  <Image
+                    source={item.icon}
+                    style={[styles.menuIcon, {tintColor: item?.themeColor}]}
+                  />
+                  <Text style={{flex: 1}} color={item?.themeColor}>
+                    {item.label}
+                  </Text>
+                  {!item?.hideRightArrow && (
+                    <Image
+                      source={images.arrow_right}
+                      style={styles.menuIcon}
+                    />
+                  )}
+                </Card>
+                <Spacing size="smd" />
+              </React.Fragment>
+            );
+          })}
         </View>
         <Text textAlign="center" type="helper-text">
           App Version: {version}.{build}
