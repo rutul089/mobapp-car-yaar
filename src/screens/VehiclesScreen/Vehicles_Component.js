@@ -180,7 +180,7 @@ const Vehicles_Component = ({
             loading={loading}
             currentPage={currentPage}
             totalPages={totalPages}
-            footerMessage={'All Vehicles are loaded.'}
+            footerMessage={'You’ve reached the end!'}
             minTotalPagesToShowMessage={1}
           />
         }
@@ -190,7 +190,7 @@ const Vehicles_Component = ({
               text="No Search Result Found"
               btnLabel="Add Vehicle"
               onPress={onAddButtonPress}
-              showButton
+              showButton={false}
             />
           )
         }

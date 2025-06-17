@@ -15,7 +15,7 @@ const screenOptions = {
   gestureEnabled: true,
   gestureDirection: 'horizontal',
   detachPreviousScreen: true,
-  lazy: true,
+  lazy: false,
   cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
   transitionSpec: {
     open: {

@@ -100,7 +100,8 @@ class LoanOfferDetailScreen extends Component {
 
   componentDidMount() {
     let route = this.props.route;
-    let loanDetail = getScreenParam(route, 'params');
+    let loanDetail =
+      getScreenParam(route, 'params') || route?.params?.loanDetail;
     this.setState({
       loanDetail,
     });

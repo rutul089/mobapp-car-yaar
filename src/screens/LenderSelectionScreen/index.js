@@ -29,8 +29,11 @@ class LenderSelection extends Component {
       selectedApplicationId,
       param,
       success => {
-        let params = getScreenParam(this.props.route, 'params');
-        navigate(ScreenNames.LoanOfferDetail, {params});
+        let rawParams = getScreenParam(this.props.route, 'params');
+        navigate(ScreenNames.LoanOfferDetail, {
+          ...rawParams,
+          loanDetail: {title: item?.title, interestRate: item?.interestRate},
+        });
       },
     );
   };

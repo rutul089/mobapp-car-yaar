@@ -39,7 +39,6 @@ class EditProfileScreen extends Component {
 
   componentDidMount() {
     const {profileDetail} = this.props;
-    console.log('profileDetail', JSON.stringify(profileDetail));
     this.setState({
       fullName: get(profileDetail, 'name', ''),
       email: get(profileDetail, 'email', ''),

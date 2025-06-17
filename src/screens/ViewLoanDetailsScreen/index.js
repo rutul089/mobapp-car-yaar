@@ -33,7 +33,6 @@ class ViewLoanDetailsScreen extends Component {
     super(props);
     this.state = {
       loanDetail: {},
-      applicationId: getScreenParam(props.route, 'params')?.id || '',
     };
     this.onBackToHomePress = this.onBackToHomePress.bind(this);
     this.onTrackLoanStatusPress = this.onTrackLoanStatusPress.bind(this);
@@ -41,10 +40,11 @@ class ViewLoanDetailsScreen extends Component {
   }
 
   componentDidMount() {
-    const {applicationId} = this.state;
+    const loanId = this.props.route.params.loanId || '';
+
     const {selectedLoanApplication} = this.props;
-    if (applicationId && !selectedLoanApplication) {
-      this.props.fetchLoanApplicationFromIdThunk(applicationId);
+    if (loanId && !selectedLoanApplication) {
+      this.props.fetchLoanApplicationFromIdThunk(loanId);
     }
   }
 

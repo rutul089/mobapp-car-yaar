@@ -122,10 +122,7 @@ const Customer_Personal_Details_Component = ({
 
   const _onChangeDob = selectedDate => {
     setShowPicker(false);
-    console.log('selectedDate', selectedDate);
   };
-
-  console.log('dob', dob);
 
   return (
     <SafeAreaWrapper>
@@ -163,7 +160,7 @@ const Customer_Personal_Details_Component = ({
           />
           <Spacing size="md" />
           <Input
-            placeholder=""
+            placeholder="ABCDE1234F"
             isLeftIconVisible
             leftIconName={images.idCard}
             onChangeText={value => {
@@ -177,6 +174,8 @@ const Customer_Personal_Details_Component = ({
             ref={refs?.panCardNumber}
             onSubmitEditing={() => focusNext('aadharNumber')}
             onFocus={() => !isEdit && scrollToInput('aadharNumber')}
+            rightLabelColor={theme.colors.primary}
+            rightIconName={images.successCheck}
             {...(restInputProps?.panCardNumber || {})}
           />
           <Spacing size="md" />
@@ -211,9 +210,7 @@ const Customer_Personal_Details_Component = ({
             placeholder="8752 7580 9001"
             isLeftIconVisible
             leftIconName={images.idCard}
-            rightLabel="VERIFY"
             rightLabelColor={theme.colors.primary}
-            rightLabelPress={() => Alert.alert('test')}
             onChangeText={value => {
               const sanitizedText = value.replace(/[^0-9]/g, '');
               onChangeAadharNumber?.(sanitizedText);
@@ -225,6 +222,7 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             onSubmitEditing={() => focusNext('applicantName')}
             onFocus={() => !isEdit && scrollToInput('applicantName')}
+            rightIconName={images.successCheck}
             {...(restInputProps?.aadharNumber || {})}
           />
           <Spacing size="md" />

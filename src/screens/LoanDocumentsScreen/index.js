@@ -79,7 +79,7 @@ class LoanDocumentsScreen extends Component {
   }
 
   backHandler = () => {
-    return !this.props.isCreatingLoanApplication;
+    return this.props.isCreatingLoanApplication;
   };
 
   componentWillUnmount() {

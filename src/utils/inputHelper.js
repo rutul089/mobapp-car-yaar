@@ -73,7 +73,7 @@ export const validateField = (key, value, isOptional) => {
 
     case 'aadharNumber':
       return trimmedValue === ''
-        ? 'Please enter a mobile number'
+        ? 'Please enter a valid Aadhaar number.'
         : !aadharRegex.test(trimmedValue)
         ? 'Please enter a valid 12-digit Aadhaar number.'
         : '';
@@ -159,42 +159,8 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === '' ? 'Please upload required image' : '';
 
     case 'dob':
-    case 'loanClosedDate': {
-      if (trimmedValue === '') {
-        return 'Please enter valid date';
-      }
-
-      const parts = trimmedValue.split('/');
-      if (parts.length !== 3) {
-        return 'Please enter a valid date in dd/mm/yyyy format';
-      }
-
-      const [dd, mm, yyyy] = parts.map(Number);
-      const date = new Date(yyyy, mm - 1, dd);
-
-      const isValid =
-        date.getFullYear() === yyyy &&
-        date.getMonth() === mm - 1 &&
-        date.getDate() === dd;
-
-      if (!isValid) {
-        return 'Please enter a valid date in dd/mm/yyyy format';
-      }
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const inputDate = new Date(yyyy, mm - 1, dd);
-
-      if (inputDate.getTime() === today.getTime() && key === 'dob') {
-        return 'Date of birth cannot be today';
-      }
-
-      if (inputDate > today) {
-        return 'Date cannot be in the future';
-      }
-
-      return ''; // All good
-    }
+    case 'loanClosedDate':
+      return validateDate(trimmedValue, key);
 
     case 'bankName':
       return trimmedValue === '' ? 'Please enter Bank Name.' : '';
@@ -419,3 +385,61 @@ export const isValidInput = input => {
   // Allow only numbers and slashes
   return /^[0-9/]*$/.test(input);
 };
+
+function validateDate(trimmedValue, key) {
+  if (trimmedValue === '') {
+    return 'Please enter a valid date';
+  }
+
+  const parts = trimmedValue.split('/');
+  if (parts.length !== 3) {
+    return 'Please enter a valid date in dd/mm/yyyy format';
+  }
+
+  const [ddStr, mmStr, yyyyStr] = parts;
+
+  if (yyyyStr.length !== 4 || isNaN(yyyyStr)) {
+    return 'Please enter a 4-digit year';
+  }
+
+  const dd = Number(ddStr);
+  const mm = Number(mmStr);
+  const yyyy = Number(yyyyStr);
+
+  const currentYear = new Date().getFullYear();
+  if (yyyy < 1900) {
+    return 'Please enter a valid year';
+  }
+
+  const date = new Date(yyyy, mm - 1, dd);
+  const isValid =
+    date.getFullYear() === yyyy &&
+    date.getMonth() === mm - 1 &&
+    date.getDate() === dd;
+
+  if (!isValid) {
+    return 'Please enter a valid date';
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const inputDate = new Date(yyyy, mm - 1, dd);
+
+  if (key === 'dob') {
+    if (inputDate.getTime() === today.getTime()) {
+      return 'Date of birth cannot be today';
+    }
+
+    if (inputDate > today) {
+      return 'Date of birth cannot be in the future';
+    }
+
+    // ✅ Optional: Minimum age check (e.g., 18 years)
+    // const age = currentYear - yyyy;
+    // if (age < 18) {
+    //   return 'You must be at least 18 years old';
+    // }
+  }
+
+  return ''; // ✅ All good
+}

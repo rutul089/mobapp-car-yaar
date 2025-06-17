@@ -28,8 +28,11 @@ class index extends Component {
       selectedApplicationId,
       param,
       success => {
-        let params = getScreenParam(this.props.route, 'params');
-        navigate(ScreenNames.LoanOfferDetail, {params});
+        let rawParams = getScreenParam(this.props.route, 'params');
+        navigate(ScreenNames.LoanOfferDetail, {
+          ...rawParams,
+          loanDetail: {title: 'HDFC Bank', interestRate: '8.9'},
+        });
       },
     );
   };

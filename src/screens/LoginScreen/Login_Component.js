@@ -68,7 +68,7 @@ const Login_Component = ({
               </View>
               <Input
                 placeholder="98744 32092"
-                optionalLabelContainerStyles={{alignSelf: 'center'}}
+                // optionalLabelContainerStyles={{alignSelf: 'left'}}
                 inputStyles={styles.inputStyle}
                 value={mobileNumber}
                 onChangeText={setMobileNumber}

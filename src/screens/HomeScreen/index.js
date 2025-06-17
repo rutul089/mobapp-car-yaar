@@ -107,7 +107,6 @@ class HomeScreen extends Component {
 
   render() {
     const {userData, partnerStats} = this.props;
-    console.log({userData});
     return (
       <Home_Component
         onSelectedCarType={this.onSelectedCarType}

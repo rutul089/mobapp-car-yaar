@@ -20,11 +20,8 @@ class VehicleDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      vehicleId:
-        getScreenParam(this.props.route, 'params')?.UsedVehicle?.vehicleId ||
-        '',
       vehicleInfo: [],
-      basicDetail: getScreenParam(this.props.route, 'params') || '',
+      basicDetail: '',
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onPressSecondaryButton = this.onPressSecondaryButton.bind(this);
@@ -32,17 +29,17 @@ class VehicleDetail extends Component {
   }
 
   componentDidMount() {
-    const {navigation} = this.props;
-    const {vehicleId} = this.state;
+    const {navigation, route} = this.props;
+    let vehicleId = route.params?.vehicleId;
     if (vehicleId) {
       this.fetchVehicleFromId(vehicleId);
     }
-    this.focusListener = navigation.addListener('focus', () => {
-      // const {vehicleId} = this.state;
-      // if (vehicleId) {
-      //   this.fetchVehicleFromId(vehicleId);
-      // }
-    });
+    // this.focusListener = navigation.addListener('focus', () => {
+    //   // const {vehicleId} = this.state;
+    //   // if (vehicleId) {
+    //   //   this.fetchVehicleFromId(vehicleId);
+    //   // }
+    // });
   }
 
   componentWillUnmount() {

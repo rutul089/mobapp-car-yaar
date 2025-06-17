@@ -12,6 +12,7 @@ import React from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {formatDate} from '../../utils/helper';
 import {NoDataFound} from '../../components';
+import {goBack} from '../../navigation/NavigationUtils';
 
 const steps = [
   'Vehicle onboarding',
@@ -48,7 +49,7 @@ export default function LoanTrackingScreen({
 
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header title="Loan Application Tracking" />
+      <Header title="Loan Application Tracking" onBackPress={() => goBack()} />
       <View
         style={{
           padding: theme.sizes.padding,

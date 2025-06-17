@@ -147,7 +147,7 @@ const Applications_Component = ({
             loading={loading}
             currentPage={currentPage}
             totalPages={totalPages}
-            footerMessage={'All Applications are loaded.'}
+            footerMessage={'You’ve reached the end!'}
             minTotalPagesToShowMessage={1}
           />
         }

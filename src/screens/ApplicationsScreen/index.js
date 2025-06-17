@@ -186,7 +186,7 @@ class ApplicationsScreen extends Component {
    */
   onItemPress = item => {
     this.props.resetLoanApplication();
-    navigate(ScreenNames.ViewLoanDetail, {params: item});
+    navigate(ScreenNames.ViewLoanDetail, {loanId: item.id});
   };
 
   /**

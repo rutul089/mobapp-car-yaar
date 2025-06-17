@@ -44,17 +44,17 @@ import {get} from 'lodash';
 const initialState = {
   applicantPhoto: '',
   pancardPhoto: '',
-  panCardNumber: 'YKGWJ8413A',
-  aadharNumber: '958296232328',
-  applicantName: 'Raju Shah',
-  fatherName: 'Raja Shah',
-  spouseName: 'Kavisha Brooks',
-  email: 'ashk@cardenas.org',
+  panCardNumber: '',
+  aadharNumber: '',
+  applicantName: '',
+  fatherName: '',
+  spouseName: '',
+  email: '',
   dob: '',
-  address: '9957 Lucero Path Suite 683, Humphreymouth, NE 02200',
-  pincode: '380015',
-  monthlyIncome: '910454',
-  bankName: 'State Bank of India',
+  address: '',
+  pincode: '',
+  monthlyIncome: '',
+  bankName: '',
   accountNumber: '',
   currentEmi: '',
   maxEmiAfford: '',
@@ -67,6 +67,33 @@ const initialState = {
   occupation: null,
   incomeSource: null,
 };
+
+// const initialState = {
+//   applicantPhoto: '',
+//   pancardPhoto: '',
+//   panCardNumber: 'YKGWJ8413A',
+//   aadharNumber: '958296232328',
+//   applicantName: 'Raju Shah',
+//   fatherName: 'Raja Shah',
+//   spouseName: 'Kavisha Brooks',
+//   email: 'ashk@cardenas.org',
+//   dob: '',
+//   address: '9957 Lucero Path Suite 683, Humphreymouth, NE 02200',
+//   pincode: '380015',
+//   monthlyIncome: '910454',
+//   bankName: 'State Bank of India',
+//   accountNumber: '',
+//   currentEmi: '',
+//   maxEmiAfford: '',
+//   avgMonthlyBankBalance: '',
+//   gender: genderType.MALE,
+//   currentLoan: currentLoanOptions.YES,
+//   aadharFrontPhoto: '',
+//   aadharBackphoto: '',
+//   currentState: '',
+//   occupation: null,
+//   incomeSource: null,
+// };
 
 class CustomerPersonalDetails extends Component {
   constructor(props) {
@@ -281,6 +308,7 @@ class CustomerPersonalDetails extends Component {
     const fieldValidationRules = {
       applicantPhoto: {required: false},
       currentEmi: {required: currentLoan},
+      spouseName: {required: false},
     };
 
     const fieldsToValidate = [
@@ -332,7 +360,7 @@ class CustomerPersonalDetails extends Component {
   };
 
   onChangeField = (key, value, isOptional = false) => {
-    handleFieldChange(this, key, value, isOptional);
+    handleFieldChange(this, key, value, value?.toString()?.trim().length === 0);
   };
 
   handleFileUpload = type => {
@@ -440,6 +468,14 @@ class CustomerPersonalDetails extends Component {
     });
   };
 
+  verifyPanCard = () => {
+    alert('TODO API Call for PanCard');
+  };
+
+  verifyAadharCard = () => {
+    alert('TODO API Call for AadharCard');
+  };
+
   render() {
     const {
       gender,
@@ -490,7 +526,9 @@ class CustomerPersonalDetails extends Component {
         onChangeFatherMotherName={value =>
           this.onChangeField('fatherName', value)
         }
-        onChangeSpouseName={value => this.onChangeField('spouseName', value)}
+        onChangeSpouseName={value =>
+          this.onChangeField('spouseName', value, true)
+        }
         onChangeEmail={value => this.onChangeField('email', value)}
         onChangeCurrentAddress={value => this.onChangeField('address', value)}
         onChangeCurrentPincode={value => this.onChangeField('pincode', value)}
@@ -523,11 +561,19 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.panCardNumber,
             statusMsg: errors?.panCardNumber,
             autoCapitalize: 'characters',
+            isDisabled: isEdit,
+            rightLabel: isEdit ? '' : 'VERIFY',
+            rightLabelPress: this.verifyPanCard,
+            isRightIconVisible: isEdit,
           },
           aadharNumber: {
             value: aadharNumber,
             isError: errors?.aadharNumber,
             statusMsg: errors?.aadharNumber,
+            isDisabled: isEdit,
+            rightLabel: isEdit ? '' : 'VERIFY',
+            rightLabelPress: this.verifyAadharCard,
+            isRightIconVisible: isEdit,
           },
           applicantName: {
             isError: errors?.applicantName,

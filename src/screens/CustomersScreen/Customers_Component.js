@@ -131,7 +131,7 @@ const Customers_Component = ({
             loading={loading}
             currentPage={currentPage}
             totalPages={totalPages}
-            footerMessage={'All Customer are loaded.'}
+            footerMessage={'You’ve reached the end!'}
             minTotalPagesToShowMessage={1}
           />
         }

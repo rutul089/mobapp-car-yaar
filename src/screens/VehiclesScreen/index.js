@@ -96,8 +96,12 @@ class Vehicles extends Component {
     if (!fullScreen) {
       this.props.selectedLoanType(loanType.addVehicle);
     }
+    // this.props.navigation.navigate(ScreenNames.VehicleDetail, {
+    //   vehicleId: item?.UsedVehicle?.vehicleId,
+    // });
+    // return;
     navigate(ScreenNames.VehicleDetail, {
-      params: item,
+      vehicleId: item?.UsedVehicle?.vehicleId,
     });
   };
 
@@ -226,7 +230,6 @@ class Vehicles extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const {activeFilterOption, isSearch, searchText} = this.state;
-    console.log('activeFilterOption', prevState.activeFilterOption);
 
     // Run filter fetch if activeFilterOption changes and it's not a search
     if (prevState.activeFilterOption !== activeFilterOption && !isSearch) {

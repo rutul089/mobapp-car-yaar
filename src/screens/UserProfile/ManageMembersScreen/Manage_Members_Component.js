@@ -123,7 +123,7 @@ const Manage_Members_Component = ({
             loading={isLoading}
             currentPage={currentPage}
             totalPages={totalPages}
-            footerMessage={'All members loaded.'}
+            footerMessage={'You’ve reached the end!'}
           />
         }
       />
