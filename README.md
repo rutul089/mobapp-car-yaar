@@ -9,7 +9,7 @@ A React Native mobile application project for **Car Yaar** — a car trading pla
 ```
 mobapp-car-yaar/
 ├── src/
-│   ├── api/                 # API services and utility functions
+│   ├── networking/          # Centralized Axios instance with request/response interceptors. 
 │   ├── assets/              # Images and fonts
 │   ├── components/          # Custom components specific to this project
 │   ├── constants/           # Constants, enums, and screen names
@@ -19,6 +19,7 @@ mobapp-car-yaar/
 │   ├── styles/              # Common styles for screens
 │   ├── theme/               # Colors, sizes, and font styles
 │   ├── utils/               # Common utility functions
+│   ├── services/            # Modular API service layer with reusable methods
 ├── App.js                   # Main app entry point
 ├── metro.config.js
 ├── package.json
