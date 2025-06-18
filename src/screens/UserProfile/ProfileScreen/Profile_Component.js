@@ -169,7 +169,7 @@ const Profile_Component = ({
           })}
         </View>
         <Text textAlign="center" type="helper-text">
-          App Version: {version}.{build}
+          {`App Version: ${version} (${build})`}
         </Text>
       </ScrollView>
       <CommonModal

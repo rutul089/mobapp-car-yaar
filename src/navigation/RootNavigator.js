@@ -14,19 +14,14 @@ export default class RootNavigator extends Component {
       isNetConnected: true,
       currentScreenName: null,
     };
-    this.currentScreen = null;
     this.routeNameRef = React.createRef();
-    this.appStateRef = null;
   }
 
-  onNavigationStateChange = e => {
-    const currentRouteName = navigationRef.current.getCurrentRoute().name;
-    this.currentScreen = currentRouteName ? {...currentRouteName} : null;
-    console.log(`@@@current_screen:${currentRouteName}`);
+  onNavigationStateChange = () => {
+    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
+    console.log(`@@@current_screen: ${currentRouteName}`);
     this.routeNameRef.current = currentRouteName;
-    this.setState({
-      currentScreenName: currentRouteName,
-    });
+    this.setState({currentScreenName: currentRouteName});
   };
 
   render() {
@@ -36,11 +31,9 @@ export default class RootNavigator extends Component {
           key={'NavigationContainer'}
           ref={navigationRef}
           onReady={() => {
-            this.routeNameRef.current =
-              navigationRef.current.getCurrentRoute().name;
-            this.setState({
-              currentScreenName: navigationRef.current?.getCurrentRoute()?.name,
-            });
+            const route = navigationRef.current?.getCurrentRoute()?.name;
+            this.routeNameRef.current = route;
+            this.setState({currentScreenName: route});
           }}
           onStateChange={this.onNavigationStateChange}>
           <StackRoutes />
@@ -52,5 +45,8 @@ export default class RootNavigator extends Component {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {flex: 1},
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#fff', // ✅ Prevents Android green flash
+  },
 });

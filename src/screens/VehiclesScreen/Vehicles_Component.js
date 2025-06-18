@@ -13,11 +13,12 @@ import {
   Text,
   theme,
   VehicleCard,
+  StatusChip,
 } from '@caryaar/components';
 import {get} from 'lodash';
 import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {NoDataFound, StatusChip} from '../../components';
+import {NoDataFound} from '../../components';
 import {
   API_TRIGGER,
   currentLoanLabelMap,

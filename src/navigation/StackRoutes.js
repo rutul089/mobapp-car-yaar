@@ -1,43 +1,22 @@
-// navigation/StackRoutes.js
 import React from 'react';
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as Screens from '../screens';
 import ScreenNames from '../constants/ScreenNames';
 import TabNavigator from './TabNavigator';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const screenOptions = {
   headerShown: false,
-  gestureEnabled: true,
-  gestureDirection: 'horizontal',
-  detachPreviousScreen: true,
-  lazy: false,
-  cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-  transitionSpec: {
-    open: {
-      animation: 'timing',
-      config: {duration: 220},
-    },
-    close: {
-      animation: 'timing',
-      config: {duration: 200},
-    },
-  },
+  animation: 'slide_from_right',
 };
-
-// options={{
-//   unmountOnBlur: true,
-// }}
 
 const StackRoutes = () => {
   return (
     <Stack.Navigator
       initialRouteName={ScreenNames.Splash}
       screenOptions={screenOptions}>
+      {/* Splash & Authentication */}
       <Stack.Screen
         name={ScreenNames.Splash}
         component={Screens.SplashScreen}
@@ -47,14 +26,30 @@ const StackRoutes = () => {
         name={ScreenNames.OTP}
         component={Screens.OTPVerification}
       />
+      <Stack.Screen
+        name={ScreenNames.NewLoanCustomerOtp}
+        component={Screens.NewLoanCustomerOtpScreen}
+      />
+
+      {/* Main Tab */}
       <Stack.Screen name={ScreenNames.HomeTab} component={TabNavigator} />
+
+      {/* Notifications */}
       <Stack.Screen
         name={ScreenNames.Notification}
         component={Screens.NotificationScreen}
       />
+
+      {/* Search */}
       <Stack.Screen
         name={ScreenNames.SearchView}
         component={Screens.SearchScreen}
+      />
+
+      {/* Vehicle Flow */}
+      <Stack.Screen
+        name={ScreenNames.SelectVehicle}
+        component={Screens.SelectVehicleScreen}
       />
       <Stack.Screen
         name={ScreenNames.VehicleDetail}
@@ -73,6 +68,16 @@ const StackRoutes = () => {
         component={Screens.VehiclePricingScreen}
       />
       <Stack.Screen
+        name={ScreenNames.VehicleHypothecation}
+        component={Screens.VehicleHypothecationScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.VehicleFullScreen}
+        component={Screens.VehiclesScreen}
+      />
+
+      {/* Customer Flow */}
+      <Stack.Screen
         name={ScreenNames.CustomerDetail}
         component={Screens.CustomerDetailScreen}
       />
@@ -81,79 +86,8 @@ const StackRoutes = () => {
         component={Screens.CustomerPersonalDetailsScreen}
       />
       <Stack.Screen
-        name={ScreenNames.LoanDocument}
-        component={Screens.LoanDocumentsScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.LoanAmount}
-        component={Screens.LoanAmountScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.CheckCIBIL}
-        component={Screens.CheckCIBILScreen}
-      />
-      <Stack.Screen
         name={ScreenNames.CustomerEnvelope}
         component={Screens.CustomerEnvelopeScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.LenderSelection}
-        component={Screens.LenderSelectionScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.LoanOfferDetail}
-        component={Screens.LoanOfferDetailScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.AddReference}
-        component={Screens.AddReferencesScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.ViewLoanDetail}
-        component={Screens.ViewLoanDetailsScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.VehicleHypothecation}
-        component={Screens.VehicleHypothecationScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.FinanceDetails}
-        component={Screens.FinanceDetailsScreen}
-        options={{
-          unmountOnBlur: true,
-        }}
-      />
-      <Stack.Screen
-        name={ScreenNames.FinanceDocuments}
-        component={Screens.FinanceDocumentsScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.ThankYouView}
-        component={Screens.ThankYouScreen}
-        options={{
-          gestureEnabled: false,
-          headerLeft: () => null, // hides the back arrow
-        }}
-      />
-      <Stack.Screen
-        name={ScreenNames.TrackApplication}
-        component={Screens.TrackApplicationScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.CarFinanceDetails}
-        component={Screens.CarFinanceDetails}
-      />
-      <Stack.Screen
-        name={ScreenNames.TopUpFinanceDocuments}
-        component={Screens.TopUpFinanceDocuments}
-      />
-      <Stack.Screen
-        name={ScreenNames.LenderDetails}
-        component={Screens.LenderDetails}
-      />
-      <Stack.Screen
-        name={ScreenNames.CustomizeLoanOffer}
-        component={Screens.CustomizeLoanOffer}
       />
       <Stack.Screen
         name={ScreenNames.CustomerInfo}
@@ -171,6 +105,84 @@ const StackRoutes = () => {
         name={ScreenNames.MoreOnFinancial}
         component={Screens.MoreOnFinancialScreen}
       />
+      <Stack.Screen
+        name={ScreenNames.CustomerFullScreen}
+        component={Screens.CustomersScreen}
+      />
+
+      {/* Loan Flow */}
+      <Stack.Screen
+        name={ScreenNames.LoanDocument}
+        component={Screens.LoanDocumentsScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.LoanAmount}
+        component={Screens.LoanAmountScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.CheckCIBIL}
+        component={Screens.CheckCIBILScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.TrackApplication}
+        component={Screens.TrackApplicationScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.LenderSelection}
+        component={Screens.LenderSelectionScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.LoanOfferDetail}
+        component={Screens.LoanOfferDetailScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.ViewLoanDetail}
+        component={Screens.ViewLoanDetailsScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.FinanceDetails}
+        component={Screens.FinanceDetailsScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.FinanceDocuments}
+        component={Screens.FinanceDocumentsScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.CarFinanceDetails}
+        component={Screens.CarFinanceDetails}
+      />
+      <Stack.Screen
+        name={ScreenNames.TopUpFinanceDocuments}
+        component={Screens.TopUpFinanceDocuments}
+      />
+      <Stack.Screen
+        name={ScreenNames.LenderDetails}
+        component={Screens.LenderDetails}
+      />
+      <Stack.Screen
+        name={ScreenNames.CustomizeLoanOffer}
+        component={Screens.CustomizeLoanOffer}
+      />
+
+      {/* References */}
+      <Stack.Screen
+        name={ScreenNames.AddReference}
+        component={Screens.AddReferencesScreen}
+      />
+
+      {/* Documents & Invoices */}
+      <Stack.Screen
+        name={ScreenNames.ProformaInvoice}
+        component={Screens.ProformaInvoiceScreen}
+      />
+
+      {/* Utilities */}
+      <Stack.Screen
+        name={ScreenNames.ImagePreviewScreen}
+        component={Screens.ImagePreviewScreen}
+      />
+
+      {/* Settings & Profile */}
       <Stack.Screen
         name={ScreenNames.UserProfile}
         component={Screens.ProfileScreen}
@@ -192,36 +204,17 @@ const StackRoutes = () => {
         name={ScreenNames.ContactSupport}
         component={Screens.ContactSupportScreen}
       />
+
+      {/* Final Screens */}
       <Stack.Screen
-        name={ScreenNames.NewLoanCustomerOtp}
-        component={Screens.NewLoanCustomerOtpScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.SelectVehicle}
-        component={Screens.SelectVehicleScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.ProformaInvoice}
-        component={Screens.ProformaInvoiceScreen}
+        name={ScreenNames.ThankYouView}
+        component={Screens.ThankYouScreen}
+        options={{gestureEnabled: false}}
       />
       <Stack.Screen
         name={ScreenNames.SuccessScreen}
         component={Screens.SuccessModalScreen}
-        options={{
-          gestureEnabled: false, // disables swipe back on iOS
-        }}
-      />
-      <Stack.Screen
-        name={ScreenNames.ImagePreviewScreen}
-        component={Screens.ImagePreviewScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.VehicleFullScreen}
-        component={Screens.VehiclesScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.CustomerFullScreen}
-        component={Screens.CustomersScreen}
+        options={{gestureEnabled: false}}
       />
     </Stack.Navigator>
   );

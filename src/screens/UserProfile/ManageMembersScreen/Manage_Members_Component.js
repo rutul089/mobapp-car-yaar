@@ -13,6 +13,7 @@ import {
   Loader,
   PaginationFooter,
   Dropdown,
+  InitialsAvatar,
 } from '@caryaar/components';
 import React from 'react';
 import {
@@ -23,7 +24,7 @@ import {
   View,
 } from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
-import {InitialsAvatar, NoDataFound} from '../../../components';
+import { NoDataFound} from '../../../components';
 import {getLabelFromEnum, salesExecutiveValue} from '../../../constants/enums';
 import {formatMobileNumber} from '../../../utils/helper';
 

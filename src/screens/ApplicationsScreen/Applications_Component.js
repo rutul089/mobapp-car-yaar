@@ -10,10 +10,11 @@ import {
   RadioButton,
   Spacing,
   Text,
+  StatusChip,
 } from '@caryaar/components';
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {NoDataFound, StatusChip} from '../../components';
+import {NoDataFound} from '../../components';
 import {
   API_TRIGGER,
   applicationStatus,

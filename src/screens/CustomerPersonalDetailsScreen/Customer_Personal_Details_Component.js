@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Platform, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -19,6 +19,7 @@ import {
   Text,
   theme,
 } from '@caryaar/components';
+// import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {FullLoader} from '../../components';
 import {
   currentLoanTypes,
@@ -33,7 +34,6 @@ import {
   sanitizeAmount,
 } from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const Customer_Personal_Details_Component = ({
   selectedGender,
@@ -574,7 +574,7 @@ const Customer_Personal_Details_Component = ({
 
       {isLoadingDocument && <FullLoader />}
 
-      {showPicker && (
+      {/* {showPicker && (
         <DateTimePickerModal
           isVisible={showPicker}
           mode="date"
@@ -583,7 +583,7 @@ const Customer_Personal_Details_Component = ({
           maximumDate={new Date(Date.now() - 86400000)} // yesterday
           date={new Date(state.date)}
         />
-      )}
+      )} */}
     </SafeAreaWrapper>
   );
 };
