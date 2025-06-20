@@ -386,8 +386,6 @@ class CustomerPersonalDetails extends Component {
         } else {
           const uploadedKey = await uploadDocumentViaPresignedUrl(
             asset,
-            fileName,
-            mimeType,
             selectionType,
           );
           this.setState({[selectionType]: uploadedKey}, () => {

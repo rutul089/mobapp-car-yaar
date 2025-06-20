@@ -4,7 +4,8 @@ import RNFS from 'react-native-fs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {documentImageLabelMap, documentImageType} from '../constants/enums';
 import {showToast} from './helper';
-
+import {Alert} from 'react-native';
+import {getPresignedDownloadUrl} from '../services';
 /**
  * Launches a file picker based on type: camera, gallery, or document.
  *
@@ -84,6 +85,7 @@ export const getFileType = fileUri => {
  */
 
 export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
+  let type = '';
   try {
     if (
       !uri ||
@@ -100,7 +102,7 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
 
     // Check for image
     if (uri.startsWith('http')) {
-      const type = await detectFileType(uri);
+      type = await detectFileType(uri);
 
       if (type === 'image') {
         onImage?.(uri);
@@ -128,6 +130,12 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
     }
   } catch (err) {
     console.warn('Error opening file:', err);
+    if (err.message.includes('No app associated with this mime type')) {
+      return Alert.alert(
+        'No App Found',
+        `Please install an app to open ${type} file type.`,
+      );
+    }
     onError?.(err);
   } finally {
     onLoading?.();
@@ -259,7 +267,6 @@ const detectFileType = async url => {
   try {
     const response = await fetch(url, {method: 'HEAD'});
     const contentType = response.headers.get('Content-Type');
-
     if (contentType && contentType !== 'text/plain') {
       if (contentType.startsWith('image/')) {
         return 'image';
@@ -292,8 +299,44 @@ export const getMimeFromUrl = url => {
     return 'image';
   }
   if (docExts.includes(extension)) {
-    return 'document';
+    return extension;
   }
 
   return 'unknown';
+};
+
+// utils/transformDocumentData.js
+
+/**
+ * Transforms document response to formatted file objects with presigned download URLs
+ * @param {Object} responseData - Original API response's `data` object
+ * @returns {Promise<Object>} - Formatted object with metadata and download URLs
+ */
+export const transformDocumentData = async responseData => {
+  const formattedData = {};
+  const fileKeys = Object.keys(responseData).filter(
+    key => responseData[key] && typeof responseData[key] === 'string',
+  );
+
+  for (const key of fileKeys) {
+    const uri = responseData[key];
+    try {
+      const {data} = await getPresignedDownloadUrl({objectKey: uri});
+      formattedData[key] = {
+        uploadKey: uri,
+        uploadedUrl: uri,
+        uri: data?.url || null,
+        isLocal: false,
+      };
+    } catch (error) {
+      console.error(`Failed to get presigned URL for ${key}`, error);
+      formattedData[key] = {
+        uploadKey: uri,
+        uploadedUrl: uri,
+        uri: uri,
+      };
+    }
+  }
+
+  return formattedData;
 };

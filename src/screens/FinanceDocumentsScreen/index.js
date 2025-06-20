@@ -1,29 +1,27 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Finance_Documents_Component from './Finance_Documents_Component';
+import {documentImageLabelMap, documentImageType} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {formatVehicleNumber, showToast} from '../../utils/helper';
-import {documentImageLabelMap, documentImageType} from '../../constants/enums';
-import {
-  formatDocumentImages,
-  generateImageUploadPayload,
-  handleFileSelection,
-  validateRequiredDocuments,
-  viewDocumentHelper,
-} from '../../utils/documentUtils';
 import {
   fetchCustomerFinanceDocumentsThunk,
   postCustomerFinanceDocumentsThunk,
 } from '../../redux/actions';
-import RNFS from 'react-native-fs';
-import {Buffer} from 'buffer';
-import {getPresignedDownloadUrl, getPresignedUploadUrl} from '../../services';
+import {getPresignedDownloadUrl} from '../../services';
+import {
+  generateImageUploadPayload,
+  handleFileSelection,
+  transformDocumentData,
+  validateRequiredDocuments,
+  viewDocumentHelper,
+} from '../../utils/documentUtils';
 import {uploadDocumentViaPresignedUrl} from '../../utils/fileUploadUtils';
+import {formatVehicleNumber, showToast} from '../../utils/helper';
+import Finance_Documents_Component from './Finance_Documents_Component';
 
 const requiredFields = [
   documentImageType.SANCTION_LETTER,
@@ -50,10 +48,13 @@ class FinanceDocumentsScreen extends Component {
       this.props.fetchCustomerFinanceDocumentsThunk(
         selectedApplicationId,
         {},
-        response => {
+        async response => {
           if (response.financeDocuments) {
+            const formattedDocuments = await transformDocumentData(
+              response.financeDocuments,
+            );
             this.setState({
-              documents: formatDocumentImages(response?.financeDocuments, ''),
+              documents: formattedDocuments,
             });
           }
         },
@@ -157,13 +158,8 @@ class FinanceDocumentsScreen extends Component {
       await new Promise(resolve => setTimeout(resolve, 110));
 
       try {
-        const fileName = asset.name || asset.fileName || 'upload';
-        const mimeType = asset.type || 'application/octet-stream';
-
         const presignedKey = await uploadDocumentViaPresignedUrl(
           asset,
-          fileName,
-          mimeType,
           this.state.selectedDocType,
         );
 
@@ -238,7 +234,7 @@ class FinanceDocumentsScreen extends Component {
           docObject: documents[type],
           onDeletePress: () => this.handleDeleteMedia(type),
           uploadMedia: () => this.handleUploadMedia(type),
-          viewImage: () => this.handleViewImage(documents[type]?.uri),
+          viewImage: () => this.handleViewImage(documents[type]?.uploadedUrl),
           isRequired: requiredFields.includes(type),
         }))}
         handleNextStepPress={this.handleNextStepPress}

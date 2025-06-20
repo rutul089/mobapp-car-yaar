@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Alert, BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {
@@ -6,6 +7,7 @@ import {
   documentImageType,
   loanType,
 } from '../../constants/enums';
+import {loan_document_requirements} from '../../constants/loan_document_requirements';
 import {
   getScreenParam,
   goBack,
@@ -20,9 +22,9 @@ import {
 } from '../../redux/actions';
 import {getPresignedDownloadUrl} from '../../services';
 import {
-  formatDocumentImages,
   generateImageUploadPayload,
   handleFileSelection,
+  transformDocumentData,
   validateRequiredDocuments,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
@@ -33,8 +35,6 @@ import {
   showToast,
 } from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
-import {loan_document_requirements} from '../../constants/loan_document_requirements';
-import {Alert, BackHandler} from 'react-native';
 
 const requiredFields = [
   'addressProofImage',
@@ -88,24 +88,25 @@ class LoanDocumentsScreen extends Component {
 
   fetchCustomerDocuments = async () => {
     const {selectedApplicationId} = this.props;
+    this.setState({isLoading: true});
 
-    this.setState({isLoading: true}, async () => {
-      try {
-        await this.props.fetchCustomerDocumentsThunk(
-          selectedApplicationId,
-          {},
-          response => {
-            if (response.success && response !== null) {
-              this.setState({
-                documents: formatDocumentImages(response.data, ''),
-              });
-            }
-          },
-        );
-      } finally {
-        this.setState({isLoading: false});
-      }
-    });
+    try {
+      await this.props.fetchCustomerDocumentsThunk(
+        selectedApplicationId,
+        {},
+        async response => {
+          if (response?.success && response?.data) {
+            const formattedDocuments = await transformDocumentData(
+              response.data,
+            );
+            this.setState({documents: formattedDocuments, isLoading: false});
+          }
+        },
+      );
+    } catch (error) {
+      console.error('Error fetching customer documents:', error);
+      this.setState({isLoading: false});
+    }
   };
 
   onNextPress = () => {
@@ -191,8 +192,10 @@ class LoanDocumentsScreen extends Component {
           this.state.selectedDocType,
         );
 
+        const {data} = await getPresignedDownloadUrl({objectKey: presignedKey});
+
         const docObj = {
-          uri: presignedKey,
+          uri: data?.url,
           uploadedUrl: presignedKey,
           uploadKey: presignedKey,
         };
@@ -339,6 +342,35 @@ class LoanDocumentsScreen extends Component {
     );
   };
 
+  /**
+   * Transforms document response to formatted file objects with presigned URL
+   * @param {Object} responseData - Original API response's `data` object
+   * @returns {Promise<Object>} - Transformed object with file metadata and presigned URLs
+   */
+  transformDocumentData12 = async responseData => {
+    const formattedData = {};
+    const fileKeys = Object.keys(responseData).filter(key =>
+      key.endsWith('Image'),
+    );
+
+    for (const key of fileKeys) {
+      const uri = responseData[key];
+      if (uri) {
+        const downloadUrlResponse = await getPresignedDownloadUrl({
+          objectKey: uri,
+        });
+
+        formattedData[key] = {
+          uploadKey: uri,
+          uploadedUrl: uri,
+          uri: downloadUrlResponse?.data?.url || null, // Add downloaded URL here
+        };
+      }
+    }
+
+    return formattedData;
+  };
+
   render() {
     const {
       selectedVehicle,
@@ -391,7 +423,7 @@ class LoanDocumentsScreen extends Component {
           docObject: documents[type],
           onDeletePress: () => this.handleDeleteMedia(type),
           uploadMedia: () => this.handleUploadMedia(type),
-          viewImage: () => this.handleViewImage(documents[type]?.uri),
+          viewImage: () => this.handleViewImage(documents[type]?.uploadedUrl),
           isRequired: requiredFields.includes(type),
         }))}
         otherDocuments={[
@@ -404,7 +436,7 @@ class LoanDocumentsScreen extends Component {
           docObject: documents[type],
           onDeletePress: () => this.handleDeleteMedia(type),
           uploadMedia: () => this.handleUploadMedia(type),
-          viewImage: () => this.handleViewImage(documents[type]?.uri),
+          viewImage: () => this.handleViewImage(documents[type]?.uploadedUrl),
         }))}
         onNextPress={this.onNextPress}
         fileModalProps={{

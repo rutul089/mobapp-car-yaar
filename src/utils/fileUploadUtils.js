@@ -41,12 +41,10 @@ export const uploadApplicantPhoto = (asset, fileName, mimeType) => {
  * @param {string} selectionType - Prefix for file key on S3.
  * @returns {Promise<string>} - Resolves with uploaded file key.
  */
-export const uploadDocumentViaPresignedUrl = (
-  asset,
-  fileName,
-  mimeType,
-  selectionType,
-) => {
+export const uploadDocumentViaPresignedUrl = (asset, selectionType) => {
+  const fileName = asset.name || asset.fileName || 'upload';
+  const mimeType = asset.type || 'application/octet-stream';
+
   return new Promise(async (resolve, reject) => {
     try {
       const uploadUrlResponse = await getPresignedUploadUrl({

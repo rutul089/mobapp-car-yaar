@@ -36,13 +36,13 @@ const Loan_Documents_Component = ({
         <DocumentGroup
           title={'Documents'}
           documents={documentList}
-          isDocument={true}
+          isDocument={false}
           isView={isReadOnlyLoanApplication}
         />
         <DocumentGroup
           title={'Other Documents'}
           documents={otherDocuments}
-          isDocument={true}
+          isDocument={false}
           isView={isReadOnlyLoanApplication}
         />
         <Spacing size="smd" />

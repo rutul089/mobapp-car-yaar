@@ -56,7 +56,9 @@ const Customer_Envelop_Component = ({
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
         keyboardShouldPersistTaps="handled"
-        bounces={false}>
+        extraScrollHeight={150}
+        enableOnAndroid
+        bounces={true}>
         <View style={{padding: 0}}>
           <DetailInfoCard
             label={'Vehicle Details'}
@@ -118,6 +120,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: theme.sizes.padding,
     backgroundColor: theme.colors.background,
+    paddingBottom: theme.sizes.padding,
   },
   headerStyle: {
     backgroundColor: theme.colors.primaryBlack,

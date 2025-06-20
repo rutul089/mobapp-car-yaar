@@ -35,7 +35,7 @@ const Finance_Documents_Component = ({
         <DocumentGroup
           title={'Documents'}
           documents={documentList}
-          isDocument={true}
+          isDocument={false}
           isView={isReadOnlyLoanApplication}
         />
         <Spacing size="smd" />

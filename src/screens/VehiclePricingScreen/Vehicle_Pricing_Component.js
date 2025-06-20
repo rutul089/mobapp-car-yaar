@@ -82,10 +82,13 @@ const Vehicle_Pricing_Component = ({
       />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
+        enableOnAndroid
+        extraScrollHeight={100}
         contentContainerStyle={{
           backgroundColor: theme.colors.background,
           flexGrow: 1,
           padding: theme.sizes.padding,
+          paddingBottom: theme.sizes.padding,
         }}>
         <GroupWrapper title="Vehicle Pricing">
           <Input

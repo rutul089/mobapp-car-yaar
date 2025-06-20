@@ -56,6 +56,8 @@ const Add_References_Component = ({
       <Header {...headerProp} />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
+        extraScrollHeight={100}
+        enableOnAndroid
         bounces={false}>
         <GroupWrapper title={'Home Verification'}>
           <Input
@@ -232,6 +234,7 @@ const styles = StyleSheet.create({
     padding: theme.sizes.padding,
     backgroundColor: theme.colors.background,
     flexGrow: 1,
+    paddingBottom: theme.sizes.padding,
   },
 });
 
