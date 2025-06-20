@@ -26,12 +26,12 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter the odometer reading'
         : !numericRegex.test(trimmedValue) || trimmedValue.startsWith('.')
-        ? 'Odometer must be a valid number (not starting with a decimal)'
-        : parseFloat(trimmedValue) <= 0
-        ? 'Odometer reading must be greater than 0'
-        : parseFloat(trimmedValue) > 1000000
-        ? 'Odometer reading seems too high'
-        : '';
+          ? 'Odometer must be a valid number (not starting with a decimal)'
+          : parseFloat(trimmedValue) <= 0
+            ? 'Odometer reading must be greater than 0'
+            : parseFloat(trimmedValue) > 1000000
+              ? 'Odometer reading seems too high'
+              : '';
 
     case 'vehicleCondition':
       return trimmedValue === ''
@@ -50,12 +50,12 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter the valid value.'
         : !integerRegex.test(trimmedValue)
-        ? 'Value must be a valid number'
-        : parseInt(trimmedValue, 10) <= 0
-        ? 'Value must be greater than 0'
-        : // : parseInt(trimmedValue, 10) > 99999999
-          // ? 'Value is too large'
-          '';
+          ? 'Value must be a valid number'
+          : parseInt(trimmedValue, 10) <= 0
+            ? 'Value must be greater than 0'
+            : // : parseInt(trimmedValue, 10) > 99999999
+              // ? 'Value is too large'
+              '';
 
     case 'mobileNumber':
     case 'mobileNumberHome':
@@ -63,8 +63,8 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter a mobile number'
         : !mobileNumberRegex.test(trimmedValue)
-        ? 'Mobile number must be a 10-digit number'
-        : '';
+          ? 'Mobile number must be a 10-digit number'
+          : '';
 
     case 'panCardNumber':
       return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(trimmedValue)
@@ -75,36 +75,36 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter a valid Aadhaar number.'
         : !aadharRegex.test(trimmedValue)
-        ? 'Please enter a valid 12-digit Aadhaar number.'
-        : '';
+          ? 'Please enter a valid 12-digit Aadhaar number.'
+          : '';
 
     case 'applicantName':
       return trimmedValue === ''
         ? 'Please enter applicant name'
         : !nameRegex.test(trimmedValue)
-        ? 'Applicant name should only contain alphabets and spaces'
-        : '';
+          ? 'Applicant name should only contain alphabets and spaces'
+          : '';
 
     case 'email':
       return trimmedValue === ''
         ? 'Please enter your email address'
         : !emailRegex.test(trimmedValue)
-        ? 'Please enter a valid email address'
-        : '';
+          ? 'Please enter a valid email address'
+          : '';
 
     case 'fatherName':
       return trimmedValue === ''
         ? 'Please enter Father/mother name'
         : !nameRegex.test(trimmedValue)
-        ? 'Father/mother name should only contain alphabets and spaces'
-        : '';
+          ? 'Father/mother name should only contain alphabets and spaces'
+          : '';
 
     case 'spouseName':
       return trimmedValue === ''
         ? 'Please enter Spouse name'
         : !nameRegex.test(trimmedValue)
-        ? 'Spouse name should only contain alphabets and spaces'
-        : '';
+          ? 'Spouse name should only contain alphabets and spaces'
+          : '';
 
     case 'address':
     case 'addressHome':
@@ -117,8 +117,8 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter a PIN code'
         : !pincodeRegex.test(trimmedValue)
-        ? 'PIN code must be a 6-digit number'
-        : '';
+          ? 'PIN code must be a 6-digit number'
+          : '';
 
     case 'occupation':
     case 'incomeSource':
@@ -128,15 +128,15 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter an account number'
         : !accountNumberRegex.test(trimmedValue)
-        ? 'Account number must be between 9 to 18 digits'
-        : '';
+          ? 'Account number must be between 9 to 18 digits'
+          : '';
 
     case 'loanAccountNumber':
       return trimmedValue === ''
         ? 'Please enter an loan account number'
         : !accountNumberRegex.test(trimmedValue)
-        ? 'Account number must be between 9 to 18 digits'
-        : '';
+          ? 'Account number must be between 9 to 18 digits'
+          : '';
 
     case 'currentEmi':
     case 'maxEmiAfford':
@@ -147,10 +147,10 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter a valid amount.'
         : !/^\d+(\.\d{1,2})?$/.test(trimmedValue)
-        ? 'Amount must be a valid number, optionally with up to 2 decimal places, and not starting with a decimal point.'
-        : parseFloat(trimmedValue) <= 0
-        ? 'Amount must be greater than 0'
-        : '';
+          ? 'Amount must be a valid number, optionally with up to 2 decimal places, and not starting with a decimal point.'
+          : parseFloat(trimmedValue) <= 0
+            ? 'Amount must be greater than 0'
+            : '';
 
     case 'applicantPhoto':
     case 'pancardPhoto':
@@ -173,12 +173,12 @@ export const validateField = (key, value, isOptional) => {
             key === 'ownerName'
               ? 'owner name'
               : key === 'fullName'
-              ? 'Full Name'
-              : 'account holder name'
+                ? 'Full Name'
+                : 'account holder name'
           }`
         : !nameRegex.test(trimmedValue)
-        ? 'Name should contain only alphabets'
-        : '';
+          ? 'Name should contain only alphabets'
+          : '';
 
     case 'tenure': {
       if (trimmedValue === '') {
@@ -202,8 +202,8 @@ export const validateField = (key, value, isOptional) => {
       return trimmedValue === ''
         ? 'Please enter Name'
         : !nameRegex.test(trimmedValue)
-        ? 'Name should only contain alphabets and spaces'
-        : '';
+          ? 'Name should only contain alphabets and spaces'
+          : '';
 
     case 'relationshipHome':
     case 'relationshipOffice':

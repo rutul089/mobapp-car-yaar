@@ -128,10 +128,9 @@ const Customer_Personal_Details_Component = ({
     <SafeAreaWrapper>
       <Header {...headerProp} />
       <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="always"
+        bounces={true}
         enableOnAndroid
-        extraScrollHeight={100} // adjust if needed
-        keyboardShouldPersistTaps="handled"
-        bounces={false}
         contentContainerStyle={styles.wrapper}>
         {/* Personal Details */}
         <GroupWrapper title={'Personal Details'}>
@@ -593,6 +592,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: theme.colors.background,
     padding: theme.sizes.padding,
+    paddingBottom: theme.sizes.padding,
   },
   rowSpaceBetween: {
     flexDirection: 'row',

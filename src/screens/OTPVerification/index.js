@@ -85,8 +85,8 @@ class OTPVerification extends Component {
     }
 
     const param = {
-      // mobileNumber: formatMobileNumber(phone),
-      mobileNumber: '+919812345682',
+      mobileNumber: formatMobileNumber(phone),
+      // mobileNumber: '+919812345682',
       otp: otp,
     };
 
@@ -110,6 +110,7 @@ class OTPVerification extends Component {
 
   render() {
     const {mobileNumber, timer, isResendDisabled} = this.state;
+    const {loading} = this.props;
     return (
       <OTP_Verification_Component
         mobileNumber={formatMobileNumber(mobileNumber)}
@@ -121,6 +122,7 @@ class OTPVerification extends Component {
         onBackPress={this.onBackPress}
         isError={this.state.isError}
         errorMessage="Please enter valid OTP"
+        loading={loading}
       />
     );
   }

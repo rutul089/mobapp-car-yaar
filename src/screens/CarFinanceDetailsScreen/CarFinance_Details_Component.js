@@ -10,6 +10,7 @@ import {
   theme,
   AutocompleteInput,
   Loader,
+  DropdownModal,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -18,6 +19,16 @@ import strings from '../../locales/strings';
 import {formatIndianCurrency} from '../../utils/helper';
 import {useInputRefs} from '../../utils/useInputRefs';
 import {sanitizeAmount} from '../../utils/inputHelper';
+
+const defaultTenure = Array(60)
+  .fill(0)
+  .map((_, i) => {
+    const month = i + 1;
+    return {
+      label: `${month} ${month > 1 ? 'Months' : 'Month'}`,
+      value: month,
+    };
+  });
 
 const CarFinance_Details_Component = ({
   headerProp,
@@ -37,6 +48,7 @@ const CarFinance_Details_Component = ({
   onChangeEmiPaid,
   tenure,
   restInputProps = {},
+  selectTenure,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'bankName',
@@ -66,12 +78,15 @@ const CarFinance_Details_Component = ({
     return isEditing ? value + '' : value > 0 ? `${value} Months` : '';
   }, []);
 
+  const [showTenureModal, setShowTenureModal] = React.useState(false);
+
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header {...headerProp} />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
         keyboardShouldPersistTaps="handled"
+        enableOnAndroid
         bounces={false}>
         <Text>Basic Details</Text>
         <Spacing size="smd" />
@@ -193,14 +208,14 @@ const CarFinance_Details_Component = ({
             label="Tenure"
             keyboardType="number-pad"
             returnKeyType="done"
-            onChangeText={onChangeTenure}
-            value={getDisplayValueTenure(editingStates.tenure, state.tenure)}
-            onSubmitEditing={handleNextStepPress}
-            onFocus={() => {
-              scrollToInput('tenure');
-              setFieldEditing('tenure', true);
-            }}
-            onBlur={() => setFieldEditing('tenure', false)}
+            value={
+              loading
+                ? '-'
+                : `${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`
+            }
+            isAsDropdown
+            isRightIconVisible
+            onPress={() => setShowTenureModal(true)}
             {...(restInputProps?.tenure || {})}
           />
         </Card>
@@ -210,6 +225,17 @@ const CarFinance_Details_Component = ({
           // secondaryButtonLabel={strings.next}
           // onPressSecondaryButton={onNextPress}
           hideSecondaryButton={true}
+        />
+
+        <DropdownModal
+          visible={showTenureModal}
+          data={defaultTenure}
+          selectedItem={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
+          onSelect={(item, index) => {
+            selectTenure?.(item);
+          }}
+          onClose={() => setShowTenureModal(false)}
+          title="Select Tenure"
         />
       </KeyboardAwareScrollView>
       {loading && <Loader visible={loading} />}
@@ -222,6 +248,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: theme.colors.background,
     padding: theme.sizes.padding,
+    paddingBottom: theme.sizes.padding,
   },
   rowSpaceBetween: {
     flexDirection: 'row',

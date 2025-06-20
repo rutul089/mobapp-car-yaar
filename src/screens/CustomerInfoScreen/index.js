@@ -134,7 +134,10 @@ class CustomerInfoScreen extends Component {
             label: 'Father/Mother Name',
             value: this._safeGet(details, 'fatherName'),
           },
-          {label: 'Spouse Name', value: this._safeGet(details, 'spouseName')},
+          {
+            label: 'Spouse Name',
+            value: this._safeGet(details, 'spouseName') || '-',
+          },
           {
             label: 'Email address',
             value: this._safeGet(details, 'email'),

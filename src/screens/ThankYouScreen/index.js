@@ -9,10 +9,7 @@ import {
   occupationLabelMap,
 } from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
-import {
-  navigate,
-  navigateAndSimpleReset,
-} from '../../navigation/NavigationUtils';
+import {navigate, navigateToTab} from '../../navigation/NavigationUtils';
 import {
   fetchLoanApplicationFromIdThunk,
   setIsCreatingLoanApplication,
@@ -48,7 +45,7 @@ class ThankYouScreen extends Component {
 
   onBackToHomePress = () => {
     this.props.setIsCreatingLoanApplication(false);
-    navigateAndSimpleReset(ScreenNames.HomeTab);
+    navigateToTab(ScreenNames.Applications);
   };
 
   onTrackLoanStatusPress = () => {

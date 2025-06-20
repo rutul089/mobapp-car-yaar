@@ -1,27 +1,25 @@
 import {
+  Button,
   CardWrapper,
   DetailInfoCard,
   FinanceCard,
   Header,
+  Loader,
   SafeAreaWrapper,
   Spacing,
   theme,
-  Button,
-  Loader,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
-import {goBack} from '../../navigation/NavigationUtils';
-import {
-  getApplicationGradientColors,
-  getApplicationStatusColor,
-  getGradientColors,
-  getGradientColorsLoan,
-} from '../../utils/helper';
 import {
   applicationStatus,
   getApplicationStatusLabel,
 } from '../../constants/enums';
+import {goBack} from '../../navigation/NavigationUtils';
+import {
+  getApplicationGradientColors,
+  getApplicationStatusColor,
+} from '../../utils/helper';
 
 const View_Loan_Details_Component = ({
   customerDetail,
@@ -33,6 +31,7 @@ const View_Loan_Details_Component = ({
   loading,
   loanOverviewCard = {},
   handleEditLoanApplication,
+  isReadOnlyLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -100,16 +99,13 @@ const View_Loan_Details_Component = ({
               <Spacing size="lg" />
             </>
           )}
-          {loanOverviewCard?.status !== applicationStatus.APPROVED && (
-            <>
-              <Spacing size="lg" />
-              <Button
-                label={'Edit Application'}
-                onPress={handleEditLoanApplication}
-              />
-              <Spacing size="lg" />
-            </>
-          )}
+
+          <Spacing size="lg" />
+          <Button
+            label={`${isReadOnlyLoanApplication ? 'View' : 'Edit'} Application`}
+            onPress={handleEditLoanApplication}
+          />
+          <Spacing size="lg" />
         </View>
       </ScrollView>
       {loading && <Loader visible={loading} />}

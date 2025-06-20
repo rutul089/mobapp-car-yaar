@@ -54,7 +54,7 @@ class CarFinanceDetails extends Component {
             bankName: response?.bankName || '',
             loanAccountNumber: response?.loanAccountNumber?.toString() || '',
             loanAmount: response?.loanAmount?.toString(),
-            tenure: response?.tenure?.toString() || '',
+            tenure: response?.tenure?.toString() || '-',
             monthlyEmi: response?.monthlyEmi?.toString() || '',
             emiPaid: response?.emiPaid.toString() || '',
           });
@@ -171,6 +171,18 @@ class CarFinanceDetails extends Component {
     return isFormValid;
   };
 
+  selectTenure = (item, index) => {
+    console.log({item: item?.value});
+    this.setState(
+      {
+        tenure: item.value,
+      },
+      () => {
+        this.onChangeField('tenure', String(this.state.tenure));
+      },
+    );
+  };
+
   render() {
     const {
       bankName,
@@ -193,82 +205,79 @@ class CarFinanceDetails extends Component {
 
     const {UsedVehicle = {}} = selectedVehicle || {};
     return (
-      <>
-        <CarFinance_Details_Component
-          headerProp={{
-            title: 'Car Finance Details',
-            subtitle: isCreatingLoanApplication
-              ? formatVehicleNumber(UsedVehicle?.registerNumber)
+      <CarFinance_Details_Component
+        headerProp={{
+          title: 'Car Finance Details',
+          subtitle: isCreatingLoanApplication
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
+            : '',
+          showRightContent: true,
+          rightLabel:
+            isCreatingLoanApplication || isEdit
+              ? selectedLoanApplication?.loanApplicationId || ''
               : '',
-            showRightContent: true,
-            rightLabel:
-              isCreatingLoanApplication || isEdit
-                ? selectedLoanApplication?.loanApplicationId || ''
-                : '',
-            rightLabelColor: '#F8A902',
-            onBackPress: () => goBack(),
-          }}
-          state={{
-            bankName,
-            loanAccountNumber,
-            loanAmount,
-            monthlyEmi,
-            emiPaid,
-            tenure,
-          }}
-          tenure={tenure}
-          onBankNameChange={value => this.onChangeField('bankName', value)}
-          onSelectSuggestion={this.onSelectBank}
-          isCreatingLoanApplication={isCreatingLoanApplication}
-          searchBankNameFromAPI={this.searchBankNameFromAPI}
-          loading={loading}
-          onChangeAccountNumber={value =>
-            this.onChangeField('loanAccountNumber', value)
-          }
-          onChangeLoanAmount={value => this.onChangeField('loanAmount', value)}
-          onChangeTenure={value => this.onChangeField('tenure', value)}
-          onChangeEmiPaid={value => this.onChangeField('emiPaid', value)}
-          onChangeMonthlyAmount={value =>
-            this.onChangeField('monthlyEmi', value)
-          }
-          restInputProps={{
-            bankName: {
-              value: bankName,
-              isError: errors.bankName,
-              statusMsg: errors.bankName,
-              isDisabled: isReadOnlyLoanApplication,
-            },
-            loanAccountNumber: {
-              value: loanAccountNumber,
-              isError: errors.loanAccountNumber,
-              statusMsg: errors.loanAccountNumber,
-              isDisabled: isReadOnlyLoanApplication,
-            },
-            loanAmount: {
-              isError: errors.loanAmount,
-              statusMsg: errors.loanAmount,
-              isDisabled: isReadOnlyLoanApplication,
-            },
-            tenure: {
-              isError: errors.tenure,
-              statusMsg: errors.tenure,
-              isDisabled: isReadOnlyLoanApplication,
-            },
-            monthlyEmi: {
-              isError: errors.monthlyEmi,
-              statusMsg: errors.monthlyEmi,
-              isDisabled: isReadOnlyLoanApplication,
-            },
-            emiPaid: {
-              isError: errors.emiPaid,
-              statusMsg: errors.emiPaid,
-              isDisabled: isReadOnlyLoanApplication,
-            },
-          }}
-          handleNextStepPress={this.handleNextStepPress}
-          handleSaveDraftPress={this.handleSaveDraftPress}
-        />
-      </>
+          rightLabelColor: '#F8A902',
+          onBackPress: () => goBack(),
+        }}
+        state={{
+          bankName,
+          loanAccountNumber,
+          loanAmount,
+          monthlyEmi,
+          emiPaid,
+          tenure,
+        }}
+        tenure={tenure}
+        onBankNameChange={value => this.onChangeField('bankName', value)}
+        onSelectSuggestion={this.onSelectBank}
+        isCreatingLoanApplication={isCreatingLoanApplication}
+        searchBankNameFromAPI={this.searchBankNameFromAPI}
+        loading={loading}
+        onChangeAccountNumber={value =>
+          this.onChangeField('loanAccountNumber', value)
+        }
+        onChangeLoanAmount={value => this.onChangeField('loanAmount', value)}
+        onChangeTenure={value => this.onChangeField('tenure', value)}
+        onChangeEmiPaid={value => this.onChangeField('emiPaid', value)}
+        onChangeMonthlyAmount={value => this.onChangeField('monthlyEmi', value)}
+        restInputProps={{
+          bankName: {
+            value: bankName,
+            isError: errors.bankName,
+            statusMsg: errors.bankName,
+            isDisabled: isReadOnlyLoanApplication,
+          },
+          loanAccountNumber: {
+            value: loanAccountNumber,
+            isError: errors.loanAccountNumber,
+            statusMsg: errors.loanAccountNumber,
+            isDisabled: isReadOnlyLoanApplication,
+          },
+          loanAmount: {
+            isError: errors.loanAmount,
+            statusMsg: errors.loanAmount,
+            isDisabled: isReadOnlyLoanApplication,
+          },
+          tenure: {
+            isError: errors.tenure,
+            statusMsg: errors.tenure,
+            isDisabled: isReadOnlyLoanApplication,
+          },
+          monthlyEmi: {
+            isError: errors.monthlyEmi,
+            statusMsg: errors.monthlyEmi,
+            isDisabled: isReadOnlyLoanApplication,
+          },
+          emiPaid: {
+            isError: errors.emiPaid,
+            statusMsg: errors.emiPaid,
+            isDisabled: isReadOnlyLoanApplication,
+          },
+        }}
+        handleNextStepPress={this.handleNextStepPress}
+        handleSaveDraftPress={this.handleSaveDraftPress}
+        selectTenure={this.selectTenure}
+      />
     );
   }
 }

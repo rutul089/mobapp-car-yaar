@@ -11,6 +11,7 @@ import {
   Spacing,
   Text,
   theme,
+  DropdownModal,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet} from 'react-native';
@@ -24,6 +25,16 @@ import {
   sanitizeAmount,
 } from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
+
+const defaultTenure = Array(60)
+  .fill(0)
+  .map((_, i) => {
+    const month = i + 1;
+    return {
+      label: `${month} ${month > 1 ? 'Months' : 'Month'}`,
+      value: month,
+    };
+  });
 
 const Finance_Details_Component = ({
   headerProp,
@@ -40,6 +51,7 @@ const Finance_Details_Component = ({
   onChangeTenure,
   onChangeMonthlyAmount,
   onChangeLoanClosedDate,
+  selectTenure,
   restInputProps = {},
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
@@ -71,10 +83,15 @@ const Finance_Details_Component = ({
     return isEditing ? value + '' : value > 0 ? `${value} Months` : '';
   }, []);
 
+  const [showTenureModal, setShowTenureModal] = React.useState(false);
+
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header {...headerProp} />
       <KeyboardAwareScrollView
+        enableOnAndroid
+        // extraScrollHeight={50}
+        bounces={false}
         contentContainerStyle={styles.wrapper}
         keyboardShouldPersistTaps="handled">
         <Text>Was this car financed?</Text>
@@ -142,7 +159,7 @@ const Finance_Details_Component = ({
                   editingStates.loanAmount,
                   state.loanAmount,
                 )}
-                onSubmitEditing={() => focusNext('tenure')}
+                onSubmitEditing={() => focusNext('monthlyEmi')}
                 onFocus={() => {
                   scrollToInput('loanAmount');
                   setFieldEditing('loanAmount', true);
@@ -150,7 +167,7 @@ const Finance_Details_Component = ({
                 onBlur={() => setFieldEditing('loanAmount', false)}
                 {...(restInputProps?.loanAmount || {})}
               />
-              <Spacing size="md" />
+              {/* <Spacing size="md" />
               <Input
                 ref={refs?.tenure}
                 placeholder=""
@@ -170,6 +187,22 @@ const Finance_Details_Component = ({
                   setFieldEditing('tenure', true);
                 }}
                 onBlur={() => setFieldEditing('tenure', false)}
+                isAsDropdown
+                isRightIconVisible
+                {...(restInputProps?.tenure || {})}
+              /> */}
+              <Spacing size="md" />
+              <Input
+                ref={refs?.tenure}
+                placeholder=""
+                isLeftIconVisible
+                leftIconName={images.calendar}
+                label="Tenure"
+                onChangeText={onChangeTenure}
+                value={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
+                isAsDropdown
+                isRightIconVisible
+                onPress={() => setShowTenureModal(true)}
                 {...(restInputProps?.tenure || {})}
               />
               <Spacing size="md" />
@@ -229,6 +262,18 @@ const Finance_Details_Component = ({
         />
         <Spacing size={theme.sizes.padding + 10} />
       </KeyboardAwareScrollView>
+
+      <DropdownModal
+        visible={showTenureModal}
+        data={defaultTenure}
+        selectedItem={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
+        onSelect={(item, index) => {
+          selectTenure?.(item);
+        }}
+        onClose={() => setShowTenureModal(false)}
+        title="Select Tenure"
+      />
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );

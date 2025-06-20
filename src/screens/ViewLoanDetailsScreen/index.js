@@ -76,7 +76,7 @@ class ViewLoanDetailsScreen extends Component {
   };
 
   render() {
-    const {loading, selectedLoanApplication} = this.props;
+    const {loading, selectedLoanApplication,isReadOnlyLoanApplication} = this.props;
     const {
       customer = {},
       vehicle = {},
@@ -271,6 +271,7 @@ class ViewLoanDetailsScreen extends Component {
         onTackLoanApplication={this.onTackLoanApplication}
         loading={loading}
         handleEditLoanApplication={this.handleEditLoanApplication}
+        isReadOnlyLoanApplication={isReadOnlyLoanApplication}
       />
     );
   }
@@ -287,6 +288,8 @@ const mapStateToProps = ({loanData}) => {
     loading: loanData.loading,
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
+    isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
+
   };
 };
 export default connect(

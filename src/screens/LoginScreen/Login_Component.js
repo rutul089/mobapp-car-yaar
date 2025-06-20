@@ -1,17 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {Image, KeyboardAvoidingView, Platform, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {
   Button,
   Card,
+  Input,
   SafeAreaWrapper,
   Spacing,
   Text,
-  theme,
-  Input,
   images,
+  theme,
 } from '@caryaar/components';
+import React from 'react';
+import {Image, KeyboardAvoidingView, Platform, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import strings from '../../locales/strings';
 import {styles} from '../../styles/Login.style';
 
@@ -22,6 +22,8 @@ const Login_Component = ({
   generateOTP,
   isError,
 }) => {
+  const [caretHidden, setCaretHidden] = React.useState(true);
+
   return (
     <SafeAreaWrapper
       barStyle="dark-content"
@@ -71,7 +73,10 @@ const Login_Component = ({
                 // optionalLabelContainerStyles={{alignSelf: 'left'}}
                 inputStyles={styles.inputStyle}
                 value={mobileNumber}
-                onChangeText={setMobileNumber}
+                onChangeText={value => {
+                  setMobileNumber?.(value);
+                  setCaretHidden(!(value.length > 0));
+                }}
                 maxLength={10}
                 keyboardType="number-pad"
                 isError={isError}
@@ -79,6 +84,9 @@ const Login_Component = ({
                 autoFocus
                 returnKeyType={'done'}
                 onSubmitEditing={generateOTP}
+                restProps={{
+                  caretHidden: caretHidden,
+                }}
               />
               <Spacing size="xl" />
               <Button label={strings.generateOTP} onPress={generateOTP} />

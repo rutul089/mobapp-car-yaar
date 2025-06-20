@@ -202,6 +202,18 @@ class FinanceDetailsScreen extends Component {
     return isFormValid;
   };
 
+  selectTenure = (item, index) => {
+    console.log({item: item?.value});
+    this.setState(
+      {
+        tenure: item.value,
+      },
+      () => {
+        this.onChangeField('tenure', String(this.state.tenure));
+      },
+    );
+  };
+
   render() {
     const {
       isCarFinanced,
@@ -263,11 +275,12 @@ class FinanceDetailsScreen extends Component {
           this.onChangeField('loanAccountNumber', value)
         }
         onChangeLoanAmount={value => this.onChangeField('loanAmount', value)}
-        onChangeTenure={value => this.onChangeField('tenure', value)}
+        // onChangeTenure={value => this.onChangeField('tenure', value)}
         onChangeMonthlyAmount={value => this.onChangeField('monthlyEmi', value)}
         onChangeLoanClosedDate={value =>
           this.onChangeField('loanClosedDate', value)
         }
+        selectTenure={this.selectTenure}
         restInputProps={{
           bankName: {
             value: bankName,

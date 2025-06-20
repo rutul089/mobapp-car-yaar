@@ -8,6 +8,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import React from 'react';
 import {KeyboardAvoidingView, Platform, View} from 'react-native';
@@ -26,6 +27,7 @@ const OTP_Verification_Component = ({
   onBackPress,
   isError,
   errorMessage,
+  loading,
 }) => {
   return (
     <SafeAreaWrapper
@@ -93,6 +95,7 @@ const OTP_Verification_Component = ({
           </View>
         </KeyboardAvoidingView>
       </LinearGradient>
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };
