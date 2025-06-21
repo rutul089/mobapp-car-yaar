@@ -25,6 +25,8 @@ const Loan_Amount_Component = ({
   loading,
   loanAmount,
 }) => {
+  const [caretHidden, setCaretHidden] = React.useState(true);
+
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header {...headerProp} />
@@ -36,7 +38,7 @@ const Loan_Amount_Component = ({
         </Text>
         <Spacing size="smd" />
         <Input
-          placeholder={'123'}
+          placeholder={'1234567'}
           optionalLabelContainerStyles={{alignSelf: 'center'}}
           labelStyles={{fontSize: theme.typography.fontSizes.body}}
           inputContainerBackgroundColor={'white'}
@@ -47,11 +49,15 @@ const Loan_Amount_Component = ({
           autoFocus
           onChangeText={value => {
             const sanitizedText = sanitizeAmount(value);
+            setCaretHidden(!(sanitizedText.length > 0));
             onChangeLoanAmount?.(sanitizedText);
           }}
           onSubmitEditing={onNextButtonPress}
           value={formatIndianCurrency(loanAmount, true, true)}
           {...(restInputProps?.loanAmount || {})}
+          restProps={{
+            caretHidden: caretHidden,
+          }}
         />
         <FormFooterButtons
           primaryButtonLabel={strings.next}

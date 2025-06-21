@@ -88,3 +88,5 @@ export const FETCH_SALES_EXECUTIVE = createAsyncActionTypes(
 export const REMOVE_SALES_EXECUTIVE = createAsyncActionTypes(
   'REMOVE_SALES_EXECUTIVE',
 );
+
+export const KYC_ACTION = createAsyncActionTypes('KYC_ACTION');

@@ -1,4 +1,6 @@
+import {get} from 'lodash';
 import React, {Component} from 'react';
+import {Keyboard} from 'react-native';
 import {connect} from 'react-redux';
 import {
   currentLoanOptions,
@@ -18,6 +20,8 @@ import {
   searchBanksThunk,
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
+  verifyAadharThunk,
+  verifyPanThunk,
 } from '../../redux/actions';
 import {getPresignedDownloadUrl} from '../../services';
 import {
@@ -39,7 +43,6 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
-import {get} from 'lodash';
 
 const initialState = {
   applicantPhoto: '',
@@ -135,6 +138,8 @@ class CustomerPersonalDetails extends Component {
       selectionType: '',
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
       isLoadingDocument: false,
+      panCardVerification: false,
+      aadharVerification: false,
     };
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
@@ -179,6 +184,8 @@ class CustomerPersonalDetails extends Component {
         aadharFrontPhoto: customerDetail?.aadharFrontPhoto,
         pancardPhoto: customerDetail?.pancardPhoto,
         applicantPhoto: customerDetail?.applicantPhoto,
+        panCardVerification: customerDetail?.panCardVerification,
+        aadharVerification: customerDetail?.aadharVerification,
       });
     }
   }
@@ -467,18 +474,60 @@ class CustomerPersonalDetails extends Component {
   };
 
   verifyPanCard = () => {
-    alert('TODO API Call for PanCard');
+    const {selectedCustomerId} = this.props;
+    const {panCardNumber, errors} = this.state;
+
+    Keyboard.dismiss();
+
+    if (!panCardNumber || errors.panCardNumber) {
+      return showToast(
+        'error',
+        errors.panCardNumber || 'Please enter pan number',
+      );
+    }
+
+    let payload = {
+      customerId: selectedCustomerId,
+      panCardNumber,
+    };
+    this.props.verifyPanThunk(payload, response => {
+      if (response?.success && response?.data) {
+        this.setState({
+          panCardVerification: response?.data?.verified,
+        });
+      }
+    });
   };
 
   verifyAadharCard = () => {
-    alert('TODO API Call for AadharCard');
+    const {selectedCustomerId} = this.props;
+    const {aadharNumber, errors} = this.state;
+
+    Keyboard.dismiss();
+
+    if (!aadharNumber || errors.aadharNumber) {
+      return showToast(
+        'error',
+        errors.aadharNumber || 'Please enter aadhar number',
+      );
+    }
+
+    let payload = {
+      customerId: selectedCustomerId,
+      aadharNumber,
+    };
+    this.props.verifyAadharThunk(payload, response => {
+      if (response?.success && response?.data) {
+        this.setState({
+          aadharVerification: response?.data?.verified,
+        });
+      }
+    });
   };
 
   render() {
     const {
       gender,
-      isOnboard,
-      registrationNumber,
       errors,
       incomeSource,
       occupation,
@@ -488,6 +537,8 @@ class CustomerPersonalDetails extends Component {
       bankName,
       isLoadingDocument,
       selectionType,
+      panCardVerification,
+      aadharVerification,
     } = this.state;
 
     const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
@@ -559,19 +610,19 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.panCardNumber,
             statusMsg: errors?.panCardNumber,
             autoCapitalize: 'characters',
-            isDisabled: isEdit,
-            rightLabel: isEdit ? '' : 'VERIFY',
+            isDisabled: panCardVerification,
+            rightLabel: panCardVerification ? '' : 'VERIFY',
             rightLabelPress: this.verifyPanCard,
-            isRightIconVisible: isEdit,
+            isRightIconVisible: panCardVerification,
           },
           aadharNumber: {
             value: aadharNumber,
             isError: errors?.aadharNumber,
             statusMsg: errors?.aadharNumber,
-            isDisabled: isEdit,
-            rightLabel: isEdit ? '' : 'VERIFY',
+            isDisabled: aadharVerification,
+            rightLabel: aadharVerification ? '' : 'VERIFY',
             rightLabelPress: this.verifyAadharCard,
-            isRightIconVisible: isEdit,
+            isRightIconVisible: aadharVerification,
           },
           applicantName: {
             isError: errors?.applicantName,
@@ -689,6 +740,8 @@ const mapActionCreators = {
   updateCustomerDetailsThunk,
   searchBanksThunk,
   initiateLoanApplicationThunk,
+  verifyAadharThunk,
+  verifyPanThunk,
 };
 
 const mapStateToProps = ({customerData, vehicleData, loanData}) => ({

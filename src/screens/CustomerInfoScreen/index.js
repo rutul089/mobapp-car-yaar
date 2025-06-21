@@ -29,6 +29,7 @@ class CustomerInfoScreen extends Component {
   }
 
   componentDidMount() {
+    console.log('componentDidMount');
     this.fetchCustomerDetailsThunk();
   }
 

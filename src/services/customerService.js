@@ -363,3 +363,37 @@ export const deleteCustomer = async customerId => {
     throw error;
   }
 };
+/**
+ * Verifies customer's Aadhaar number.
+ * @param {Object} payload - Aadhaar verification payload.
+ * @returns {Promise<Object>} - Response data from the server.
+ * @throws {Error} - Throws an error if the request fails.
+ */
+export const verifyAadhar = async payload => {
+  try {
+    const response = await axiosInstance.post(
+      '/customers/verifyAadhar',
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error verifying Aadhaar:', error);
+    throw error;
+  }
+};
+
+/**
+ * Verifies customer's PAN number.
+ * @param {Object} payload - PAN verification payload.
+ * @returns {Promise<Object>} - Response data from the server.
+ * @throws {Error} - Throws an error if the request fails.
+ */
+export const verifyPan = async payload => {
+  try {
+    const response = await axiosInstance.post('/customers/verifyPan', payload);
+    return response.data;
+  } catch (error) {
+    console.error('Error verifying PAN:', error);
+    throw error;
+  }
+};

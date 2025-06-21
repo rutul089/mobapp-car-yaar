@@ -7,6 +7,7 @@ import {
   FETCH_CUSTOMER_DETAIL,
   FETCH_CUSTOMER_DOCUMENT,
   FETCH_CUSTOMERS,
+  KYC_ACTION,
 } from '../actions/actionType';
 
 const initialState = {
@@ -32,6 +33,7 @@ const customerReducer = (state = initialState, action) => {
     case FETCH_CUSTOMER_DOCUMENT.REQUEST:
     case CREATE_CUSTOMER_BASIC_DETAIL.REQUEST:
     case CUSTOMER_MORE_FINANCE.REQUEST:
+    case KYC_ACTION.REQUEST:
       return {
         ...state,
         loading: true,
@@ -99,6 +101,7 @@ const customerReducer = (state = initialState, action) => {
     case FETCH_CUSTOMERS.FAILURE:
     case FETCH_CUSTOMER_DETAIL.FAILURE:
     case FETCH_CUSTOMER_DOCUMENT.FAILURE:
+    case KYC_ACTION.FAILURE:
       return {
         ...state,
         loading: false,
@@ -133,6 +136,9 @@ const customerReducer = (state = initialState, action) => {
 
     case types.RESET_APP_STATE:
       return {...initialState};
+
+    case KYC_ACTION.SUCCESS:
+      return {...state, loading: false};
 
     default:
       return state;

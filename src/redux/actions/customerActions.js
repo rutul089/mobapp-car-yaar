@@ -7,7 +7,9 @@ import {
   updateCustomerDetails,
   updateCustomerDocuments,
   uploadCustomerDocuments,
+  verifyAadhar,
   verifyCustomerOtp,
+  verifyPan,
 } from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
 import {
@@ -17,6 +19,7 @@ import {
   FETCH_CUSTOMERS,
   FETCH_CUSTOMER_DETAIL,
   FETCH_CUSTOMER_DOCUMENT,
+  KYC_ACTION,
 } from './actionType';
 
 /**
@@ -253,3 +256,44 @@ export const addCustomerBasicDetail = (customer, customerID) => ({
     customerId: customerID,
   },
 });
+
+export const verifyAadharThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: KYC_ACTION.REQUEST});
+    try {
+      const response = await verifyAadhar(payload);
+      // dispatch({
+      //   type: KYC_ACTION.SUCCESS,
+      // });
+      dispatch(fetchCustomerDetailsThunk(payload?.customerId));
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: KYC_ACTION.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      showApiErrorToast(error);
+    }
+  };
+
+export const verifyPanThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: KYC_ACTION.REQUEST});
+    try {
+      const response = await verifyPan(payload);
+      dispatch({
+        type: KYC_ACTION.SUCCESS,
+      });
+      dispatch(fetchCustomerDetailsThunk(payload?.customerId));
+      onSuccess?.(response);
+      console.log('verifyPanThunk', JSON.stringify(response));
+    } catch (error) {
+      dispatch({
+        type: KYC_ACTION.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      showApiErrorToast(error);
+    }
+  };
