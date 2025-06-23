@@ -1,7 +1,7 @@
-import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import * as Screens from '../screens';
+import React from 'react';
 import ScreenNames from '../constants/ScreenNames';
+import * as Screens from '../screens';
 import TabNavigator from './TabNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -92,14 +92,6 @@ const StackRoutes = () => {
       <Stack.Screen
         name={ScreenNames.CustomerInfo}
         component={Screens.CustomerInfoScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.CustomerDocuments}
-        component={Screens.CustomerDocumentsScreen}
-      />
-      <Stack.Screen
-        name={ScreenNames.CustomerFinancialDocs}
-        component={Screens.CustomerFinancialDocsScreen}
       />
       <Stack.Screen
         name={ScreenNames.MoreOnFinancial}

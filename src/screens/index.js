@@ -36,8 +36,6 @@ export {default as TopUpFinanceDocuments} from './TopUpFinanceDocumentsScreen';
 export {default as LenderDetails} from './LenderDetailsScreen';
 export {default as CustomizeLoanOffer} from './CustomizeLoanOfferScreen';
 export {default as CustomerInfoScreen} from './CustomerInfoScreen';
-export {default as CustomerDocumentsScreen} from './CustomerDocumentsScreen';
-export {default as CustomerFinancialDocsScreen} from './CustomerFinancialDocsScreen';
 export {default as MoreOnFinancialScreen} from './MoreOnFinancialScreen';
 
 //UserProfile

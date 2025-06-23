@@ -39,8 +39,6 @@ const ScreenNames = {
   LenderDetails: 'LenderDetailsScreen',
   CustomizeLoanOffer: 'CustomizeLoanOfferScreen',
   CustomerInfo: 'CustomerInfoScreen',
-  CustomerDocuments: 'CustomerDocumentsScreen',
-  CustomerFinancialDocs: 'CustomerFinancialDocsScreen',
   MoreOnFinancial: 'MoreOnFinancialScreen',
   UserProfile: 'ProfileScreen',
   EditProfile: 'EditProfileScreen',
