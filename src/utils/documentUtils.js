@@ -235,8 +235,13 @@ export const generateImageUploadPayload = (
 
   imageKeys.forEach(key => {
     const uploadedUrl = formattedImages?.[key]?.uploadKey;
+    const selectedDocType = formattedImages?.[key]?.selectedDocType;
     if (uploadedUrl) {
       payload[key] = uploadedUrl;
+      // payload[key] = {
+      //   image: selectedDocType,
+      //   url: uploadedUrl,
+      // };
     } else if (isEdit) {
       // Ensure missing keys are explicitly set to null in edit mode
       payload[key] = null;
@@ -393,5 +398,27 @@ export const openInBrowser = async url => {
   } catch (error) {
     Alert.alert('Error', 'Failed to open browser.');
     console.error('Failed to open URL:', error);
+  }
+};
+
+/**
+ * Fetches a presigned URL for the given document URI.
+ * Only makes API call if URI is valid.
+ *
+ * @param {string} uri - The object key for the document.
+ * @returns {Promise<string|null>} - The presigned URL or null if invalid input.
+ */
+export const getDocumentLink = async uri => {
+  if (!uri || typeof uri !== 'string') {
+    console.warn('Invalid URI provided to getDocumentLink:', uri);
+    return null;
+  }
+
+  try {
+    const {data} = await getPresignedDownloadUrl({objectKey: uri});
+    return data?.url || null;
+  } catch (error) {
+    console.error('Error fetching document link:', error);
+    return null;
   }
 };

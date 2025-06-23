@@ -25,6 +25,7 @@ import {
 } from '../../redux/actions';
 import {getPresignedDownloadUrl} from '../../services';
 import {
+  getDocumentLink,
   handleFileSelection,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
@@ -140,6 +141,9 @@ class CustomerPersonalDetails extends Component {
       isLoadingDocument: false,
       panCardVerification: false,
       aadharVerification: false,
+      aadharBackphotoLink: null,
+      aadharFrontPhotoLink: null,
+      pancardPhotoLink: null,
     };
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
@@ -148,46 +152,58 @@ class CustomerPersonalDetails extends Component {
     this.onNextPress = this.onNextPress.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {isEdit} = this.state;
     const {selectedCustomer} = this.props;
-    let customerDetail = selectedCustomer?.details;
-
-    if (isEdit) {
-      this.setState({
-        panCardNumber: customerDetail?.panCardNumber,
-        aadharNumber: customerDetail?.aadharNumber,
-        applicantName: customerDetail?.applicantName,
-        mobileNumber:
-          customerDetail?.mobileNumber || selectedCustomer?.mobileNumber,
-        gender: customerDetail?.gender ?? genderType.MALE,
-        fatherName: customerDetail?.fatherName,
-        spouseName: customerDetail?.spouseName,
-        email: customerDetail?.email,
-        dob: formatDate(customerDetail?.dob, 'DD/MM/YYYY'),
-        address: customerDetail?.address,
-        pincode: customerDetail?.pincode,
-        monthlyIncome: get(customerDetail, 'monthlyIncome', '').toString(),
-        bankName: customerDetail?.bankName,
-        accountNumber: customerDetail?.accountNumber,
-        currentLoan: customerDetail?.currentLoan ?? currentLoanOptions.YES,
-        currentEmi: get(customerDetail, 'currentEmi', '').toString(),
-        maxEmiAfford: get(customerDetail, 'maxEmiAfford', '').toString(),
-        avgMonthlyBankBalance: get(
-          customerDetail,
-          'avgMonthlyBankBalance',
-          '',
-        ).toString(),
-        occupation: customerDetail?.occupation,
-        incomeSource: customerDetail?.incomeSource,
-        aadharBackphoto: customerDetail?.aadharBackphoto,
-        aadharFrontPhoto: customerDetail?.aadharFrontPhoto,
-        pancardPhoto: customerDetail?.pancardPhoto,
-        applicantPhoto: customerDetail?.applicantPhoto,
-        panCardVerification: customerDetail?.panCardVerification,
-        aadharVerification: customerDetail?.aadharVerification,
-      });
+    if (!isEdit) {
+      return;
     }
+
+    const detail = selectedCustomer?.details || {};
+    const mappedFields = {
+      panCardNumber: detail?.panCardNumber,
+      aadharNumber: detail?.aadharNumber,
+      applicantName: detail?.applicantName,
+      gender: detail?.gender ?? genderType.MALE,
+      fatherName: detail?.fatherName,
+      spouseName: detail?.spouseName,
+      email: detail?.email,
+      dob: formatDate(detail?.dob, 'DD/MM/YYYY'),
+      address: detail?.address,
+      pincode: detail?.pincode,
+      monthlyIncome: get(detail, 'monthlyIncome', '').toString(),
+      bankName: detail?.bankName,
+      accountNumber: detail?.accountNumber,
+      currentLoan: detail?.currentLoan ?? currentLoanOptions.YES,
+      currentEmi: get(detail, 'currentEmi', '').toString(),
+      maxEmiAfford: get(detail, 'maxEmiAfford', '').toString(),
+      avgMonthlyBankBalance: get(
+        detail,
+        'avgMonthlyBankBalance',
+        '',
+      ).toString(),
+      occupation: detail?.occupation,
+      incomeSource: detail?.incomeSource,
+      aadharBackphoto: detail?.aadharBackphoto,
+      aadharFrontPhoto: detail?.aadharFrontPhoto,
+      pancardPhoto: detail?.pancardPhoto,
+      applicantPhoto: detail?.applicantPhoto,
+      panCardVerification: detail?.panCardVerification,
+      aadharVerification: detail?.aadharVerification,
+    };
+
+    const [back, front, pancard] = await Promise.all([
+      getDocumentLink(detail?.aadharBackphoto),
+      getDocumentLink(detail?.aadharFrontPhoto),
+      getDocumentLink(detail?.pancardPhoto),
+    ]);
+
+    this.setState({
+      ...mappedFields,
+      aadharBackphotoLink: back,
+      aadharFrontPhotoLink: front,
+      pancardPhotoLink: pancard,
+    });
   }
 
   onSelectedGender = value => {
@@ -316,6 +332,7 @@ class CustomerPersonalDetails extends Component {
       applicantPhoto: {required: false},
       currentEmi: {required: currentLoan},
       spouseName: {required: false},
+      aadharBackphoto: {required: false},
     };
 
     const fieldsToValidate = [
@@ -372,7 +389,6 @@ class CustomerPersonalDetails extends Component {
 
   handleFileUpload = type => {
     const {selectionType} = this.state;
-
     handleFileSelection(type, async asset => {
       if (!asset?.uri) {
         return;
@@ -387,17 +403,13 @@ class CustomerPersonalDetails extends Component {
       try {
         if (selectionType === 'applicantPhoto') {
           const url = await uploadApplicantPhoto(asset, fileName, mimeType);
-          this.setState({applicantPhoto: url}, () => {
-            this.onChangeField('applicantPhoto', url);
-          });
+          await this.updateDocumentState('applicantPhoto', url);
         } else {
           const uploadedKey = await uploadDocumentViaPresignedUrl(
             asset,
             selectionType,
           );
-          this.setState({[selectionType]: uploadedKey}, () => {
-            this.onChangeField(selectionType, uploadedKey);
-          });
+          await this.updateDocumentState(selectionType, uploadedKey);
         }
       } catch (error) {
         showToast('error', 'Upload failed');
@@ -458,7 +470,6 @@ class CustomerPersonalDetails extends Component {
           navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
         },
         error => {
-          console.warn('Error opening file:', error);
           showToast('error', 'Could not open the document.', 'bottom', 3000);
         },
       );
@@ -468,9 +479,7 @@ class CustomerPersonalDetails extends Component {
   };
 
   handleDeleteDocument = type => {
-    this.setState({
-      [type]: null,
-    });
+    this.updateDocumentState(type, null, false);
   };
 
   verifyPanCard = () => {
@@ -523,6 +532,30 @@ class CustomerPersonalDetails extends Component {
         });
       }
     });
+  };
+
+  updateDocumentState = async (type, uri, isCheck) => {
+    if (!type) {
+      return;
+    }
+
+    let link = null;
+    if (uri) {
+      link = await getDocumentLink(uri);
+    }
+
+    this.setState(
+      {
+        [type]: uri,
+        [`${type}Link`]: link,
+      },
+      () => {
+        if (!isCheck) {
+          return;
+        }
+        this.onChangeField(type, uri);
+      },
+    );
   };
 
   render() {
@@ -759,51 +792,3 @@ export default connect(
   mapStateToProps,
   mapActionCreators,
 )(CustomerPersonalDetails);
-
-// // Define this utility function either locally or extract to a utils/helper file
-// const buildInputProps = (fields, errors = {}, extraProps = {}) => {
-//   return fields.reduce((acc, field) => {
-//     acc[field] = {
-//       isError: errors?.[field],
-//       statusMsg: errors?.[field],
-//       ...(extraProps[field] || {}),
-//     };
-//     return acc;
-//   }, {});
-// };
-
-// // Then use it where you're defining restInputProps
-// const fields = [
-//   'panCardNumber',
-//   'aadharNumber',
-//   'applicantName',
-//   'mobileNumber',
-//   'fatherName',
-//   'spouseName',
-//   'email',
-//   'address',
-//   'pincode',
-//   'occupation',
-//   'incomeSource',
-//   'accountNumber',
-//   'currentEmi',
-//   'maxEmiAfford',
-//   'monthlyIncome',
-//   'avgMonthlyBankBalance',
-//   'applicantPhoto',
-//   'pancardPhoto',
-//   'aadharFrontPhoto',
-//   'aadharBackphoto',
-// ];
-
-// const extraProps = {
-//   panCardNumber: { autoCapitalize: 'characters' },
-//   aadharNumber: { value: aadharNumber },
-//   incomeSource: { value: incomeSource },
-// };
-
-// const restInputProps = buildInputProps(fields, errors, extraProps);
-
-{
-  /* <YourComponent restInputProps={restInputProps} /> */
-}

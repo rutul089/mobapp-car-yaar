@@ -18,7 +18,6 @@ const DocumentGroup = ({
           documents.map(doc => {
             const fileUri = doc?.docObject?.uri;
             const fileType = getFileType(fileUri);
-
             return (
               <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
                 <VehicleImageCard

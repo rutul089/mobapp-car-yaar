@@ -163,6 +163,7 @@ class CustomerDetailView extends Component {
       customerType,
       mobileNumber,
     };
+
     this.props
       .createCustomerBasicDetailThunk(
         payload,
@@ -194,6 +195,7 @@ class CustomerDetailView extends Component {
     const {route} = this.props;
     const {otp, mobileNumber} = this.state;
     let params = route.params;
+    params.mobileNumber = mobileNumber;
 
     let payload = {
       code: otp,

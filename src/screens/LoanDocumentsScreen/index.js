@@ -180,9 +180,9 @@ class LoanDocumentsScreen extends Component {
 
     // Trigger file picker modal
     this.setState({
-      showFilePicker: true,
-      // showFilePicker: !acceptedDocuments.length,
-      // showAcceptedDocModal: acceptedDocuments.length,
+      // showFilePicker: true,
+      showFilePicker: !acceptedDocuments.length,
+      showAcceptedDocModal: acceptedDocuments.length,
       selectedDocType: type,
       acceptedDocuments,
     });
@@ -209,6 +209,7 @@ class LoanDocumentsScreen extends Component {
           uri: data?.url,
           uploadedUrl: presignedKey,
           uploadKey: presignedKey,
+          selectedDocType: this.state.selectedAcceptedDocument,
         };
 
         this.setState(prev => ({

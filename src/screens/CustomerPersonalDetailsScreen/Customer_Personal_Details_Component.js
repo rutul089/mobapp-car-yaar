@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
@@ -26,7 +26,7 @@ import {
   genderTypes,
   occupationOptions,
 } from '../../constants/enums';
-import {getFileType} from '../../utils/documentUtils';
+import {getFileType, getMimeFromUrl} from '../../utils/documentUtils';
 import {formatIndianCurrency} from '../../utils/helper';
 import {
   formatInputDate,
@@ -110,18 +110,12 @@ const Customer_Personal_Details_Component = ({
     monthlyIncome: false,
   });
 
-  const [showPicker, setShowPicker] = React.useState(false);
-
   const setFieldEditing = (field, value) => {
     setEditingStates(prev => ({...prev, [field]: value}));
   };
 
   const getDisplayValue = (isEditing, value) => {
     return formatIndianCurrency(value, false, true);
-  };
-
-  const _onChangeDob = selectedDate => {
-    setShowPicker(false);
   };
 
   return (
@@ -149,11 +143,14 @@ const Customer_Personal_Details_Component = ({
           <ImageUploadButton
             label={'Pan Card'}
             btnLabel={'Click to Upload PAN Card Photo'}
-            image={state.pancardPhoto}
+            image={state.pancardPhotoLink}
             handleImagePick={() => handleFilePicker?.('pancardPhoto')}
             viewImage={() => handleViewDocument?.(state.pancardPhoto)}
             onDeletePress={() => handleDeleteDocument?.('pancardPhoto')}
-            isDocument={true}
+            isDocument={
+              Platform.OS === 'android' &&
+              getMimeFromUrl(state.pancardPhotoLink) !== 'image'
+            }
             fileType={getFileType(state.pancardPhoto)}
             {...(restInputProps?.pancardPhoto || {})}
           />
@@ -183,22 +180,28 @@ const Customer_Personal_Details_Component = ({
             <ImageUploadButton
               btnLabel={'Click to Upload Front Side Photo'}
               wrapperStyle={styles.halfWidth}
-              image={state.aadharFrontPhoto}
+              image={state.aadharFrontPhotoLink}
               handleImagePick={() => handleFilePicker?.('aadharFrontPhoto')}
               viewImage={() => handleViewDocument?.(state.aadharFrontPhoto)}
               onDeletePress={() => handleDeleteDocument?.('aadharFrontPhoto')}
-              isDocument={true}
+              isDocument={
+                Platform.OS === 'android' &&
+                getMimeFromUrl(state.aadharFrontPhotoLink) !== 'image'
+              }
               fileType={getFileType(state.aadharFrontPhoto)}
               {...(restInputProps?.aadharFrontPhoto || {})}
             />
             <ImageUploadButton
               btnLabel={'Click to Upload Back Side Photo'}
               wrapperStyle={styles.halfWidth}
-              image={state.aadharBackphoto}
+              image={state.aadharBackphotoLink}
               handleImagePick={() => handleFilePicker?.('aadharBackphoto')}
               viewImage={() => handleViewDocument?.(state.aadharBackphoto)}
               onDeletePress={() => handleDeleteDocument?.('aadharBackphoto')}
-              isDocument={true}
+              isDocument={
+                Platform.OS === 'android' &&
+                getMimeFromUrl(state.aadharBackphotoLink) !== 'image'
+              }
               fileType={getFileType(state.aadharBackphoto)}
               {...(restInputProps?.aadharBackphoto || {})}
             />
