@@ -208,11 +208,7 @@ const CarFinance_Details_Component = ({
             label="Tenure"
             keyboardType="number-pad"
             returnKeyType="done"
-            value={
-              loading
-                ? '-'
-                : `${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`
-            }
+            value={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
             isAsDropdown
             isRightIconVisible
             onPress={() => setShowTenureModal(true)}

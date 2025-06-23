@@ -43,6 +43,19 @@ const requiredFields = [
   'bankingProofImage',
 ];
 
+const loanDocuments = [
+  documentImageType.ID_PROOF,
+  documentImageType.ADDRESS_PROOF,
+  documentImageType.PERMANENT_ADDRESS,
+  documentImageType.INCOME_PROOF,
+  documentImageType.BANKING_PROOF,
+  documentImageType.BUSINESS_PROOF,
+  documentImageType.INSURANCE,
+  documentImageType.APPLICATION_FORM,
+  documentImageType.PASSPORT_SIZE_PHOTO,
+  documentImageType.CO_APPLICANT_DOCUMENTS,
+];
+
 class LoanDocumentsScreen extends Component {
   constructor(props) {
     super(props);
@@ -98,8 +111,11 @@ class LoanDocumentsScreen extends Component {
           if (response?.success && response?.data) {
             const formattedDocuments = await transformDocumentData(
               response.data,
+              loanDocuments,
             );
             this.setState({documents: formattedDocuments, isLoading: false});
+          } else {
+            this.setState({isLoading: false});
           }
         },
       );
@@ -182,13 +198,8 @@ class LoanDocumentsScreen extends Component {
       this.setState({showFilePicker: false, isLoadingDocument: true});
 
       try {
-        const fileName = asset.name || asset.fileName || 'upload';
-        const mimeType = asset.type || 'application/octet-stream';
-
         const presignedKey = await uploadDocumentViaPresignedUrl(
           asset,
-          fileName,
-          mimeType,
           this.state.selectedDocType,
         );
 

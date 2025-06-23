@@ -172,7 +172,6 @@ class CarFinanceDetails extends Component {
   };
 
   selectTenure = (item, index) => {
-    console.log({item: item?.value});
     this.setState(
       {
         tenure: item.value,

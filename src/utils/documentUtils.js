@@ -4,7 +4,7 @@ import RNFS from 'react-native-fs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {documentImageLabelMap, documentImageType} from '../constants/enums';
 import {showToast} from './helper';
-import {Alert} from 'react-native';
+import {Alert, Linking, Platform} from 'react-native';
 import {getPresignedDownloadUrl} from '../services';
 /**
  * Launches a file picker based on type: camera, gallery, or document.
@@ -85,6 +85,7 @@ export const getFileType = fileUri => {
  */
 
 export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
+  console.log('View URL ', uri);
   let type = '';
   try {
     if (
@@ -131,10 +132,13 @@ export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
   } catch (err) {
     console.warn('Error opening file:', err);
     if (err.message.includes('No app associated with this mime type')) {
-      return Alert.alert(
-        'No App Found',
-        `Please install an app to open ${type} file type.`,
+      openInBrowser(
+        `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(uri)}`,
       );
+      // return Alert.alert(
+      //   'No App Found',
+      //   `Please install an app to open ${type} file type.`,
+      // );
     }
     onError?.(err);
   } finally {
@@ -312,10 +316,14 @@ export const getMimeFromUrl = url => {
  * @param {Object} responseData - Original API response's `data` object
  * @returns {Promise<Object>} - Formatted object with metadata and download URLs
  */
-export const transformDocumentData = async responseData => {
+export const transformDocumentData = async (responseData, documentKey = []) => {
   const formattedData = {};
+
   const fileKeys = Object.keys(responseData).filter(
-    key => responseData[key] && typeof responseData[key] === 'string',
+    key =>
+      documentKey.includes(key) &&
+      responseData[key] &&
+      typeof responseData[key] === 'string',
   );
 
   for (const key of fileKeys) {
@@ -334,9 +342,56 @@ export const transformDocumentData = async responseData => {
         uploadKey: uri,
         uploadedUrl: uri,
         uri: uri,
+        isLocal: false,
       };
     }
   }
 
   return formattedData;
+};
+
+// export const transformDocumentData = async (responseData, documentKey) => {
+//   console.log({responseData});
+//   console.log({documentKey});
+//   const formattedData = {};
+//   const fileKeys = Object.keys(responseData).filter(
+//     key => responseData[key] && typeof responseData[key] === 'string',
+//   );
+
+//   for (const key of fileKeys) {
+//     const uri = responseData[key];
+//     try {
+//       const {data} = await getPresignedDownloadUrl({objectKey: uri});
+//       formattedData[key] = {
+//         uploadKey: uri,
+//         uploadedUrl: uri,
+//         uri: data?.url || null,
+//         isLocal: false,
+//       };
+//     } catch (error) {
+//       console.error(`Failed to get presigned URL for ${key}`, error);
+//       formattedData[key] = {
+//         uploadKey: uri,
+//         uploadedUrl: uri,
+//         uri: uri,
+//       };
+//     }
+//   }
+
+//   return formattedData;
+// };
+
+export const openInBrowser = async url => {
+  try {
+    const supported = await Linking.openURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert('Error', 'Cannot open this URL.');
+    }
+  } catch (error) {
+    Alert.alert('Error', 'Failed to open browser.');
+    console.error('Failed to open URL:', error);
+  }
 };

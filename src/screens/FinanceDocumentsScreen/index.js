@@ -28,6 +28,20 @@ const requiredFields = [
   documentImageType.NOC,
 ];
 
+let fDocumentList = [
+  documentImageType.SOA,
+  documentImageType.SANCTION_LETTER,
+  documentImageType.NOC,
+  documentImageType.FORM_34,
+  documentImageType.OTHER_DOCUMENTS,
+];
+
+let refinanceDocumentList = [
+  documentImageType.NOC,
+  documentImageType.SOA,
+  documentImageType.OTHER_DOCUMENTS,
+];
+
 class FinanceDocumentsScreen extends Component {
   constructor(props) {
     super(props);
@@ -41,24 +55,34 @@ class FinanceDocumentsScreen extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {isEdit} = this.state;
     const {selectedApplicationId} = this.props;
     if (isEdit) {
-      this.props.fetchCustomerFinanceDocumentsThunk(
-        selectedApplicationId,
-        {},
-        async response => {
-          if (response.financeDocuments) {
-            const formattedDocuments = await transformDocumentData(
-              response.financeDocuments,
-            );
-            this.setState({
-              documents: formattedDocuments,
-            });
-          }
-        },
-      );
+      this.setState({isLoading: true});
+
+      try {
+        await this.props.fetchCustomerFinanceDocumentsThunk(
+          selectedApplicationId,
+          {},
+          async response => {
+            if (response.financeDocuments) {
+              const formattedDocuments = await transformDocumentData(
+                response.financeDocuments,
+                fDocumentList,
+              );
+              this.setState({
+                documents: formattedDocuments,
+                isLoading: false,
+              });
+            } else {
+              this.setState({isLoading: false});
+            }
+          },
+        );
+      } catch (e) {
+        this.setState({isLoading: false});
+      }
     }
   }
 
@@ -205,7 +229,8 @@ class FinanceDocumentsScreen extends Component {
 
     const {UsedVehicle = {}} = selectedVehicle || {};
 
-    const {documents, showFilePicker, isLoadingDocument, isEdit} = this.state;
+    const {documents, showFilePicker, isLoadingDocument, isEdit, isLoading} =
+      this.state;
 
     return (
       <Finance_Documents_Component
@@ -222,13 +247,7 @@ class FinanceDocumentsScreen extends Component {
           rightLabelColor: '#F8A902',
           onBackPress: () => goBack(),
         }}
-        documentList={[
-          documentImageType.SOA,
-          documentImageType.SANCTION_LETTER,
-          documentImageType.NOC,
-          documentImageType.FORM_34,
-          documentImageType.OTHER_DOCUMENTS,
-        ].map(type => ({
+        documentList={fDocumentList.map(type => ({
           type,
           label: documentImageLabelMap[type],
           docObject: documents[type],
@@ -245,7 +264,7 @@ class FinanceDocumentsScreen extends Component {
           onClose: this.closeFilePicker,
           autoCloseOnSelect: false,
         }}
-        loading={loading}
+        loading={isLoading}
         isLoadingDocument={isLoadingDocument}
         isReadOnlyLoanApplication={isReadOnlyLoanApplication}
       />
