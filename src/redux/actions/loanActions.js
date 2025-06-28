@@ -1,5 +1,6 @@
 import {
   addCustomerLoanAmount,
+  deleteLoanApplicationById,
   fetchCustomerFinanceDetails,
   fetchCustomerFinanceDocuments,
   fetchCustomerMoreFinanceDetails,
@@ -22,6 +23,7 @@ import {
   FETCH_LOAN_APP_BY_ID,
   FETCH_LOAN_APPLICATIONS,
   RESET_LOAN_APPLICATION,
+  DELETE_LOAN_APPLICATION,
 } from './actionType';
 import types from './types';
 
@@ -111,10 +113,12 @@ export const initiateLoanApplicationThunk = (
 
     try {
       const response = await initiateLoanApplication(applicationData);
-      dispatch({
-        type: FETCH_LOAN_APP_BY_ID.SUCCESS,
-        payload: response.data,
-      });
+
+      dispatch(fetchLoanApplicationFromIdThunk(response.data?.id));
+      // dispatch({
+      //   type: FETCH_LOAN_APP_BY_ID.SUCCESS,
+      //   payload: response.data,
+      // });
 
       dispatch({
         type: types.APPEND_NEW_LOAN_APPLICATION,
@@ -375,3 +379,31 @@ export const clearSearchApplication = () => ({
 export const resetLoanApplication = () => ({
   type: RESET_LOAN_APPLICATION.SUCCESS,
 });
+
+export const deleteLoanApplicationByIdThunk = (
+  applicationId,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: DELETE_LOAN_APPLICATION.REQUEST});
+
+    try {
+      const response = await deleteLoanApplicationById(applicationId);
+
+      dispatch({
+        type: DELETE_LOAN_APPLICATION.SUCCESS,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: DELETE_LOAN_APPLICATION.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};

@@ -1,32 +1,41 @@
 import {
+  AutocompleteInput,
   Card,
+  DropdownModal,
   FormFooterButtons,
   Header,
   images,
   Input,
+  Loader,
   SafeAreaWrapper,
   Spacing,
   Text,
   theme,
-  AutocompleteInput,
-  Loader,
-  DropdownModal,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
 import {formatIndianCurrency} from '../../utils/helper';
-import {useInputRefs} from '../../utils/useInputRefs';
 import {sanitizeAmount} from '../../utils/inputHelper';
+import {useInputRefs} from '../../utils/useInputRefs';
 
-const defaultTenure = Array(60)
+const defaultTenure = Array(84)
+  .fill(0)
+  .map((_, i) => {
+    const month = i + 12;
+    return {
+      label: `${month} Months`,
+      value: month,
+    };
+  });
+
+const defaultEmiPaid = Array(60)
   .fill(0)
   .map((_, i) => {
     const month = i + 1;
     return {
-      label: `${month} ${month > 1 ? 'Months' : 'Month'}`,
-      value: month,
+      label: month + '',
     };
   });
 
@@ -49,6 +58,7 @@ const CarFinance_Details_Component = ({
   tenure,
   restInputProps = {},
   selectTenure,
+  selectEmiPaid,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'bankName',
@@ -74,11 +84,8 @@ const CarFinance_Details_Component = ({
     return formatIndianCurrency(value, false, true);
   }, []);
 
-  const getDisplayValueTenure = React.useCallback((isEditing, value) => {
-    return isEditing ? value + '' : value > 0 ? `${value} Months` : '';
-  }, []);
-
   const [showTenureModal, setShowTenureModal] = React.useState(false);
+  const [showEmiPaidModal, setShowEmiPaidModal] = React.useState(false);
 
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -146,6 +153,7 @@ const CarFinance_Details_Component = ({
               setFieldEditing('loanAmount', true);
             }}
             onBlur={() => setFieldEditing('loanAmount', false)}
+            maxLength={15}
             {...(restInputProps?.loanAmount || {})}
           />
           <Spacing size="md" />
@@ -181,7 +189,7 @@ const CarFinance_Details_Component = ({
                 ref={refs?.emiPaid}
                 placeholder=""
                 isLeftIconVisible
-                leftIconName={images.icRupee}
+                leftIconName={images.calendar}
                 label="EMI Paid"
                 keyboardType="number-pad"
                 returnKeyType="next"
@@ -189,12 +197,9 @@ const CarFinance_Details_Component = ({
                   onChangeEmiPaid?.(value);
                 }}
                 value={state.emiPaid}
-                onSubmitEditing={() => focusNext('tenure')}
-                onFocus={() => {
-                  scrollToInput('emiPaid');
-                  setFieldEditing('emiPaid', true);
-                }}
-                onBlur={() => setFieldEditing('emiPaid', false)}
+                onPress={() => setShowEmiPaidModal(true)}
+                isAsDropdown
+                isRightIconVisible
                 {...(restInputProps?.emiPaid || {})}
               />
             </View>
@@ -208,7 +213,7 @@ const CarFinance_Details_Component = ({
             label="Tenure"
             keyboardType="number-pad"
             returnKeyType="done"
-            value={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
+            value={`${state.tenure} Months`}
             isAsDropdown
             isRightIconVisible
             onPress={() => setShowTenureModal(true)}
@@ -226,12 +231,23 @@ const CarFinance_Details_Component = ({
         <DropdownModal
           visible={showTenureModal}
           data={defaultTenure}
-          selectedItem={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
+          selectedItem={`${state.tenure} Months`}
           onSelect={(item, index) => {
             selectTenure?.(item);
           }}
           onClose={() => setShowTenureModal(false)}
           title="Select Tenure"
+        />
+
+        <DropdownModal
+          visible={showEmiPaidModal}
+          data={defaultEmiPaid}
+          selectedItem={state.emiPaid}
+          onSelect={(item, index) => {
+            selectEmiPaid?.(item);
+          }}
+          onClose={() => setShowEmiPaidModal(false)}
+          title="Select Emi Paid"
         />
       </KeyboardAwareScrollView>
       {loading && <Loader visible={loading} />}

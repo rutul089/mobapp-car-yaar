@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {documentImageLabelMap, documentImageType} from '../../constants/enums';
+import {loan_document_requirements} from '../../constants/loan_document_requirements';
 import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
@@ -52,6 +53,9 @@ class FinanceDocumentsScreen extends Component {
       selectedDocType: null,
       isLoading: false,
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+      acceptedDocuments: [],
+      selectedAcceptedDocument: '',
+      showAcceptedDocModal: false,
     };
   }
 
@@ -109,6 +113,7 @@ class FinanceDocumentsScreen extends Component {
       documentImageType.SANCTION_LETTER,
       documentImageType.NOC,
       documentImageType.FORM_34,
+      documentImageType.OTHER_DOCUMENTS,
     ]);
 
     delete payload.customerId;
@@ -167,8 +172,36 @@ class FinanceDocumentsScreen extends Component {
   };
 
   handleUploadMedia = async type => {
+    const {selectedLoanApplication} = this.props;
+    let typeOfIndividual =
+      selectedLoanApplication?.customer?.customerDetails?.occupation;
+    let documentType =
+      type === documentImageType.OTHER_DOCUMENTS
+        ? documentImageType.SPECIAL_DOCUMENTS
+        : '';
+    let loadProduct = selectedLoanApplication?.loanType;
+
+    const matched = loan_document_requirements.find(
+      item =>
+        item.loadProduct === loadProduct &&
+        item.typeOfIndividual === typeOfIndividual &&
+        item.documentType === documentType,
+    );
+
+    let acceptedDocuments =
+      matched?.acceptedDocuments?.map(doc => ({label: doc})) || [];
+
     // Trigger file picker modal
-    this.setState({showFilePicker: true, selectedDocType: type});
+    this.setState({
+      showFilePicker: !acceptedDocuments.length,
+      showAcceptedDocModal: acceptedDocuments.length,
+      selectedDocType: type,
+      acceptedDocuments,
+      selectedAcceptedDocument:
+        this.state.selectedDocType === type
+          ? this.state.selectedAcceptedDocument
+          : '',
+    });
   };
 
   handleFile = type => {
@@ -195,6 +228,7 @@ class FinanceDocumentsScreen extends Component {
           fileSize: asset.fileSize,
           uploadedUrl: asset.uri,
           uploadKey: presignedKey,
+          selectedDocType: this.state.selectedAcceptedDocument,
         };
 
         this.setState(prev => ({
@@ -203,6 +237,7 @@ class FinanceDocumentsScreen extends Component {
             [this.state.selectedDocType]: docObj,
           },
           selectedDocType: '',
+          showFilePicker: false,
         }));
       } catch (error) {
         this.closeFilePicker();
@@ -218,6 +253,22 @@ class FinanceDocumentsScreen extends Component {
     });
   };
 
+  setSelectedAcceptedDocument = async item => {
+    this.setState(
+      {
+        selectedAcceptedDocument: item?.label,
+        showAcceptedDocModal: false,
+      },
+      async () => {
+        await new Promise(resolve => setTimeout(resolve, 330));
+        this.setState({
+          showAcceptedDocModal: false,
+          showFilePicker: true,
+        });
+      },
+    );
+  };
+
   render() {
     const {
       selectedVehicle,
@@ -229,8 +280,16 @@ class FinanceDocumentsScreen extends Component {
 
     const {UsedVehicle = {}} = selectedVehicle || {};
 
-    const {documents, showFilePicker, isLoadingDocument, isEdit, isLoading} =
-      this.state;
+    const {
+      documents,
+      showFilePicker,
+      isLoadingDocument,
+      isEdit,
+      isLoading,
+      acceptedDocuments,
+      showAcceptedDocModal,
+      selectedAcceptedDocument,
+    } = this.state;
 
     return (
       <Finance_Documents_Component
@@ -267,6 +326,17 @@ class FinanceDocumentsScreen extends Component {
         loading={isLoading}
         isLoadingDocument={isLoadingDocument}
         isReadOnlyLoanApplication={isReadOnlyLoanApplication}
+        dropdownModalProps={{
+          data: acceptedDocuments,
+          visible: showAcceptedDocModal,
+          selectedItem: selectedAcceptedDocument,
+          onSelect: this.setSelectedAcceptedDocument,
+          onClose: () => {
+            this.setState({
+              showAcceptedDocModal: false,
+            });
+          },
+        }}
       />
     );
   }

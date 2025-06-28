@@ -1,14 +1,21 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import View_Loan_Details_Component from './View_Loan_Details_Component';
 import {
-  getScreenParam,
+  customerCategoryValue,
+  customerIndividualTypeValue,
+  getLabelFromEnum,
+  loanTypeLabelMap,
+  occupationLabelMap,
+} from '../../constants/enums';
+import ScreenNames from '../../constants/ScreenNames';
+import {
+  goBack,
   navigate,
   navigateAndSimpleReset,
 } from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
 import {
   addCustomerBasicDetail,
+  deleteLoanApplicationByIdThunk,
   fetchLoanApplicationFromIdThunk,
   selectedLoanType,
 } from '../../redux/actions';
@@ -19,20 +26,17 @@ import {
   formatShortId,
   formatVehicleNumber,
   safeGet,
+  showToast,
 } from '../../utils/helper';
-import {
-  customerCategoryValue,
-  customerIndividualTypeValue,
-  getLabelFromEnum,
-  loanTypeLabelMap,
-  occupationLabelMap,
-} from '../../constants/enums';
+import View_Loan_Details_Component from './View_Loan_Details_Component';
 
 class ViewLoanDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loanDetail: {},
+      isDeleteModalVisible: false,
+      isLoading: false,
     };
     this.onBackToHomePress = this.onBackToHomePress.bind(this);
     this.onTrackLoanStatusPress = this.onTrackLoanStatusPress.bind(this);
@@ -75,8 +79,43 @@ class ViewLoanDetailsScreen extends Component {
     });
   };
 
+  showDeleteLoanApplication = () => {
+    this.setState({
+      isDeleteModalVisible: true,
+    });
+  };
+
+  handleDeleteLoanApplication = () => {
+    this.setState({isLoading: true});
+    const {selectedApplicationId} = this.props;
+    this.props.deleteLoanApplicationByIdThunk(
+      selectedApplicationId,
+      async response => {
+        this.setState({isLoading: false});
+        if (response?.success) {
+          showToast('success', response?.message);
+          this.omModalHide();
+          await new Promise(resolve => setTimeout(resolve, 200));
+          goBack();
+        }
+      },
+      onFailure => {
+        this.setState({isLoading: false});
+        this.omModalHide();
+      },
+    );
+  };
+
+  omModalHide = () => {
+    this.setState({
+      isDeleteModalVisible: false,
+    });
+  };
+
   render() {
-    const {loading, selectedLoanApplication,isReadOnlyLoanApplication} = this.props;
+    const {loading, selectedLoanApplication, isReadOnlyLoanApplication} =
+      this.props;
+    const {isDeleteModalVisible, isLoading} = this.state;
     const {
       customer = {},
       vehicle = {},
@@ -272,6 +311,11 @@ class ViewLoanDetailsScreen extends Component {
         loading={loading}
         handleEditLoanApplication={this.handleEditLoanApplication}
         isReadOnlyLoanApplication={isReadOnlyLoanApplication}
+        handleDeleteLoanApplication={this.handleDeleteLoanApplication}
+        showDeleteLoanApplication={this.showDeleteLoanApplication}
+        isDeleteModalVisible={isDeleteModalVisible}
+        omModalHide={this.omModalHide}
+        isLoading={isLoading}
       />
     );
   }
@@ -281,6 +325,7 @@ const mapActionCreators = {
   fetchLoanApplicationFromIdThunk,
   selectedLoanType,
   addCustomerBasicDetail,
+  deleteLoanApplicationByIdThunk,
 };
 // Redux: map state to props
 const mapStateToProps = ({loanData}) => {
@@ -289,7 +334,6 @@ const mapStateToProps = ({loanData}) => {
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
     isReadOnlyLoanApplication: loanData?.isReadOnlyLoanApplication,
-
   };
 };
 export default connect(

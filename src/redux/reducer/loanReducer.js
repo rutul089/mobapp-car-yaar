@@ -8,6 +8,7 @@ import {
   FETCH_LOAN_APP_BY_ID,
   FETCH_LOAN_APPLICATIONS,
   RESET_LOAN_APPLICATION,
+  DELETE_LOAN_APPLICATION,
 } from '../actions/actionType';
 
 const initialState = {
@@ -48,6 +49,8 @@ const loanReducer = (state = initialState, action) => {
     case CUSTOMER_FINANCE_DETAILS.FAILURE:
     case CUSTOMER_FINANCE_DOCUMENT.FAILURE:
     case ADD_REFERENCE.FAILURE:
+    case DELETE_LOAN_APPLICATION.FAILURE:
+    case DELETE_LOAN_APPLICATION.REQUEST:
       return {...state, loading: false};
 
     case CLEAR_SEARCH_APPLICATION.SUCCESS:
@@ -147,6 +150,27 @@ const loanReducer = (state = initialState, action) => {
         loading: false,
         referenceDetail: action.payload,
       };
+
+    case DELETE_LOAN_APPLICATION.SUCCESS: {
+      const deletedId = action.payload?.id;
+
+      return {
+        ...state,
+        loading: false,
+        applications: state.applications.filter(app => app.id !== deletedId),
+        searchApplications: state.searchApplications.filter(
+          app => app.id !== deletedId,
+        ),
+        selectedLoanApplication:
+          state.selectedApplicationId === deletedId
+            ? null
+            : state.selectedLoanApplication,
+        selectedApplicationId:
+          state.selectedApplicationId === deletedId
+            ? null
+            : state.selectedApplicationId,
+      };
+    }
 
     case types.RESET_APP_STATE:
       return {...initialState};

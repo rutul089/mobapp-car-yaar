@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Button,
   CardWrapper,
@@ -8,8 +9,10 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  CommonModal,
+  Text,
 } from '@caryaar/components';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 
 import {
   applicationStatus,
@@ -32,6 +35,12 @@ const View_Loan_Details_Component = ({
   loanOverviewCard = {},
   handleEditLoanApplication,
   isReadOnlyLoanApplication,
+  isDeleteModalVisible,
+  omModalHide,
+  onPressPrimaryButton,
+  handleDeleteLoanApplication,
+  showDeleteLoanApplication,
+  isLoading,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -96,18 +105,74 @@ const View_Loan_Details_Component = ({
                 label={'Upload Documents'}
                 onPress={handleUploadDocument}
               />
-              <Spacing size="lg" />
             </>
           )}
 
           <Spacing size="lg" />
-          <Button
-            label={`${isReadOnlyLoanApplication ? 'View' : 'Edit'} Application`}
-            onPress={handleEditLoanApplication}
-          />
-          <Spacing size="lg" />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              gap: 10,
+            }}>
+            {isReadOnlyLoanApplication ? null : (
+              <View style={{flex: 1}}>
+                <Button
+                  label={'Delete Application'}
+                  onPress={showDeleteLoanApplication}
+                  variant={'link'}
+                  bColor={theme.colors.error}
+                  themedColor={theme.colors.error}
+                />
+              </View>
+            )}
+            <View style={{flex: 1}}>
+              <Button
+                label={`${isReadOnlyLoanApplication ? 'View' : 'Edit'} Application`}
+                onPress={handleEditLoanApplication}
+              />
+            </View>
+          </View>
+          {/* <Spacing size="lg" /> */}
         </View>
       </ScrollView>
+
+      <CommonModal
+        isVisible={isDeleteModalVisible}
+        onModalHide={omModalHide}
+        primaryButtonLabel={'Delete'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        onPressPrimaryButton={handleDeleteLoanApplication}
+        title="Delete Application"
+        tittleColor={theme.colors.error}
+        restPrimaryButtonProp={{
+          bgColor: theme.colors.error,
+          themedColor: 'white',
+          variant: 'ghost',
+        }}>
+        <View style={{paddingVertical: 5}}>
+          {isLoading && (
+            <ActivityIndicator
+              size={'large'}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+            />
+          )}
+          <Text textAlign="center" lineHeight={22}>
+            {
+              'Are you sure you want to delete this application?\nThis action cannot be undone and all related data will be permanently removed.'
+            }
+          </Text>
+        </View>
+      </CommonModal>
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );

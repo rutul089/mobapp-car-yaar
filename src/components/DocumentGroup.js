@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
 import {VehicleImageCard, Text, theme} from '@caryaar/components'; // Adjust path as needed
-import {getFileType} from '../utils/documentUtils';
+import {getFileType, getMimeFromUrl} from '../utils/documentUtils';
 
 const DocumentGroup = ({
   title,
@@ -17,7 +17,7 @@ const DocumentGroup = ({
         {documents &&
           documents.map(doc => {
             const fileUri = doc?.docObject?.uri;
-            const fileType = getFileType(fileUri);
+            const fileType = getMimeFromUrl(fileUri);
             return (
               <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
                 <VehicleImageCard
@@ -29,7 +29,12 @@ const DocumentGroup = ({
                   isView={isView}
                   btnLabel={'Click to Upload\nImage or PDF'}
                   uploadMedia={doc.uploadMedia}
-                  isDocument={isDocument}
+                  isDocument={
+                    isDocument &&
+                    Platform.OS === 'android' &&
+                    getMimeFromUrl(fileUri) !== 'image'
+                  }
+                  acceptedDocument={doc?.docObject?.selectedDocType}
                 />
               </View>
             );

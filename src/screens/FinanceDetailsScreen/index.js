@@ -31,7 +31,7 @@ class FinanceDetailsScreen extends Component {
       loanAmount: '',
       monthlyEmi: '',
       emiPaid: '',
-      tenure: '',
+      tenure: 0,
       loanClosedDate: '',
       errors: {
         bankName: '',
@@ -59,11 +59,11 @@ class FinanceDetailsScreen extends Component {
         {},
         response => {
           this.setState({
-            isCarFinanced: response?.isCarFinanced,
+            isCarFinanced: response?.isCarFinanced || currentLoanOptions.YES,
             bankName: response?.bankName,
             loanAccountNumber: response?.loanAccountNumber,
             loanAmount: response?.loanAmount + '',
-            tenure: response?.tenure + '',
+            tenure: response?.tenure ? response?.tenure + '' : 1,
             monthlyEmi: response?.monthlyEmi + '',
             loanClosedDate: formatDate(response?.loanClosedDate, 'DD/MM/yyyy'),
           });
@@ -113,12 +113,14 @@ class FinanceDetailsScreen extends Component {
       isCarFinanced: isCarFinanced,
       bankName: isCarFinanced ? bankName : '',
       loanAccountNumber: isCarFinanced ? String(loanAccountNumber) : '',
-      loanAmount: isCarFinanced ? Number(loanAmount) : '',
-      monthlyEmi: isCarFinanced ? Number(monthlyEmi) : '',
-      emiPaid: isCarFinanced ? Number(emiPaid) : '',
-      tenure: isCarFinanced ? Number(tenure) : '',
+      loanAmount: isCarFinanced ? Number(loanAmount) : 0,
+      monthlyEmi: isCarFinanced ? Number(monthlyEmi) : 0,
+      emiPaid: isCarFinanced ? Number(emiPaid) : 0,
+      tenure: isCarFinanced ? Number(tenure) : 0,
       loanClosedDate: isCarFinanced ? convertToISODate(loanClosedDate) : '',
     };
+
+    console.log('payLoad', payLoad);
 
     this.props.postCustomerFinanceDetailsThunk(
       selectedApplicationId,
@@ -145,9 +147,6 @@ class FinanceDetailsScreen extends Component {
       query,
       onSuccess => {
         searchResult = onSuccess;
-        if (Array.isArray(searchResult) && searchResult.length === 0) {
-          this.onChangeField('bankName', '');
-        }
       },
       error => {
         return [];

@@ -51,9 +51,7 @@ const loanDocuments = [
   documentImageType.BANKING_PROOF,
   documentImageType.BUSINESS_PROOF,
   documentImageType.INSURANCE,
-  documentImageType.APPLICATION_FORM,
-  documentImageType.PASSPORT_SIZE_PHOTO,
-  documentImageType.CO_APPLICANT_DOCUMENTS,
+  documentImageType.OTHER_DOCUMENTS,
 ];
 
 class LoanDocumentsScreen extends Component {
@@ -70,6 +68,7 @@ class LoanDocumentsScreen extends Component {
       acceptedDocuments: [],
       selectedAcceptedDocument: '',
       showAcceptedDocModal: false,
+      acceptedDocModalTitle: '',
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -113,6 +112,7 @@ class LoanDocumentsScreen extends Component {
               response.data,
               loanDocuments,
             );
+
             this.setState({documents: formattedDocuments, isLoading: false});
           } else {
             this.setState({isLoading: false});
@@ -160,10 +160,18 @@ class LoanDocumentsScreen extends Component {
 
   handleUploadMedia = async type => {
     const {selectedLoanApplication} = this.props;
+    console.log(
+      'selectedLoanApplication',
+      JSON.stringify(selectedLoanApplication),
+    );
     let typeOfIndividual =
       selectedLoanApplication?.customer?.customerDetails?.occupation;
     let documentType = type;
     let loadProduct = selectedLoanApplication?.loanType;
+
+    console.log('documentType', documentImageLabelMap[type]);
+    console.log('loadProduct', loadProduct);
+    console.log('typeOfIndividual', typeOfIndividual);
 
     const matched = loan_document_requirements.find(
       item =>
@@ -176,7 +184,7 @@ class LoanDocumentsScreen extends Component {
       matched?.acceptedDocuments?.map(doc => ({label: doc})) || [];
 
     // console.log({typeOfIndividual, documentType, loadProduct});
-    // console.log(acceptedDocuments);
+    console.log(acceptedDocuments);
 
     // Trigger file picker modal
     this.setState({
@@ -185,6 +193,11 @@ class LoanDocumentsScreen extends Component {
       showAcceptedDocModal: acceptedDocuments.length,
       selectedDocType: type,
       acceptedDocuments,
+      selectedAcceptedDocument:
+        this.state.selectedDocType === type
+          ? this.state.selectedAcceptedDocument
+          : '',
+      acceptedDocModalTitle: documentImageLabelMap[type],
     });
   };
 
@@ -401,7 +414,10 @@ class LoanDocumentsScreen extends Component {
       acceptedDocuments,
       showAcceptedDocModal,
       selectedAcceptedDocument,
+      acceptedDocModalTitle,
     } = this.state;
+
+    console.log('selectedLoanApplication', selectedLoanApplication);
 
     return (
       <Loan_Documents_Component
@@ -429,6 +445,7 @@ class LoanDocumentsScreen extends Component {
           documentImageType.BANKING_PROOF,
           documentImageType.BUSINESS_PROOF,
           documentImageType.INSURANCE,
+          documentImageType.OTHER_DOCUMENTS,
         ].map(type => ({
           type,
           label: documentImageLabelMap[type],
@@ -466,8 +483,11 @@ class LoanDocumentsScreen extends Component {
           selectedItem: selectedAcceptedDocument,
           onSelect: this.setSelectedAcceptedDocument,
           onClose: () => {
-            this.setState({showAcceptedDocModal: false});
+            this.setState({
+              showAcceptedDocModal: false,
+            });
           },
+          title: `Select ${acceptedDocModalTitle} Type`,
         }}
         isReadOnlyLoanApplication={isReadOnlyLoanApplication}
       />

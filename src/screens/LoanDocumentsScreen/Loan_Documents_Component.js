@@ -36,15 +36,15 @@ const Loan_Documents_Component = ({
         <DocumentGroup
           title={'Documents'}
           documents={documentList}
-          isDocument={false}
+          isDocument={true}
           isView={isReadOnlyLoanApplication}
         />
-        <DocumentGroup
+        {/* <DocumentGroup
           title={'Other Documents'}
           documents={otherDocuments}
           isDocument={false}
           isView={isReadOnlyLoanApplication}
-        />
+        /> */}
         <Spacing size="smd" />
         <Button variant="link" onPress={onNextPress} label={strings.next} />
         <Spacing size="md" />
@@ -55,6 +55,7 @@ const Loan_Documents_Component = ({
       <DropdownModal {...dropdownModalProps} />
 
       {loading && <Loader visible={loading} />}
+
       {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}
     </SafeAreaWrapper>
   );

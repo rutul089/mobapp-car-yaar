@@ -84,6 +84,7 @@ export const documentImageType = Object.freeze({
   FORM_34: 'form34',
   PASSPORT_SIZE_PHOTO: 'passportImage',
   CO_APPLICANT_DOCUMENTS: 'coapplicantImage',
+  SPECIAL_DOCUMENTS: 'specialDocuments',
 });
 
 export const documentImageLabelMap = {
@@ -97,7 +98,7 @@ export const documentImageLabelMap = {
   [documentImageType.INCOME_PROOF]: 'Income Proof',
   [documentImageType.INSURANCE]: 'Insurance',
   [documentImageType.NOC]: 'NOC',
-  [documentImageType.OTHER_DOCUMENTS]: 'Other Documents',
+  [documentImageType.OTHER_DOCUMENTS]: 'Other Document',
   [documentImageType.PASSPORT]: 'Passport',
   [documentImageType.PERMANENT_ADDRESS]: 'Permanent Address',
   [documentImageType.SANCTION_LETTER]: 'Sanction Letter',
@@ -451,3 +452,18 @@ export const dealershipTypeLabels = {
   [dealershipTypeEnum.DSA]: 'DSA',
   [dealershipTypeEnum.BROKER]: 'Broker',
 };
+
+export const documentType = Object.freeze({
+  [documentImageType.ID_PROOF]: 'idProofType',
+  [documentImageType.ADDRESS_PROOF]: 'addressProofType',
+  [documentImageType.PERMANENT_ADDRESS]: 'permanentAddressType',
+  [documentImageType.INCOME_PROOF]: 'incomeProofType',
+  [documentImageType.BANKING_PROOF]: 'bankingProofType',
+  [documentImageType.BUSINESS_PROOF]: 'businessProofType',
+  [documentImageType.INSURANCE]: 'insuranceProofType',
+  [documentImageType.OTHER_DOCUMENTS]: 'otherDocumentsType',
+  [documentImageType.FORM_34]: 'form34DocumentType',
+  [documentImageType.SOA]: 'soaDocumentType',
+  [documentImageType.SANCTION_LETTER]: 'sanctionLetterType',
+  [documentImageType.NOC]: 'nocDocumentType',
+});

@@ -90,3 +90,7 @@ export const REMOVE_SALES_EXECUTIVE = createAsyncActionTypes(
 );
 
 export const KYC_ACTION = createAsyncActionTypes('KYC_ACTION');
+
+export const DELETE_LOAN_APPLICATION = createAsyncActionTypes(
+  'DELETE_LOAN_APPLICATION',
+);

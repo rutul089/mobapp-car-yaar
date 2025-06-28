@@ -76,7 +76,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.externalBT,
     typeOfIndividual: occupationType.AGRICULTURE,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -161,7 +161,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.externalBT,
     typeOfIndividual: occupationType.SALARIED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -247,7 +247,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.externalBT,
     typeOfIndividual: occupationType.SELF_EMPLOYED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -331,7 +331,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.externalBT,
     typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -415,7 +415,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.internalBT,
     typeOfIndividual: occupationType.AGRICULTURE,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -493,7 +493,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.internalBT,
     typeOfIndividual: occupationType.SALARIED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -577,7 +577,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.internalBT,
     typeOfIndividual: occupationType.SELF_EMPLOYED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -659,7 +659,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.internalBT,
     typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
       'EMI Track Record',
@@ -741,7 +741,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.refinance,
     typeOfIndividual: occupationType.AGRICULTURE,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Vehicle RC',
       'Current Insurance Copy',
@@ -825,7 +825,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.refinance,
     typeOfIndividual: occupationType.SALARIED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Vehicle RC',
       'Current Insurance Copy',
@@ -910,7 +910,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.refinance,
     typeOfIndividual: occupationType.SELF_EMPLOYED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Vehicle RC',
       'Current Insurance Copy',
@@ -993,7 +993,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.refinance,
     typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Vehicle RC',
       'Current Insurance Copy',
@@ -1368,7 +1368,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.topUp,
     typeOfIndividual: occupationType.AGRICULTURE,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Current Loan Statement',
       'Sanction Letter of Existing Loan',
@@ -1451,7 +1451,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.topUp,
     typeOfIndividual: occupationType.SALARIED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Current Loan Statement',
       'Sanction Letter of Existing Loan',
@@ -1535,7 +1535,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.topUp,
     typeOfIndividual: occupationType.SELF_EMPLOYED,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Current Loan Statement',
       'Sanction Letter of Existing Loan',
@@ -1617,7 +1617,7 @@ export const loan_document_requirements = [
   {
     loadProduct: loanType.topUp,
     typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
-    documentType: 'documentImageType.SPECIAL_DOCUMENTS',
+    documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Current Loan Statement',
       'Sanction Letter of Existing Loan',

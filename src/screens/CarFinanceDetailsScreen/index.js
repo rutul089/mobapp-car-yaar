@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import CarFinance_Details_Component from './CarFinance_Details_Component';
+import ScreenNames from '../../constants/ScreenNames';
 import {
   getScreenParam,
   goBack,
   navigate,
 } from '../../navigation/NavigationUtils';
-import ScreenNames from '../../constants/ScreenNames';
-import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import {
   fetchCustomerFinanceDetailsThunk,
   postCustomerFinanceDetailsThunk,
   searchBanksThunk,
 } from '../../redux/actions';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import CarFinance_Details_Component from './CarFinance_Details_Component';
 
 class CarFinanceDetails extends Component {
   constructor(props) {
@@ -182,6 +182,17 @@ class CarFinanceDetails extends Component {
     );
   };
 
+  selectEmiPaid = (item, index) => {
+    this.setState(
+      {
+        emiPaid: item.label,
+      },
+      () => {
+        this.onChangeField('emiPaid', this.state.emiPaid);
+      },
+    );
+  };
+
   render() {
     const {
       bankName,
@@ -276,6 +287,7 @@ class CarFinanceDetails extends Component {
         handleNextStepPress={this.handleNextStepPress}
         handleSaveDraftPress={this.handleSaveDraftPress}
         selectTenure={this.selectTenure}
+        selectEmiPaid={this.selectEmiPaid}
       />
     );
   }

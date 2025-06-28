@@ -5,6 +5,7 @@ import {
   SafeAreaWrapper,
   Spacing,
   Loader,
+  DropdownModal,
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView} from 'react-native';
@@ -27,6 +28,7 @@ const Finance_Documents_Component = ({
   loading,
   isLoadingDocument,
   isReadOnlyLoanApplication,
+  dropdownModalProps,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -50,6 +52,8 @@ const Finance_Documents_Component = ({
       </ScrollView>
 
       <FilePickerModal {...fileModalProps} />
+
+      <DropdownModal {...dropdownModalProps} />
 
       {loading && <Loader visible={loading} />}
       {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}

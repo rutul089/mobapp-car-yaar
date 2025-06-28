@@ -1,11 +1,15 @@
 import {pick, types} from '@react-native-documents/picker';
+import {Alert, Linking} from 'react-native';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {documentImageLabelMap, documentImageType} from '../constants/enums';
-import {showToast} from './helper';
-import {Alert, Linking, Platform} from 'react-native';
+import {
+  documentImageLabelMap,
+  documentImageType,
+  documentType,
+} from '../constants/enums';
 import {getPresignedDownloadUrl} from '../services';
+import {showToast} from './helper';
 /**
  * Launches a file picker based on type: camera, gallery, or document.
  *
@@ -216,16 +220,14 @@ export const generateImageUploadPayload = (
   customerId,
   isEdit = false,
   imageKeys = [
-    documentImageType.ID_PROOF, // e.g. "idProofImage"
+    documentImageType.ID_PROOF,
     documentImageType.ADDRESS_PROOF,
     documentImageType.PERMANENT_ADDRESS,
     documentImageType.INCOME_PROOF,
     documentImageType.BANKING_PROOF,
     documentImageType.BUSINESS_PROOF,
     documentImageType.INSURANCE,
-    documentImageType.APPLICATION_FORM,
-    documentImageType.PASSPORT_SIZE_PHOTO,
-    documentImageType.CO_APPLICANT_DOCUMENTS,
+    documentImageType.OTHER_DOCUMENTS,
   ],
 ) => {
   const payload = {
@@ -235,15 +237,15 @@ export const generateImageUploadPayload = (
   imageKeys.forEach(key => {
     const uploadedUrl = formattedImages?.[key]?.uploadKey;
     const selectedDocType = formattedImages?.[key]?.selectedDocType;
-    if (uploadedUrl) {
-      payload[key] = uploadedUrl;
-      // payload[key] = {
-      //   image: selectedDocType,
-      //   url: uploadedUrl,
-      // };
-    } else if (isEdit) {
-      // Ensure missing keys are explicitly set to null in edit mode
-      payload[key] = null;
+    const documentTypeKey = documentType[key];
+
+    console.log('documentTypeKey', documentTypeKey);
+
+    if (uploadedUrl || isEdit) {
+      payload[key] = uploadedUrl || null;
+      if (documentTypeKey !== undefined) {
+        payload[documentTypeKey] = selectedDocType || null;
+      }
     }
   });
 
@@ -332,6 +334,7 @@ export const transformDocumentData = async (responseData, documentKey = []) => {
 
   for (const key of fileKeys) {
     const uri = responseData[key];
+    const acceptedDocType = responseData[documentType[key]];
     try {
       const {data} = await getPresignedDownloadUrl({objectKey: uri});
       formattedData[key] = {
@@ -339,6 +342,7 @@ export const transformDocumentData = async (responseData, documentKey = []) => {
         uploadedUrl: uri,
         uri: data?.url || null,
         isLocal: false,
+        selectedDocType: acceptedDocType,
       };
     } catch (error) {
       console.error(`Failed to get presigned URL for ${key}`, error);
@@ -347,6 +351,7 @@ export const transformDocumentData = async (responseData, documentKey = []) => {
         uploadedUrl: uri,
         uri: uri,
         isLocal: false,
+        selectedDocType: null,
       };
     }
   }

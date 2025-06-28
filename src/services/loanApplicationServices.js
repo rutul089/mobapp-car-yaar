@@ -336,3 +336,28 @@ export const editCustomerReferenceDetails = async (
     throw error;
   }
 };
+/**
+ * Deletes a loan application by its ID.
+ *
+ * @param {string} applicationId - The ID of the loan application to delete.
+ * @param {object} [config={}] - Optional Axios configuration (e.g., headers).
+ * @returns {Promise<object>} The response data from the API after deletion.
+ * @throws Will throw an error if the application ID is not provided or the request fails.
+ *
+ */
+export const deleteLoanApplicationById = async (applicationId, config = {}) => {
+  if (!applicationId) {
+    throw new Error('Application ID is required for deletion');
+  }
+
+  try {
+    const response = await axiosInstance.delete(
+      `/loan-applications/${applicationId}`,
+      config,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to delete loan application ${applicationId}:`, error);
+    throw error;
+  }
+};
