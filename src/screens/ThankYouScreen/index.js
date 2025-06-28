@@ -58,43 +58,50 @@ class ThankYouScreen extends Component {
 
   render() {
     const {selectedLoanApplication, loading} = this.props;
+
     const {
       loanApplicationId,
       createdAt,
       tenure,
-      customer: {
-        customerType,
-        customerCategory,
-        customerDetails: {
-          applicantName,
-          gender,
-          mobileNumber,
-          dob,
-          pincode,
-          occupation,
-          monthlyIncome,
-          incomeSource,
-        } = {},
-      } = {},
-      vehicle: {fuelType} = {},
-      usedVehicle: {
-        registerNumber,
-        ownerName,
-        manufactureYear,
-        chassisNumber,
-        engineNumber,
-        registrationDate,
-        registrationAuthority,
-        emissionNorm,
-        insuranceValidUpto,
-        fitnessValidUpto,
-        PUCC,
-        vehicleStatus,
-        hypothecationStatus,
-        vehicleAge,
-        ownershipCount,
-      } = {},
+      customer = {},
+      vehicle: {fuelType = '-'} = {},
+      usedVehicle = {},
     } = selectedLoanApplication || {};
+
+    const {
+      customerType = '-',
+      customerCategory = '-',
+      customerDetails = {},
+    } = customer || {};
+
+    const {
+      applicantName = '-',
+      gender = '-',
+      mobileNumber = '-',
+      dob = '-',
+      pincode = '-',
+      occupation = '-',
+      monthlyIncome = '-',
+      incomeSource = '-',
+    } = customerDetails || {};
+
+    const {
+      ownerName = '-',
+      manufactureYear = '-',
+      chassisNumber = '-',
+      engineNumber = '-',
+      registrationDate = '-',
+      registrationAuthority = '-',
+      emissionNorm = '-',
+      insuranceValidUpto = '-',
+      fitnessValidUpto = '-',
+      PUCC = '-',
+      vehicleStatus = '-',
+      hypothecationStatus = '-',
+      vehicleAge = '-',
+      ownershipCount = '-',
+      registerNumber = '-',
+    } = usedVehicle || {};
 
     let loanAmount = safeGet(loading, selectedLoanApplication, 'loanAmount');
     let emi = safeGet(loading, selectedLoanApplication, 'emi');
@@ -212,7 +219,7 @@ class ThankYouScreen extends Component {
             label: 'Register Number',
             value: formatVehicleNumber(registerNumber),
           },
-          {label: 'Owner Name', value: ownerName},
+          {label: 'Owner Name', value: ownerName || '-'},
           {label: 'Manufacture Year', value: manufactureYear},
           {label: 'Chassis Number', value: chassisNumber},
           {label: 'Engine Number', value: engineNumber},

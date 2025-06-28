@@ -3,11 +3,10 @@ import {
   NotificationCard,
   SafeAreaWrapper,
   theme,
+  images,
 } from '@caryaar/components';
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
-import images from '../../assets/images';
+import {StyleSheet, FlatList} from 'react-native';
 
 const Notification_Component = ({
   dataList,

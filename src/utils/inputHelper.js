@@ -282,6 +282,44 @@ export const handleFieldChange = (
  * @param {string} value
  * @returns {string}
  */
+// export const sanitizeAmount = value => {
+//   if (typeof value !== 'string') {
+//     return '';
+//   }
+
+//   // Remove invalid characters (keep digits and .)
+//   let cleaned = value.replace(/[^0-9.]/g, '');
+
+//   // Allow only one decimal point
+//   const parts = cleaned.split('.');
+//   if (parts.length > 2) {
+//     cleaned = parts[0] + '.' + parts.slice(1).join('');
+//   }
+
+//   // Prevent decimal at the start (e.g., ".5" => "0.5")
+//   if (cleaned.startsWith('.')) {
+//     cleaned = '0' + cleaned;
+//   }
+
+//   // Remove leading zeros (but keep "0." intact)
+//   if (/^0[0-9]+/.test(cleaned)) {
+//     cleaned = cleaned.replace(/^0+/, '');
+//   }
+
+//   // If number ends with '.', keep it as-is (user is still typing)
+//   if (cleaned.endsWith('.')) {
+//     return cleaned;
+//   }
+
+//   // If number has decimals like "12.0", convert to number and back
+//   const num = parseFloat(cleaned);
+//   if (!isNaN(num)) {
+//     return cleaned.includes('.') ? cleaned : String(num); // preserve decimal input like "12.01"
+//   }
+
+//   return '';
+// };
+
 export const sanitizeAmount = value => {
   if (typeof value !== 'string') {
     return '';
@@ -301,20 +339,20 @@ export const sanitizeAmount = value => {
     cleaned = '0' + cleaned;
   }
 
-  // Remove leading zeros (but keep "0." intact)
+  // Remove leading zeros (but keep "0." or "0.5" intact)
   if (/^0[0-9]+/.test(cleaned)) {
     cleaned = cleaned.replace(/^0+/, '');
   }
 
-  // If number ends with '.', keep it as-is (user is still typing)
+  // If ends with '.', it's a partial input – return as-is
   if (cleaned.endsWith('.')) {
     return cleaned;
   }
 
-  // If number has decimals like "12.0", convert to number and back
-  const num = parseFloat(cleaned);
-  if (!isNaN(num)) {
-    return cleaned.includes('.') ? cleaned : String(num); // preserve decimal input like "12.01"
+  // Validate final string without converting to number
+  const validNumberPattern = /^\d+(\.\d+)?$/;
+  if (validNumberPattern.test(cleaned)) {
+    return cleaned;
   }
 
   return '';

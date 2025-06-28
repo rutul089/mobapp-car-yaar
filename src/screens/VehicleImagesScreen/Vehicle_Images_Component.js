@@ -56,7 +56,7 @@ const Vehicle_Images_Component = ({
       <Header
         title={strings.vehicleDetailTitle}
         onBackPress={onBackPress}
-        showRightContent
+        showRightContent={false}
         rightLabel={registerNumber}
       />
       <ScrollView contentContainerStyle={styles.wrapper}>

@@ -294,7 +294,7 @@ class LoanDocumentsScreen extends Component {
     );
 
     const thunk = isEdit
-      ? this.props.uploadCustomerDocumentsThunk
+      ? this.props.updateCustomerDocumentsThunk
       : this.props.uploadCustomerDocumentsThunk;
 
     this.setState({isLoading: true}, () => {

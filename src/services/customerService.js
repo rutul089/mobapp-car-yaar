@@ -293,7 +293,7 @@ export const updateCustomerDetails = async detailsData => {
 export const updateCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.patch(
-      `/customers/customerDocuments/${customerId}`,
+      `/loan-applications/customerDocuments/${customerId}`,
       documentsData,
     );
     return response.data;

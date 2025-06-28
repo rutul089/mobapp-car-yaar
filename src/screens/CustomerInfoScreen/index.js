@@ -13,6 +13,7 @@ import {
   formatDate,
   formatIndianCurrency,
   safeGet,
+  showToast,
 } from '../../utils/helper';
 import Customer_Info_Component from './Customer_Info_Component';
 
@@ -29,7 +30,6 @@ class CustomerInfoScreen extends Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount');
     this.fetchCustomerDetailsThunk();
   }
 
@@ -63,8 +63,21 @@ class CustomerInfoScreen extends Component {
   };
 
   createLoanApplication = () => {
-    const {vehicleId, loanType, selectedCustomerId, selectedApplicationId} =
-      this.props;
+    const {
+      vehicleId,
+      loanType,
+      selectedCustomerId,
+      selectedApplicationId,
+      selectedCustomer,
+    } = this.props;
+
+    if (!selectedCustomer?.isComplete) {
+      return showToast(
+        'error',
+        'Please fill out all customer details before proceeding to the next step.',
+      );
+    }
+
     if (selectedApplicationId) {
       return navigate(ScreenNames.LoanDocument);
     }

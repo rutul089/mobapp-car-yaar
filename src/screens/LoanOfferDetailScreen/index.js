@@ -107,7 +107,7 @@ class LoanOfferDetailScreen extends Component {
     });
   }
   onProceedPress = () => {
-    let params = getScreenParam(this.props.route, 'params');
+    let params = this.props.route?.params;
 
     navigate(ScreenNames.AddReference, {params});
   };

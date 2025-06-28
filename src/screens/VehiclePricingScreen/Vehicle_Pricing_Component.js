@@ -158,6 +158,7 @@ const Vehicle_Pricing_Component = ({
             onChangeText={onChangeAdditionalNotes}
             returnKeyType="done"
             onSubmitEditing={onNextPress}
+            placeholderTextColor={'#82828299'}
           />
         </GroupWrapper>
 

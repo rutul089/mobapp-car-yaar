@@ -58,6 +58,7 @@ const Loan_Amount_Component = ({
           restProps={{
             caretHidden: caretHidden,
           }}
+          maxLength={15}
         />
         <FormFooterButtons
           primaryButtonLabel={strings.next}

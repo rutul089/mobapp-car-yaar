@@ -287,7 +287,6 @@ export const verifyPanThunk =
       });
       dispatch(fetchCustomerDetailsThunk(payload?.customerId));
       onSuccess?.(response);
-      console.log('verifyPanThunk', JSON.stringify(response));
     } catch (error) {
       dispatch({
         type: KYC_ACTION.FAILURE,

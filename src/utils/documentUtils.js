@@ -85,7 +85,6 @@ export const getFileType = fileUri => {
  */
 
 export const viewDocumentHelper = async (uri, onImage, onError, onLoading) => {
-  console.log('View URL ', uri);
   let type = '';
   try {
     if (
