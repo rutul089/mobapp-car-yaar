@@ -26,6 +26,7 @@ class CarFinanceDetails extends Component {
       emiPaid: '',
       tenure: '',
       loanClosedDate: '',
+      bankNameValue: '',
       errors: {
         bankName: '',
         loanAccountNumber: '',
@@ -33,6 +34,7 @@ class CarFinanceDetails extends Component {
         monthlyEmi: '',
         emiPaid: '',
         tenure: '',
+        bankNameValue: '',
       },
       isFormValid: false,
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
@@ -52,6 +54,7 @@ class CarFinanceDetails extends Component {
         response => {
           this.setState({
             bankName: response?.bankName || '',
+            bankNameValue: response?.bankName || '',
             loanAccountNumber: response?.loanAccountNumber?.toString() || '',
             loanAmount: response?.loanAmount?.toString(),
             tenure: response?.tenure?.toString() || '-',
@@ -124,17 +127,19 @@ class CarFinanceDetails extends Component {
 
   onSelectBank = (item, index) => {
     this.onChangeField('bankName', item?.bank);
+    this.onChangeField('bankNameValue', item?.bank);
   };
 
   searchBankNameFromAPI = async query => {
     this.onChangeField('bankName', query);
+    this.onChangeField('bankNameValue', '');
     let searchResult = [];
     await this.props.searchBanksThunk(
       query,
       onSuccess => {
         searchResult = onSuccess;
         if (Array.isArray(searchResult) && searchResult.length === 0) {
-          this.onChangeField('bankName', '');
+          this.onChangeField('bankNameValue', '');
         }
       },
       error => {
@@ -152,6 +157,7 @@ class CarFinanceDetails extends Component {
       'monthlyEmi',
       'emiPaid',
       'tenure',
+      'bankNameValue',
     ];
 
     const errors = {};
@@ -203,6 +209,7 @@ class CarFinanceDetails extends Component {
       tenure,
       errors,
       isEdit,
+      bankNameValue,
     } = this.state;
 
     const {
@@ -253,8 +260,8 @@ class CarFinanceDetails extends Component {
         restInputProps={{
           bankName: {
             value: bankName,
-            isError: errors.bankName,
-            statusMsg: errors.bankName,
+            isError: errors.bankName || errors.bankNameValue,
+            statusMsg: errors.bankName || errors.bankNameValue,
             isDisabled: isReadOnlyLoanApplication,
           },
           loanAccountNumber: {

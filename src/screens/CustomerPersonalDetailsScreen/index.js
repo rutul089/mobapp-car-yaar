@@ -70,6 +70,7 @@ const initialState = {
   currentState: '',
   occupation: null,
   incomeSource: null,
+  bankNameValue: '',
 };
 
 // const initialState = {
@@ -133,6 +134,7 @@ class CustomerPersonalDetails extends Component {
         occupation: '',
         incomeSource: '',
         bankName: '',
+        bankNameValue: '',
       },
       isFormValid: false,
       showFilePicker: false,
@@ -160,6 +162,7 @@ class CustomerPersonalDetails extends Component {
     }
 
     const detail = selectedCustomer?.details || {};
+    console.log('selectedCustomer', selectedCustomer);
     const mappedFields = {
       panCardNumber: detail?.panCardNumber,
       aadharNumber: detail?.aadharNumber,
@@ -173,6 +176,7 @@ class CustomerPersonalDetails extends Component {
       pincode: detail?.pincode,
       monthlyIncome: get(detail, 'monthlyIncome', '').toString(),
       bankName: detail?.bankName,
+      bankNameValue: detail?.bankName,
       accountNumber: detail?.accountNumber,
       currentLoan: detail?.currentLoan ?? currentLoanOptions.YES,
       currentEmi: get(detail, 'currentEmi', '').toString(),
@@ -190,6 +194,7 @@ class CustomerPersonalDetails extends Component {
       applicantPhoto: detail?.applicantPhoto,
       panCardVerification: detail?.panCardVerification,
       aadharVerification: detail?.aadharVerification,
+      mobileNumber: detail?.mobileNumber || selectedCustomer?.mobileNumber,
     };
 
     const [back, front, pancard] = await Promise.all([
@@ -251,7 +256,7 @@ class CustomerPersonalDetails extends Component {
 
     const payload = this.getPayload();
     const onSuccess = response => {
-      if (isEdit) {
+      if (isEdit && !isCreatingLoanApplication) {
         if (response?.success) {
           showToast('success', 'Customer detail updated successfully');
         }
@@ -357,6 +362,7 @@ class CustomerPersonalDetails extends Component {
       'aadharBackphoto',
       'pancardPhoto',
       'bankName',
+      'bankNameValue',
     ];
 
     const errors = {};
@@ -429,11 +435,15 @@ class CustomerPersonalDetails extends Component {
 
   searchBankNameFromAPI = async query => {
     this.onChangeField('bankName', query);
+    this.onChangeField('bankNameValue', '');
     let searchResult = [];
     await this.props.searchBanksThunk(
       query,
       onSuccess => {
         searchResult = onSuccess;
+        if (Array.isArray(searchResult) && searchResult.length === 0) {
+          this.onChangeField('bankNameValue', '');
+        }
       },
       error => {
         return [];
@@ -444,6 +454,7 @@ class CustomerPersonalDetails extends Component {
 
   onSelectBank = (item, index) => {
     this.onChangeField('bankName', item?.bank);
+    this.onChangeField('bankNameValue', item?.bank);
   };
 
   handleViewImage = async (uri, type) => {
@@ -739,8 +750,8 @@ class CustomerPersonalDetails extends Component {
           },
           bankName: {
             value: bankName,
-            isError: errors.bankName,
-            statusMsg: errors.bankName,
+            isError: errors.bankName || errors.bankNameValue,
+            statusMsg: errors.bankName || errors.bankNameValue,
           },
         }}
         filePickerProps={{

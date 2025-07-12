@@ -124,6 +124,7 @@ const Customer_Personal_Details_Component = ({
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
         bounces={true}
+        extraScrollHeight={150}
         enableOnAndroid
         contentContainerStyle={styles.wrapper}>
         {/* Personal Details */}
@@ -550,8 +551,8 @@ const Customer_Personal_Details_Component = ({
           // onPressSecondaryButton={onNextPress}
           hideSecondaryButton
         />
-        <Spacing size={'xl'} />
       </KeyboardAwareScrollView>
+
       <DropdownModal
         visible={isOccupationModalVisible}
         data={occupationOptions}

@@ -163,6 +163,7 @@ export const validateField = (key, value, isOptional) => {
       return validateDate(trimmedValue, key);
 
     case 'bankName':
+    case 'bankNameValue':
       return trimmedValue === '' ? 'Please enter Bank Name.' : '';
 
     case 'fullName':
@@ -234,6 +235,10 @@ export const validateField = (key, value, isOptional) => {
     case 'salesExecutiveUserId':
     case 'partnerUserId':
       return trimmedValue === '' ? 'Please select required field.' : '';
+
+    case 'carYarPartnerValue':
+    case 'salesExecutiveValue':
+      return trimmedValue === '' ? 'Please select valid option from list.' : '';
 
     default:
       return '';

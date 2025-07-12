@@ -8,6 +8,7 @@ import {
   Spacing,
   Text,
   theme,
+  Pressable,
 } from '@caryaar/components';
 import React from 'react';
 import {Image, ScrollView, View} from 'react-native';
@@ -30,12 +31,15 @@ const Home_Component = ({
   userRole,
   partnerStats,
   partnerID,
+  onPendingLoanPress,
+  onApprovedLoanPress,
+  onVehicleOnboardedPress,
 }) => {
   /**
    * Render a small stat card (e.g., Loans Pending/Approved)
    */
-  const renderStatBox = (count, countColor, label) => (
-    <View style={styles.statBox}>
+  const renderStatBox = (count, countColor, label, onPress) => (
+    <Pressable style={styles.statBox} onPress={onPress}>
       <Text lineHeight="h2" size="h2" hankenGroteskExtraBold color={countColor}>
         {count}
       </Text>
@@ -46,7 +50,7 @@ const Home_Component = ({
         color={theme.colors.textLabel}>
         {label}
       </Text>
-    </View>
+    </Pressable>
   );
 
   /**
@@ -97,16 +101,19 @@ const Home_Component = ({
               partnerStats?.loansPending ?? '-',
               '#F8A902',
               'Loans\nPending',
+              onPendingLoanPress,
             )}
             {renderStatBox(
               partnerStats?.loansApproved ?? '-',
               '#6EEE87',
               'Loans\nApproved',
+              onApprovedLoanPress,
             )}
             {renderStatBox(
               partnerStats?.vehiclesOnboarded ?? '-',
               '#696EFF',
               'Vehicles\nOnboarded',
+              onVehicleOnboardedPress,
             )}
           </View>
           <Spacing />

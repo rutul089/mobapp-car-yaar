@@ -9,6 +9,7 @@ export const applicationStatus = Object.freeze({
 
 export const applicationStatusOptions = [
   {id: '1', label: 'Approved', value: applicationStatus.APPROVED},
+  {id: '3', label: 'Draft', value: applicationStatus.DRAFT},
   {id: '2', label: 'Rejected', value: applicationStatus.REJECTED},
   {id: '4', label: 'Query', value: applicationStatus.QUERY},
   {id: '5', label: 'In Review', value: applicationStatus.IN_REVIEW},

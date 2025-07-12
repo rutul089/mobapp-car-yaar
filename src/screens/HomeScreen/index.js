@@ -105,6 +105,16 @@ class HomeScreen extends Component {
     // Add navigation if required
   };
 
+  onApprovedLoanPress = () => {
+    navigate(ScreenNames.Applications);
+  };
+
+  onPendingLoanPress = () => {};
+
+  onVehicleOnboardedPress = () => {
+    navigate(ScreenNames.Vehicles);
+  };
+
   render() {
     const {userData, partnerStats} = this.props;
     return (
@@ -121,6 +131,9 @@ class HomeScreen extends Component {
         userRole={getLabelFromEnum(userRoleValue, userData?.role)}
         partnerID={userData?.id}
         partnerStats={partnerStats}
+        onApprovedLoanPress={this.onApprovedLoanPress}
+        onPendingLoanPress={this.onPendingLoanPress}
+        onVehicleOnboardedPress={this.onVehicleOnboardedPress}
       />
     );
   }

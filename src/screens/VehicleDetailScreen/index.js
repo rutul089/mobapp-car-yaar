@@ -1,20 +1,17 @@
 import {get} from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {currentLoanLabelMap, getLabelFromEnum} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
-import {
-  getScreenParam,
-  goBack,
-  navigate,
-} from '../../navigation/NavigationUtils';
+import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {fetchVehicleFromIdThunk} from '../../redux/actions';
 import {
   formatDate,
   formatVehicleDetails,
   formatVehicleNumber,
+  showToast,
 } from '../../utils/helper';
 import Vehicle_Detail_Component from './Vehicle_Detail_Component';
-import {currentLoanLabelMap, getLabelFromEnum} from '../../constants/enums';
 
 class VehicleDetail extends Component {
   constructor(props) {
@@ -73,7 +70,17 @@ class VehicleDetail extends Component {
   };
 
   onNextPress = () => {
-    const {isCreatingLoanApplication, selectedLoanType} = this.props;
+    const {isCreatingLoanApplication, selectedLoanType, selectedVehicle} =
+      this.props;
+    let isDraft = selectedVehicle?.isDraft;
+    if (isCreatingLoanApplication && isDraft) {
+      return showToast(
+        'info',
+        'Vehicles in draft state cannot be used for loan application.',
+        'bottom',
+        3000,
+      );
+    }
     let screenName = '';
     if (isCreatingLoanApplication) {
       screenName = ScreenNames.VehicleHypothecation;

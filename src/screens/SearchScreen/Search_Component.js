@@ -26,6 +26,8 @@ const Search_Component = ({
   showStatusIcon,
   loading,
 }) => {
+  const [caretHidden, setCaretHidden] = React.useState(true);
+
   return (
     <SafeAreaWrapper>
       <Header title={strings.searchTitle} onBackPress={onBackPress} />
@@ -50,10 +52,16 @@ const Search_Component = ({
           statusMsg={statusMsg}
           statusIcon={images.infoStatus}
           value={vehicleNumber}
-          onChangeText={onVehicleNumberChange}
+          onChangeText={value => {
+            setCaretHidden(!(value.length > 0));
+            onVehicleNumberChange?.(value);
+          }}
           showStatusIcon={showStatusIcon}
           autoCapitalize={'characters'}
           onSubmitEditing={onSearchVehicle}
+          restProps={{
+            caretHidden: caretHidden,
+          }}
         />
         <FormFooterButtons
           primaryButtonLabel={strings.searchButton}

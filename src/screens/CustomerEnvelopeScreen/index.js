@@ -31,8 +31,11 @@ class CustomerEnvelopeScreen extends Component {
       salesExecutive: '',
       salesExecutiveUserId: '',
       partnerUserId: '',
+      carYarPartnerValue: '',
+      salesExecutiveValue: '',
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
       errors: {},
+      showError: false,
     };
   }
 
@@ -46,6 +49,7 @@ class CustomerEnvelopeScreen extends Component {
           this.setState({
             carYarPartner: response?.partnerUser?.user?.name || '',
             partnerUserId: response?.partnerUser?.id || '',
+            carYarPartnerValue: response?.partnerUser?.id || '',
           });
         }
 
@@ -53,6 +57,7 @@ class CustomerEnvelopeScreen extends Component {
           this.setState({
             salesExecutive: response?.salesExecutive?.user?.name || '',
             salesExecutiveUserId: response?.salesExecutive?.id || '',
+            salesExecutiveValue: response?.salesExecutive?.id || '',
           });
         }
       },
@@ -60,6 +65,7 @@ class CustomerEnvelopeScreen extends Component {
   }
 
   onChangeField = (key, value, isOptional = false) => {
+    this.setState({showError: false});
     handleFieldChange(this, key, value, isOptional);
   };
 
@@ -116,11 +122,13 @@ class CustomerEnvelopeScreen extends Component {
   onSelectSalesExecutive = value => {
     this.onChangeField('salesExecutiveUserId', value?.id);
     this.onChangeField('salesExecutive', value?.user?.name);
+    this.onChangeField('salesExecutiveValue', value?.user?.name);
   };
 
   onSelectPartner = value => {
     this.onChangeField('carYarPartner', value?.name);
     this.onChangeField('partnerUserId', value?.id);
+    this.onChangeField('carYarPartnerValue', value?.id);
   };
 
   validateAllFields = () => {
@@ -129,6 +137,8 @@ class CustomerEnvelopeScreen extends Component {
       'salesExecutive',
       'salesExecutiveUserId',
       'partnerUserId',
+      'carYarPartnerValue',
+      'salesExecutiveValue',
     ];
     const errors = {};
     let isFormValid = true;
@@ -146,8 +156,18 @@ class CustomerEnvelopeScreen extends Component {
   };
 
   onViewLenderPress = () => {
+    const {errors} = this.state;
     if (!this.validateAllFields()) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      this.setState({showError: true});
+
+      showToast(
+        'warning',
+        errors?.salesExecutiveValue ||
+          errors?.carYarPartnerValue ||
+          'Required field cannot be empty.',
+        'bottom',
+        3000,
+      );
       return;
     }
 
@@ -190,7 +210,7 @@ class CustomerEnvelopeScreen extends Component {
       customer = {},
     } = selectedLoanApplication || {};
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
-    const {errors, salesExecutive, carYarPartner} = this.state;
+    const {errors, salesExecutive, carYarPartner, showError} = this.state;
 
     return (
       <Customer_Envelop_Component
@@ -234,10 +254,12 @@ class CustomerEnvelopeScreen extends Component {
         onSalesExecutiveChange={value => {
           this.onChangeField('salesExecutive', value);
           this.onChangeField('salesExecutiveUserId', '');
+          this.onChangeField('salesExecutiveValue', '');
         }}
         onPartnerChange={value => {
           this.onChangeField('carYarPartner', value);
           this.onChangeField('partnerUserId', '');
+          this.onChangeField('carYarPartnerValue', '');
         }}
         searchSalesExecutiveFromAPI={this.searchSalesExecutiveFromAPI}
         searchPartnerFromAPI={this.searchPartnerFromAPI}
@@ -246,13 +268,13 @@ class CustomerEnvelopeScreen extends Component {
         restInputProps={{
           salesExecutive: {
             value: salesExecutive,
-            // isError: errors.salesExecutiveUserId,
-            // statusMsg: errors.salesExecutiveUserId,
+            isError: showError,
+            statusMsg: errors.salesExecutive,
           },
           carYarPartner: {
             value: carYarPartner,
-            // isError: errors.carYarPartner,
-            // statusMsg: errors.carYarPartner,
+            isError: showError,
+            statusMsg: errors?.carYarPartner,
           },
         }}
         loading={loading}

@@ -61,7 +61,7 @@ const Customers_Component = ({
       ) : (
         <ImageHeader
           subTittle={'Customers'}
-          searchPlaceHolder={'Search by customer name or ID...'}
+          searchPlaceHolder={'Search Customer...'}
           onLeftIconPress={() => navigate(ScreenNames.UserProfile)}
           onRightIconPress={() => navigate(ScreenNames.Notification)}
           profileImage={profileImage}

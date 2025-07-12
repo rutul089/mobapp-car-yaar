@@ -73,8 +73,10 @@ class CustomerInfoScreen extends Component {
 
     if (!selectedCustomer?.isComplete) {
       return showToast(
-        'error',
+        'info',
         'Please fill out all customer details before proceeding to the next step.',
+        'bottom',
+        3000,
       );
     }
 
