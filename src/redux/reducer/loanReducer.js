@@ -9,6 +9,7 @@ import {
   FETCH_LOAN_APPLICATIONS,
   RESET_LOAN_APPLICATION,
   DELETE_LOAN_APPLICATION,
+  SUBMIT_LOAN_APPLICATION,
 } from '../actions/actionType';
 
 const initialState = {
@@ -42,6 +43,7 @@ const loanReducer = (state = initialState, action) => {
     case FETCH_LOAN_APP_BY_ID.REQUEST:
     case CUSTOMER_FINANCE_DOCUMENT.REQUEST:
     case ADD_REFERENCE.REQUEST:
+    case SUBMIT_LOAN_APPLICATION.REQUEST:
       return {...state, loading: true};
 
     case FETCH_LOAN_APPLICATIONS.FAILURE:
@@ -51,6 +53,7 @@ const loanReducer = (state = initialState, action) => {
     case ADD_REFERENCE.FAILURE:
     case DELETE_LOAN_APPLICATION.FAILURE:
     case DELETE_LOAN_APPLICATION.REQUEST:
+    case SUBMIT_LOAN_APPLICATION.FAILURE:
       return {...state, loading: false};
 
     case CLEAR_SEARCH_APPLICATION.SUCCESS:
@@ -171,6 +174,9 @@ const loanReducer = (state = initialState, action) => {
             : state.selectedApplicationId,
       };
     }
+
+    case SUBMIT_LOAN_APPLICATION.SUCCESS:
+      return {...state, loading: false};
 
     case types.RESET_APP_STATE:
       return {...initialState};

@@ -94,3 +94,7 @@ export const KYC_ACTION = createAsyncActionTypes('KYC_ACTION');
 export const DELETE_LOAN_APPLICATION = createAsyncActionTypes(
   'DELETE_LOAN_APPLICATION',
 );
+
+export const SUBMIT_LOAN_APPLICATION = createAsyncActionTypes(
+  'SUBMIT_LOAN_APPLICATION',
+);

@@ -11,6 +11,7 @@ import {
   editCustomerReferenceDetailsThunk,
   getCustomerReferenceDetailsThunk,
   postCustomerReferenceDetailsThunk,
+  submitLoanApplicationThunk,
 } from '../../redux/actions';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
@@ -141,6 +142,10 @@ class AddReferencesScreen extends Component {
         navigate(ScreenNames.ThankYouView);
       }
     };
+
+    if (!isEdit) {
+      this.props.submitLoanApplicationThunk(selectedApplicationId);
+    }
 
     const action =
       isEdit && !isNoReference
@@ -349,6 +354,7 @@ const mapActionCreators = {
   postCustomerReferenceDetailsThunk,
   getCustomerReferenceDetailsThunk,
   editCustomerReferenceDetailsThunk,
+  submitLoanApplicationThunk,
 };
 const mapStateToProps = ({loanData, vehicleData}) => {
   return {

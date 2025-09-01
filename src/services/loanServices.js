@@ -135,3 +135,22 @@ export const fetchLoanTrackingDetailsByAppId = async applicationId => {
     throw error;
   }
 };
+
+/**
+ * Submit a loan application.
+ *
+ * @param {string} applicationId - The ID of the loan application.
+ * @returns {Promise<Object>} - The response data from the server after submission.
+ * @throws Will throw an error if the API request fails.
+ */
+export const submitLoanApplication = async applicationId => {
+  try {
+    const response = await axiosInstance.post(
+      `loan-applications/submit/${applicationId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error submitting loan application:', error);
+    throw error;
+  }
+};

@@ -13,6 +13,7 @@ import {
 import {
   initiateLoanApplication,
   setPartnerAndSalesExecutive,
+  submitLoanApplication,
 } from '../../services/loanServices';
 import {showApiErrorToast} from '../../utils/helper';
 import {
@@ -24,6 +25,7 @@ import {
   FETCH_LOAN_APPLICATIONS,
   RESET_LOAN_APPLICATION,
   DELETE_LOAN_APPLICATION,
+  SUBMIT_LOAN_APPLICATION,
 } from './actionType';
 import types from './types';
 
@@ -87,6 +89,7 @@ export const fetchLoanApplicationFromIdThunk = (
 
     try {
       const response = await fetchLoanApplicationById(applicationId, config);
+      console.log('1312313123', JSON.stringify(response.data));
       dispatch({
         type: FETCH_LOAN_APP_BY_ID.SUCCESS,
         payload: response.data,
@@ -400,6 +403,34 @@ export const deleteLoanApplicationByIdThunk = (
     } catch (error) {
       dispatch({
         type: DELETE_LOAN_APPLICATION.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const submitLoanApplicationThunk = (
+  applicationId,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    dispatch({type: SUBMIT_LOAN_APPLICATION.REQUEST});
+
+    try {
+      const response = await submitLoanApplication(applicationId);
+
+      dispatch({
+        type: SUBMIT_LOAN_APPLICATION.SUCCESS,
+        payload: response.data,
+      });
+
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: SUBMIT_LOAN_APPLICATION.FAILURE,
         payload: error.message,
       });
       showApiErrorToast(error);
