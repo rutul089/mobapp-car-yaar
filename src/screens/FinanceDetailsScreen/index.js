@@ -120,8 +120,6 @@ class FinanceDetailsScreen extends Component {
       loanClosedDate: isCarFinanced ? convertToISODate(loanClosedDate) : '',
     };
 
-    console.log('payLoad', payLoad);
-
     this.props.postCustomerFinanceDetailsThunk(
       selectedApplicationId,
       payLoad,

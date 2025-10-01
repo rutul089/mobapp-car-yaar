@@ -8,3 +8,4 @@ export * from './loanServices';
 export * from './partnersServices';
 export * from './imageUploadServices';
 export * from './salesExecutiveService';
+export * from './kycServices';

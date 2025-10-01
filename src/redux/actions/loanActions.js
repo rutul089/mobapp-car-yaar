@@ -89,7 +89,6 @@ export const fetchLoanApplicationFromIdThunk = (
 
     try {
       const response = await fetchLoanApplicationById(applicationId, config);
-      console.log('1312313123', JSON.stringify(response.data));
       dispatch({
         type: FETCH_LOAN_APP_BY_ID.SUCCESS,
         payload: response.data,

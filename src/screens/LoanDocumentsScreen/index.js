@@ -160,18 +160,11 @@ class LoanDocumentsScreen extends Component {
 
   handleUploadMedia = async type => {
     const {selectedLoanApplication} = this.props;
-    console.log(
-      'selectedLoanApplication',
-      JSON.stringify(selectedLoanApplication),
-    );
+
     let typeOfIndividual =
       selectedLoanApplication?.customer?.customerDetails?.occupation;
     let documentType = type;
     let loadProduct = selectedLoanApplication?.loanType;
-
-    console.log('documentType', documentImageLabelMap[type]);
-    console.log('loadProduct', loadProduct);
-    console.log('typeOfIndividual', typeOfIndividual);
 
     const matched = loan_document_requirements.find(
       item =>
@@ -182,9 +175,6 @@ class LoanDocumentsScreen extends Component {
 
     let acceptedDocuments =
       matched?.acceptedDocuments?.map(doc => ({label: doc})) || [];
-
-    // console.log({typeOfIndividual, documentType, loadProduct});
-    console.log(acceptedDocuments);
 
     // Trigger file picker modal
     this.setState({

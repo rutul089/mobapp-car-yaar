@@ -162,7 +162,6 @@ class CustomerPersonalDetails extends Component {
     }
 
     const detail = selectedCustomer?.details || {};
-    console.log('selectedCustomer', selectedCustomer);
     const mappedFields = {
       panCardNumber: detail?.panCardNumber,
       aadharNumber: detail?.aadharNumber,
