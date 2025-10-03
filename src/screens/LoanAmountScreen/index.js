@@ -54,7 +54,7 @@ class LoanAmountScreen extends Component {
       payload,
       selectedApplicationId,
       success => {
-        navigate(ScreenNames.CheckCIBIL, {params});
+        navigate(ScreenNames.CreateCIBILScreen, {params});
       },
       error => {},
     );

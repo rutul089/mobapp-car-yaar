@@ -510,6 +510,7 @@ class CustomerPersonalDetails extends Component {
       panCardNumber,
     };
     this.props.verifyPanThunk(payload, response => {
+      console.log('verifyPanThunk----->', JSON.stringify(response));
       if (response?.success && response?.data) {
         this.setState({
           panCardVerification: response?.data?.verified,

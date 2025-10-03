@@ -151,7 +151,8 @@ class LoanDocumentsScreen extends Component {
         return navigate(ScreenNames.CarFinanceDetails, {params: params});
 
       case loanType.loan:
-        return navigate(ScreenNames.CheckCIBIL);
+        // return navigate(ScreenNames.CheckCIBIL);
+        return navigate(ScreenNames.CreateCIBILScreen);
 
       default:
         return navigate(ScreenNames.LoanAmount, {params: params});

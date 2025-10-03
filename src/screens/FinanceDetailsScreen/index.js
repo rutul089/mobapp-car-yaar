@@ -299,6 +299,7 @@ class FinanceDetailsScreen extends Component {
             isError: errors.tenure,
             statusMsg: errors.tenure,
             isDisabled: isReadOnlyLoanApplication,
+            rightIcnDisable: isReadOnlyLoanApplication,
           },
           monthlyEmi: {
             isError: errors.monthlyEmi,

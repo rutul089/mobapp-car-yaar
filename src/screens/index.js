@@ -21,6 +21,8 @@ export {default as CustomerPersonalDetailsScreen} from './CustomerPersonalDetail
 export {default as LoanDocumentsScreen} from './LoanDocumentsScreen';
 export {default as LoanAmountScreen} from './LoanAmountScreen';
 export {default as CheckCIBILScreen} from './CheckCIBILScreen';
+export {default as CreateCIBILScreen} from './CreateCIBILScreen';
+export {default as CIBILReportScreen} from './CIBILReportScreen';
 export {default as CustomerEnvelopeScreen} from './CustomerEnvelopeScreen';
 export {default as LenderSelectionScreen} from './LenderSelectionScreen';
 export {default as LoanOfferDetailScreen} from './LoanOfferDetailScreen';

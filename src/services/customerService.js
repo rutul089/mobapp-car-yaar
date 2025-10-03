@@ -382,18 +382,64 @@ export const verifyAadhar = async payload => {
   }
 };
 
-/**
- * Verifies customer's PAN number.
- * @param {Object} payload - PAN verification payload.
- * @returns {Promise<Object>} - Response data from the server.
- * @throws {Error} - Throws an error if the request fails.
- */
+// /**
+//  * Verifies customer's PAN number.
+//  * @param {Object} payload - PAN verification payload.
+//  * @returns {Promise<Object>} - Response data from the server.
+//  * @throws {Error} - Throws an error if the request fails.
+//  */
 export const verifyPan = async payload => {
   try {
     const response = await axiosInstance.post('/customers/verifyPan', payload);
     return response.data;
   } catch (error) {
     console.error('Error verifying PAN:', error);
+    throw error;
+  }
+};
+
+// /**
+//  * Verify customer's PAN card.
+//  *
+//  * @param {Object} payload - The details required for PAN verification.
+//  * @param {string} payload.customerId - The unique ID of the customer.
+//  * @param {string} payload.panCardNumber - The PAN card number to verify.
+//  * @returns {Promise<Object>} - The PAN verification response from the server.
+//  * @throws Will throw an error if the API request fails.
+//  */
+// export const verifyPan = async payload => {
+//   try {
+//     const response = await axiosInstance.post('/customers/verifyPan', payload, {
+//       baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error verifying PAN:', JSON.stringify(error));
+//     throw error;
+//   }
+// };
+
+/**
+ * Fetch CIBIL score for a customer.
+ *
+ * @param {Object} payload - The customer details required for CIBIL check.
+ * @param {string} payload.mobile - Customer's mobile number.
+ * @param {string} payload.pan - Customer's PAN card number.
+ * @param {string} payload.name - Customer's full name.
+ * @param {string} payload.gender - Customer's gender.
+ * @param {string} payload.consent - Consent flag (Y/N).
+ * @returns {Promise<Object>} - The CIBIL score response from the server.
+ * @throws Will throw an error if the API request fails.
+ */
+export const fetchCibilScore = async payload => {
+  try {
+    const response = await axiosInstance.post(
+      '/customers/fetchCibilScore',
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching CIBIL score:', error);
     throw error;
   }
 };

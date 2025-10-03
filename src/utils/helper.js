@@ -381,3 +381,26 @@ export const uploadOptions = [
   {label: 'Photo Gallery', value: 'gallery', icon: images.file_gallery},
   {label: 'Documents', value: 'document', icon: images.file_documents},
 ];
+
+/**
+ * Get CIBIL score status based on score value.
+ *
+ * @param {number} score - The CIBIL score (300–900).
+ * @returns {string} - The score category (Excellent, Good, Fair, Poor, Fail).
+ */
+export const getCibilScoreStatus = score => {
+  if (score === -1 || score === null) {
+    return 'No History';
+  }
+
+  if (score < 550) {
+    return 'Poor';
+  }
+  if (score < 670) {
+    return 'Fair';
+  }
+  if (score < 740) {
+    return 'Good';
+  }
+  return 'Excellent';
+};

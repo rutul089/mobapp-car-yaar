@@ -336,11 +336,13 @@ class AddReferencesScreen extends Component {
             isError: errors?.relationshipHome,
             statusMsg: errors?.relationshipHome,
             isDisabled: isReadOnlyLoanApplication,
+            rightIcnDisable: isReadOnlyLoanApplication,
           },
           relationshipOffice: {
             isError: errors?.relationshipOffice,
             statusMsg: errors?.relationshipOffice,
             isDisabled: isReadOnlyLoanApplication,
+            rightIcnDisable: isReadOnlyLoanApplication,
           },
         }}
         loading={loading}

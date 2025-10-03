@@ -240,6 +240,9 @@ export const validateField = (key, value, isOptional) => {
     case 'salesExecutiveValue':
       return trimmedValue === '' ? 'Please select valid option from list.' : '';
 
+    case 'gender':
+      return trimmedValue === '' ? 'Please select gender' : '';
+
     default:
       return '';
   }

@@ -208,6 +208,14 @@ const StackRoutes = () => {
         component={Screens.SuccessModalScreen}
         options={{gestureEnabled: false}}
       />
+      <Stack.Screen
+        name={ScreenNames.CreateCIBILScreen}
+        component={Screens.CreateCIBILScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.CIBILReportScreen}
+        component={Screens.CIBILReportScreen}
+      />
     </Stack.Navigator>
   );
 };

@@ -172,6 +172,7 @@ export const getVehicleByRegisterNumberThunk = (
 
     try {
       const response = await getVehicleByRegisterNumber(registerNumber);
+      console.log('responseresponse', JSON.stringify(response));
       dispatch({
         type: VEHICLE_DETAILS.SUCCESS,
         payload: response.data,

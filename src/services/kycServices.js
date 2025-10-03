@@ -1,4 +1,4 @@
-import axiosInstance from './axiosInstance';
+import axiosInstance from '../networking/axiosInstance';
 
 /**
  * Fetch CIBIL score for a customer.
@@ -12,21 +12,21 @@ import axiosInstance from './axiosInstance';
  * @returns {Promise<Object>} - The CIBIL score response from the server.
  * @throws Will throw an error if the API request fails.
  */
-export const fetchCibilScore = async payload => {
-  try {
-    const response = await axiosInstance.post(
-      '/customers/fetchCibilScore',
-      payload,
-      {
-        baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
-      },
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching CIBIL score:', error);
-    throw error;
-  }
-};
+// export const fetchCibilScore = async payload => {
+//   try {
+//     const response = await axiosInstance.post(
+//       '/customers/fetchCibilScore',
+//       payload,
+//       {
+//         baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
+//       },
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching CIBIL score:', error);
+//     throw error;
+//   }
+// };
 
 /**
  * Verify customer's PAN card.
@@ -37,7 +37,7 @@ export const fetchCibilScore = async payload => {
  * @returns {Promise<Object>} - The PAN verification response from the server.
  * @throws Will throw an error if the API request fails.
  */
-export const verifyPan = async payload => {
+export const verifyPanCard = async payload => {
   try {
     const response = await axiosInstance.post('/customers/verifyPan', payload, {
       baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL

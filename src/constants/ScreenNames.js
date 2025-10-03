@@ -54,6 +54,8 @@ const ScreenNames = {
   ImagePreviewScreen: 'ImagePreviewScreen',
   VehicleFullScreen: 'VehicleFullScreen',
   CustomerFullScreen: 'CustomersScreen',
+  CreateCIBILScreen: 'CreateCIBILScreen',
+  CIBILReportScreen: 'CIBILReportScreen',
 };
 
 export default ScreenNames;

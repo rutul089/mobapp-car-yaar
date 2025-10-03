@@ -1,4 +1,8 @@
-import {sendOtpForCibil, verifyOtpForCibil} from '../../services';
+import {
+  fetchCibilScore,
+  sendOtpForCibil,
+  verifyOtpForCibil,
+} from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
 import {CIBIL_SCORE} from './actionType';
 
@@ -37,5 +41,24 @@ export const verifyOtpForCibilThunk =
       showApiErrorToast(error);
 
       onFailure?.(error);
+    }
+  };
+
+export const fetchCibilScoreThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: CIBIL_SCORE.REQUEST});
+    try {
+      const response = await fetchCibilScore(payload);
+      dispatch({
+        type: CIBIL_SCORE.SUCCESS,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: CIBIL_SCORE.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
+      showApiErrorToast(error);
     }
   };
