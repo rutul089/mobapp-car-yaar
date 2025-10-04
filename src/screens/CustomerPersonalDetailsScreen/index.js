@@ -532,6 +532,9 @@ class CustomerPersonalDetails extends Component {
       );
     }
 
+    navigate(ScreenNames.RedirectingScreen);
+
+    return;
     let payload = {
       customerId: selectedCustomerId,
       aadharNumber,

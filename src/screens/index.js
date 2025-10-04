@@ -52,3 +52,7 @@ export {default as SelectVehicleScreen} from './NewVehicleFlow/SelectVehicleScre
 export {default as ProformaInvoiceScreen} from './NewVehicleFlow/ProformaInvoiceScreen';
 export {default as SuccessModalScreen} from './SuccessModalScreen';
 export {default as ImagePreviewScreen} from './ImagePreviewScreen';
+
+//DigiLocker
+export {default as DigiLockerAadhaarScreen} from './DigiLocker/DigiLockerAadhaarScreen';
+export {default as DigiLockerRedirectScreen} from './DigiLocker/DigiLockerRedirectScreen';
