@@ -3,4 +3,5 @@ export default {
   vehicleSuccess: require('./vehicleSuccess.png'),
   icFilterClose: require('./icFilterClose.png'),
   cibil_banner: require('./cibil_banner.png'),
+  icDigiLocker: require('./icDigiLocker.png'),
 };

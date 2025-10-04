@@ -216,6 +216,14 @@ const StackRoutes = () => {
         name={ScreenNames.CIBILReportScreen}
         component={Screens.CIBILReportScreen}
       />
+      <Stack.Screen
+        name={ScreenNames.DigiLockerAadhaarScreen}
+        component={Screens.DigiLockerAadhaarScreen}
+      />
+      <Stack.Screen
+        name={ScreenNames.RedirectingScreen}
+        component={Screens.DigiLockerRedirectScreen}
+      />
     </Stack.Navigator>
   );
 };

@@ -56,6 +56,8 @@ const ScreenNames = {
   CustomerFullScreen: 'CustomersScreen',
   CreateCIBILScreen: 'CreateCIBILScreen',
   CIBILReportScreen: 'CIBILReportScreen',
+  RedirectingScreen: 'DigiLockerRedirectScreen',
+  DigiLockerAadhaarScreen: 'DigiLockerAadhaarScreen',
 };
 
 export default ScreenNames;
