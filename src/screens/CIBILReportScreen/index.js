@@ -2,42 +2,55 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import CIBILReport_Component from './CIBILReport_Component';
 import {formatVehicleNumber} from '../../utils/helper';
-import {goBack} from '../../navigation/NavigationUtils';
+import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
+import ScreenNames from '../../constants/ScreenNames';
 
 class CIBILReportScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+    };
+    this.onSavePress = this.onSavePress.bind(this);
   }
+
+  onSavePress = () => {
+    navigate(ScreenNames.CustomerEnvelope);
+  };
 
   render() {
     const {
       selectedVehicle,
       isCreatingLoanApplication,
       selectedLoanApplication,
+      cibilReport,
       loading,
     } = this.props;
+
     const {UsedVehicle = {}} = selectedVehicle || {};
-    const {errors, mobileNumber, isEdit, panCardNumber, fullName, gender} =
-      this.state;
+    const {isEdit} = this.state;
     return (
-      <>
-        <CIBILReport_Component
-          headerProp={{
-            title: 'CIBIL Score',
-            subtitle: isCreatingLoanApplication
-              ? formatVehicleNumber(UsedVehicle?.registerNumber)
+      <CIBILReport_Component
+        headerProp={{
+          title: 'CIBIL Score',
+          subtitle: isCreatingLoanApplication
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
+            : '',
+          showRightContent: true,
+          rightLabel:
+            isCreatingLoanApplication || isEdit
+              ? selectedLoanApplication?.loanApplicationId || ''
               : '',
-            showRightContent: true,
-            rightLabel:
-              isCreatingLoanApplication || isEdit
-                ? selectedLoanApplication?.loanApplicationId || ''
-                : '',
-            rightLabelColor: '#F8A902',
-            onBackPress: () => goBack(),
-          }}
-        />
-      </>
+          rightLabelColor: '#F8A902',
+          onBackPress: () => goBack(),
+        }}
+        cibilScore={cibilReport?.score}
+        onSavePress={this.onSavePress}
+      />
     );
   }
 }
@@ -51,12 +64,12 @@ const mapStateToProps = ({
 }) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
-  documentDetail: customerData?.documentDetail,
   selectedApplicationId: loanData?.selectedApplicationId,
   loading: loanData?.loading || cibilReducer?.loading,
   selectedVehicle: vehicleData?.selectedVehicle,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
   selectedLoanApplication: loanData?.selectedLoanApplication,
   selectedCustomer: customerData?.selectedCustomer,
+  cibilReport: cibilReducer?.score,
 });
 export default connect(mapStateToProps, mapActionCreators)(CIBILReportScreen);

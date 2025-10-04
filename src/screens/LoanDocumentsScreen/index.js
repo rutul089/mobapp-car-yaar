@@ -408,8 +408,6 @@ class LoanDocumentsScreen extends Component {
       acceptedDocModalTitle,
     } = this.state;
 
-    console.log('selectedLoanApplication', selectedLoanApplication);
-
     return (
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}

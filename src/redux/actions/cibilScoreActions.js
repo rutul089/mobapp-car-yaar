@@ -51,6 +51,7 @@ export const fetchCibilScoreThunk =
       const response = await fetchCibilScore(payload);
       dispatch({
         type: CIBIL_SCORE.SUCCESS,
+        payload: response?.data,
       });
       onSuccess?.(response);
     } catch (error) {

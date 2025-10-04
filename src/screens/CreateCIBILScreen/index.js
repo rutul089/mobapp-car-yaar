@@ -46,6 +46,9 @@ class CreateCIBILScreen extends Component {
       response => {
         this.setState({
           mobileNumber: response?.customer?.mobileNumber,
+          panCardNumber: response?.customer?.customerDetails?.panCardNumber,
+          fullName: response?.customer?.customerDetails?.applicantName,
+          gender: response?.customer?.customerDetails?.gender,
         });
       },
     );
@@ -55,6 +58,7 @@ class CreateCIBILScreen extends Component {
     const isFormValid = this.validateAllFields();
 
     const {mobileNumber, panCardNumber, fullName, gender} = this.state;
+    let params = getScreenParam(this.props.route, 'params');
 
     if (!isFormValid) {
       showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
@@ -62,24 +66,24 @@ class CreateCIBILScreen extends Component {
     }
 
     let payload = {
-      // mobile: mobileNumber,
+      mobile: mobileNumber,
       pan: panCardNumber,
       name: fullName,
       gender: gender,
-      consent: 'Y',
+      consent: 'N',
+      customerId: this.props.selectedCustomerId,
     };
-    console.log('payload---->', JSON.stringify(payload));
 
     this.props.fetchCibilScoreThunk(
       payload,
       res => {
-        console.log('Success-------->', JSON.stringify(res));
+        if (res?.success && res?.data) {
+          navigate(ScreenNames.CIBILReportScreen, {params});
+        }
       },
       error => {},
     );
-    // navigate(ScreenNames.CIBILReportScreen);
 
-    // this.checkOtpForCibil();
     // navigate(ScreenNames.CustomerEnvelope);
   };
 
@@ -110,22 +114,6 @@ class CreateCIBILScreen extends Component {
 
     this.setState({errors, isFormValid});
     return isFormValid;
-  };
-
-  checkOtpForCibil = () => {
-    const {selectedCustomerId} = this.props;
-    const {mobileNumber, otp} = this.state;
-
-    let params = getScreenParam(this.props.route, 'params');
-
-    if (otp.length !== 4) {
-      return showToast('error', 'Please enter 4 digit OTP.');
-    }
-    let payload = {
-      customerId: selectedCustomerId,
-      mobileNumber: mobileNumber,
-      code: otp,
-    };
   };
 
   onSelectedGender = value => {

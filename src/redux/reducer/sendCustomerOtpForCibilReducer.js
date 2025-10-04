@@ -3,7 +3,7 @@ import {CIBIL_SCORE} from '../actions/actionType';
 
 const initialState = {
   loading: false,
-  data: null,
+  score: null,
   error: null,
 };
 
@@ -19,7 +19,7 @@ const sendCustomerOtpForCibilReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        data: action.payload,
+        score: action.payload,
         error: null,
       };
     case CIBIL_SCORE.FAILURE:

@@ -1,3 +1,4 @@
+import {compose} from 'redux';
 import {
   createCustomer,
   fetchAllCustomers,
@@ -293,6 +294,7 @@ export const verifyPanThunk =
         error: error?.message || 'Something went wrong',
       });
       onFailure?.(error);
+      console.log('error--->', JSON.stringify(error));
       showApiErrorToast(error);
     }
   };
