@@ -78,7 +78,7 @@ const Customers_Component = ({
 
       <FlatList
         data={customerList}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         contentContainerStyle={styles.wrapper}
         renderItem={({item}) => {
           let customerDetails = item?.customer?.customerDetails;

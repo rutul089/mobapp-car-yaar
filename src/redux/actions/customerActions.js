@@ -4,6 +4,7 @@ import {
   fetchAllCustomers,
   fetchCustomerDetailsById,
   fetchCustomerDocuments,
+  initiateAadharDigilocker,
   submitCustomerDetails,
   updateCustomerDetails,
   updateCustomerDocuments,
@@ -71,8 +72,11 @@ export const fetchCustomerDetailsThunk =
     dispatch({type: FETCH_CUSTOMER_DETAIL.REQUEST});
     try {
       const response = await fetchCustomerDetailsById(customerId, config);
-      dispatch({type: FETCH_CUSTOMER_DETAIL.SUCCESS, payload: response?.data});
-      onSuccess?.(response);
+      dispatch({
+        type: FETCH_CUSTOMER_DETAIL.SUCCESS,
+        payload: response?.data?.data,
+      });
+      onSuccess?.(response?.data);
     } catch (error) {
       dispatch({
         type: FETCH_CUSTOMER_DETAIL.FAILURE,
@@ -295,6 +299,25 @@ export const verifyPanThunk =
       });
       onFailure?.(error);
       console.log('error--->', JSON.stringify(error));
+      showApiErrorToast(error);
+    }
+  };
+
+export const initiateAadharDigilockerThunk =
+  (payload, onSuccess, onFailure) => async dispatch => {
+    dispatch({type: KYC_ACTION.REQUEST});
+    try {
+      const response = await initiateAadharDigilocker(payload);
+      dispatch({
+        type: KYC_ACTION.SUCCESS,
+      });
+      onSuccess?.(response);
+    } catch (error) {
+      dispatch({
+        type: KYC_ACTION.FAILURE,
+        error: error?.message || 'Something went wrong',
+      });
+      onFailure?.(error);
       showApiErrorToast(error);
     }
   };

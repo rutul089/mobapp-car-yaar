@@ -1,9 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import axios from 'axios';
+import {SafeAreaWrapper, theme, Header} from '@caryaar/components';
 import React, {Component} from 'react';
-import {View, ActivityIndicator} from 'react-native';
-import {connect} from 'react-redux';
+import {ActivityIndicator, View} from 'react-native';
 import {WebView} from 'react-native-webview';
+import {connect} from 'react-redux';
+import {getScreenParam} from '../../../navigation/NavigationUtils';
+import {fetchAadhaarFromDigilocker} from '../../../services';
 
 class DigiLockerAadhaarScreen extends Component {
   constructor(props) {
@@ -11,90 +13,100 @@ class DigiLockerAadhaarScreen extends Component {
     this.state = {
       url: null,
       loading: true,
+      navData: null,
     };
     this.webViewRef = React.createRef();
+    this._isNavigatingBack = false;
+    this.onBackPress = this.onBackPress.bind(this);
   }
 
   componentDidMount() {
-    this.startDigilockerJourney();
-  }
-  // 1. Call backend to start journey and get redirectUrl
-  startDigilockerJourney = async () => {
-    try {
-      const response = await axios.post(
-        'https://your.backend/api/start-digilocker-journey',
-        {
-          // any payload your backend expects
-        },
-      );
+    const params = getScreenParam(this.props.route, 'params');
+    if (params) {
       this.setState({
-        url: response.data.redirectUrl,
+        url: params?.url,
         loading: false,
+        navData: params,
       });
-    } catch (error) {
-      console.error('Error starting DigiLocker journey:', error);
-      this.setState({loading: false, url: 'https://www.google.com/'});
     }
-  };
+  }
 
   /**
    * Step 2: Handle navigation state change inside WebView
    */
   onNavigationStateChange = async navState => {
-    const {url: navUrl} = navState;
-    if (!navUrl) {
+    console.log('navState', JSON.stringify(navState?.url));
+    const {navData} = this.state;
+    const {route, navigation} = this.props;
+    const {onGoBack} = route.params || {};
+
+    // Prevent multiple triggers
+    if (this._isNavigatingBack) {
+      return;
+    }
+    if (!navState?.url) {
       return;
     }
 
-    if (navUrl.startsWith('https://your.backend/redirect-callback')) {
-      const code =
-        this.extractParam(navUrl, 'code') ||
-        this.extractParam(navUrl, 'journeyId');
+    if (
+      navState?.url.startsWith('https://caryaar-dev-api.pedalsupclients.xyz/')
+    ) {
+      this._isNavigatingBack = true; // ✅ mark as navigating back
 
-      try {
-        const resp = await axios.post(
-          'https://your.backend/api/digilocker/exchange',
-          {code},
-        );
+      fetchAadhaarFromDigilocker(navData?.client_id)
+        .then(data => {
+          console.log('Aadhaar data:', data);
+          onGoBack?.(data);
+          navigation.pop(2);
+          // navigate(ScreenNames.CustomerPersonalDetails);
+          // goBack();
+        })
 
-        const {navigation} = this.props;
-        navigation.replace('CibilScreen', {aadhaar: resp.data.aadhaar});
-      } catch (error) {
-        console.error('Error exchanging DigiLocker code:', error);
-      }
+        .catch(err => {
+          console.log('error', JSON.stringify(err));
+          // goBack();
+          navigation.pop(2);
+          // navigate(ScreenNames.CustomerPersonalDetails);
+        })
+        .finally(() => {});
     }
   };
 
-  /**
-   * Utility to extract query parameters from URL
-   */
-  extractParam = (url, name) => {
-    const match = url.match(new RegExp('[?&]' + name + '=([^&]+)'));
-    return match ? decodeURIComponent(match[1]) : null;
+  onBackPress = () => {
+    this.props.navigation.pop(2);
   };
 
   render() {
     const {url, loading} = this.state;
 
-    if (loading) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#007AFF" />
-        </View>
-      );
-    }
     return (
-      <WebView
-        ref={this.webViewRef}
-        source={{uri: url}}
-        onNavigationStateChange={this.onNavigationStateChange}
-        startInLoadingState
-      />
+      <SafeAreaWrapper
+        statusBarColor={theme.colors.background}
+        barStyle="dark-content"
+        backgroundColor={theme.colors.background}>
+        <Header
+          backgroundColor={theme.colors.background}
+          onBackPress={this.onBackPress}
+        />
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: theme.colors.background,
+            }}>
+            <ActivityIndicator size="large" color="#007AFF" />
+          </View>
+        ) : (
+          <WebView
+            ref={this.webViewRef}
+            source={{uri: url}}
+            onNavigationStateChange={this.onNavigationStateChange}
+            startInLoadingState
+          />
+        )}
+      </SafeAreaWrapper>
     );
   }
 }

@@ -22,6 +22,7 @@ import {
   updateCustomerDetailsThunk,
   verifyAadharThunk,
   verifyPanThunk,
+  initiateAadharDigilockerThunk,
 } from '../../redux/actions';
 import {getPresignedDownloadUrl} from '../../services';
 import {
@@ -45,48 +46,20 @@ import {
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
 
-const initialState = {
-  applicantPhoto: '',
-  pancardPhoto: '',
-  panCardNumber: '',
-  aadharNumber: '',
-  applicantName: '',
-  fatherName: '',
-  spouseName: '',
-  email: '',
-  dob: '',
-  address: '',
-  pincode: '',
-  monthlyIncome: '',
-  bankName: '',
-  accountNumber: '',
-  currentEmi: '',
-  maxEmiAfford: '',
-  avgMonthlyBankBalance: '',
-  gender: genderType.MALE,
-  currentLoan: currentLoanOptions.YES,
-  aadharFrontPhoto: '',
-  aadharBackphoto: '',
-  currentState: '',
-  occupation: null,
-  incomeSource: null,
-  bankNameValue: '',
-};
-
 // const initialState = {
 //   applicantPhoto: '',
 //   pancardPhoto: '',
-//   panCardNumber: 'YKGWJ8413A',
-//   aadharNumber: '958296232328',
-//   applicantName: 'Raju Shah',
-//   fatherName: 'Raja Shah',
-//   spouseName: 'Kavisha Brooks',
-//   email: 'ashk@cardenas.org',
+//   panCardNumber: '',
+//   aadharNumber: '',
+//   applicantName: '',
+//   fatherName: '',
+//   spouseName: '',
+//   email: '',
 //   dob: '',
-//   address: '9957 Lucero Path Suite 683, Humphreymouth, NE 02200',
-//   pincode: '380015',
-//   monthlyIncome: '910454',
-//   bankName: 'State Bank of India',
+//   address: '',
+//   pincode: '',
+//   monthlyIncome: '',
+//   bankName: '',
 //   accountNumber: '',
 //   currentEmi: '',
 //   maxEmiAfford: '',
@@ -98,7 +71,35 @@ const initialState = {
 //   currentState: '',
 //   occupation: null,
 //   incomeSource: null,
+//   bankNameValue: '',
 // };
+
+const initialState = {
+  applicantPhoto: '',
+  pancardPhoto: '',
+  panCardNumber: 'YKGWJ8413A',
+  aadharNumber: '958296232328',
+  applicantName: 'Raju Shah',
+  fatherName: 'Raja Shah',
+  spouseName: 'Kavisha Brooks',
+  email: 'ashk@cardenas.org',
+  dob: '',
+  address: '9957 Lucero Path Suite 683, Humphreymouth, NE 02200',
+  pincode: '380015',
+  monthlyIncome: '910454',
+  bankName: 'State Bank of India',
+  accountNumber: '',
+  currentEmi: '',
+  maxEmiAfford: '',
+  avgMonthlyBankBalance: '',
+  gender: genderType.MALE,
+  currentLoan: currentLoanOptions.YES,
+  aadharFrontPhoto: '',
+  aadharBackphoto: '',
+  currentState: '',
+  occupation: null,
+  incomeSource: null,
+};
 
 class CustomerPersonalDetails extends Component {
   constructor(props) {
@@ -156,8 +157,12 @@ class CustomerPersonalDetails extends Component {
 
   async componentDidMount() {
     const {isEdit} = this.state;
-    const {selectedCustomer} = this.props;
+    const {selectedCustomer, route} = this.props;
+
     if (!isEdit) {
+      this.setState({
+        mobileNumber: route?.params?.mobileNumber || '',
+      });
       return;
     }
 
@@ -510,7 +515,6 @@ class CustomerPersonalDetails extends Component {
       panCardNumber,
     };
     this.props.verifyPanThunk(payload, response => {
-      console.log('verifyPanThunk----->', JSON.stringify(response));
       if (response?.success) {
         this.setState({
           panCardVerification: response?.data?.verified,
@@ -521,29 +525,72 @@ class CustomerPersonalDetails extends Component {
 
   verifyAadharCard = () => {
     const {selectedCustomerId} = this.props;
+
+    Keyboard.dismiss();
+
+    let payload = {
+      customerId: selectedCustomerId,
+    };
+
+    this.props.initiateAadharDigilockerThunk(payload, response => {
+      if (response?.success && response?.data && response?.data?.url) {
+        //DigiLockerAadhaarScreen RedirectingScreen
+        navigate(ScreenNames.RedirectingScreen, {
+          params: response?.data,
+          onGoBack: aadhaarData => {
+            if (aadhaarData?.success) {
+              console.log('aadhaarData----->', aadhaarData);
+              const formattedDob = aadhaarData?.data?.aadhaar_xml_data?.dob
+                ?.split('-')
+                .reverse()
+                .join('/');
+              const randomLast4 = Math.floor(1000 + Math.random() * 9000);
+              const newMaskedAadhaar = `XXXXXXXX${randomLast4}`;
+              console.log('newMaskedAadhaar', newMaskedAadhaar);
+
+              this.setState(
+                {
+                  // aadharNumber:
+                  //   aadhaarData?.data?.aadhaar_xml_data?.masked_aadhaar,
+                  aadharNumber: newMaskedAadhaar,
+                  applicantName: aadhaarData?.data?.aadhaar_xml_data?.full_name,
+                  dob: formattedDob,
+                },
+                () => {
+                  this.callVerifyAadharCard();
+                },
+              );
+            } else {
+              showToast('error', 'Please verify your aadhar card');
+            }
+          },
+        });
+      }
+    });
+  };
+
+  callVerifyAadharCard = () => {
+    const {selectedCustomerId} = this.props;
     const {aadharNumber, errors} = this.state;
+
+    let payload = {
+      customerId: selectedCustomerId,
+      aadharNumber,
+    };
 
     Keyboard.dismiss();
 
     if (!aadharNumber || errors.aadharNumber) {
       return showToast(
         'error',
-        errors.aadharNumber || 'Please enter aadhar number',
+        errors.aadharNumber ||
+          'Please enter a valid 12-digit or Verify your aadhar',
       );
     }
 
-    navigate(ScreenNames.RedirectingScreen);
-
-    return;
-    let payload = {
-      customerId: selectedCustomerId,
-      aadharNumber,
-    };
     this.props.verifyAadharThunk(payload, response => {
-      if (response?.success && response?.data) {
-        this.setState({
-          aadharVerification: response?.data?.verified,
-        });
+      if (response?.success) {
+        this.onNextPress();
       }
     });
   };
@@ -666,8 +713,9 @@ class CustomerPersonalDetails extends Component {
             value: aadharNumber,
             isError: errors?.aadharNumber,
             statusMsg: errors?.aadharNumber,
-            isDisabled: aadharVerification,
-            rightLabel: aadharVerification ? '' : 'VERIFY',
+            // isDisabled: aadharVerification,
+            isDisabled: true,
+            rightLabel: aadharVerification ? '' : 'FETCH',
             rightLabelPress: this.verifyAadharCard,
             isRightIconVisible: aadharVerification,
           },
@@ -675,6 +723,7 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.applicantName,
             statusMsg: errors?.applicantName,
             autoCapitalize: 'words',
+            isDisabled: aadharVerification,
           },
           mobileNumber: {
             isError: errors?.mobileNumber,
@@ -750,6 +799,7 @@ class CustomerPersonalDetails extends Component {
           dob: {
             isError: errors?.dob,
             statusMsg: errors?.dob,
+            isDisabled: aadharVerification,
           },
           bankName: {
             value: bankName,
@@ -789,6 +839,7 @@ const mapActionCreators = {
   initiateLoanApplicationThunk,
   verifyAadharThunk,
   verifyPanThunk,
+  initiateAadharDigilockerThunk,
 };
 
 const mapStateToProps = ({customerData, vehicleData, loanData}) => ({

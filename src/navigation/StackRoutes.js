@@ -219,10 +219,12 @@ const StackRoutes = () => {
       <Stack.Screen
         name={ScreenNames.DigiLockerAadhaarScreen}
         component={Screens.DigiLockerAadhaarScreen}
+        options={{gestureEnabled: true}}
       />
       <Stack.Screen
         name={ScreenNames.RedirectingScreen}
         component={Screens.DigiLockerRedirectScreen}
+        // options={{gestureEnabled: false}}
       />
     </Stack.Navigator>
   );

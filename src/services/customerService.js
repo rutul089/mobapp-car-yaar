@@ -1,5 +1,6 @@
 import axiosInstance from '../networking/axiosInstance';
-
+import axios from 'axios';
+const DIGILOCKER_BASE_URL = 'https://kyc-api.surepass.app/api/v1/digilocker';
 /**
  * Fetches all customers from the backend.
  *
@@ -47,6 +48,8 @@ export const fetchCustomerDetailsById = async (customerId, config = {}) => {
       `/customers/customerDetails/${customerId}`,
       config,
     );
+    console.log('fetchCustomerDetailsById', JSON.stringify(response));
+
     return response.data;
   } catch (error) {
     console.error(
@@ -382,6 +385,25 @@ export const verifyAadhar = async payload => {
   }
 };
 
+/**
+ * Verifies customer's Aadhaar number.
+ * @param {Object} payload - Aadhaar verification payload.
+ * @returns {Promise<Object>} - Response data from the server.
+ * @throws {Error} - Throws an error if the request fails.
+ */
+export const initiateAadharDigilocker = async payload => {
+  try {
+    const response = await axiosInstance.post(
+      '/customers/initiateAadharDigilocker',
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error verifying Aadhaar:', error);
+    throw error;
+  }
+};
+
 // /**
 //  * Verifies customer's PAN number.
 //  * @param {Object} payload - PAN verification payload.
@@ -440,6 +462,33 @@ export const fetchCibilScore = async payload => {
     return response.data;
   } catch (error) {
     console.error('Error fetching CIBIL score:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch Aadhaar details from Surepass DigiLocker API
+ */
+export const fetchAadhaarFromDigilocker = async clientId => {
+  try {
+    const url = `${DIGILOCKER_BASE_URL}/download-aadhaar/${clientId}`;
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0OTU1OTI2MywianRpIjoiN2I4YmE5NWEtYjhiMS00NDU5LWE3MTMtZmQ1Mjc4Y2MyODdhIiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LmNhcnlhYXJyQHN1cmVwYXNzLmlvIiwibmJmIjoxNzQ5NTU5MjYzLCJleHAiOjIzODAyNzkyNjMsImVtYWlsIjoiY2FyeWFhcnJAc3VyZXBhc3MuaW8iLCJ0ZW5hbnRfaWQiOiJtYWluIiwidXNlcl9jbGFpbXMiOnsic2NvcGVzIjpbInVzZXIiXX19.MrZScZ5fBYBYAVclIC2QbByQpYKQb-lQEGY_WsNHJ_g',
+        'Content-Type': 'application/json',
+      },
+      timeout: 10000, // optional
+    });
+
+    console.log('✅ Aadhaar fetched successfully:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      '❌ Error fetching Aadhaar from DigiLocker:',
+      error?.response?.data || error.message,
+    );
     throw error;
   }
 };

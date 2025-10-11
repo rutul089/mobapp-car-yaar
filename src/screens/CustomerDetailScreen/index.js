@@ -195,7 +195,12 @@ class CustomerDetailView extends Component {
     const {route} = this.props;
     const {otp, mobileNumber} = this.state;
     let params = route.params;
-    params.mobileNumber = mobileNumber;
+    const updatedParams = {
+      ...params,
+      mobileNumber, // your new value
+    };
+
+    console.log({updatedParams});
 
     let payload = {
       code: otp,
@@ -206,7 +211,7 @@ class CustomerDetailView extends Component {
       response => {
         if (response?.success) {
           this.onCloseVerifyOTP();
-          navigate(ScreenNames.CustomerPersonalDetails, params);
+          navigate(ScreenNames.CustomerPersonalDetails, updatedParams);
         }
       },
       error => {

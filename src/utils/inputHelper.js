@@ -13,7 +13,8 @@ export const validateField = (key, value, isOptional) => {
   const pincodeRegex = /^[0-9]{6}$/;
   const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
   const accountNumberRegex = /^[0-9]{9,18}$/;
-  const aadharRegex = /^[1-9]{1}[0-9]{11}$/;
+  // const aadharRegex = /^[1-9]{1}[0-9]{11}$/;
+  const aadharRegex = /^([1-9]{1}[0-9]{11}|X{8}[0-9]{4})$/;
 
   const trimmedValue = typeof value === 'string' ? value.trim() : '';
 

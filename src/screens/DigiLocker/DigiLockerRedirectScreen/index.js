@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import DigiLocker_Redirect_Component from './DigiLocker_Redirect_Component';
-import {navigate} from '../../../navigation/NavigationUtils';
+import {getScreenParam, navigate} from '../../../navigation/NavigationUtils';
 import ScreenNames from '../../../constants/ScreenNames';
 
 class DigiLockerRedirectScreen extends Component {
@@ -11,9 +11,16 @@ class DigiLockerRedirectScreen extends Component {
   }
 
   componentDidMount() {
+    const response = getScreenParam(this.props.route, 'params');
+    const {route} = this.props;
+    const {params, onGoBack} = route.params || {};
+
     setTimeout(() => {
-      navigate(ScreenNames.DigiLockerAadhaarScreen);
-    }, 2500);
+      navigate(ScreenNames.DigiLockerAadhaarScreen, {
+        params: response,
+        onGoBack,
+      });
+    }, 2000);
   }
 
   render() {
