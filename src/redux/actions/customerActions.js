@@ -1,6 +1,7 @@
 import {compose} from 'redux';
 import {
   createCustomer,
+  deleteCustomer,
   fetchAllCustomers,
   fetchCustomerDetailsById,
   fetchCustomerDocuments,
@@ -18,6 +19,7 @@ import {
   CLEAR_SEARCH,
   CLEAR_SELECTED_CUSTOMER,
   CREATE_CUSTOMER_BASIC_DETAIL,
+  DELETE_CUSTOMER,
   FETCH_CUSTOMERS,
   FETCH_CUSTOMER_DETAIL,
   FETCH_CUSTOMER_DOCUMENT,
@@ -321,3 +323,25 @@ export const initiateAadharDigilockerThunk =
       showApiErrorToast(error);
     }
   };
+
+export const deleteCustomerThunk = customerId => async dispatch => {
+  dispatch({type: DELETE_CUSTOMER.REQUEST});
+  try {
+    const response = await deleteCustomer(customerId);
+    dispatch({
+      type: DELETE_CUSTOMER.SUCCESS,
+      payload: {
+        data: response?.data,
+      },
+    });
+    return response;
+  } catch (error) {
+    dispatch({
+      type: DELETE_CUSTOMER.FAILURE,
+      error: error?.message || 'Something went wrong',
+    });
+    throw error;
+  }
+};
+
+// deleteCustomer

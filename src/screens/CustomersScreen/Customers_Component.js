@@ -81,11 +81,15 @@ const Customers_Component = ({
         keyExtractor={(item, index) => `${item.id}-${index}`}
         contentContainerStyle={styles.wrapper}
         renderItem={({item}) => {
+          let isDeleted = item?.customer?.isDeleted;
           let customerDetails = item?.customer?.customerDetails;
           let customerNote = `${capitalizeFirstLetter(
             item?.customer?.customerCategory,
           )} - ${capitalizeFirstLetter(item?.customer?.customerType)}`;
           let status = item?.customer?.isMobileVerified ? 'SAVED' : 'DRAFT';
+          if (isDeleted) {
+            return;
+          }
           return (
             <CardWrapper
               onPress={() => onWrapperClick?.(item)}

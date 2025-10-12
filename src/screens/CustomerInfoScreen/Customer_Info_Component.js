@@ -4,15 +4,16 @@ import {
   CustomerCard,
   DetailInfoCard,
   Header,
+  images,
+  Loader,
   SafeAreaWrapper,
   Spacing,
   theme,
-  Loader,
-  images,
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
+import {DeleteConfirmationContent} from '../../components';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {
@@ -29,11 +30,18 @@ const Customer_Info_Component = ({
   onNextPress,
   handleEditDetailPress,
   loading,
-  isCreatingLoanApplication,
+  deleteModalProps,
+  showDeleteCustomerModal,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header title="Customer Details" onBackPress={() => goBack()} />
+      <Header
+        title="Customer Details"
+        onBackPress={() => goBack()}
+        showRightContent={true}
+        rightIconName={images.icon_delete}
+        onPressRightContent={showDeleteCustomerModal}
+      />
       <ScrollView contentContainerStyle={styles.scrollWrapper} bounces={false}>
         <View style={styles.headerWrapper}>
           <CardWrapper
@@ -86,6 +94,17 @@ const Customer_Info_Component = ({
           <Button label={strings.next} onPress={onNextPress} />
         </View>
       </ScrollView>
+      <DeleteConfirmationContent
+        isVisible={deleteModalProps?.isDeleteModalVisible}
+        onModalHide={deleteModalProps?.omModalHide}
+        onPressPrimaryButtonPress={deleteModalProps?.handleDeleteCustomerInfo}
+        title={'Delete Customer'}
+        message={
+          'Are you sure you want to delete this Customer?\nThis action cannot be undone and all related data will be permanently removed.'
+        }
+        isLoading={deleteModalProps?.isLoading}
+      />
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );

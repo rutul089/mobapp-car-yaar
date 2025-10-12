@@ -91,9 +91,9 @@ export const fetchLoanApplicationFromIdThunk = (
       const response = await fetchLoanApplicationById(applicationId, config);
       dispatch({
         type: FETCH_LOAN_APP_BY_ID.SUCCESS,
-        payload: response.data,
+        payload: response.data?.[0],
       });
-      onSuccess?.(response.data);
+      onSuccess?.(response.data?.[0]);
     } catch (error) {
       dispatch({
         type: FETCH_LOAN_APP_BY_ID.FAILURE,

@@ -45,6 +45,7 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
+import {getNameMatchPercentage} from '../../utils/getNameMatchPercentage';
 
 // const initialState = {
 //   applicantPhoto: '',
@@ -83,12 +84,12 @@ const initialState = {
   fatherName: 'Raja Shah',
   spouseName: 'Kavisha Brooks',
   email: 'ashk@cardenas.org',
-  dob: '',
+  dob: '07/06/1995',
   address: '9957 Lucero Path Suite 683, Humphreymouth, NE 02200',
   pincode: '380015',
   monthlyIncome: '910454',
   bankName: 'State Bank of India',
-  accountNumber: '',
+  accountNumber: '123123124123',
   currentEmi: '',
   maxEmiAfford: '',
   avgMonthlyBankBalance: '',
@@ -117,6 +118,8 @@ class CustomerPersonalDetails extends Component {
       ],
       isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
       registrationNumber: '',
+      nameOnPanCard: '',
+      nameOnAadharCard: '',
       errors: {
         panCardNumber: '',
         aadharNumber: '',
@@ -265,6 +268,7 @@ class CustomerPersonalDetails extends Component {
           showToast('success', 'Customer detail updated successfully');
         }
       } else {
+        this.callVerifyAadharCard();
         if (isCreatingLoanApplication) {
           return this.createLoanApplication();
         }
@@ -342,6 +346,8 @@ class CustomerPersonalDetails extends Component {
       currentEmi: {required: currentLoan},
       spouseName: {required: false},
       aadharBackphoto: {required: false},
+      aadharFrontPhoto: {required: false},
+      pancardPhoto: {required: false},
     };
 
     const fieldsToValidate = [
@@ -390,6 +396,7 @@ class CustomerPersonalDetails extends Component {
     });
 
     this.setState({errors, isFormValid});
+    console.log('errors', JSON.stringify(errors));
     return isFormValid;
   };
 
@@ -515,9 +522,10 @@ class CustomerPersonalDetails extends Component {
       panCardNumber,
     };
     this.props.verifyPanThunk(payload, response => {
+      console.log('response----->', JSON.stringify(response));
       if (response?.success) {
         this.setState({
-          panCardVerification: response?.data?.verified,
+          // panCardVerification: response?.data?.verified,
         });
       }
     });
@@ -554,10 +562,14 @@ class CustomerPersonalDetails extends Component {
                   //   aadhaarData?.data?.aadhaar_xml_data?.masked_aadhaar,
                   aadharNumber: newMaskedAadhaar,
                   applicantName: aadhaarData?.data?.aadhaar_xml_data?.full_name,
+                  nameOnAadharCard:
+                    aadhaarData?.data?.aadhaar_xml_data?.full_name,
                   dob: formattedDob,
                 },
                 () => {
-                  this.callVerifyAadharCard();
+                  if (this.state.isEdit) {
+                    this.callVerifyAadharCard();
+                  }
                 },
               );
             } else {
@@ -571,7 +583,7 @@ class CustomerPersonalDetails extends Component {
 
   callVerifyAadharCard = () => {
     const {selectedCustomerId} = this.props;
-    const {aadharNumber, errors} = this.state;
+    const {aadharNumber, errors, nameOnAadharCard, nameOnPanCard} = this.state;
 
     let payload = {
       customerId: selectedCustomerId,
@@ -588,9 +600,21 @@ class CustomerPersonalDetails extends Component {
       );
     }
 
+    if (getNameMatchPercentage(nameOnAadharCard, nameOnPanCard) <= 70) {
+      showToast(
+        'error',
+        'The name on Aadhaar and PAN do not match closely enough. Please check your documents.',
+        'bottom',
+        2500,
+      );
+      return;
+    }
+
     this.props.verifyAadharThunk(payload, response => {
       if (response?.success) {
-        this.onNextPress();
+        if (this.state.isEdit) {
+          this.onNextPress();
+        }
       }
     });
   };
@@ -713,9 +737,9 @@ class CustomerPersonalDetails extends Component {
             value: aadharNumber,
             isError: errors?.aadharNumber,
             statusMsg: errors?.aadharNumber,
-            // isDisabled: aadharVerification,
-            isDisabled: true,
-            rightLabel: aadharVerification ? '' : 'FETCH',
+            isDisabled: aadharVerification && isEdit,
+            // isDisabled: true,
+            rightLabel: !aadharVerification ? '' : 'FETCH',
             rightLabelPress: this.verifyAadharCard,
             isRightIconVisible: aadharVerification,
           },
@@ -723,7 +747,7 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.applicantName,
             statusMsg: errors?.applicantName,
             autoCapitalize: 'words',
-            isDisabled: aadharVerification,
+            isDisabled: aadharVerification && isEdit,
           },
           mobileNumber: {
             isError: errors?.mobileNumber,
@@ -799,7 +823,7 @@ class CustomerPersonalDetails extends Component {
           dob: {
             isError: errors?.dob,
             statusMsg: errors?.dob,
-            isDisabled: aadharVerification,
+            isDisabled: aadharVerification && isEdit,
           },
           bankName: {
             value: bankName,

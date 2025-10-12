@@ -3,8 +3,13 @@ import {Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {getLabelFromEnum, occupationLabelMap} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
-import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import {
+  getScreenParam,
+  goBack,
+  navigate,
+} from '../../navigation/NavigationUtils';
+import {
+  deleteCustomerThunk,
   fetchCustomerDetailsThunk,
   initiateLoanApplicationThunk,
 } from '../../redux/actions';
@@ -23,6 +28,8 @@ class CustomerInfoScreen extends Component {
     this.state = {
       customerInfo: {},
       customerId: getScreenParam(this.props.route, 'param')?.customerId,
+      isDeleteModalVisible: false,
+      isLoading: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
     this.handleEditDetailPress = this.handleEditDetailPress.bind(this);
@@ -98,8 +105,46 @@ class CustomerInfoScreen extends Component {
     );
   };
 
+  showDeleteCustomerModal = () => {
+    this.setState({
+      isDeleteModalVisible: true,
+    });
+  };
+
+  omModalHide = () => {
+    this.setState({
+      isDeleteModalVisible: false,
+    });
+  };
+
+  handleDeleteCustomerInfo = () => {
+    const {selectedCustomerId} = this.props;
+    this.setState({isLoading: true});
+    this.props
+      .deleteCustomerThunk(selectedCustomerId)
+      .then(async response => {
+        if (response?.success) {
+          showToast(
+            'success',
+            'Customer has been deleted successfully.',
+            'bottom',
+            3000,
+          );
+          // small delay before navigation
+          setTimeout(() => {
+            goBack();
+          }, 250);
+        }
+      })
+      .catch(error => {})
+      .finally(() => {
+        this.setState({isLoading: false});
+        this.omModalHide();
+      });
+  };
+
   render() {
-    const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
+    const {loading, selectedCustomer} = this.props;
     const {details = {}} = selectedCustomer || {};
 
     let customerNote = `${capitalizeFirstLetter(
@@ -115,6 +160,8 @@ class CustomerInfoScreen extends Component {
       applicantPhoto?.startsWith('file://');
 
     const occupation = this._safeGet(details, 'occupation');
+
+    const {isDeleteModalVisible, isLoading} = this.state;
 
     return (
       <Customer_Info_Component
@@ -226,7 +273,13 @@ class CustomerInfoScreen extends Component {
         onNextPress={this.onNextPress}
         handleEditDetailPress={this.handleEditDetailPress}
         loading={loading}
-        isCreatingLoanApplication={true}
+        showDeleteCustomerModal={this.showDeleteCustomerModal}
+        deleteModalProps={{
+          isDeleteModalVisible: isDeleteModalVisible,
+          omModalHide: this.omModalHide,
+          handleDeleteCustomerInfo: this.handleDeleteCustomerInfo,
+          isLoading: isLoading,
+        }}
       />
     );
   }
@@ -235,6 +288,7 @@ class CustomerInfoScreen extends Component {
 const mapActionCreators = {
   fetchCustomerDetailsThunk,
   initiateLoanApplicationThunk,
+  deleteCustomerThunk,
 };
 const mapStateToProps = ({customerData, loanData, vehicleData}) => {
   return {

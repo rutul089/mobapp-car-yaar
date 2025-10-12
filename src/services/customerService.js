@@ -48,7 +48,6 @@ export const fetchCustomerDetailsById = async (customerId, config = {}) => {
       `/customers/customerDetails/${customerId}`,
       config,
     );
-    console.log('fetchCustomerDetailsById', JSON.stringify(response));
 
     return response.data;
   } catch (error) {

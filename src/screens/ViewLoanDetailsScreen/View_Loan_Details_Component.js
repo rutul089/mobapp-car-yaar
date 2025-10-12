@@ -9,11 +9,10 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
-  CommonModal,
-  Text,
 } from '@caryaar/components';
-import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
+import {DeleteConfirmationContent} from '../../components';
 import {
   applicationStatus,
   getApplicationStatusLabel,
@@ -138,40 +137,16 @@ const View_Loan_Details_Component = ({
         </View>
       </ScrollView>
 
-      <CommonModal
+      <DeleteConfirmationContent
         isVisible={isDeleteModalVisible}
         onModalHide={omModalHide}
-        primaryButtonLabel={'Delete'}
-        isScrollableContent={true}
-        isPrimaryButtonVisible={true}
-        onPressPrimaryButton={handleDeleteLoanApplication}
-        title="Delete Application"
-        tittleColor={theme.colors.error}
-        restPrimaryButtonProp={{
-          bgColor: theme.colors.error,
-          themedColor: 'white',
-          variant: 'ghost',
-        }}>
-        <View style={{paddingVertical: 5}}>
-          {isLoading && (
-            <ActivityIndicator
-              size={'large'}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
-            />
-          )}
-          <Text textAlign="center" lineHeight={22}>
-            {
-              'Are you sure you want to delete this application?\nThis action cannot be undone and all related data will be permanently removed.'
-            }
-          </Text>
-        </View>
-      </CommonModal>
+        onPressPrimaryButtonPress={handleDeleteLoanApplication}
+        title={'Delete Application'}
+        message={
+          'Are you sure you want to delete this application?\nThis action cannot be undone and all related data will be permanently removed.'
+        }
+        isLoading={isLoading}
+      />
 
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>

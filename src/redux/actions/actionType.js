@@ -98,3 +98,5 @@ export const DELETE_LOAN_APPLICATION = createAsyncActionTypes(
 export const SUBMIT_LOAN_APPLICATION = createAsyncActionTypes(
   'SUBMIT_LOAN_APPLICATION',
 );
+
+export const DELETE_CUSTOMER = createAsyncActionTypes('DELETE_CUSTOMER');

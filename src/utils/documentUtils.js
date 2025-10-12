@@ -414,7 +414,7 @@ export const openInBrowser = async url => {
  */
 export const getDocumentLink = async uri => {
   if (!uri || typeof uri !== 'string') {
-    console.warn('Invalid URI provided to getDocumentLink:', uri);
+    console.log('Invalid URI provided to getDocumentLink:', uri);
     return null;
   }
 

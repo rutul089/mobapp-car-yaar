@@ -101,7 +101,6 @@ class LoanDocumentsScreen extends Component {
   fetchCustomerDocuments = async () => {
     const {selectedApplicationId} = this.props;
     this.setState({isLoading: true});
-
     try {
       await this.props.fetchCustomerDocumentsThunk(
         selectedApplicationId,
@@ -112,15 +111,13 @@ class LoanDocumentsScreen extends Component {
               response.data,
               loanDocuments,
             );
-
             this.setState({documents: formattedDocuments, isLoading: false});
-          } else {
-            this.setState({isLoading: false});
           }
         },
       );
     } catch (error) {
       console.error('Error fetching customer documents:', error);
+    } finally {
       this.setState({isLoading: false});
     }
   };
@@ -419,9 +416,7 @@ class LoanDocumentsScreen extends Component {
             ? formatVehicleNumber(UsedVehicle?.registerNumber)
             : '',
           showRightContent: true,
-          // rightLabel: isCreatingLoanApplication
-          //   ? selectedLoanApplication?.loanApplicationId || ''
-          //   : '',
+
           rightLabel: selectedLoanApplication?.loanApplicationId || '',
           rightLabelColor: '#F8A902',
           onBackPress: this.handleBackPress,

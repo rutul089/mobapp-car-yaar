@@ -1,7 +1,7 @@
+import {Text, theme, VehicleImageCard} from '@caryaar/components'; // Adjust path as needed
 import React from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
-import {VehicleImageCard, Text, theme} from '@caryaar/components'; // Adjust path as needed
-import {getFileType, getMimeFromUrl} from '../utils/documentUtils';
+import {Platform, StyleSheet, View} from 'react-native';
+import {getMimeFromUrl} from '../utils/documentUtils';
 
 const DocumentGroup = ({
   title,

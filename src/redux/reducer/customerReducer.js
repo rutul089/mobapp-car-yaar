@@ -4,6 +4,7 @@ import {
   CLEAR_SELECTED_CUSTOMER,
   CREATE_CUSTOMER_BASIC_DETAIL,
   CUSTOMER_MORE_FINANCE,
+  DELETE_CUSTOMER,
   FETCH_CUSTOMER_DETAIL,
   FETCH_CUSTOMER_DOCUMENT,
   FETCH_CUSTOMERS,
@@ -34,6 +35,7 @@ const customerReducer = (state = initialState, action) => {
     case CREATE_CUSTOMER_BASIC_DETAIL.REQUEST:
     case CUSTOMER_MORE_FINANCE.REQUEST:
     case KYC_ACTION.REQUEST:
+    case DELETE_CUSTOMER.REQUEST:
       return {
         ...state,
         loading: true,
@@ -41,6 +43,7 @@ const customerReducer = (state = initialState, action) => {
 
     case CREATE_CUSTOMER_BASIC_DETAIL.FAILURE:
     case CUSTOMER_MORE_FINANCE.FAILURE:
+    case DELETE_CUSTOMER.FAILURE:
       return {
         ...state,
         loading: false,
@@ -139,6 +142,30 @@ const customerReducer = (state = initialState, action) => {
 
     case KYC_ACTION.SUCCESS:
       return {...state, loading: false};
+
+    case DELETE_CUSTOMER.SUCCESS:
+      const deletedId = action.payload?.data?.id;
+      console.log('Before delete:', state.customers);
+      console.log('Before deletedId:', deletedId);
+
+      return {
+        ...state,
+        loading: false,
+        customers: state.customers.filter(
+          data => data?.customerId !== deletedId,
+        ),
+        searchCustomer: state.searchCustomer.filter(
+          data => data?.customerId !== deletedId,
+        ),
+        selectedCustomer:
+          state.selectedCustomerId === deletedId
+            ? null
+            : state.selectedCustomer,
+        selectedCustomerId:
+          state.selectedCustomerId === deletedId
+            ? null
+            : state.selectedCustomerId,
+      };
 
     default:
       return state;
