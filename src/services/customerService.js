@@ -481,7 +481,6 @@ export const fetchAadhaarFromDigilocker = async clientId => {
       timeout: 10000, // optional
     });
 
-    console.log('✅ Aadhaar fetched successfully:', response.data);
     return response.data;
   } catch (error) {
     console.error(

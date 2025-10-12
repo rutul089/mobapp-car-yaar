@@ -145,8 +145,6 @@ const customerReducer = (state = initialState, action) => {
 
     case DELETE_CUSTOMER.SUCCESS:
       const deletedId = action.payload?.data?.id;
-      console.log('Before delete:', state.customers);
-      console.log('Before deletedId:', deletedId);
 
       return {
         ...state,

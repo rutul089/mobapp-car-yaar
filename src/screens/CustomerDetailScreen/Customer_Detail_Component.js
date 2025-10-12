@@ -12,21 +12,20 @@ import {
   images,
   Input,
   OptionCard,
+  OTPModal,
   SafeAreaWrapper,
   Spacing,
   Text,
   theme,
-  Loader,
-  OTPModal,
 } from '@caryaar/components';
 
+import {FullLoader} from '../../components';
 import {
   customerCategory,
   customerCategoryValue,
   customerIndividualTypeOptions,
   loanType,
 } from '../../constants/enums';
-import {FullLoader} from '../../components';
 
 const Customer_Detail_Component = ({
   onBackPress,

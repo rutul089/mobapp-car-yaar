@@ -48,7 +48,6 @@ class SearchScreen extends Component {
       return;
     }
     this.props.checkVehicleExistsThunk(vehicleNumber, response => {
-      console.log('response', JSON.stringify(response));
       if (response?.data) {
         return this.props.getVehicleByRegisterNumberThunk(
           vehicleNumber,

@@ -404,3 +404,91 @@ export const getCibilScoreStatus = score => {
   }
   return 'Excellent';
 };
+
+/**
+ * Generate a random Indian PAN number.
+ *
+ * PAN format: 5 letters + 4 digits + 1 letter -> [A-Z]{5}[0-9]{4}[A-Z]
+ *  - 4th character is the holder type (P, C, F, T, H, A, B, L, J, G, etc).
+ *  - 5th character is usually the first letter of the holder's last name (for individuals).
+ *
+ * Usage:
+ *   generateRandomPAN()                     // random person-like PAN
+ *   generateRandomPAN({ type: 'C' })        // company PAN (4th char = C)
+ *   generateRandomPAN({ initial: 'M' })     // uses 'M' as 5th char
+ *
+ * Returns uppercase PAN string.
+ */
+export const generateRandomPAN = (options = {}) => {
+  const {type = 'P', initial = null} = options;
+
+  // Map of friendly types (optional). If user passes a letter directly it will be used.
+  const typeMap = {
+    person: 'P',
+    company: 'C',
+    firm: 'F',
+    trust: 'T',
+    huf: 'H',
+    aop: 'A',
+    body: 'B',
+    local: 'L',
+    j: 'J',
+    govt: 'G',
+  };
+
+  // Normalize type to a single uppercase letter
+  const typeChar = (
+    typeMap[type?.toString()?.toLowerCase()] ||
+    (typeof type === 'string' && type.toUpperCase().slice(0, 1)) ||
+    'P'
+  ).toUpperCase();
+
+  const randomLetter = () =>
+    String.fromCharCode(65 + Math.floor(Math.random() * 26)); // A-Z
+  const randomDigit = () => String(Math.floor(Math.random() * 10)); // 0-9
+
+  // first 3 letters: random
+  const first3 = Array.from({length: 3}, randomLetter).join('');
+
+  // 5th character: use provided initial if valid letter, else random letter
+  const fifthChar =
+    initial && typeof initial === 'string' && /^[A-Za-z]$/.test(initial)
+      ? initial.toUpperCase()
+      : randomLetter();
+
+  // middle 4 digits
+  const digits4 = Array.from({length: 4}, randomDigit).join('');
+
+  // last letter
+  const last = randomLetter();
+
+  return `${first3}${typeChar}${fifthChar}${digits4}${last}`;
+};
+
+/**
+ * Generate a masked Aadhaar string (default format: "XXXXXXXX1234").
+ *
+ * Options:
+ *  - maskChar: character used for masking (default: 'X')
+ *  - maskLength: number of mask characters (default: 8)
+ *  - visibleDigits: number of trailing digits to show (default: 4)
+ *
+ * Returns a string like: "XXXXXXXX1234"
+ */
+export const generateMaskedAadhaar = (options = {}) => {
+  const {maskChar = 'X', maskLength = 8, visibleDigits = 4} = options;
+
+  // Ensure visibleDigits is between 1 and 12 (Aadhaar is 12 digits total)
+  const vd = Math.min(Math.max(Math.floor(visibleDigits) || 4, 1), 12);
+
+  // Generate the trailing digits (ensure correct zero-padding)
+  const max = Math.pow(10, vd);
+  const min = Math.pow(10, vd - 1);
+  const randomTrailing = Math.floor(min + Math.random() * (max - min));
+  const trailingStr = String(randomTrailing).padStart(vd, '0');
+
+  // Build mask
+  const mask = String(maskChar).repeat(Math.max(0, Math.floor(maskLength)));
+
+  return `${mask}${trailingStr}`;
+};

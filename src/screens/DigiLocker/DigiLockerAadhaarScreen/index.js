@@ -47,10 +47,9 @@ class DigiLockerAadhaarScreen extends Component {
     if (!navState?.url) {
       return;
     }
+    let redirectUrl1 = 'https://caryaar-dev-api.pedalsupclients.xyz/';
 
-    if (
-      navState?.url.startsWith('https://caryaar-dev-api.pedalsupclients.xyz/')
-    ) {
+    if (navState?.url.startsWith(redirectUrl1)) {
       this._isNavigatingBack = true; // ✅ mark as navigating back
 
       fetchAadhaarFromDigilocker(navData?.client_id)
