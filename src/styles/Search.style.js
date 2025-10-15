@@ -12,5 +12,7 @@ export const styles = StyleSheet.create({
     fontSize: theme.typography.fontSizes.h4,
     textAlign: 'center',
     ...theme.typography.fontStyles.hankenGroteskBold,
+    flex: 1, // ✅ Takes full width
+    paddingVertical: 0, // ✅ Prevent vertical shift
   },
 });

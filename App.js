@@ -18,7 +18,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <RootNavigator />
-        <View pointerEvents="box-none" style={{marginHorizontal: 20}}>
+        <View pointerEvents="none" style={{marginHorizontal: 20}}>
           <Toast config={toastConfig} />
         </View>
       </PersistGate>

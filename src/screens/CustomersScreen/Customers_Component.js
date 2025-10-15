@@ -86,7 +86,7 @@ const Customers_Component = ({
           let customerNote = `${capitalizeFirstLetter(
             item?.customer?.customerCategory,
           )} - ${capitalizeFirstLetter(item?.customer?.customerType)}`;
-          let status = item?.customer?.isMobileVerified ? 'SAVED' : 'DRAFT';
+          let status = item?.customer?.isComplete ? 'SAVED' : 'DRAFT';
           let isValidCustomer = item?.customer?.isComplete;
           // if (isDeleted) {
           //   return;

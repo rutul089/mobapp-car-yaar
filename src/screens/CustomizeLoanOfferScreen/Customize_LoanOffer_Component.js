@@ -43,8 +43,8 @@ const Customize_LoanOffer_Component = ({
                       label={type}
                       selected={selectedType === type}
                       onPress={() => {
-                        setSelectedType(type),
-                          onSelectLoanType && onSelectLoanType(type, index);
+                        (setSelectedType(type),
+                          onSelectLoanType && onSelectLoanType(type, index));
                       }}
                       marginBottom={isLastRow ? 0 : 14}
                     />
@@ -59,12 +59,6 @@ const Customize_LoanOffer_Component = ({
             leftIconName={images.percentage_circle}
             label={'Interest Rate'}
             keyboardType="decimal-pad"
-            isLeftIconVisible
-          />
-          <Spacing size="smd" />
-          <Input
-            leftIconName={images.percentage_circle}
-            label={'Title'}
             isLeftIconVisible
           />
           <Spacing size="smd" />

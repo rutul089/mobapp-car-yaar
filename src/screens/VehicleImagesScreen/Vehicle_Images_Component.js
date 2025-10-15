@@ -8,6 +8,7 @@ import {
   images,
   theme,
   Loader,
+  Spacing,
 } from '@caryaar/components';
 import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
 
@@ -47,7 +48,6 @@ const Vehicle_Images_Component = ({
           );
         })}
       </View>
-      {/* <Spacing size="lg" /> */}
     </View>
   );
 

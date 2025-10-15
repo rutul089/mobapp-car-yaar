@@ -69,8 +69,8 @@ const Login_Component = ({
                 </Text>
               </View>
               <Input
-                placeholder="98744 32092"
-                // optionalLabelContainerStyles={{alignSelf: 'left'}}
+                // placeholder="98744 32092"
+                optionalLabelContainerStyles={{alignSelf: 'left'}}
                 inputStyles={styles.inputStyle}
                 value={mobileNumber}
                 onChangeText={value => {
@@ -84,9 +84,11 @@ const Login_Component = ({
                 autoFocus
                 returnKeyType={'done'}
                 onSubmitEditing={generateOTP}
-                restProps={{
-                  caretHidden: caretHidden,
-                }}
+                restProps={
+                  {
+                    // caretHidden: caretHidden,
+                  }
+                }
               />
               <Spacing size="xl" />
               <Button label={strings.generateOTP} onPress={generateOTP} />

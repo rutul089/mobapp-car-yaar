@@ -187,7 +187,7 @@ class CustomerInfoScreen extends Component {
           ],
           profileImage: applicantPhoto,
           isValidUri: isValidUri,
-          status: selectedCustomer?.isMobileVerified ? 'SAVED' : 'DRAFT',
+          status: selectedCustomer?.isComplete ? 'SAVED' : 'DRAFT',
           customerId: details?.customerId,
         }}
         personalDetail={[

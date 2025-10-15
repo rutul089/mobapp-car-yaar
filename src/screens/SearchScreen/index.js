@@ -21,6 +21,7 @@ class SearchScreen extends Component {
       statusMsg: '',
       showStatusIcon: false,
       vehicleExists: true,
+      isLoading: false,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onAddVehicle = this.onAddVehicle.bind(this);
@@ -41,6 +42,7 @@ class SearchScreen extends Component {
   };
 
   onSearchVehicle = () => {
+    this.setState({isLoading: true});
     const {vehicleNumber} = this.state;
     const isValid = isValidIndianVehicleNumber(vehicleNumber);
     if (!isValid) {
@@ -53,7 +55,7 @@ class SearchScreen extends Component {
     this.props.getVehicleByRegisterNumberThunk(
       vehicleNumber,
       _response => {
-        setTimeout(() => {
+        this.setState({isLoading: false, vehicleExists: true}, () => {
           navigate(ScreenNames.VehicleDetail, {
             addNewVehicle: true,
             UsedVehicle: {
@@ -61,16 +63,13 @@ class SearchScreen extends Component {
             },
             vehicleId: _response?.data?.vehicleId,
           });
-        }, 250);
-
-        this.setState({
-          vehicleExists: true,
         });
       },
       () => {
         this.setState({
           statusMsg: 'Oh no! Vehicle not found',
           vehicleExists: false,
+          isLoading: false,
         });
       },
     );
@@ -111,7 +110,7 @@ class SearchScreen extends Component {
   };
 
   render() {
-    const {vehicleNumber, statusMsg, showStatusIcon, vehicleExists} =
+    const {vehicleNumber, statusMsg, showStatusIcon, vehicleExists, isLoading} =
       this.state;
     const {loading} = this.props;
     return (
@@ -125,7 +124,7 @@ class SearchScreen extends Component {
           vehicleNumber={vehicleNumber}
           statusMsg={statusMsg}
           showStatusIcon={showStatusIcon}
-          loading={loading}
+          loading={isLoading}
         />
       </>
     );

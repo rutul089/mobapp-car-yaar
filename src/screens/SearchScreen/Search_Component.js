@@ -41,7 +41,7 @@ const Search_Component = ({
         showsVerticalScrollIndicator={false}>
         <Input
           label={strings.vehicleNumberLabel}
-          placeholder={'GJ01YB6356'}
+          // placeholder={'GJ01YB6356'}
           optionalLabelContainerStyles={{alignSelf: 'center'}}
           labelStyles={{fontSize: theme.typography.fontSizes.body}}
           inputContainerBackgroundColor={'white'}
@@ -60,9 +60,11 @@ const Search_Component = ({
           showStatusIcon={showStatusIcon}
           autoCapitalize={'characters'}
           onSubmitEditing={onSearchVehicle}
-          restProps={{
-            caretHidden: caretHidden,
-          }}
+          restProps={
+            {
+              // caretHidden: caretHidden,
+            }
+          }
         />
         <Spacing size="lg" />
         <FormFooterButtons
@@ -74,7 +76,7 @@ const Search_Component = ({
           hideSecondaryButton={showAddVehicle}
         />
       </KeyboardAwareScrollView>
-      {loading && <Loader visible={loading} />}
+      {loading ? <Loader visible={loading} /> : null}
     </SafeAreaWrapper>
   );
 };

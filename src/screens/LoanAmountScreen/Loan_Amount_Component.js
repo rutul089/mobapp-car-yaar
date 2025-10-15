@@ -39,7 +39,6 @@ const Loan_Amount_Component = ({
         </Text>
         <Spacing size="smd" />
         <Input
-          placeholder={'1234567'}
           optionalLabelContainerStyles={{alignSelf: 'center'}}
           labelStyles={{fontSize: theme.typography.fontSizes.body}}
           inputContainerBackgroundColor={'white'}
@@ -56,9 +55,7 @@ const Loan_Amount_Component = ({
           onSubmitEditing={onNextButtonPress}
           value={formatIndianCurrency(loanAmount, true, true)}
           {...(restInputProps?.loanAmount || {})}
-          restProps={{
-            caretHidden: caretHidden,
-          }}
+          restProps={{}}
           maxLength={15}
         />
         <Spacing size="lg" />
@@ -82,6 +79,8 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSizes.h4,
     textAlign: 'center',
     ...theme.typography.fontStyles.hankenGroteskBold,
+    flex: 1, // ✅ Takes full width
+    paddingVertical: 0, // ✅ Prevent vertical shift
   },
 });
 

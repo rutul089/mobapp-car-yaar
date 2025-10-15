@@ -101,7 +101,6 @@ class Vehicles extends Component {
     }
 
     if (fullScreen && item?.hasActiveLoan) {
-      console.log('item------>', JSON.stringify(item));
       Alert.alert(
         'Vehicle Not Available',
         'This vehicle already has an active loan. You cannot assign it to another customer.',
@@ -288,6 +287,8 @@ class Vehicles extends Component {
       !stopLoading;
 
     const vehiclesToShow = isSearch ? searchVehicles : vehicleList;
+
+    console.log({loading, apiTrigger, refreshing, stopLoading});
 
     return (
       <Vehicles_Component

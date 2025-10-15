@@ -389,8 +389,8 @@ class CustomerPersonalDetails extends Component {
       currentEmi: {required: currentLoan},
       spouseName: {required: false},
       aadharBackphoto: {required: false},
-      aadharNumber: {required: false},
-      panCardNumber: {required: false},
+      aadharNumber: {required: true},
+      panCardNumber: {required: true},
     };
 
     const fieldsToValidate = [

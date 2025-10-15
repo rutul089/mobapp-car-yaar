@@ -108,7 +108,7 @@ class VehicleImagesScreen extends Component {
 
   handleViewImage = async uri => {
     if (!uri) {
-      return showToast('error', strings.errorNoDocumentUpload);
+      return;
     }
 
     setTimeout(async () => {

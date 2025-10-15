@@ -78,23 +78,8 @@ const Vehicle_Detail_Component = ({
             hideSecondaryButton={!isCreatingLoanApplication}
             onPressSecondaryButton={onPressSecondaryButton}
           />
-          <Spacing size="lg" />
         </View>
       </ScrollView>
-      {/* <View
-        style={{
-          paddingHorizontal: theme.sizes.padding,
-          backgroundColor: theme.colors.background,
-        }}>
-        <FormFooterButtons
-          primaryButtonLabel={strings.next}
-          secondaryButtonLabel={'Edit'}
-          onPressPrimaryButton={onNextPress}
-          hideSecondaryButton={!isCreatingLoanApplication}
-          onPressSecondaryButton={onPressSecondaryButton}
-        />
-      </View> */}
-
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
