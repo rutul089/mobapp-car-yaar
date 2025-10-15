@@ -181,7 +181,7 @@ class CustomerPersonalDetails extends Component {
       fatherName: detail?.fatherName,
       spouseName: detail?.spouseName,
       email: detail?.email,
-      dob: formatDate(detail?.dob, 'DD/MM/YYYY'),
+      dob: detail?.dob ? formatDate(detail?.dob, 'DD/MM/YYYY') : '',
       address: detail?.address,
       pincode: detail?.pincode,
       monthlyIncome: get(detail, 'monthlyIncome', '')?.toString(),
@@ -668,7 +668,6 @@ class CustomerPersonalDetails extends Component {
   };
 
   updateDocumentState = async (type, uri, isCheck = true) => {
-    console.log({type, uri, isCheck});
     if (!type) {
       return;
     }

@@ -300,7 +300,6 @@ export const verifyPanThunk =
         error: error?.message || 'Something went wrong',
       });
       onFailure?.(error);
-      console.log('error--->', JSON.stringify(error?.response?.data));
       showApiErrorToast(error);
     }
   };

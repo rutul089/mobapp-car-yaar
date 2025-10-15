@@ -201,8 +201,6 @@ class CustomerDetailView extends Component {
       mobileNumber, // your new value
     };
 
-    console.log({updatedParams});
-
     let payload = {
       code: otp,
       mobileNumber: mobileNumber,

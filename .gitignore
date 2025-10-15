@@ -86,3 +86,5 @@ local.properties
 .android/app/build/outputs/apk/
 .android/app/build/outputs/bundle/
 .android/app/build/outputs/release/
+*.dm
+*.dm~

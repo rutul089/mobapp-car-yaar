@@ -82,8 +82,6 @@ class CustomerInfoScreen extends Component {
       selectedCustomer,
     } = this.props;
 
-    console.log({selectedCustomer});
-
     if (!selectedCustomer?.isComplete) {
       return showToast(
         'info',

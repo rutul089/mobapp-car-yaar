@@ -40,7 +40,7 @@ const Finance_Documents_Component = ({
           isDocument={false}
           isView={isReadOnlyLoanApplication}
         />
-        <Spacing size="lg" />
+        <Spacing size="xs" />
         <FormFooterButtons
           primaryButtonLabel={strings.next}
           secondaryButtonLabel={strings.btnSave}

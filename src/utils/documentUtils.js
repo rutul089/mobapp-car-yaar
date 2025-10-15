@@ -245,8 +245,6 @@ export const generateImageUploadPayload = (
     const selectedDocType = formattedImages?.[key]?.selectedDocType;
     const documentTypeKey = documentType[key];
 
-    console.log('documentTypeKey', documentTypeKey);
-
     if (uploadedUrl || isEdit) {
       payload[key] = uploadedUrl || null;
       if (documentTypeKey !== undefined) {

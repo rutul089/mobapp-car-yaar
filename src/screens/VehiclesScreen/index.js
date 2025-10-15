@@ -288,8 +288,6 @@ class Vehicles extends Component {
 
     const vehiclesToShow = isSearch ? searchVehicles : vehicleList;
 
-    console.log({loading, apiTrigger, refreshing, stopLoading});
-
     return (
       <Vehicles_Component
         vehicleData={vehiclesToShow}

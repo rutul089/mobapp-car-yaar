@@ -26,7 +26,6 @@ class TrackApplicationScreen extends Component {
     try {
       const response = await fetchLoanTrackingDetailsByAppId(applicationId);
       if (response?.success) {
-        console.log('--->', JSON.stringify(response?.data));
         this.setState({
           trackingSteps: response?.data,
         });

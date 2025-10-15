@@ -575,17 +575,6 @@ const Customer_Personal_Details_Component = ({
       {loading && <Loader visible={loading} />}
 
       {isLoadingDocument && <FullLoader />}
-
-      {/* {showPicker && (
-        <DateTimePickerModal
-          isVisible={showPicker}
-          mode="date"
-          onConfirm={_onChangeDob}
-          onCancel={() => setShowPicker(false)}
-          maximumDate={new Date(Date.now() - 86400000)} // yesterday
-          date={new Date(state.date)}
-        />
-      )} */}
     </SafeAreaWrapper>
   );
 };

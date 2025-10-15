@@ -45,7 +45,7 @@ const Loan_Documents_Component = ({
           isDocument={false}
           isView={isReadOnlyLoanApplication}
         /> */}
-        <Spacing size="smd" />
+        <Spacing size="xs" />
         <Button variant="link" onPress={onNextPress} label={strings.next} />
         <Spacing size="md" />
       </ScrollView>

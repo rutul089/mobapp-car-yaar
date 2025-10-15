@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     paddingBlock: theme.sizes.spacing.smd,
   },
   scrollSection: {
-    padding: theme.sizes.padding,
+    padding: theme.sizes.spacing.md,
   },
   row: {
     flexDirection: 'row',

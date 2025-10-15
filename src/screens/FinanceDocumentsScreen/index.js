@@ -313,7 +313,10 @@ class FinanceDocumentsScreen extends Component {
           docObject: documents[type],
           onDeletePress: () => this.handleDeleteMedia(type),
           uploadMedia: () => this.handleUploadMedia(type),
-          viewImage: () => this.handleViewImage(documents[type]?.uploadedUrl),
+          viewImage: () =>
+            documents[type]?.uploadedUrl || isReadOnlyLoanApplication
+              ? this.handleViewImage(documents[type]?.uploadedUrl)
+              : this.handleUploadMedia(type),
           isRequired: requiredFields.includes(type),
         }))}
         handleNextStepPress={this.handleNextStepPress}

@@ -42,7 +42,6 @@ class SearchScreen extends Component {
   };
 
   onSearchVehicle = () => {
-    this.setState({isLoading: true});
     const {vehicleNumber} = this.state;
     const isValid = isValidIndianVehicleNumber(vehicleNumber);
     if (!isValid) {
@@ -52,6 +51,8 @@ class SearchScreen extends Component {
       });
       return;
     }
+    this.setState({isLoading: true});
+
     this.props.getVehicleByRegisterNumberThunk(
       vehicleNumber,
       _response => {

@@ -223,7 +223,10 @@ class VehicleImagesScreen extends Component {
           docObject: documents[type],
           onDeletePress: () => this.handleDeleteMedia(type),
           uploadMedia: () => this.handleUploadMedia(type),
-          viewImage: () => this.handleViewImage(documents[type]?.uri),
+          viewImage: () =>
+            documents[type]?.uri
+              ? this.handleViewImage(documents[type]?.uri)
+              : this.handleUploadMedia(type),
         }))}
         saveAsDraftPress={this.saveAsDraftPress}
         onNextPress={this.onNextPress}

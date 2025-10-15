@@ -1,3 +1,4 @@
+/* eslint-disable handle-callback-err */
 import {get} from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
@@ -61,7 +62,6 @@ class VehicleDetail extends Component {
         });
       },
       err => {
-        console.log('13123', err);
         this.setState({
           isLoading: false,
         });
