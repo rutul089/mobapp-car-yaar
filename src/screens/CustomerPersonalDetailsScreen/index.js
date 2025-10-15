@@ -512,7 +512,7 @@ class CustomerPersonalDetails extends Component {
 
   handleViewImage = async (uri, type) => {
     if (!uri) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     let downloadedUrl = uri;

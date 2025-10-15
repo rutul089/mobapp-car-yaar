@@ -7,6 +7,7 @@ import {
   Loader,
   SafeAreaWrapper,
   theme,
+  Spacing,
 } from '@caryaar/components';
 import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -26,7 +27,7 @@ const Search_Component = ({
   showStatusIcon,
   loading,
 }) => {
-  const [caretHidden, setCaretHidden] = React.useState(true);
+  const [caretHidden, setCaretHidden] = React.useState(false);
 
   return (
     <SafeAreaWrapper>
@@ -63,6 +64,7 @@ const Search_Component = ({
             caretHidden: caretHidden,
           }}
         />
+        <Spacing size="lg" />
         <FormFooterButtons
           primaryButtonLabel={strings.searchButton}
           secondaryButtonLabel={strings.addVehicleButton}

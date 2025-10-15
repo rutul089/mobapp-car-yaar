@@ -11,6 +11,8 @@ import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Loan_Amount_Component from './Loan_Amount_Component';
 import strings from '../../locales/strings';
+import {Alert} from 'react-native';
+import {MIN_LOAN_AMOUNT} from '../../constants/enums';
 
 class LoanAmountScreen extends Component {
   constructor(props) {
@@ -36,10 +38,11 @@ class LoanAmountScreen extends Component {
 
   onNextButtonPress = () => {
     const {loanAmount} = this.state;
+
     const {selectedApplicationId, isReadOnlyLoanApplication} = this.props;
+
     let params = getScreenParam(this.props.route, 'params');
 
-    //d3e4354d-0703-4b88-a9ae-5b3956181a70
     if (isReadOnlyLoanApplication) {
       return navigate(ScreenNames.AddReference, {params});
     }
@@ -50,7 +53,17 @@ class LoanAmountScreen extends Component {
       showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
+
+    if (loanAmount <= MIN_LOAN_AMOUNT) {
+      Alert.alert(
+        'Invalid Loan Amount',
+        `The loan amount entered is below the minimum limit. Please enter at least ₹${MIN_LOAN_AMOUNT}.`,
+      );
+      return;
+    }
+
     let payload = {loanAmount};
+
     this.props.addCustomerLoanAmountThunk(
       payload,
       selectedApplicationId,

@@ -25,6 +25,8 @@ const strings = {
   odometerReading: 'Odometer Reading',
   vehicleCondition: 'Vehicle Condition',
   errorMissingField: 'Please fill in all required fields.',
+  errorNoDocumentUpload:
+    'No document available to view. Please add or upload one.',
 };
 
 export default strings;

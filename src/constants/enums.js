@@ -468,3 +468,5 @@ export const documentType = Object.freeze({
   [documentImageType.SANCTION_LETTER]: 'sanctionLetterType',
   [documentImageType.NOC]: 'nocDocumentType',
 });
+
+export const MIN_LOAN_AMOUNT = 50000;

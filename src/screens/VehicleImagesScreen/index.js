@@ -20,6 +20,7 @@ import {
   showToast,
 } from '../../utils/helper';
 import Vehicle_Images_Component from './Vehicle_Images_Component';
+import strings from '../../locales/strings';
 
 class VehicleImagesScreen extends Component {
   constructor(props) {
@@ -107,7 +108,7 @@ class VehicleImagesScreen extends Component {
 
   handleViewImage = async uri => {
     if (!uri) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     setTimeout(async () => {

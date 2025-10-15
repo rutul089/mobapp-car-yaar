@@ -14,7 +14,7 @@ import {
   Button,
 } from '@caryaar/components';
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {currentLoanTypes} from '../../constants/enums';
 import strings from '../../locales/strings';

@@ -109,7 +109,9 @@ class HomeScreen extends Component {
     navigate(ScreenNames.Applications);
   };
 
-  onPendingLoanPress = () => {};
+  onPendingLoanPress = () => {
+    navigate(ScreenNames.Applications);
+  };
 
   onVehicleOnboardedPress = () => {
     navigate(ScreenNames.Vehicles);

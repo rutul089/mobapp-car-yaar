@@ -22,7 +22,7 @@ const Login_Component = ({
   generateOTP,
   isError,
 }) => {
-  const [caretHidden, setCaretHidden] = React.useState(true);
+  const [caretHidden, setCaretHidden] = React.useState(false);
 
   return (
     <SafeAreaWrapper

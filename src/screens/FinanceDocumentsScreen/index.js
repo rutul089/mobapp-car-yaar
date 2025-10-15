@@ -23,6 +23,7 @@ import {
 import {uploadDocumentViaPresignedUrl} from '../../utils/fileUploadUtils';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import Finance_Documents_Component from './Finance_Documents_Component';
+import strings from '../../locales/strings';
 
 const requiredFields = [
   documentImageType.SANCTION_LETTER,
@@ -142,7 +143,7 @@ class FinanceDocumentsScreen extends Component {
 
   handleViewImage = async uri => {
     if (!uri) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     setTimeout(async () => {

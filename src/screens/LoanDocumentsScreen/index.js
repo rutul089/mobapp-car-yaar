@@ -35,6 +35,7 @@ import {
   showToast,
 } from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
+import strings from '../../locales/strings';
 
 const requiredFields = [
   'addressProofImage',
@@ -243,7 +244,7 @@ class LoanDocumentsScreen extends Component {
 
   handleViewImage = async uri => {
     if (!uri) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     this.setState({isLoadingDocument: true});

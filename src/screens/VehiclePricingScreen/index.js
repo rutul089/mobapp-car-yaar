@@ -165,7 +165,7 @@ class VehiclePricingScreen extends Component {
   handleViewImage = async () => {
     const {valueReportUrl} = this.state;
     if (!valueReportUrl) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     setTimeout(async () => {

@@ -176,7 +176,7 @@ class VehicleOdometerScreen extends Component {
   handleViewImage = async () => {
     const {odometerImage} = this.state;
     if (!odometerImage) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     setTimeout(async () => {

@@ -117,7 +117,7 @@ class EditProfileScreen extends Component {
   handleViewImage = async () => {
     let uri = this.state.profileImage;
     if (!uri) {
-      return;
+      return showToast('error', strings.errorNoDocumentUpload);
     }
 
     this.setState({isLoadingDocument: true});
