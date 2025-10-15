@@ -636,51 +636,6 @@ class CustomerPersonalDetails extends Component {
     );
   };
 
-  // verifyAadharCard = () => {
-  //   const {selectedCustomerId} = this.props;
-
-  //   Keyboard.dismiss();
-
-  //   let payload = {
-  //     customerId: selectedCustomerId,
-  //   };
-
-  //   this.props.initiateAadharDigilockerThunk(payload, response => {
-  //     if (response?.success && response?.data && response?.data?.url) {
-  //       //DigiLockerAadhaarScreen RedirectingScreen
-  //       navigate(ScreenNames.RedirectingScreen, {
-  //         params: response?.data,
-  //         onGoBack: aadhaarData => {
-  //           if (aadhaarData?.success) {
-  //             const formattedDob = aadhaarData?.data?.aadhaar_xml_data?.dob
-  //               ?.split('-')
-  //               .reverse()
-  //               .join('/');
-
-  //             this.setState(
-  //               {
-  //                 aadharNumber: __DEV__
-  //                   ? generateMaskedAadhaar()
-  //                   : aadhaarData?.data?.aadhaar_xml_data?.masked_aadhaar,
-  //                 applicantName: aadhaarData?.data?.aadhaar_xml_data?.full_name,
-  //                 nameOnAadharCard:
-  //                   aadhaarData?.data?.aadhaar_xml_data?.full_name,
-  //                 dob: formattedDob,
-  //               },
-  //               () => {
-  //                 this.callVerifyAadharCard();
-  //                 this.onChangeField('aadharNumber', this.state.aadharNumber);
-  //               },
-  //             );
-  //           } else {
-  //             showToast('error', 'Please verify your aadhar card');
-  //           }
-  //         },
-  //       });
-  //     }
-  //   });
-  // };
-
   callVerifyAadharCard = () => {
     const {selectedCustomerId} = this.props;
     const {aadharNumber, errors} = this.state;
@@ -712,7 +667,8 @@ class CustomerPersonalDetails extends Component {
     });
   };
 
-  updateDocumentState = async (type, uri, isCheck) => {
+  updateDocumentState = async (type, uri, isCheck = true) => {
+    console.log({type, uri, isCheck});
     if (!type) {
       return;
     }

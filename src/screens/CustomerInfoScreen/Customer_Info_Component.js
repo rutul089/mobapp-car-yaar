@@ -39,7 +39,7 @@ const Customer_Info_Component = ({
       <Header
         title="Customer Details"
         onBackPress={() => goBack()}
-        showRightContent={!isCreatingLoanApplication}
+        // showRightContent={!isCreatingLoanApplication}
         rightIconName={images.icon_delete}
         onPressRightContent={showDeleteCustomerModal}
       />
