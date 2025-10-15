@@ -42,11 +42,10 @@ const Vehicle_Hypothecation_Component = ({
             onChange={onSelectedAnswer}
           />
         </Card>
+        <Spacing size="lg" />
         <FormFooterButtons
           primaryButtonLabel={strings.next}
-          // secondaryButtonLabel={strings.next}
           onPressPrimaryButton={onNextPress}
-          // onPressSecondaryButton={onNextPress}
           hideSecondaryButton={true}
         />
       </KeyboardAwareScrollView>

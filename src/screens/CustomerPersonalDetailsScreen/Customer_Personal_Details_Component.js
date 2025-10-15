@@ -18,6 +18,7 @@ import {
   Spacing,
   Text,
   theme,
+  Button,
 } from '@caryaar/components';
 // import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {FullLoader} from '../../components';
@@ -544,12 +545,10 @@ const Customer_Personal_Details_Component = ({
             {...(restInputProps?.avgMonthlyBankBalance || {})}
           />
         </GroupWrapper>
-        <FormFooterButtons
-          primaryButtonLabel={isCreatingLoanApplication ? 'Next' : 'Save'}
-          // secondaryButtonLabel={strings.next}
-          onPressPrimaryButton={onNextPress}
-          // onPressSecondaryButton={onNextPress}
-          hideSecondaryButton
+        <Spacing size="lg" />
+        <Button
+          label={isCreatingLoanApplication ? 'Next' : 'Save'}
+          onPress={onNextPress}
         />
       </KeyboardAwareScrollView>
 

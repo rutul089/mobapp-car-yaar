@@ -18,6 +18,7 @@ import {uploadApplicantPhoto} from '../../utils/fileUploadUtils';
 import {showApiErrorToast, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Vehicle_Odometer_Component from './Vehicle_Odometer_Component';
+import strings from '../../locales/strings';
 
 class VehicleOdometerScreen extends Component {
   constructor(props) {
@@ -133,7 +134,7 @@ class VehicleOdometerScreen extends Component {
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
     const isFormValid = this.validateAllFields();
     if (!isFormValid) {
-      return showToast('error', 'Please enter all field');
+      return showToast('error', strings.errorMissingField);
     }
 
     let payload = {

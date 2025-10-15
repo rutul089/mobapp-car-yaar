@@ -1,7 +1,6 @@
 import {
   AutocompleteInput,
   Card,
-  FormFooterButtons,
   Header,
   images,
   Input,
@@ -12,6 +11,7 @@ import {
   Text,
   theme,
   DropdownModal,
+  Button,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet} from 'react-native';
@@ -253,13 +253,8 @@ const Finance_Details_Component = ({
             </>
           )}
         </Card>
-        <FormFooterButtons
-          primaryButtonLabel={strings.next}
-          onPressPrimaryButton={onNextPress}
-          // secondaryButtonLabel={strings.next}
-          // onPressSecondaryButton={onNextPress}
-          hideSecondaryButton={true}
-        />
+        <Spacing size="lg" />
+        <Button variant="link" onPress={onNextPress} label={strings.next} />
         <Spacing size={theme.sizes.padding + 10} />
       </KeyboardAwareScrollView>
 

@@ -16,6 +16,7 @@ import {
   vehicleFilterOption,
 } from '../../constants/enums';
 import debounce from 'lodash.debounce';
+import {Alert} from 'react-native';
 
 class Vehicles extends Component {
   constructor(props) {
@@ -92,14 +93,23 @@ class Vehicles extends Component {
    */
   onWrapperClick = item => {
     const {fullScreen} = this.state;
+
     this.props.resetSelectedVehicle();
+
     if (!fullScreen) {
       this.props.selectedLoanType(loanType.addVehicle);
     }
-    // this.props.navigation.navigate(ScreenNames.VehicleDetail, {
-    //   vehicleId: item?.UsedVehicle?.vehicleId,
-    // });
-    // return;
+
+    if (fullScreen && item?.hasActiveLoan) {
+      console.log('item------>', JSON.stringify(item));
+      Alert.alert(
+        'Vehicle Not Available',
+        'This vehicle already has an active loan. You cannot assign it to another customer.',
+        [{text: 'OK'}],
+      );
+      return;
+    }
+
     navigate(ScreenNames.VehicleDetail, {
       vehicleId: item?.UsedVehicle?.vehicleId,
     });

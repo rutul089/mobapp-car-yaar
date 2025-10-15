@@ -20,6 +20,7 @@ import {
   getLabelFromEnum,
   partnerUserPositionValue,
 } from '../../../constants/enums';
+import strings from '../../../locales/strings';
 
 class EditProfileScreen extends Component {
   state = {
@@ -62,7 +63,7 @@ class EditProfileScreen extends Component {
     };
     const isFormValid = this.validateAllFields();
     if (!isFormValid) {
-      return showToast('error', 'Please enter all field');
+      return showToast('error', strings.errorMissingField);
     }
     this.props.updateProfileThunk(
       param,

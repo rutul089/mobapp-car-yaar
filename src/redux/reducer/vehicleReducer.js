@@ -5,6 +5,7 @@ import {
   UPDATE,
   VEHICLE_EXISTS,
   VEHICLE_DETAILS,
+  SUBMIT_VEHICLE,
 } from '../actions/actionType';
 
 const initialState = {
@@ -33,7 +34,7 @@ const vehicleReducer = (state = initialState, action) => {
     case UPDATE.REQUEST:
     case VEHICLE_EXISTS.REQUEST:
     case VEHICLE_DETAILS.REQUEST:
-    case VEHICLE_DETAILS.REQUEST:
+    case SUBMIT_VEHICLE.REQUEST:
       return {
         ...state,
         loading: true,
@@ -70,6 +71,7 @@ const vehicleReducer = (state = initialState, action) => {
     case UPDATE.FAILURE:
     case VEHICLE_BY_ID.FAILURE:
     case VEHICLE_EXISTS.FAILURE:
+    case SUBMIT_VEHICLE.FAILURE:
       return {
         ...state,
         loading: false,
@@ -90,6 +92,7 @@ const vehicleReducer = (state = initialState, action) => {
       };
 
     case VEHICLE_BY_ID.SUCCESS:
+    case SUBMIT_VEHICLE.SUCCESS:
       return {
         ...state,
         selectedVehicle: action.payload,
@@ -123,6 +126,12 @@ const vehicleReducer = (state = initialState, action) => {
       return {
         ...state,
         newVehicleData: action.payload,
+        loading: false,
+      };
+
+    case VEHICLE_DETAILS.FAILURE:
+      return {
+        ...state,
         loading: false,
       };
 

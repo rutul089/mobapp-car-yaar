@@ -95,14 +95,14 @@ export const validateField = (key, value, isOptional) => {
 
     case 'fatherName':
       return trimmedValue === ''
-        ? 'Please enter Father/mother name'
+        ? 'Please enter father/mother name'
         : !nameRegex.test(trimmedValue)
           ? 'Father/mother name should only contain alphabets and spaces'
           : '';
 
     case 'spouseName':
       return trimmedValue === ''
-        ? 'Please enter Spouse name'
+        ? 'Please enter spouse name'
         : !nameRegex.test(trimmedValue)
           ? 'Spouse name should only contain alphabets and spaces'
           : '';
@@ -165,7 +165,7 @@ export const validateField = (key, value, isOptional) => {
 
     case 'bankName':
     case 'bankNameValue':
-      return trimmedValue === '' ? 'Please enter Bank Name.' : '';
+      return trimmedValue === '' ? 'Please enter bank name.' : '';
 
     case 'fullName':
     case 'ownerName':
@@ -175,7 +175,7 @@ export const validateField = (key, value, isOptional) => {
             key === 'ownerName'
               ? 'owner name'
               : key === 'fullName'
-                ? 'Full Name'
+                ? 'fullname'
                 : 'account holder name'
           }`
         : !nameRegex.test(trimmedValue)
@@ -209,11 +209,11 @@ export const validateField = (key, value, isOptional) => {
 
     case 'relationshipHome':
     case 'relationshipOffice':
-      return trimmedValue === '' ? 'Please select a Relationship.' : '';
+      return trimmedValue === '' ? 'Please select a relationship.' : '';
 
     case 'emiPaid': {
       if (trimmedValue === '') {
-        return 'Please enter EMI Paid.';
+        return 'Please enter EMI paid.';
       }
       const emiValue = Number(trimmedValue);
       if (isNaN(emiValue)) {

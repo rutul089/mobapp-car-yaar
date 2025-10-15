@@ -157,3 +157,15 @@ export const searchVehiclesByKeyword = async (search, page = 1, limit = 10) => {
     throw error;
   }
 };
+export const submitVehicleById = async (vehicleId, data) => {
+  try {
+    const response = await axiosInstance.put(
+      `/vehicles/submit-vehicle/${vehicleId}`,
+      data,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to update vehicle data:', error);
+    throw error;
+  }
+};

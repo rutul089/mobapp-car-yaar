@@ -30,6 +30,7 @@ class CustomerInfoScreen extends Component {
       customerId: getScreenParam(this.props.route, 'param')?.customerId,
       isDeleteModalVisible: false,
       isLoading: false,
+      onNextPress: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
     this.handleEditDetailPress = this.handleEditDetailPress.bind(this);
@@ -41,12 +42,14 @@ class CustomerInfoScreen extends Component {
   }
 
   fetchCustomerDetailsThunk = () => {
+    this.setState({onNextPress: false});
     const {customerId} = this.state;
     this.props.fetchCustomerDetailsThunk(customerId);
   };
 
   onNextPress = () => {
     const {isCreatingLoanApplication} = this.props;
+    this.setState({onNextPress: true});
     isCreatingLoanApplication
       ? this.createLoanApplication()
       : navigate(ScreenNames.MoreOnFinancial);
@@ -66,7 +69,8 @@ class CustomerInfoScreen extends Component {
   };
 
   _safeGet = (obj, path) => {
-    return safeGet(this.props.loading, obj, path, '-');
+    const {onNextPress} = this.state;
+    return safeGet(this.props.loading && !onNextPress, obj, path, '-');
   };
 
   createLoanApplication = () => {
@@ -78,10 +82,12 @@ class CustomerInfoScreen extends Component {
       selectedCustomer,
     } = this.props;
 
+    console.log({selectedCustomer});
+
     if (!selectedCustomer?.isComplete) {
       return showToast(
         'info',
-        'Please fill out all customer details before proceeding to the next step.',
+        'Please fill out all or edit customer details before proceeding to the next step.',
         'bottom',
         3000,
       );
@@ -144,7 +150,7 @@ class CustomerInfoScreen extends Component {
   };
 
   render() {
-    const {loading, selectedCustomer} = this.props;
+    const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
     const {details = {}} = selectedCustomer || {};
 
     let customerNote = `${capitalizeFirstLetter(
@@ -280,6 +286,7 @@ class CustomerInfoScreen extends Component {
           handleDeleteCustomerInfo: this.handleDeleteCustomerInfo,
           isLoading: isLoading,
         }}
+        isCreatingLoanApplication={isCreatingLoanApplication}
       />
     );
   }

@@ -4,6 +4,7 @@ import {
   fetchVehicles,
   getVehicleByRegisterNumber,
   searchVehiclesByKeyword,
+  submitVehicleById,
   updateVehicleById,
 } from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
@@ -13,6 +14,7 @@ import {
   UPDATE,
   VEHICLE_EXISTS,
   VEHICLE_DETAILS,
+  SUBMIT_VEHICLE,
 } from './actionType';
 
 import types from './types';
@@ -172,7 +174,6 @@ export const getVehicleByRegisterNumberThunk = (
 
     try {
       const response = await getVehicleByRegisterNumber(registerNumber);
-      console.log('responseresponse', JSON.stringify(response));
       dispatch({
         type: VEHICLE_DETAILS.SUCCESS,
         payload: response.data,
@@ -192,3 +193,25 @@ export const getVehicleByRegisterNumberThunk = (
 export const resetSelectedVehicle = () => ({
   type: RESET_SELECTED_VEHICLE.SUCCESS,
 });
+
+export const submitVehicleThunk = (id, onSuccess, onFailure) => {
+  return async dispatch => {
+    dispatch({type: SUBMIT_VEHICLE.REQUEST});
+
+    try {
+      const response = await submitVehicleById(id);
+      dispatch({
+        type: SUBMIT_VEHICLE.SUCCESS,
+        payload: response.data,
+      });
+      onSuccess?.(response?.data);
+    } catch (error) {
+      dispatch({
+        type: SUBMIT_VEHICLE.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};

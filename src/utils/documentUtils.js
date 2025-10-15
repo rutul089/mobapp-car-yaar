@@ -19,7 +19,12 @@ import {showToast} from './helper';
 export const handleFileSelection = async (type, callback) => {
   try {
     if (type === 'camera') {
-      const result = await launchCamera({mediaType: 'photo', quality: 0.8});
+      const result = await launchCamera({
+        mediaType: 'photo',
+        quality: 0.5,
+        saveToPhotos: true,
+        conversionQuality: 0.5,
+      });
 
       if (!result.didCancel && result.assets?.length > 0) {
         callback(result.assets[0]);
@@ -30,6 +35,7 @@ export const handleFileSelection = async (type, callback) => {
       const result = await launchImageLibrary({
         mediaType: 'photo',
         quality: 0.3,
+        conversionQuality: 0.5,
       });
 
       if (!result.didCancel && result.assets?.length > 0) {

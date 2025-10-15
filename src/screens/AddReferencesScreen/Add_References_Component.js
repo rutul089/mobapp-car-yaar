@@ -211,6 +211,7 @@ const Add_References_Component = ({
           }
           onPress={onConfirmLoanPress}
         />
+        <Spacing size="xl" />
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={showModal}

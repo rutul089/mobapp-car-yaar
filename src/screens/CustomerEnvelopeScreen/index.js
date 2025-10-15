@@ -22,6 +22,7 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Envelop_Component from './Customer_Envelop_Component';
+import strings from '../../locales/strings';
 
 class CustomerEnvelopeScreen extends Component {
   constructor(props) {
@@ -164,7 +165,7 @@ class CustomerEnvelopeScreen extends Component {
         'warning',
         errors?.salesExecutiveValue ||
           errors?.carYarPartnerValue ||
-          'Required field cannot be empty.',
+          strings.errorMissingField,
         'bottom',
         3000,
       );

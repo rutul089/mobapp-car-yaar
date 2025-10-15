@@ -38,7 +38,7 @@ const Vehicle_Images_Component = ({
                 image={fileUri}
                 onDeletePress={doc.onDeletePress}
                 viewImage={doc.viewImage}
-                btnLabel={'Click to Upload\nImage or PDF'}
+                btnLabel={'Click to\nUpload Image'}
                 uploadMedia={doc.uploadMedia}
                 fileType={fileType}
                 // isDocument={fileType !== 'image'}

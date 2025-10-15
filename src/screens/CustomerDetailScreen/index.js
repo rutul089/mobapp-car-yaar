@@ -19,6 +19,7 @@ import {
 import {getErrorMessage, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Detail_Component from './Customer_Detail_Component';
+import strings from '../../locales/strings';
 
 class CustomerDetailView extends Component {
   constructor(props) {
@@ -79,7 +80,7 @@ class CustomerDetailView extends Component {
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
 
@@ -109,7 +110,7 @@ class CustomerDetailView extends Component {
     const isFormValid = this.validateAllFields(loanType.loan);
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
     navigate(ScreenNames.CustomerPersonalDetails);

@@ -11,6 +11,7 @@ import {
   Spacing,
   Text,
   theme,
+  Button,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -220,12 +221,11 @@ const CarFinance_Details_Component = ({
             {...(restInputProps?.tenure || {})}
           />
         </Card>
-        <FormFooterButtons
-          primaryButtonLabel={strings.next}
-          onPressPrimaryButton={handleNextStepPress}
-          // secondaryButtonLabel={strings.next}
-          // onPressSecondaryButton={onNextPress}
-          hideSecondaryButton={true}
+        <Spacing size="lg" />
+        <Button
+          label={strings.next}
+          onPress={handleNextStepPress}
+          variant="link"
         />
 
         <DropdownModal
@@ -247,7 +247,7 @@ const CarFinance_Details_Component = ({
             selectEmiPaid?.(item);
           }}
           onClose={() => setShowEmiPaidModal(false)}
-          title="Select Emi Paid"
+          title="Select EMI Paid"
         />
       </KeyboardAwareScrollView>
       {loading && <Loader visible={loading} />}

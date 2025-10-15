@@ -15,6 +15,7 @@ import {
   verifyOtpForCibilThunk,
   fetchCibilScoreThunk,
 } from '../../redux/actions';
+import strings from '../../locales/strings';
 
 class CreateCIBILScreen extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ class CreateCIBILScreen extends Component {
     let params = getScreenParam(this.props.route, 'params');
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
 

@@ -133,20 +133,22 @@ const Home_Component = ({
             Select Car Type
           </Text>
           <View style={styles.row}>
-            <OptionCard
-              value={vehicleType.used}
-              label="Used Vehicle"
-              icon={images.usedVehicle}
-              onSelect={onSelectedCarType}
-              isSelected={selectedCarType === vehicleType.used}
-            />
-            <OptionCard
+            <View style={{width: '50%'}}>
+              <OptionCard
+                value={vehicleType.used}
+                label="Used Vehicle"
+                icon={images.usedVehicle}
+                onSelect={onSelectedCarType}
+                isSelected={selectedCarType === vehicleType.used}
+              />
+            </View>
+            {/* <OptionCard
               value={vehicleType.new}
               label="New Vehicle"
               icon={images.newVehicle}
               onSelect={onSelectedCarType}
               isSelected={selectedCarType === vehicleType.new}
-            />
+            /> */}
           </View>
 
           {/* ---------- Loan Type Selection ---------- */}

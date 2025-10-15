@@ -13,9 +13,14 @@ import {
   postCustomerReferenceDetailsThunk,
   submitLoanApplicationThunk,
 } from '../../redux/actions';
-import {formatVehicleNumber, showToast} from '../../utils/helper';
+import {
+  formatVehicleNumber,
+  showToast,
+  validateReferences,
+} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Add_References_Component from './Add_References_Component';
+import strings from '../../locales/strings';
 
 class AddReferencesScreen extends Component {
   constructor(props) {
@@ -114,7 +119,7 @@ class AddReferencesScreen extends Component {
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
 
@@ -136,6 +141,12 @@ class AddReferencesScreen extends Component {
     });
 
     const payload = {references};
+
+    const result = validateReferences(references);
+
+    if (!result?.isValid) {
+      return showToast('error', result.message);
+    }
 
     const callback = response => {
       if (response?.success) {

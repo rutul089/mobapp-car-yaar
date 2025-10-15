@@ -48,7 +48,10 @@ const View_Loan_Details_Component = ({
         onBackPress={() => goBack()}
         hideBorder
       />
-      <ScrollView bounces={false} contentContainerStyle={styles.wrapper}>
+      <ScrollView
+        bounces={false}
+        contentContainerStyle={[styles.wrapper, {paddingBottom: 40}]}
+        keyboardShouldPersistTaps="always">
         <View style={styles.headerWrapper}>
           <CardWrapper
             showLeftText

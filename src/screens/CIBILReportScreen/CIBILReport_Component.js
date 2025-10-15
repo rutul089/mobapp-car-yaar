@@ -21,7 +21,7 @@ const CIBILReport_Component = ({
   headerProp,
   restInputProps = {},
   loading,
-  lastUpdatedOn = 'Score as of 30 Sep 2025',
+  lastUpdatedOn,
   cibilScore = '800',
   cibilStatus,
 }) => {
@@ -51,12 +51,12 @@ const CIBILReport_Component = ({
             </View>
             {lastUpdatedOn && (
               <Text hankenGroteskSemiBold type={'label'} textAlign={'center'}>
-                Score as of 30 Sep 2025
+                {`Score as of ${lastUpdatedOn}`}
               </Text>
             )}
           </DetailInfoCard>
           <Spacing size="xl" />
-          <Button label={'Save'} onPress={onSavePress} />
+          <Button label={'Next'} onPress={onSavePress} />
         </View>
         <View style={styles.bottomWrapper}>
           <Image

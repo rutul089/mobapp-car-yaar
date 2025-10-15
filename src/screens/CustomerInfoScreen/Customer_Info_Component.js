@@ -32,17 +32,22 @@ const Customer_Info_Component = ({
   loading,
   deleteModalProps,
   showDeleteCustomerModal,
+  isCreatingLoanApplication,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
         title="Customer Details"
         onBackPress={() => goBack()}
-        showRightContent={true}
+        showRightContent={!isCreatingLoanApplication}
         rightIconName={images.icon_delete}
         onPressRightContent={showDeleteCustomerModal}
       />
-      <ScrollView contentContainerStyle={styles.scrollWrapper} bounces={false}>
+
+      <ScrollView
+        contentContainerStyle={styles.scrollWrapper}
+        bounces={false}
+        keyboardShouldPersistTaps="handled">
         <View style={styles.headerWrapper}>
           <CardWrapper
             leftText={customerInfo?.status}
@@ -89,11 +94,11 @@ const Customer_Info_Component = ({
             data={bankDetails}
             isSemiBold={false}
           />
-
-          <Spacing size="xl" />
+          <Spacing size="lg" />
           <Button label={strings.next} onPress={onNextPress} />
         </View>
       </ScrollView>
+
       <DeleteConfirmationContent
         isVisible={deleteModalProps?.isDeleteModalVisible}
         onModalHide={deleteModalProps?.omModalHide}
@@ -105,7 +110,7 @@ const Customer_Info_Component = ({
         isLoading={deleteModalProps?.isLoading}
       />
 
-      {loading && <Loader visible={loading} />}
+      {loading ? <Loader visible={loading} /> : null}
     </SafeAreaWrapper>
   );
 };

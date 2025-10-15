@@ -15,8 +15,8 @@ import {
 } from '@caryaar/components';
 import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import strings from '../../locales/strings';
 import {FullLoader} from '../../components';
+import strings from '../../locales/strings';
 
 const Vehicle_Odometer_Component = ({
   params,
@@ -83,14 +83,8 @@ const Vehicle_Odometer_Component = ({
             {...(restInputProps?.vehicleCondition || {})}
           />
         </GroupWrapper>
-        <Spacing size="xl" />
+        <Spacing size="lg" />
         <Button label={strings.next} variant="link" onPress={onNextPress} />
-        {/* <FormFooterButtons
-          primaryButtonLabel={strings.btnSaveDraft}
-          secondaryButtonLabel={strings.next}
-          onPressPrimaryButton={onSaveDraftPress}
-          onPressSecondaryButton={onNextPress}
-        /> */}
       </KeyboardAwareScrollView>
       <DropdownModal
         visible={showModal}

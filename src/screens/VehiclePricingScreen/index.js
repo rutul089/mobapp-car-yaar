@@ -13,6 +13,7 @@ import {uploadApplicantPhoto} from '../../utils/fileUploadUtils';
 import {showApiErrorToast, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Vehicle_Pricing_Component from './Vehicle_Pricing_Component';
+import strings from '../../locales/strings';
 
 class VehiclePricingScreen extends Component {
   constructor(props) {
@@ -94,7 +95,7 @@ class VehiclePricingScreen extends Component {
     let vehicleId = selectedVehicle?.UsedVehicle?.id;
 
     if (!isFormValid) {
-      return showToast('error', 'Please enter all field');
+      return showToast('error', strings.errorMissingField);
     }
 
     let payload = {

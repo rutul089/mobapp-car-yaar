@@ -8,6 +8,7 @@ import {
   navigate,
 } from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+import moment from 'moment';
 
 class CIBILReportScreen extends Component {
   constructor(props) {
@@ -50,6 +51,7 @@ class CIBILReportScreen extends Component {
         }}
         cibilScore={cibilReport?.score}
         onSavePress={this.onSavePress}
+        lastUpdatedOn={moment().format('DD MMM YYYY')}
       />
     );
   }

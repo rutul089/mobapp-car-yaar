@@ -49,7 +49,8 @@ class ThankYouScreen extends Component {
   };
 
   onTrackLoanStatusPress = () => {
-    navigate(ScreenNames.TrackApplication);
+    const {selectedLoanApplication, loading} = this.props;
+    navigate(ScreenNames.TrackApplication, {params: selectedLoanApplication});
   };
 
   componentWillUnmount() {

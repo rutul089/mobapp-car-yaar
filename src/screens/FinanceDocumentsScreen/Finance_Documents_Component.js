@@ -48,7 +48,6 @@ const Finance_Documents_Component = ({
           onPressSecondaryButton={handleSaveDraftPress}
           hideSecondaryButton
         />
-        <Spacing size="md" />
       </ScrollView>
 
       <FilePickerModal {...fileModalProps} />

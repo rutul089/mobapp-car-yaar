@@ -17,7 +17,7 @@ class TrackApplicationScreen extends Component {
 
   async componentDidMount() {
     let navState = getScreenParam(this.props.route, 'params');
-    let applicationId = navState?.id || '676f4163-3980-4fd0-a0ce-81802935eb8d';
+    let applicationId = navState?.id;
 
     this.setState({
       loading: true,
@@ -26,6 +26,7 @@ class TrackApplicationScreen extends Component {
     try {
       const response = await fetchLoanTrackingDetailsByAppId(applicationId);
       if (response?.success) {
+        console.log('--->', JSON.stringify(response?.data));
         this.setState({
           trackingSteps: response?.data,
         });

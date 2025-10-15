@@ -492,3 +492,30 @@ export const generateMaskedAadhaar = (options = {}) => {
 
   return `${mask}${trailingStr}`;
 };
+
+export const validateReferences = references => {
+  if (!Array.isArray(references) || references.length < 2) {
+    return true; // not enough references to compare
+  }
+
+  const [homeRef, officeRef] = references;
+
+  // Fields to compare
+  const fieldsToCheck = ['referenceName', 'mobileNumber', 'address', 'pincode'];
+
+  for (const field of fieldsToCheck) {
+    if (
+      homeRef[field]?.trim().toLowerCase() ===
+      officeRef[field]?.trim().toLowerCase()
+    ) {
+      return {
+        isValid: false,
+        message: `Home and Office reference cannot have the same ${field
+          .replace(/([A-Z])/g, ' $1')
+          .toLowerCase()}.`,
+      };
+    }
+  }
+
+  return {isValid: true};
+};

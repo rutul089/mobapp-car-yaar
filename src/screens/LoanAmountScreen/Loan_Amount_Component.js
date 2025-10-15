@@ -11,6 +11,7 @@ import {
   Text,
   theme,
   Loader,
+  Button,
 } from '@caryaar/components';
 import strings from '../../locales/strings';
 import {sanitizeAmount} from '../../utils/inputHelper';
@@ -60,12 +61,11 @@ const Loan_Amount_Component = ({
           }}
           maxLength={15}
         />
-        <FormFooterButtons
-          primaryButtonLabel={strings.next}
-          // secondaryButtonLabel={strings.next}
-          onPressPrimaryButton={onNextButtonPress}
-          // onPressSecondaryButton={onNextButtonPress}
-          hideSecondaryButton
+        <Spacing size="lg" />
+        <Button
+          label={strings.next}
+          onPress={onNextButtonPress}
+          variant="link"
         />
       </KeyboardAwareScrollView>
       {loading && <Loader visible={loading} />}

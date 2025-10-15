@@ -10,6 +10,7 @@ import {addCustomerLoanAmountThunk} from '../../redux/actions';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Loan_Amount_Component from './Loan_Amount_Component';
+import strings from '../../locales/strings';
 
 class LoanAmountScreen extends Component {
   constructor(props) {
@@ -46,7 +47,7 @@ class LoanAmountScreen extends Component {
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
     let payload = {loanAmount};

@@ -14,6 +14,7 @@ import {
   sendOtpForCibilThunk,
   verifyOtpForCibilThunk,
 } from '../../redux/actions';
+import strings from '../../locales/strings';
 
 class CheckCIBILScreen extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class CheckCIBILScreen extends Component {
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
 
@@ -90,7 +91,7 @@ class CheckCIBILScreen extends Component {
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
 

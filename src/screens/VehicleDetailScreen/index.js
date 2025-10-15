@@ -12,6 +12,7 @@ import {
   showToast,
 } from '../../utils/helper';
 import Vehicle_Detail_Component from './Vehicle_Detail_Component';
+import {Alert} from 'react-native';
 
 class VehicleDetail extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class VehicleDetail extends Component {
     this.state = {
       vehicleInfo: [],
       basicDetail: '',
+      isLoading: false,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onPressSecondaryButton = this.onPressSecondaryButton.bind(this);
@@ -45,16 +47,26 @@ class VehicleDetail extends Component {
     }
   }
   fetchVehicleFromId = id => {
-    this.props.fetchVehicleFromIdThunk(id, response => {
-      this.setState({
-        basicDetail: {
-          make: response?.make,
-          model: response?.model,
-          trim: response?.trim,
-          colour: response?.colour,
-        },
-      });
-    });
+    this.props.fetchVehicleFromIdThunk(
+      id,
+      response => {
+        this.setState({
+          basicDetail: {
+            make: response?.make,
+            model: response?.model,
+            trim: response?.trim,
+            colour: response?.colour,
+            isLoading: true,
+          },
+        });
+      },
+      err => {
+        console.log('13123', err);
+        this.setState({
+          isLoading: false,
+        });
+      },
+    );
   };
 
   safeGet = (obj, path) => {
@@ -73,22 +85,33 @@ class VehicleDetail extends Component {
     const {isCreatingLoanApplication, selectedLoanType, selectedVehicle} =
       this.props;
     let isDraft = selectedVehicle?.isDraft;
+
     if (isCreatingLoanApplication && isDraft) {
-      return showToast(
-        'info',
-        'Vehicles in draft state cannot be used for loan application.',
-        'bottom',
-        3000,
+      Alert.alert(
+        'Draft Vehicle',
+        'Vehicles in draft state please complete the vehicle onboarding..',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              this.onPressSecondaryButton();
+            },
+          },
+        ],
       );
+      return;
+      // return showToast(
+      //   'info',
+      //   'Vehicles in draft state please complete the vehicle onboarding..',
+      //   'bottom',
+      //   3000,
+      // );
     }
-    let screenName = '';
-    if (isCreatingLoanApplication) {
-      screenName = ScreenNames.VehicleHypothecation;
-    } else if (isCreatingLoanApplication) {
-      screenName = ScreenNames.CustomerFullScreen;
-    } else {
-      screenName = ScreenNames.CustomerFullScreen;
-    }
+
     navigate(
       isCreatingLoanApplication
         ? ScreenNames.CustomerFullScreen
@@ -104,7 +127,7 @@ class VehicleDetail extends Component {
 
   render() {
     const {loading, selectedVehicle, isCreatingLoanApplication} = this.props;
-    const {basicDetail} = this.state;
+    const {basicDetail, isLoading} = this.state;
     let {UsedVehicle} = selectedVehicle || {};
     let manufactureYear = UsedVehicle?.manufactureYear;
     let {model, trim, colour} = basicDetail || {};
@@ -196,7 +219,7 @@ class VehicleDetail extends Component {
         ]}
         onInfoChange={this.handleInfoChange}
         status={status}
-        loading={loading}
+        loading={isLoading}
         isCreatingLoanApplication={isCreatingLoanApplication}
         carImage={UsedVehicle?.images?.[0]?.frontView?.[0]}
       />

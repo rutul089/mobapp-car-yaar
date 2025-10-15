@@ -9,13 +9,14 @@ import {
 import {isValidIndianVehicleNumber} from '../../utils/validation';
 import Search_Component from './Search_Component';
 import ScreenNames from '../../constants/ScreenNames';
+import {Alert} from 'react-native';
 
 class SearchScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showAddVehicle: false,
-      vehicleNumber: 'GJ01YB6356',
+      vehicleNumber: '',
       showError: false,
       statusMsg: '',
       showStatusIcon: false,
@@ -35,7 +36,9 @@ class SearchScreen extends Component {
     goBack();
   };
 
-  onAddVehicle = () => {};
+  onAddVehicle = () => {
+    alert('TODO//Need add new vehicle flow');
+  };
 
   onSearchVehicle = () => {
     const {vehicleNumber} = this.state;
@@ -47,28 +50,53 @@ class SearchScreen extends Component {
       });
       return;
     }
-    this.props.checkVehicleExistsThunk(vehicleNumber, response => {
-      if (response?.data) {
-        return this.props.getVehicleByRegisterNumberThunk(
-          vehicleNumber,
-          _response => {
-            navigate(ScreenNames.VehicleDetail, {
-              addNewVehicle: true,
-              UsedVehicle: {
-                vehicleId: _response?.data?.vehicleId,
-              },
+    this.props.getVehicleByRegisterNumberThunk(
+      vehicleNumber,
+      _response => {
+        setTimeout(() => {
+          navigate(ScreenNames.VehicleDetail, {
+            addNewVehicle: true,
+            UsedVehicle: {
               vehicleId: _response?.data?.vehicleId,
-            });
-          },
-          () => {},
-        );
-      }
+            },
+            vehicleId: _response?.data?.vehicleId,
+          });
+        }, 250);
 
-      this.setState({
-        statusMsg: 'Oh no! Vehicle not found',
-        vehicleExists: response?.data,
-      });
-    });
+        this.setState({
+          vehicleExists: true,
+        });
+      },
+      () => {
+        this.setState({
+          statusMsg: 'Oh no! Vehicle not found',
+          vehicleExists: false,
+        });
+      },
+    );
+    return;
+    // this.props.checkVehicleExistsThunk(vehicleNumber, response => {
+    //   if (!response?.data) {
+    //     return this.props.getVehicleByRegisterNumberThunk(
+    //       vehicleNumber,
+    //       _response => {
+    //         navigate(ScreenNames.VehicleDetail, {
+    //           addNewVehicle: true,
+    //           UsedVehicle: {
+    //             vehicleId: _response?.data?.vehicleId,
+    //           },
+    //           vehicleId: _response?.data?.vehicleId,
+    //         });
+    //       },
+    //       () => {},
+    //     );
+    //   }
+
+    //   this.setState({
+    //     statusMsg: 'Oh no! Vehicle not found',
+    //     vehicleExists: response?.data,
+    //   });
+    // });
   };
 
   onVehicleNumberChange = value => {

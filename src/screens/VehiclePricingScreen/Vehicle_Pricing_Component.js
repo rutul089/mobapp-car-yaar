@@ -161,7 +161,7 @@ const Vehicle_Pricing_Component = ({
             placeholderTextColor={'#82828299'}
           />
         </GroupWrapper>
-
+        <Spacing size="lg" />
         <FormFooterButtons
           primaryButtonLabel={strings.next}
           secondaryButtonLabel={strings.next}

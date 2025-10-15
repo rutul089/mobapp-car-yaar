@@ -35,7 +35,6 @@ class DigiLockerAadhaarScreen extends Component {
    * Step 2: Handle navigation state change inside WebView
    */
   onNavigationStateChange = async navState => {
-    console.log('navState', JSON.stringify(navState?.url));
     const {navData} = this.state;
     const {route, navigation} = this.props;
     const {onGoBack} = route.params || {};
@@ -54,7 +53,6 @@ class DigiLockerAadhaarScreen extends Component {
 
       fetchAadhaarFromDigilocker(navData?.client_id)
         .then(data => {
-          console.log('Aadhaar data:', data);
           onGoBack?.(data);
           navigation.pop(2);
           // navigate(ScreenNames.CustomerPersonalDetails);

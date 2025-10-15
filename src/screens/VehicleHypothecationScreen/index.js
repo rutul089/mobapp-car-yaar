@@ -5,7 +5,7 @@ import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import Vehicle_Hypothecation_Component from './Vehicle_Hypothecation_Component';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
-import {updateVehicleByIdThunk} from '../../redux/actions';
+import {updateVehicleByIdThunk, submitVehicleThunk} from '../../redux/actions';
 
 class VehicleHypothecationScreen extends Component {
   constructor(props) {
@@ -39,11 +39,17 @@ class VehicleHypothecationScreen extends Component {
     };
 
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
-      if (isCreatingLoanApplication) {
-        navigate(ScreenNames.CustomerFullScreen);
-      } else {
-        navigate(ScreenNames.SuccessScreen);
-      }
+      this.props.submitVehicleThunk(
+        vehicleId,
+        () => {
+          if (isCreatingLoanApplication) {
+            navigate(ScreenNames.CustomerFullScreen);
+          } else {
+            navigate(ScreenNames.SuccessScreen);
+          }
+        },
+        error => {},
+      );
     });
 
     // switch (selectedLoanType) {
@@ -100,7 +106,7 @@ class VehicleHypothecationScreen extends Component {
   }
 }
 
-const mapActionCreators = {updateVehicleByIdThunk};
+const mapActionCreators = {updateVehicleByIdThunk, submitVehicleThunk};
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanType: loanData.selectedLoanType,

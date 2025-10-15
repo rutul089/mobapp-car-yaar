@@ -1,4 +1,3 @@
-/* eslint-disable no-unreachable */
 import {get} from 'lodash';
 import React, {Component} from 'react';
 import {Keyboard} from 'react-native';
@@ -17,13 +16,13 @@ import {
   navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
+  initiateAadharDigilockerThunk,
   initiateLoanApplicationThunk,
   searchBanksThunk,
   submitCustomerDetailsThunk,
   updateCustomerDetailsThunk,
   verifyAadharThunk,
   verifyPanThunk,
-  initiateAadharDigilockerThunk,
 } from '../../redux/actions';
 import {getPresignedDownloadUrl} from '../../services';
 import {
@@ -35,6 +34,7 @@ import {
   uploadApplicantPhoto,
   uploadDocumentViaPresignedUrl,
 } from '../../utils/fileUploadUtils';
+import {getNameMatchPercentage} from '../../utils/getNameMatchPercentage';
 import {
   convertToISODate,
   formatDate,
@@ -48,7 +48,7 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
-import {getNameMatchPercentage} from '../../utils/getNameMatchPercentage';
+import strings from '../../locales/strings';
 
 const initialState = {
   applicantPhoto: '',
@@ -94,8 +94,8 @@ const initialState = {
 //   bankName: 'State Bank of India',
 //   accountNumber: '123123124123',
 //   currentEmi: '',
-//   maxEmiAfford: '',
-//   avgMonthlyBankBalance: '',
+//   maxEmiAfford: '5000',
+//   avgMonthlyBankBalance: '25000',
 //   gender: genderType.MALE,
 //   currentLoan: currentLoanOptions.YES,
 //   aadharFrontPhoto: '',
@@ -184,18 +184,18 @@ class CustomerPersonalDetails extends Component {
       dob: formatDate(detail?.dob, 'DD/MM/YYYY'),
       address: detail?.address,
       pincode: detail?.pincode,
-      monthlyIncome: get(detail, 'monthlyIncome', '').toString(),
+      monthlyIncome: get(detail, 'monthlyIncome', '')?.toString(),
       bankName: detail?.bankName,
       bankNameValue: detail?.bankName,
       accountNumber: detail?.accountNumber,
       currentLoan: detail?.currentLoan ?? currentLoanOptions.YES,
-      currentEmi: get(detail, 'currentEmi', '').toString(),
-      maxEmiAfford: get(detail, 'maxEmiAfford', '').toString(),
+      currentEmi: get(detail, 'currentEmi', '')?.toString(),
+      maxEmiAfford: get(detail, 'maxEmiAfford', '')?.toString(),
       avgMonthlyBankBalance: get(
         detail,
         'avgMonthlyBankBalance',
         '',
-      ).toString(),
+      )?.toString(),
       occupation: detail?.occupation,
       incomeSource: detail?.incomeSource,
       aadharBackphoto: detail?.aadharBackphoto,
@@ -253,39 +253,78 @@ class CustomerPersonalDetails extends Component {
     );
   };
 
-  onNextPress = () => {
+  onNextPress = async () => {
     const {isEdit} = this.state;
     const {isCreatingLoanApplication} = this.props;
 
+    // 1️⃣ Validate the form
     const isFormValid = this.validateAllFields();
-
     if (!isFormValid) {
-      showToast('warning', 'Required field cannot be empty.', 'bottom', 3000);
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
 
+    // 2️⃣ Verify PAN & Aadhaar
+    const isVerified = await this.handleVerifyDocuments();
+
+    if (!isVerified && !isEdit) {
+      return; // toast already shown in handleVerifyDocuments
+    }
+
+    // 3️⃣ Prepare payload
     const payload = this.getPayload();
+
+    // 4️⃣ Success & Error callbacks
     const onSuccess = response => {
       if (isEdit && !isCreatingLoanApplication) {
         if (response?.success) {
           showToast('success', 'Customer detail updated successfully');
         }
-      } else {
-        this.callVerifyAadharCard();
-        if (isCreatingLoanApplication) {
-          return this.createLoanApplication();
-        }
-        navigateToTab(ScreenNames.Customer);
+        return;
       }
+
+      if (isCreatingLoanApplication) {
+        this.createLoanApplication();
+        return;
+      }
+
+      navigateToTab(ScreenNames.Customer);
     };
+
     const onError = error => showApiErrorToast(error);
+
+    // 5️⃣ Dispatch appropriate thunk
     this.props.updateCustomerDetailsThunk(payload, onSuccess, onError);
-    return;
+  };
+
+  handleVerifyDocuments = async () => {
+    const {
+      nameOnPanCard,
+      nameOnAadharCard,
+      isEdit,
+      aadharVerification,
+      panCardVerification,
+    } = this.state;
+
     if (isEdit) {
-      this.props.updateCustomerDetailsThunk(payload, onSuccess, onError);
-    } else {
-      this.props.submitCustomerDetailsThunk(payload, onSuccess, onError);
+      return true;
     }
+
+    if (!nameOnPanCard && !panCardVerification) {
+      return showToast('warning', 'Please verify your Pancard...');
+    }
+
+    if (!nameOnAadharCard && !aadharVerification) {
+      return showToast('warning', 'Please fetch your Aadhar card...');
+    }
+
+    if (getNameMatchPercentage(nameOnAadharCard, nameOnPanCard) <= 70) {
+      return showToast(
+        'error',
+        'The name on Aadhaar and PAN do not match closely enough. Please check your numbers.',
+      );
+    }
+    return true;
   };
 
   createLoanApplication = () => {
@@ -350,8 +389,8 @@ class CustomerPersonalDetails extends Component {
       currentEmi: {required: currentLoan},
       spouseName: {required: false},
       aadharBackphoto: {required: false},
-      aadharFrontPhoto: {required: false},
-      pancardPhoto: {required: false},
+      aadharNumber: {required: false},
+      panCardNumber: {required: false},
     };
 
     const fieldsToValidate = [
@@ -400,7 +439,6 @@ class CustomerPersonalDetails extends Component {
     });
 
     this.setState({errors, isFormValid});
-    console.log('errors', JSON.stringify(errors));
     return isFormValid;
   };
 
@@ -510,22 +548,25 @@ class CustomerPersonalDetails extends Component {
 
   verifyPanCard = () => {
     const {selectedCustomerId} = this.props;
-    const {panCardNumber, errors, aadharVerification, aadharNumber} =
-      this.state;
+    const {panCardNumber, errors} = this.state;
 
     Keyboard.dismiss();
 
+    // 1️⃣ Validate PAN input
     if (!panCardNumber || errors.panCardNumber) {
       return showToast(
         'error',
-        errors.panCardNumber || 'Please enter pan number',
+        errors.panCardNumber || 'Please enter PAN number',
       );
     }
 
-    let payload = {
+    // 2️⃣ Prepare payload
+    const payload = {
       customerId: selectedCustomerId,
       panCardNumber,
     };
+
+    // 3️⃣ Call verification thunk
     this.props.verifyPanThunk(payload, response => {
       const verifiedData = response?.data?.verified?.data;
       const isVerified =
@@ -534,24 +575,15 @@ class CustomerPersonalDetails extends Component {
         verifiedData?.pan_number &&
         verifiedData?.full_name;
 
-      if (isVerified) {
-        this.setState(
-          {
-            panCardNumber: __DEV__
-              ? generateRandomPAN()
-              : verifiedData.pan_number,
-            nameOnPanCard: verifiedData.full_name,
-            panCardVerification: true,
-          },
-          () => {
-            if (!aadharVerification && aadharNumber) {
-              this.callVerifyAadharCard();
-            }
-          },
-        );
-      } else {
-        showToast('error', 'PAN verification failed please try again');
+      if (!isVerified) {
+        return showToast('error', 'PAN verification failed. Please try again.');
       }
+
+      this.setState({
+        panCardNumber: __DEV__ ? generateRandomPAN() : verifiedData.pan_number,
+        nameOnPanCard: verifiedData.full_name,
+        panCardVerification: true,
+      });
     });
   };
 
@@ -560,55 +592,98 @@ class CustomerPersonalDetails extends Component {
 
     Keyboard.dismiss();
 
-    let payload = {
-      customerId: selectedCustomerId,
-    };
+    const payload = {customerId: selectedCustomerId};
 
     this.props.initiateAadharDigilockerThunk(payload, response => {
-      if (response?.success && response?.data && response?.data?.url) {
-        //DigiLockerAadhaarScreen RedirectingScreen
-        navigate(ScreenNames.RedirectingScreen, {
-          params: response?.data,
-          onGoBack: aadhaarData => {
-            if (aadhaarData?.success) {
-              const formattedDob = aadhaarData?.data?.aadhaar_xml_data?.dob
-                ?.split('-')
-                .reverse()
-                .join('/');
+      const digilockerUrl = response?.data?.url;
 
-              this.setState(
-                {
-                  aadharNumber: __DEV__
-                    ? generateMaskedAadhaar()
-                    : aadhaarData?.data?.aadhaar_xml_data?.masked_aadhaar,
-                  applicantName: aadhaarData?.data?.aadhaar_xml_data?.full_name,
-                  nameOnAadharCard:
-                    aadhaarData?.data?.aadhaar_xml_data?.full_name,
-                  dob: formattedDob,
-                },
-                () => {
-                  this.callVerifyAadharCard();
-                  this.onChangeField('aadharNumber', this.state.aadharNumber);
-                },
-              );
-            } else {
-              showToast('error', 'Please verify your aadhar card');
-            }
-          },
-        });
+      if (!response?.success || !digilockerUrl) {
+        return showToast(
+          'error',
+          'Aadhaar verification initiation failed.Please try after sometime.',
+        );
       }
+
+      // Redirect to DigiLocker Aadhaar screen
+      navigate(ScreenNames.RedirectingScreen, {
+        params: response.data,
+        onGoBack: this.handleAadhaarResponse,
+      });
     });
   };
 
+  handleAadhaarResponse = aadhaarData => {
+    if (!aadhaarData?.success) {
+      return showToast('error', 'Please verify your Aadhaar card');
+    }
+
+    const aadhaarInfo = aadhaarData.data?.aadhaar_xml_data;
+    const formattedDob = aadhaarInfo?.dob?.split('-').reverse().join('/');
+
+    this.setState(
+      {
+        aadharNumber: __DEV__
+          ? generateMaskedAadhaar()
+          : aadhaarInfo?.masked_aadhaar,
+        applicantName: aadhaarInfo?.full_name,
+        nameOnAadharCard: aadhaarInfo?.full_name,
+        dob: formattedDob,
+      },
+      () => {
+        this.callVerifyAadharCard();
+        this.onChangeField('aadharNumber', this.state.aadharNumber);
+      },
+    );
+  };
+
+  // verifyAadharCard = () => {
+  //   const {selectedCustomerId} = this.props;
+
+  //   Keyboard.dismiss();
+
+  //   let payload = {
+  //     customerId: selectedCustomerId,
+  //   };
+
+  //   this.props.initiateAadharDigilockerThunk(payload, response => {
+  //     if (response?.success && response?.data && response?.data?.url) {
+  //       //DigiLockerAadhaarScreen RedirectingScreen
+  //       navigate(ScreenNames.RedirectingScreen, {
+  //         params: response?.data,
+  //         onGoBack: aadhaarData => {
+  //           if (aadhaarData?.success) {
+  //             const formattedDob = aadhaarData?.data?.aadhaar_xml_data?.dob
+  //               ?.split('-')
+  //               .reverse()
+  //               .join('/');
+
+  //             this.setState(
+  //               {
+  //                 aadharNumber: __DEV__
+  //                   ? generateMaskedAadhaar()
+  //                   : aadhaarData?.data?.aadhaar_xml_data?.masked_aadhaar,
+  //                 applicantName: aadhaarData?.data?.aadhaar_xml_data?.full_name,
+  //                 nameOnAadharCard:
+  //                   aadhaarData?.data?.aadhaar_xml_data?.full_name,
+  //                 dob: formattedDob,
+  //               },
+  //               () => {
+  //                 this.callVerifyAadharCard();
+  //                 this.onChangeField('aadharNumber', this.state.aadharNumber);
+  //               },
+  //             );
+  //           } else {
+  //             showToast('error', 'Please verify your aadhar card');
+  //           }
+  //         },
+  //       });
+  //     }
+  //   });
+  // };
+
   callVerifyAadharCard = () => {
     const {selectedCustomerId} = this.props;
-    const {
-      aadharNumber,
-      errors,
-      nameOnAadharCard,
-      nameOnPanCard,
-      panCardNumber,
-    } = this.state;
+    const {aadharNumber, errors} = this.state;
 
     let payload = {
       customerId: selectedCustomerId,
@@ -622,21 +697,6 @@ class CustomerPersonalDetails extends Component {
         'error',
         errors.aadharNumber ||
           'Please enter a valid 12-digit or Verify your aadhar',
-      );
-    }
-
-    if (!panCardNumber || errors.panCardNumber) {
-      return showToast(
-        'error',
-        errors.aadharNumber ||
-          'Please enter a valid Pancard number or Verify your Pancard',
-      );
-    }
-
-    if (getNameMatchPercentage(nameOnAadharCard, nameOnPanCard) <= 70) {
-      return showToast(
-        'error',
-        'The name on Aadhaar and PAN do not match closely enough. Please check your numbers.',
       );
     }
 
@@ -694,7 +754,6 @@ class CustomerPersonalDetails extends Component {
 
     const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
-
     return (
       <Customer_Personal_Details_Component
         isEdit={isEdit}
@@ -770,8 +829,8 @@ class CustomerPersonalDetails extends Component {
             value: aadharNumber,
             isError: errors?.aadharNumber,
             statusMsg: errors?.aadharNumber,
-            isDisabled: aadharVerification && isEdit,
-            // isDisabled: true,
+            // isDisabled: aadharVerification && isEdit,
+            isDisabled: true,
             rightLabel: aadharVerification && isEdit ? '' : 'FETCH',
             rightLabelPress: this.verifyAadharCard,
             isRightIconVisible: aadharVerification,

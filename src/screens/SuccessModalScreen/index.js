@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Button,
   SafeAreaWrapper,
@@ -52,10 +53,10 @@ class SuccessModalScreen extends Component {
               Vehicle details have been saved successfully
             </Text>
             <Spacing />
-            <Text textAlign={'center'} type={'helper-text'} hankenGroteskMedium>
+            {/* <Text textAlign={'center'} type={'helper-text'} hankenGroteskMedium>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry.
-            </Text>
+            </Text> */}
           </View>
           <Spacing size={'xl'} />
           <View style={{width: '100%'}}>

@@ -24,6 +24,7 @@ const strings = {
   clickToCaptureOrUploadImage: 'Click to Capture or Upload Image',
   odometerReading: 'Odometer Reading',
   vehicleCondition: 'Vehicle Condition',
+  errorMissingField: 'Please fill in all required fields.',
 };
 
 export default strings;

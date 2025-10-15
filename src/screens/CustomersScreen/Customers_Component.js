@@ -87,9 +87,14 @@ const Customers_Component = ({
             item?.customer?.customerCategory,
           )} - ${capitalizeFirstLetter(item?.customer?.customerType)}`;
           let status = item?.customer?.isMobileVerified ? 'SAVED' : 'DRAFT';
-          if (isDeleted) {
-            return;
-          }
+          let isValidCustomer = item?.customer?.isComplete;
+          // if (isDeleted) {
+          //   return;
+          // }
+
+          // if (isCreatingLoanApplication && !isValidCustomer) {
+          //   return;
+          // }
           return (
             <CardWrapper
               onPress={() => onWrapperClick?.(item)}

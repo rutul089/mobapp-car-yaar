@@ -7,8 +7,9 @@ import {
   SafeAreaWrapper,
   VehicleCard,
   theme,
+  Spacing,
 } from '@caryaar/components';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
 import {getGradientColors, getStatusColor} from '../../utils/helper';
@@ -32,7 +33,13 @@ const Vehicle_Detail_Component = ({
   return (
     <SafeAreaWrapper>
       <Header title={strings.vehicleDetailTitle} onBackPress={onBackPress} />
-      <KeyboardAwareScrollView bounces={false}>
+      <ScrollView
+        bounces={false}
+        keyboardShouldPersistTaps="always"
+        contentContainerStyle={{
+          backgroundColor: theme.colors.background,
+          flexGrow: 1,
+        }}>
         <View style={styles.wrapper}>
           <CardWrapper
             showLeftText
@@ -58,12 +65,12 @@ const Vehicle_Detail_Component = ({
           </CardWrapper>
         </View>
         <View
-          bounces={false}
           style={{
             padding: theme.sizes.padding,
             backgroundColor: theme.colors.background,
           }}>
           <DetailInfoCard data={vehicleInfo} onChange={onInfoChange} />
+          <Spacing size="lg" />
           <FormFooterButtons
             primaryButtonLabel={strings.next}
             secondaryButtonLabel={'Edit'}
@@ -71,8 +78,23 @@ const Vehicle_Detail_Component = ({
             hideSecondaryButton={!isCreatingLoanApplication}
             onPressSecondaryButton={onPressSecondaryButton}
           />
+          <Spacing size="lg" />
         </View>
-      </KeyboardAwareScrollView>
+      </ScrollView>
+      {/* <View
+        style={{
+          paddingHorizontal: theme.sizes.padding,
+          backgroundColor: theme.colors.background,
+        }}>
+        <FormFooterButtons
+          primaryButtonLabel={strings.next}
+          secondaryButtonLabel={'Edit'}
+          onPressPrimaryButton={onNextPress}
+          hideSecondaryButton={!isCreatingLoanApplication}
+          onPressSecondaryButton={onPressSecondaryButton}
+        />
+      </View> */}
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );

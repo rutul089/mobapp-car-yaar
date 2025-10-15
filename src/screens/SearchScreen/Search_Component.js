@@ -40,7 +40,7 @@ const Search_Component = ({
         showsVerticalScrollIndicator={false}>
         <Input
           label={strings.vehicleNumberLabel}
-          placeholder={'AB12AB1234'}
+          placeholder={'GJ01YB6356'}
           optionalLabelContainerStyles={{alignSelf: 'center'}}
           labelStyles={{fontSize: theme.typography.fontSizes.body}}
           inputContainerBackgroundColor={'white'}
