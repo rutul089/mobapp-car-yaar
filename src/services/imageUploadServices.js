@@ -78,7 +78,10 @@ export const uploadFileWithFormData = async formData => {
 
     return response.data;
   } catch (error) {
-    console.log('error', JSON.stringify(error));
+    console.log(
+      'uploadFileWithFormData_response',
+      JSON.stringify(error?.response),
+    );
     throw error;
   }
 };

@@ -1,6 +1,7 @@
 import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
 import {getPresignedUploadUrl, uploadFileWithFormData} from '../services';
+import {Image as ImageCompressor} from 'react-native-compressor';
 
 /**
  * Uploads a photo using multipart/form-data.
@@ -12,9 +13,12 @@ import {getPresignedUploadUrl, uploadFileWithFormData} from '../services';
 export const uploadApplicantPhoto = (asset, fileName, mimeType) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const compressedUri = await compressImage(asset?.uri);
+
       const formData = new FormData();
+
       formData.append('file', {
-        uri: asset.uri,
+        uri: compressedUri,
         type: mimeType,
         name: fileName || 'filename',
       });
@@ -76,4 +80,39 @@ export const uploadDocumentViaPresignedUrl = (asset, selectionType) => {
       reject(error);
     }
   });
+};
+
+/**
+ * Compresses an image to reduce size before upload.
+ *
+ * @param {string} uri - Local file URI of the image.
+ * @param {object} options - Optional compression settings.
+ * @returns {Promise<string>} - Returns the compressed image URI.
+ */
+export const compressImage = async (uri, options = {}) => {
+  try {
+    const compressedUri = await ImageCompressor.compress(uri, {
+      compressionMethod: 'auto',
+      maxWidth: 1280,
+      quality: 0.7,
+      ...options, // allow overrides
+    });
+
+    console.log('✅ Image compressed successfully:', compressedUri);
+    return compressedUri;
+  } catch (error) {
+    console.error('❌ Image compression failed:', error);
+    return uri; // fallback to original if compression fails
+  }
+};
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+const validateFileSize = async uri => {
+  const fileStat = await RNFS.stat(uri);
+  console.log('validateFileSize', fileStat.size / (1024 * 1024));
+  if (fileStat.size > MAX_FILE_SIZE) {
+    return false;
+  }
+  return true;
 };

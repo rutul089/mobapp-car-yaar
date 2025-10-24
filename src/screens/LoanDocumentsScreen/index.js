@@ -196,7 +196,6 @@ class LoanDocumentsScreen extends Component {
       if (!asset?.uri) {
         return;
       }
-
       this.setState({showFilePicker: false, isLoadingDocument: true});
 
       try {

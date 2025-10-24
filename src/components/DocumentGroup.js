@@ -10,7 +10,6 @@ const DocumentGroup = ({
   isDocument,
   viewImage,
 }) => {
-  console.log(documents.length);
   return (
     <View style={styles.container}>
       <Text>{title}</Text>

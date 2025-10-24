@@ -10,52 +10,99 @@ import {
 } from '../constants/enums';
 import {getPresignedDownloadUrl} from '../services';
 import {showToast} from './helper';
+import {compressImage} from './fileUploadUtils';
+
 /**
  * Launches a file picker based on type: camera, gallery, or document.
  *
  * @param {'camera' | 'gallery' | 'document'} type - Picker type.
  * @param {(file: object | null) => void} callback - Callback with selected file or null.
  */
+// export const handleFileSelection = async (type, callback) => {
+//   try {
+//     if (type === 'camera') {
+//       const result = await launchCamera({
+//         mediaType: 'photo',
+//         quality: 0.5,
+//         saveToPhotos: true,
+//         conversionQuality: 0.9,
+//       });
+
+//       const file = result.assets[0];
+
+//       if (!result.didCancel && result.assets?.length > 0) {
+//         const compressedUri = await compressImage(file?.uri);
+//         callback({...file, uri: compressedUri});
+//       } else {
+//         callback(null);
+//       }
+//     } else if (type === 'gallery') {
+//       const result = await launchImageLibrary({
+//         mediaType: 'photo',
+//         quality: 0.3,
+//         conversionQuality: 0.9,
+//       });
+//       const file = result.assets[0];
+
+//       if (!result.didCancel && result.assets?.length > 0) {
+//         const compressedUri = await compressImage(file?.uri);
+//         callback({...file, uri: compressedUri});
+//       } else {
+//         callback(null);
+//       }
+//     } else if (type === 'document') {
+//       const res = await pick({
+//         allowMultiSelection: false,
+//         type: [types.pdf, types.images],
+//       });
+//       callback(res[0]);
+//     }
+//   } catch (err) {
+//     if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
+//       callback(null);
+//     } else {
+//       callback(null);
+//     }
+//   }
+// };
+
 export const handleFileSelection = async (type, callback) => {
   try {
+    let result;
+
     if (type === 'camera') {
-      const result = await launchCamera({
+      result = await launchCamera({
         mediaType: 'photo',
         quality: 0.5,
         saveToPhotos: true,
-        conversionQuality: 0.5,
+        conversionQuality: 0.9,
       });
-
-      if (!result.didCancel && result.assets?.length > 0) {
-        callback(result.assets[0]);
-      } else {
-        callback(null);
-      }
     } else if (type === 'gallery') {
-      const result = await launchImageLibrary({
+      result = await launchImageLibrary({
         mediaType: 'photo',
-        quality: 0.3,
-        conversionQuality: 0.5,
+        quality: 0.5,
+        conversionQuality: 0.9,
       });
-
-      if (!result.didCancel && result.assets?.length > 0) {
-        callback(result.assets[0]);
-      } else {
-        callback(null);
-      }
     } else if (type === 'document') {
       const res = await pick({
         allowMultiSelection: false,
         type: [types.pdf, types.images],
       });
-      callback(res[0]);
+      return callback(res?.[0] || null);
     }
+
+    if (result?.didCancel || !result?.assets?.length) {
+      return callback(null);
+    }
+
+    const file = result.assets[0];
+    const compressedUri = await compressImage(file.uri);
+    callback({...file, uri: compressedUri});
   } catch (err) {
-    if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
-      callback(null);
-    } else {
-      callback(null);
+    if (err?.code !== 'DOCUMENT_PICKER_CANCELED') {
+      console.error('File selection error:', err);
     }
+    callback(null);
   }
 };
 

@@ -227,7 +227,7 @@ class FinanceDocumentsScreen extends Component {
           type: asset.type,
           isLocal: true,
           fileSize: asset.fileSize,
-          uploadedUrl: asset.uri,
+          uploadedUrl: presignedKey,
           uploadKey: presignedKey,
           selectedDocType: this.state.selectedAcceptedDocument,
         };
