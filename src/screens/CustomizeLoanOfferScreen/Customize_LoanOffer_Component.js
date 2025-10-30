@@ -60,11 +60,12 @@ const Customize_LoanOffer_Component = ({
             label={'Interest Rate'}
             keyboardType="decimal-pad"
             isLeftIconVisible
+            value={'8%'}
           />
           <Spacing size="smd" />
           <Input
             leftIconName={images.percentage_circle}
-            label={'Title'}
+            label={'Tenure in Months'}
             isLeftIconVisible
           />
         </Card>

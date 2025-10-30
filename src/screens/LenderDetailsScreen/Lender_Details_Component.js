@@ -37,7 +37,7 @@ const Lender_Details_Component = ({onHoldProceedPress, loading}) => {
         <BankCard
           logoUri="https://cdn.logojoy.com/wp-content/uploads/2018/05/30160248/8_big15-768x591.png"
           bankName="HDFC Bank"
-          interestRate="8.96%"
+          interestRate="8%"
           footerInfo={[
             {label: 'Tenure', value: '60 Month'},
             {label: 'EMI', value: formatIndianCurrency('75000.12')},

@@ -14,7 +14,7 @@ class CustomizeLoanOffer extends Component {
   componentDidMount() {}
 
   onSelectLoanType = value => {
-    Alert.alert(value);
+    // Alert.alert(value);
   };
 
   onSubmitPress = () => {};

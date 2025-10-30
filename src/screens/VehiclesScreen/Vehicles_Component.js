@@ -167,6 +167,7 @@ const Vehicles_Component = ({
                 logo={{uri: UsedVehicle?.images?.[0]?.frontView?.[0]}}
                 noMargin
                 noShadow
+                onItemPress={() => onWrapperClick?.(item)} // TO Solve touch event ossie
               />
             </CardWrapper>
           );

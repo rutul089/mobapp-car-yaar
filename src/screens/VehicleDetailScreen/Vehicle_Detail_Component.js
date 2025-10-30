@@ -59,7 +59,7 @@ const Vehicle_Detail_Component = ({
               hideFooter={true}
               lastUpdateStatus={`Last updated on ${lastUpdatedOn}`}
               showButton
-              buttonLabel={'Refresh Details'}
+              buttonLabel={'Refresh Details'} // TODO : On refresh button press call the same api vahan api
               logo={{uri: carImage}}
             />
           </CardWrapper>

@@ -18,7 +18,7 @@ class index extends Component {
 
     let param = {
       lenderName: 'HDFC Bank',
-      interesetRate: 8.9,
+      interesetRate: 8,
       tenure: 60,
       emi: 50000,
       processingFee: 1200,

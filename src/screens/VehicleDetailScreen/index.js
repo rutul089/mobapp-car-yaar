@@ -86,31 +86,7 @@ class VehicleDetail extends Component {
       this.props;
     let isDraft = selectedVehicle?.isDraft;
 
-    if (isCreatingLoanApplication && isDraft) {
-      Alert.alert(
-        'Draft Vehicle',
-        'Vehicles in draft state please complete the vehicle onboarding..',
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: () => {
-              this.onPressSecondaryButton();
-            },
-          },
-        ],
-      );
-      return;
-      // return showToast(
-      //   'info',
-      //   'Vehicles in draft state please complete the vehicle onboarding..',
-      //   'bottom',
-      //   3000,
-      // );
-    }
+    // Removed vehicle is in draft state Alert based on the discussion 30 Oct 2025
 
     navigate(
       isCreatingLoanApplication
