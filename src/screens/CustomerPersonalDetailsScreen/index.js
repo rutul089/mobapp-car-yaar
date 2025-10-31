@@ -16,6 +16,7 @@ import {
   navigateToTab,
 } from '../../navigation/NavigationUtils';
 import {
+  fetchCibilScoreThunk,
   initiateAadharDigilockerThunk,
   initiateLoanApplicationThunk,
   searchBanksThunk,
@@ -110,6 +111,7 @@ class CustomerPersonalDetails extends Component {
     super(props);
     this.state = {
       ...initialState,
+      cibilScore: null,
       incomeSourceOptions: [
         {label: 'Salary', value: 'Salary'},
         {label: 'Business', value: 'Business'},
@@ -205,6 +207,7 @@ class CustomerPersonalDetails extends Component {
       panCardVerification: detail?.panCardVerification,
       aadharVerification: detail?.aadharVerification,
       mobileNumber: detail?.mobileNumber || selectedCustomer?.mobileNumber,
+      cibilScore: selectedCustomer?.cibilScore,
     };
 
     const [back, front, pancard] = await Promise.all([
@@ -382,7 +385,7 @@ class CustomerPersonalDetails extends Component {
     return payload;
   };
 
-  validateAllFields = () => {
+  validateAllFields = (fetchCibil = false) => {
     const {currentLoan} = this.state;
     const fieldValidationRules = {
       applicantPhoto: {required: false},
@@ -416,12 +419,22 @@ class CustomerPersonalDetails extends Component {
       'pancardPhoto',
       'bankName',
       'bankNameValue',
+      'cibilScore',
     ];
 
+    const fieldsToValidateCibil = [
+      'mobileNumber',
+      'panCardNumber',
+      'applicantName',
+      'gender',
+    ];
+    let _fieldsToValidate = fetchCibil
+      ? fieldsToValidateCibil
+      : fieldsToValidate;
     const errors = {};
     let isFormValid = true;
 
-    fieldsToValidate.forEach(key => {
+    _fieldsToValidate.forEach(key => {
       const value = this.state[key];
       const {required = true} = fieldValidationRules[key] || {};
 
@@ -437,6 +450,8 @@ class CustomerPersonalDetails extends Component {
         isFormValid = false;
       }
     });
+
+    console.log('errors', JSON.stringify(errors));
 
     this.setState({errors, isFormValid});
     return isFormValid;
@@ -691,6 +706,47 @@ class CustomerPersonalDetails extends Component {
     );
   };
 
+  fetchCibilScore = () => {
+    const isFormValid = this.validateAllFields(true);
+
+    console.log({isFormValid});
+
+    const {mobileNumber, panCardNumber, applicantName, gender} = this.state;
+    let params = getScreenParam(this.props.route, 'params');
+
+    if (!isFormValid) {
+      showToast('warning', strings.errorMissingField, 'bottom', 3000);
+      return;
+    }
+
+    let payload = {
+      mobile: mobileNumber,
+      pan: panCardNumber,
+      name: applicantName,
+      gender: gender,
+      consent: __DEV__ ? 'N' : 'Y',
+      customerId: this.props.selectedCustomerId,
+    };
+
+    this.props.fetchCibilScoreThunk(
+      payload,
+      res => {
+        if (res?.success) {
+          this.setState({
+            cibilScore: res?.data?.score,
+          });
+        }
+      },
+      error => {
+        this.setState({
+          cibilScore: null,
+        });
+      },
+    );
+
+    // navigate(ScreenNames.CustomerEnvelope);
+  };
+
   render() {
     const {
       gender,
@@ -705,6 +761,7 @@ class CustomerPersonalDetails extends Component {
       selectionType,
       panCardVerification,
       aadharVerification,
+      cibilScore,
     } = this.state;
 
     const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
@@ -877,6 +934,15 @@ class CustomerPersonalDetails extends Component {
             isError: errors.bankName || errors.bankNameValue,
             statusMsg: errors.bankName || errors.bankNameValue,
           },
+          cibilScore: {
+            value: cibilScore,
+            isError: errors?.cibilScore,
+            statusMsg: errors?.cibilScore,
+            isDisabled: true,
+            rightLabel: 'FETCH',
+            rightLabelPress: this.fetchCibilScore,
+            isRightIconVisible: false,
+          },
         }}
         filePickerProps={{
           isVisible: showFilePicker,
@@ -898,6 +964,7 @@ class CustomerPersonalDetails extends Component {
         handleDeleteDocument={this.handleDeleteDocument}
         isCreatingLoanApplication={isCreatingLoanApplication}
         dob={this.state.dob}
+        cibilScore={cibilScore}
       />
     );
   }
@@ -911,14 +978,20 @@ const mapActionCreators = {
   verifyAadharThunk,
   verifyPanThunk,
   initiateAadharDigilockerThunk,
+  fetchCibilScoreThunk,
 };
 
-const mapStateToProps = ({customerData, vehicleData, loanData}) => ({
+const mapStateToProps = ({
+  customerData,
+  vehicleData,
+  loanData,
+  cibilReducer,
+}) => ({
   selectedCustomerId: customerData?.selectedCustomerId,
   selectedCustomer: customerData?.selectedCustomer,
   selectedVehicle: vehicleData?.selectedVehicle,
   isCreatingLoanApplication: loanData?.isCreatingLoanApplication,
-  loading: customerData?.loading || loanData?.loading,
+  loading: customerData?.loading || loanData?.loading || cibilReducer?.loading,
   vehicleId: vehicleData?.selectedVehicle?.id,
   loanType: loanData?.selectedLoanType,
   selectedApplicationId: loanData?.selectedApplicationId,

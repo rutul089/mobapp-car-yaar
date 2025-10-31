@@ -252,7 +252,7 @@ class ViewLoanDetailsScreen extends Component {
             value: formatIndianCurrency(monthlyIncome) ?? '-',
           },
           {
-            label: 'CIBIL',
+            label: 'CIBIL Score',
             value: safeGet(loading, customer, 'cibilScore'),
           },
         ]}

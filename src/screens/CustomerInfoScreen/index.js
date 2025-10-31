@@ -214,6 +214,10 @@ class CustomerInfoScreen extends Component {
             full: true,
           },
           {label: 'Current Pincode', value: this._safeGet(details, 'pincode')},
+          {
+            label: 'CIBIL Score',
+            value: this._safeGet(selectedCustomer, 'cibilScore'),
+          },
         ]}
         professionalDetails={[
           {

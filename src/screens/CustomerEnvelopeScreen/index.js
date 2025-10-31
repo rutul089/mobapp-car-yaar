@@ -253,7 +253,7 @@ class CustomerEnvelopeScreen extends Component {
             value: formatIndianCurrency(loanAmount),
           },
           {
-            label: 'CIBIL',
+            label: 'CIBIL Score',
             value: safeGet(loading, customer, 'cibilScore'),
           },
         ]}

@@ -244,6 +244,10 @@ export const validateField = (key, value, isOptional) => {
     case 'gender':
       return trimmedValue === '' ? 'Please select gender' : '';
 
+    case 'cibilScore': {
+      return trimmedValue === '' ? 'Please fetch the CIBIL Score' : '';
+    }
+
     default:
       return '';
   }

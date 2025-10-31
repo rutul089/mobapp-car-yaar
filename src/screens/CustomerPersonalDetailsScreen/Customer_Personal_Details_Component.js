@@ -76,6 +76,7 @@ const Customer_Personal_Details_Component = ({
   handleDeleteDocument,
   isCreatingLoanApplication,
   dob,
+  cibilScore,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'panCardNumber',
@@ -96,6 +97,7 @@ const Customer_Personal_Details_Component = ({
     'incomeSource',
     'occupation',
     'bankName',
+    'cibilScore',
   ]);
 
   const [isOccupationModalVisible, setIsOccupationModalVisible] =
@@ -543,6 +545,19 @@ const Customer_Personal_Details_Component = ({
             }}
             onBlur={() => setFieldEditing('avgMonthlyBankBalance', false)}
             {...(restInputProps?.avgMonthlyBankBalance || {})}
+          />
+          <Spacing size="md" />
+          <Input
+            placeholder="XXX"
+            isLeftIconVisible
+            leftIconName={images.idCard}
+            value={state.cibilScore}
+            returnKeyType="done"
+            ref={refs?.cibilScore}
+            rightLabelColor={theme.colors.primary}
+            rightIconName={images.successCheck}
+            label="CIBIL Score"
+            {...(restInputProps?.cibilScore || {})}
           />
         </GroupWrapper>
         <Spacing size="lg" />

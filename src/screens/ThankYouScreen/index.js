@@ -217,7 +217,7 @@ class ThankYouScreen extends Component {
             value: formatIndianCurrency(monthlyIncome),
           },
           {
-            label: 'CIBIL',
+            label: 'CIBIL Score',
             value: cibilScore + '',
           },
         ]}
