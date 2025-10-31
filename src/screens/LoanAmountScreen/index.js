@@ -54,11 +54,12 @@ class LoanAmountScreen extends Component {
       return;
     }
 
-    if (loanAmount <= MIN_LOAN_AMOUNT) {
-      Alert.alert(
-        'Invalid Loan Amount',
-        `The loan amount entered is below the minimum limit. Please enter at least ₹${MIN_LOAN_AMOUNT}.`,
-      );
+    if (loanAmount < MIN_LOAN_AMOUNT) {
+      this.setState({
+        errors: {
+          loanAmount: `The loan amount entered is below the minimum limit. Please enter at least ₹${MIN_LOAN_AMOUNT}.`,
+        },
+      });
       return;
     }
 

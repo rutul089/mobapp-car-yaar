@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, BackHandler} from 'react-native';
+import {BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {
@@ -8,6 +8,7 @@ import {
   loanType,
 } from '../../constants/enums';
 import {loan_document_requirements} from '../../constants/loan_document_requirements';
+import strings from '../../locales/strings';
 import {
   getScreenParam,
   goBack,
@@ -35,7 +36,6 @@ import {
   showToast,
 } from '../../utils/helper';
 import Loan_Documents_Component from './Loan_Documents_Component';
-import strings from '../../locales/strings';
 
 const requiredFields = [
   'addressProofImage',
@@ -70,6 +70,7 @@ class LoanDocumentsScreen extends Component {
       selectedAcceptedDocument: '',
       showAcceptedDocModal: false,
       acceptedDocModalTitle: '',
+      showExitConfirmation: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -318,25 +319,7 @@ class LoanDocumentsScreen extends Component {
       return goBack();
     }
 
-    Alert.alert(
-      'Warning',
-      "You're in the middle of your loan application. If you exit now, your progress may be lost.",
-      [
-        {
-          text: 'Continue',
-          onPress: () => console.log('Exit cancelled'), // or navigate back to form
-          style: 'cancel',
-        },
-        {
-          text: 'Exit Anyway',
-          onPress: () => {
-            navigateToTab(ScreenNames.Applications);
-            this.props.setIsCreatingLoanApplication(false);
-          },
-        },
-      ],
-      {cancelable: true},
-    );
+    this.setState({showExitConfirmation: true});
   };
 
   setSelectedAcceptedDocument = async item => {
@@ -384,6 +367,21 @@ class LoanDocumentsScreen extends Component {
     return formattedData;
   };
 
+  onModalHide = () => {
+    this.setState({showExitConfirmation: false});
+  };
+
+  onContinuePress = () => {
+    this.onModalHide();
+  };
+
+  onExitPress = async () => {
+    this.setState({showExitConfirmation: false});
+    await new Promise(resolve => setTimeout(resolve, 200));
+    navigateToTab(ScreenNames.Applications);
+    this.props.setIsCreatingLoanApplication(false);
+  };
+
   render() {
     const {
       selectedVehicle,
@@ -403,6 +401,7 @@ class LoanDocumentsScreen extends Component {
       showAcceptedDocModal,
       selectedAcceptedDocument,
       acceptedDocModalTitle,
+      showExitConfirmation,
     } = this.state;
 
     return (
@@ -480,6 +479,12 @@ class LoanDocumentsScreen extends Component {
           title: `Select ${acceptedDocModalTitle} Type`,
         }}
         isReadOnlyLoanApplication={isReadOnlyLoanApplication}
+        exitConformationModalProp={{
+          isVisible: showExitConfirmation,
+          onModalHide: this.onModalHide,
+          onContinuePress: this.onContinuePress,
+          onExitPress: this.onExitPress,
+        }}
       />
     );
   }

@@ -31,6 +31,7 @@ class Vehicles extends Component {
       showFilterVehicles: false,
       activeFilterOption: '',
       previousSearch: '',
+      showUnavailableVehicleModal: false,
     };
     this.limit = 10;
     this.debouncedSearch = debounce(this.searchFromAPI, 500);
@@ -101,11 +102,7 @@ class Vehicles extends Component {
     }
 
     if (fullScreen && item?.hasActiveLoan) {
-      Alert.alert(
-        'Vehicle Not Available',
-        'This vehicle already has an active loan. You cannot assign it to another customer.',
-        [{text: 'OK'}],
-      );
+      this.setState({showUnavailableVehicleModal: true});
       return;
     }
 
@@ -259,6 +256,10 @@ class Vehicles extends Component {
     }
   }
 
+  onModalHide = () => {
+    this.setState({showUnavailableVehicleModal: false});
+  };
+
   render() {
     const {
       loading,
@@ -276,6 +277,7 @@ class Vehicles extends Component {
       stopLoading,
       showFilterVehicles,
       activeFilterOption,
+      showUnavailableVehicleModal,
     } = this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
@@ -315,6 +317,11 @@ class Vehicles extends Component {
         }}
         activeFilterOption={activeFilterOption}
         stopLoading={stopLoading}
+        showUnavailableVehicleModalProp={{
+          isVisible: showUnavailableVehicleModal,
+          onModalHide: this.onModalHide,
+          onPressPrimaryButton: this.onModalHide,
+        }}
       />
     );
   }

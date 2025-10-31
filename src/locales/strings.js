@@ -27,6 +27,19 @@ const strings = {
   errorMissingField: 'Please fill in all required fields.',
   errorNoDocumentUpload:
     'No document available to view. Please add or upload one.',
+  showUnavailableVehicleModal: {
+    tittle: 'Vehicle Not Available',
+    description:
+      'This vehicle already has an active loan. You cannot assign it to another customer.',
+    button: 'Ok',
+  },
+  exitConformationModal: {
+    tittle: 'Exit Loan Application',
+    description:
+      'You are in the middle of your loan application. If you exit now, your progress may be lost.',
+    button1: 'Continue',
+    button2: 'Exit Anyway',
+  },
 };
 
 export default strings;

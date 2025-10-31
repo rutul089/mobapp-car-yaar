@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Button,
   Header,
@@ -7,8 +8,10 @@ import {
   FilePickerModal,
   Loader,
   DropdownModal,
+  CommonModal,
+  Text,
 } from '@caryaar/components';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 
 import strings from '../../locales/strings';
 
@@ -28,6 +31,7 @@ const Loan_Documents_Component = ({
   acceptedDocuments,
   dropdownModalProps,
   isReadOnlyLoanApplication,
+  exitConformationModalProp,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -53,6 +57,24 @@ const Loan_Documents_Component = ({
       <FilePickerModal {...fileModalProps} />
 
       <DropdownModal {...dropdownModalProps} />
+
+      <CommonModal
+        isVisible={exitConformationModalProp?.isVisible}
+        onModalHide={exitConformationModalProp?.onModalHide}
+        primaryButtonLabel={strings.exitConformationModal.button1}
+        isScrollableContent={false}
+        isPrimaryButtonVisible={true}
+        showSecondaryButton
+        secondaryButtonText={strings.exitConformationModal.button2}
+        onPressPrimaryButton={exitConformationModalProp?.onContinuePress}
+        onSecondaryPress={exitConformationModalProp?.onExitPress}
+        title={strings.exitConformationModal.tittle}>
+        <View style={{paddingVertical: 10}}>
+          <Text textAlign="center" lineHeight={22}>
+            {strings.exitConformationModal.description}
+          </Text>
+        </View>
+      </CommonModal>
 
       {loading && <Loader visible={loading} />}
 

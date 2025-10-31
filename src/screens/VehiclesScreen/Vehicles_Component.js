@@ -33,6 +33,7 @@ import {
   getGradientColors,
   getStatusColor,
 } from '../../utils/helper';
+import strings from '../../locales/strings';
 
 const Vehicles_Component = ({
   vehicleData,
@@ -55,6 +56,7 @@ const Vehicles_Component = ({
   filterVehicleProps,
   activeFilterOption,
   stopLoading,
+  showUnavailableVehicleModalProp,
 }) => {
   const [localActiveFilterOption, setLocalActiveFilterOption] =
     React.useState(activeFilterOption);
@@ -228,6 +230,24 @@ const Vehicles_Component = ({
               setLocalActiveFilterOption(vehicleFilterOption.DRAFT)
             }
           />
+        </View>
+      </CommonModal>
+
+      <CommonModal
+        isVisible={showUnavailableVehicleModalProp?.isVisible}
+        onModalHide={showUnavailableVehicleModalProp?.onModalHide}
+        primaryButtonLabel={strings.showUnavailableVehicleModal.button}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        onPressPrimaryButton={
+          showUnavailableVehicleModalProp?.onPressPrimaryButton
+        }
+        title={strings.showUnavailableVehicleModal.tittle}
+        isCancellable={true}>
+        <View style={{paddingVertical: 8}}>
+          <Text textAlign="center" lineHeight={22}>
+            {strings.showUnavailableVehicleModal.description}
+          </Text>
         </View>
       </CommonModal>
       {loading && <Loader visible={loading} />}
