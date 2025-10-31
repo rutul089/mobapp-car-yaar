@@ -73,12 +73,13 @@ class ThankYouScreen extends Component {
       customerType = '-',
       customerCategory = '-',
       customerDetails = {},
+      cibilScore,
     } = customer || {};
 
     const {
       applicantName = '-',
       gender = '-',
-      mobileNumber = '-',
+      mobileNumber,
       dob = '-',
       pincode = '-',
       occupation = '-',
@@ -117,6 +118,8 @@ class ThankYouScreen extends Component {
       'principalAmount',
     );
     let loanType = safeGet(loading, selectedLoanApplication, 'loanType');
+    let _mobileNumber =
+      mobileNumber || selectedLoanApplication?.customer?.mobileNumber;
 
     return (
       <Thank_You_Component
@@ -166,7 +169,7 @@ class ThankYouScreen extends Component {
             label: 'Individual Type',
             value: getLabelFromEnum(customerCategoryValue, customerCategory),
           },
-          {label: 'Mobile Number', value: loading ? '-' : mobileNumber},
+          {label: 'Mobile Number', value: loading ? '-' : _mobileNumber},
           {label: 'Gender', value: loading ? '-' : gender},
           {
             label: 'Father/Mother Name',
@@ -212,6 +215,10 @@ class ThankYouScreen extends Component {
           {
             label: 'Monthly Income',
             value: formatIndianCurrency(monthlyIncome),
+          },
+          {
+            label: 'CIBIL',
+            value: cibilScore + '',
           },
         ]}
         vehicleDetail={[

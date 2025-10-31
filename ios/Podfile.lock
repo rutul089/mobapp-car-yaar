@@ -1287,7 +1287,7 @@ PODS:
     - Yoga
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-safe-area-context (5.6.1):
+  - react-native-safe-area-context (5.6.2):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1300,8 +1300,8 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.6.1)
-    - react-native-safe-area-context/fabric (= 5.6.1)
+    - react-native-safe-area-context/common (= 5.6.2)
+    - react-native-safe-area-context/fabric (= 5.6.2)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1310,7 +1310,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (5.6.1):
+  - react-native-safe-area-context/common (5.6.2):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1331,7 +1331,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (5.6.1):
+  - react-native-safe-area-context/fabric (5.6.2):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1666,7 +1666,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDateTimePicker (8.4.5):
+  - RNDateTimePicker (8.5.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1697,7 +1697,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.28.0):
+  - RNGestureHandler (2.29.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1718,7 +1718,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNPermissions (5.4.2):
+  - RNPermissions (5.4.3):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1848,7 +1848,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.16.0):
+  - RNScreens (4.18.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1869,9 +1869,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.16.0)
+    - RNScreens/common (= 4.18.0)
     - Yoga
-  - RNScreens/common (4.16.0):
+  - RNScreens/common (4.18.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -2202,7 +2202,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: 87ed996f2810da9d197cdcb2eeae528a2d44a709
   react-native-image-picker: 1bfd302ca55c72ce0c8d79ff65a79ede2b0daa80
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
-  react-native-safe-area-context: 4440357d6b863637d189f4618b738dbcaae14b44
+  react-native-safe-area-context: 865df17aa1fa1d85b150f6842882e98c3930a77b
   react-native-webview: f7bd80d0d6d3e1cd6edd0cdb1b94f1aae09d342a
   React-NativeModulesApple: 83ea61c133a66d967bbd8abbb5bf3c2cdcd5ff25
   React-perflogger: 5f8fa36a8e168fb355efe72099efe77213bc2ac6
@@ -2232,20 +2232,20 @@ SPEC CHECKSUMS:
   ReactCodegen: 5a220ff9ae2e4fffd2efd6d614e261d62686b867
   ReactCommon: 5008bd981a06fe63176ef815f092685ffee8f7eb
   RNCAsyncStorage: e90a7ba02f726490143039acb9a43449674a8efc
-  RNDateTimePicker: f1457e4ab1533a1cfeadc153edd7ec5605148b00
+  RNDateTimePicker: 8916668caaa1604951d101ec25f131247845378f
   RNDeviceInfo: bcce8752b5043a623fe3c26789679b473f705d3c
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
-  RNGestureHandler: d7fc3d3596411b1a7568fd1c57d817f83d793222
-  RNPermissions: 1c98b504bdca9a687c32ccc59dbd718c19863b72
+  RNGestureHandler: f11062fe57326636c9cfa15a14e784d7f25f5f93
+  RNPermissions: f12c25b3c4bc3352c6d802cdd601f57b8cde6296
   RNReanimated: 22841a595fb970c9d917a9481d2b4a2a9bd72ba6
-  RNScreens: 189b97100098b3c42742db9fc356138e6e5eb4c7
+  RNScreens: 239a97dcb197b2e25383f8428b13d3f67d97cbaa
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: e14bad835e12b6c7e2260fc320bd00e0f4b45add
 
-PODFILE CHECKSUM: 415ef65779c900f6d2f09a1ea6584f496efbee9c
+PODFILE CHECKSUM: 160f4588884a9f66ebfd3ac12adb5b783ebf2bf8
 
 COCOAPODS: 1.16.2

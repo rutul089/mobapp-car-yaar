@@ -212,6 +212,8 @@ class CustomerEnvelopeScreen extends Component {
     } = selectedLoanApplication || {};
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
     const {errors, salesExecutive, carYarPartner, showError} = this.state;
+    let _mobileNumber =
+      customer?.customerDetails.mobileNumber || customer?.mobileNumber || '-';
 
     return (
       <Customer_Envelop_Component
@@ -235,7 +237,7 @@ class CustomerEnvelopeScreen extends Component {
           },
           {
             label: 'Mobile Number',
-            value: safeGet(loading, customer, 'customerDetails.mobileNumber'),
+            value: _mobileNumber,
           },
           {label: 'Vehicle Type', value: 'Used Car'},
           {
@@ -249,6 +251,10 @@ class CustomerEnvelopeScreen extends Component {
           {
             label: 'Desired Loan Amount',
             value: formatIndianCurrency(loanAmount),
+          },
+          {
+            label: 'CIBIL',
+            value: safeGet(loading, customer, 'cibilScore'),
           },
         ]}
         onViewLenderPress={this.onViewLenderPress}

@@ -122,6 +122,8 @@ class ViewLoanDetailsScreen extends Component {
       usedVehicle = {},
     } = selectedLoanApplication || {};
 
+    console.log({selectedLoanApplication});
+
     let dob = safeGet(loading, customer?.customerDetails, 'dob');
     let _customerCategory = safeGet(loading, customer, 'customerCategory');
     let _customerType = safeGet(loading, customer, 'customerType');
@@ -248,6 +250,10 @@ class ViewLoanDetailsScreen extends Component {
           {
             label: 'Monthly Income',
             value: formatIndianCurrency(monthlyIncome) ?? '-',
+          },
+          {
+            label: 'CIBIL',
+            value: safeGet(loading, customer, 'cibilScore'),
           },
         ]}
         vehicleDetail={[

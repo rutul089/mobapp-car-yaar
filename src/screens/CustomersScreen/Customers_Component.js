@@ -81,6 +81,7 @@ const Customers_Component = ({
         keyExtractor={(item, index) => `${item.id}-${index}`}
         contentContainerStyle={styles.wrapper}
         renderItem={({item}) => {
+          console.log({item});
           let isDeleted = item?.customer?.isDeleted;
           let customerDetails = item?.customer?.customerDetails;
           let customerNote = `${capitalizeFirstLetter(

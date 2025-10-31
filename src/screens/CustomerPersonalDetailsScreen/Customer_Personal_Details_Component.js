@@ -211,7 +211,7 @@ const Customer_Personal_Details_Component = ({
           <Spacing size="md" />
           <Input
             ref={refs?.aadharNumber}
-            placeholder="8752 7580 9001"
+            placeholder="XXXX XXXX XXXX"
             isLeftIconVisible
             leftIconName={images.idCard}
             rightLabelColor={theme.colors.primary}

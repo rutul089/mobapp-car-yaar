@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Customize_LoanOffer_Component from './Customize_LoanOffer_Component';
-import {Alert} from 'react-native';
 
 class CustomizeLoanOffer extends Component {
   constructor(props) {
@@ -14,7 +13,7 @@ class CustomizeLoanOffer extends Component {
   componentDidMount() {}
 
   onSelectLoanType = value => {
-    // Alert.alert(value);
+    console.log({value});
   };
 
   onSubmitPress = () => {};

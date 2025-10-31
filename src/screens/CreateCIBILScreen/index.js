@@ -71,7 +71,7 @@ class CreateCIBILScreen extends Component {
       pan: panCardNumber,
       name: fullName,
       gender: gender,
-      consent: 'N',
+      consent: __DEV__ ? 'N' : 'Y',
       customerId: this.props.selectedCustomerId,
     };
 

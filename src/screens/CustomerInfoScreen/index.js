@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {getLabelFromEnum, occupationLabelMap} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
@@ -64,9 +63,7 @@ class CustomerInfoScreen extends Component {
     });
   };
 
-  viewIncomeProof = () => {
-    Alert.alert('viewIncomeProof');
-  };
+  viewIncomeProof = () => {};
 
   _safeGet = (obj, path) => {
     const {onNextPress} = this.state;

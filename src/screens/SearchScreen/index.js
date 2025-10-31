@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
   checkVehicleExistsThunk,
@@ -8,8 +9,6 @@ import {
 } from '../../redux/actions';
 import {isValidIndianVehicleNumber} from '../../utils/validation';
 import Search_Component from './Search_Component';
-import ScreenNames from '../../constants/ScreenNames';
-import {Alert} from 'react-native';
 
 class SearchScreen extends Component {
   constructor(props) {
@@ -38,7 +37,7 @@ class SearchScreen extends Component {
   };
 
   onAddVehicle = () => {
-    alert('TODO//Need add new vehicle flow');
+    //TODO:Need add new vehicle flow
   };
 
   onSearchVehicle = () => {
