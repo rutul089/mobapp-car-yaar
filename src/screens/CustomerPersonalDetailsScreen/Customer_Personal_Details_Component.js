@@ -574,7 +574,7 @@ const Customer_Personal_Details_Component = ({
 
       {loading && <Loader visible={loading} />}
 
-      {isLoadingDocument && <FullLoader />}
+      {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}
     </SafeAreaWrapper>
   );
 };

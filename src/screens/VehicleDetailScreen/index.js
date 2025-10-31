@@ -10,7 +10,6 @@ import {
   formatDate,
   formatVehicleDetails,
   formatVehicleNumber,
-  showToast,
 } from '../../utils/helper';
 import Vehicle_Detail_Component from './Vehicle_Detail_Component';
 import {Alert} from 'react-native';
@@ -22,6 +21,9 @@ class VehicleDetail extends Component {
       vehicleInfo: [],
       basicDetail: '',
       isLoading: false,
+      vehicleId: '',
+      ownershipCount: 0,
+      isOwnershipChanged: false,
     };
     this.onBackPress = this.onBackPress.bind(this);
     this.onPressSecondaryButton = this.onPressSecondaryButton.bind(this);
@@ -29,17 +31,16 @@ class VehicleDetail extends Component {
   }
 
   componentDidMount() {
-    const {navigation, route} = this.props;
+    const {route} = this.props;
     let vehicleId = route.params?.vehicleId;
-    if (vehicleId) {
-      this.fetchVehicleFromId(vehicleId);
-    }
-    // this.focusListener = navigation.addListener('focus', () => {
-    //   // const {vehicleId} = this.state;
-    //   // if (vehicleId) {
-    //   //   this.fetchVehicleFromId(vehicleId);
-    //   // }
-    // });
+    this.setState(
+      {
+        vehicleId: vehicleId,
+      },
+      () => {
+        this.fetchVehicleFromId(vehicleId);
+      },
+    );
   }
 
   componentWillUnmount() {
@@ -47,18 +48,32 @@ class VehicleDetail extends Component {
       this.focusListener();
     }
   }
-  fetchVehicleFromId = id => {
+  fetchVehicleFromId = async id => {
+    this.setState({isLoading: false});
+    const previousOwnershipCount = this.state.ownershipCount;
+
     this.props.fetchVehicleFromIdThunk(
       id,
-      response => {
+      async response => {
+        const newOwnershipCount = response?.UsedVehicle?.ownershipCount;
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        if (
+          previousOwnershipCount !== 0 &&
+          previousOwnershipCount !== newOwnershipCount
+        ) {
+          this.setState({isOwnershipChanged: true});
+        }
+
         this.setState({
           basicDetail: {
             make: response?.make,
             model: response?.model,
             trim: response?.trim,
             colour: response?.colour,
-            isLoading: true,
+            isLoading: false,
           },
+          ownershipCount: newOwnershipCount,
         });
       },
       err => {
@@ -101,14 +116,41 @@ class VehicleDetail extends Component {
     this.setState({vehicleInfo: updatedInfo});
   };
 
+  onRefreshDetailPress = () => {
+    const {vehicleId} = this.state;
+    this.fetchVehicleFromId(vehicleId);
+  };
+
+  componentDidUpdate(prevProps) {
+    const prevOwnership = get(
+      prevProps.selectedVehicle,
+      'UsedVehicle.ownershipCount',
+    );
+    const currentOwnership = get(
+      this.props.selectedVehicle,
+      'UsedVehicle.ownershipCount',
+    );
+    if (
+      prevOwnership !== undefined &&
+      currentOwnership !== undefined &&
+      prevOwnership !== currentOwnership
+    ) {
+      console.log('---------->');
+    }
+  }
+
+  onModalHide = () => {
+    this.setState({isOwnershipChanged: false, ownershipCount: 0});
+  };
+
   render() {
     const {loading, selectedVehicle, isCreatingLoanApplication} = this.props;
-    const {basicDetail, isLoading} = this.state;
+    const {basicDetail, isOwnershipChanged} = this.state;
     let {UsedVehicle} = selectedVehicle || {};
     let manufactureYear = UsedVehicle?.manufactureYear;
     let {model, trim, colour} = basicDetail || {};
     const status = selectedVehicle?.isDraft ? 'DRAFT' : 'SAVED';
-    const lastUpdatedOn = this.safeGet(basicDetail, 'updatedAt');
+    const lastUpdatedOn = this.safeGet(UsedVehicle, 'updatedAt');
     const _registerNumber = this.safeGet(UsedVehicle, 'registerNumber') ?? '-';
     const puc = this.safeGet(UsedVehicle, 'PUCC');
     const hypothecationStatus = this.safeGet(
@@ -195,9 +237,16 @@ class VehicleDetail extends Component {
         ]}
         onInfoChange={this.handleInfoChange}
         status={status}
-        loading={isLoading}
+        loading={loading}
         isCreatingLoanApplication={isCreatingLoanApplication}
         carImage={UsedVehicle?.images?.[0]?.frontView?.[0]}
+        onRefreshDetailPress={this.onRefreshDetailPress}
+        isOwnershipChanged={isOwnershipChanged}
+        ownerShipModalProp={{
+          isVisible: isOwnershipChanged,
+          onModalHide: this.onModalHide,
+          onPressPrimaryButton: this.onModalHide,
+        }}
       />
     );
   }

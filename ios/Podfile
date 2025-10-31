@@ -17,25 +17,15 @@ prepare_react_native_project!
 # setup_permissions([
 #   # 'AppTrackingTransparency',
 #   # 'Bluetooth',
-#   # 'Calendars',
-#   # 'CalendarsWriteOnly',
 #   'Camera',
-#   # 'Contacts',
-#   # 'FaceID',
 #   # 'LocationAccuracy',
 #   # 'LocationAlways',
 #   # 'LocationWhenInUse',
 #   # 'MediaLibrary',
-#   # 'Microphone',
-#   # 'Motion',
 #   'Notifications',
 #   'PhotoLibrary',
 #   'PhotoLibraryAddOnly',
 #   'Notifications',
-#   # 'Reminders',
-#   # 'Siri',
-#   # 'SpeechRecognition',
-#   # 'StoreKit',
 # ])
 
 linkage = ENV['USE_FRAMEWORKS']

@@ -152,7 +152,7 @@ const Edit_Profile_Component = ({
       />
 
       {loading && <Loader visible={loading} />}
-      {isLoading && <FullLoader />}
+      {isLoading && <FullLoader visible={isLoading} />}
     </SafeAreaWrapper>
   );
 };

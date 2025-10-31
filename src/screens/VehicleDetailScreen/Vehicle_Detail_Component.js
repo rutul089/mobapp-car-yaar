@@ -5,12 +5,13 @@ import {
   Header,
   Loader,
   SafeAreaWrapper,
+  Spacing,
   VehicleCard,
   theme,
-  Spacing,
+  CommonModal,
+  Text,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
 import {getGradientColors, getStatusColor} from '../../utils/helper';
 
@@ -29,6 +30,8 @@ const Vehicle_Detail_Component = ({
   isCreatingLoanApplication,
   onPressSecondaryButton,
   carImage,
+  onRefreshDetailPress,
+  ownerShipModalProp,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -36,10 +39,7 @@ const Vehicle_Detail_Component = ({
       <ScrollView
         bounces={false}
         keyboardShouldPersistTaps="always"
-        contentContainerStyle={{
-          backgroundColor: theme.colors.background,
-          flexGrow: 1,
-        }}>
+        contentContainerStyle={styles.containerWrapper}>
         <View style={styles.wrapper}>
           <CardWrapper
             showLeftText
@@ -59,8 +59,9 @@ const Vehicle_Detail_Component = ({
               hideFooter={true}
               lastUpdateStatus={`Last updated on ${lastUpdatedOn}`}
               showButton
-              buttonLabel={'Refresh Details'} // TODO : On refresh button press call the same api vahan api
+              buttonLabel={'Refresh Details'}
               logo={{uri: carImage}}
+              onButtonPress={onRefreshDetailPress}
             />
           </CardWrapper>
         </View>
@@ -80,6 +81,22 @@ const Vehicle_Detail_Component = ({
           />
         </View>
       </ScrollView>
+      <CommonModal
+        isVisible={ownerShipModalProp?.isVisible}
+        onModalHide={ownerShipModalProp?.onModalHide}
+        primaryButtonLabel={'Ok'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        onPressPrimaryButton={ownerShipModalProp?.onPressPrimaryButton}
+        title="Ownership Changed"
+        isCancellable={false}>
+        <View style={{paddingVertical: 10}}>
+          <Text textAlign="center" lineHeight={22}>
+            This vehicle ownership has been updated — it may have been sold.
+          </Text>
+        </View>
+      </CommonModal>
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
@@ -90,6 +107,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primaryBlack,
     paddingVertical: theme.sizes.spacing.md,
     paddingHorizontal: theme.sizes.padding,
+  },
+  containerWrapper: {
+    backgroundColor: theme.colors.background,
+    flexGrow: 1,
   },
 });
 

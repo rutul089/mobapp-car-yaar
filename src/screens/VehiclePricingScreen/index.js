@@ -55,6 +55,11 @@ class VehiclePricingScreen extends Component {
   }
 
   validateAllFields = () => {
+    const {trueValuePrice} = this.state;
+
+    const fieldValidationRules = {
+      trueValuePrice: {required: trueValuePrice?.toString()?.trim().length > 0},
+    };
     const fieldsToValidate = ['estimatedPrice', 'salePrice', 'trueValuePrice'];
 
     const errors = {};
@@ -62,6 +67,14 @@ class VehiclePricingScreen extends Component {
 
     fieldsToValidate.forEach(key => {
       const value = this.state[key];
+      const {required = true} = fieldValidationRules[key] || {};
+
+      // Skip validation if field is optional and empty
+      if (!required) {
+        errors[key] = '';
+        return;
+      }
+
       const error = validateField(key, value);
       errors[key] = error;
       if (error !== '') {
@@ -73,8 +86,8 @@ class VehiclePricingScreen extends Component {
     return isFormValid;
   };
 
-  onChangeField = (key, value) => {
-    handleFieldChange(this, key, value);
+  onChangeField = (key, value, isOptional = false) => {
+    handleFieldChange(this, key, value, value?.toString()?.trim().length === 0);
   };
 
   onBackPress = () => {

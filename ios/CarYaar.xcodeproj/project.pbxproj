@@ -13,13 +13,13 @@
 		722F3BC8E0E943A3B361E374 /* HankenGrotesk-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38957F507DBD4D30AA22D80B /* HankenGrotesk-SemiBold.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		7785AE97197A4E8BAE6343D3 /* HankenGrotesk-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E97E53307494D348449AF22 /* HankenGrotesk-ExtraLight.ttf */; };
-		789C2924419BA27561B99ACC /* libPods-CarYaar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2DD16E463F2D9F4A831093A /* libPods-CarYaar.a */; };
 		79205E0A144B42CAB91662AB /* HankenGrotesk-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 697726EF122149B0BE4E84F6 /* HankenGrotesk-Light.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		964437AD86E44C2184BA7D12 /* HankenGrotesk-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90656D4C09214B078DE66013 /* HankenGrotesk-Black.ttf */; };
 		9BB6CE704DED483B8DDE3C18 /* HankenGrotesk-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76E638017C76418CA2ACACED /* HankenGrotesk-Bold.ttf */; };
 		AD22FB79FA8C40E9AA99152E /* HankenGrotesk-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A558A80DA4D40F69791430C /* HankenGrotesk-Medium.ttf */; };
 		AF23689E0F5948F3B38878F8 /* HankenGrotesk-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E75757F7DF94F448CFBA8AB /* HankenGrotesk-Thin.ttf */; };
+		CC3E0E8E2336394CD8D6151D /* libPods-CarYaar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F37AAB6B905AD833693BBC6 /* libPods-CarYaar.a */; };
 		D572A123EC7C4E108344FBE7 /* HankenGrotesk-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4DCE51E9D9444C218404E4AB /* HankenGrotesk-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
@@ -32,15 +32,15 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = CarYaar/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		38957F507DBD4D30AA22D80B /* HankenGrotesk-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-SemiBold.ttf"; path = "../src/assets/fonts/HankenGrotesk-SemiBold.ttf"; sourceTree = "<group>"; };
 		4DCE51E9D9444C218404E4AB /* HankenGrotesk-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-ExtraBold.ttf"; path = "../src/assets/fonts/HankenGrotesk-ExtraBold.ttf"; sourceTree = "<group>"; };
+		4F37AAB6B905AD833693BBC6 /* libPods-CarYaar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CarYaar.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		683354EE1429C9647B543B6C /* Pods-CarYaar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarYaar.release.xcconfig"; path = "Target Support Files/Pods-CarYaar/Pods-CarYaar.release.xcconfig"; sourceTree = "<group>"; };
 		697726EF122149B0BE4E84F6 /* HankenGrotesk-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Light.ttf"; path = "../src/assets/fonts/HankenGrotesk-Light.ttf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = CarYaar/AppDelegate.swift; sourceTree = "<group>"; };
 		76E638017C76418CA2ACACED /* HankenGrotesk-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Bold.ttf"; path = "../src/assets/fonts/HankenGrotesk-Bold.ttf"; sourceTree = "<group>"; };
 		7E97E53307494D348449AF22 /* HankenGrotesk-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-ExtraLight.ttf"; path = "../src/assets/fonts/HankenGrotesk-ExtraLight.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CarYaar/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8DA41DEBE0714208DC40CF29 /* Pods-CarYaar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarYaar.debug.xcconfig"; path = "Target Support Files/Pods-CarYaar/Pods-CarYaar.debug.xcconfig"; sourceTree = "<group>"; };
 		90656D4C09214B078DE66013 /* HankenGrotesk-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Black.ttf"; path = "../src/assets/fonts/HankenGrotesk-Black.ttf"; sourceTree = "<group>"; };
-		9181205818459A1CE4AAF31B /* Pods-CarYaar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarYaar.debug.xcconfig"; path = "Target Support Files/Pods-CarYaar/Pods-CarYaar.debug.xcconfig"; sourceTree = "<group>"; };
-		98B76F2A0C422C4D66A45725 /* Pods-CarYaar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarYaar.release.xcconfig"; path = "Target Support Files/Pods-CarYaar/Pods-CarYaar.release.xcconfig"; sourceTree = "<group>"; };
-		B2DD16E463F2D9F4A831093A /* libPods-CarYaar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CarYaar.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8C1F9F1C4834FCA889CAEC9 /* HankenGrotesk-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HankenGrotesk-Regular.ttf"; path = "../src/assets/fonts/HankenGrotesk-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				789C2924419BA27561B99ACC /* libPods-CarYaar.a in Frameworks */,
+				CC3E0E8E2336394CD8D6151D /* libPods-CarYaar.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				B2DD16E463F2D9F4A831093A /* libPods-CarYaar.a */,
+				4F37AAB6B905AD833693BBC6 /* libPods-CarYaar.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,8 +127,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9181205818459A1CE4AAF31B /* Pods-CarYaar.debug.xcconfig */,
-				98B76F2A0C422C4D66A45725 /* Pods-CarYaar.release.xcconfig */,
+				8DA41DEBE0714208DC40CF29 /* Pods-CarYaar.debug.xcconfig */,
+				683354EE1429C9647B543B6C /* Pods-CarYaar.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -140,12 +140,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CarYaar" */;
 			buildPhases = (
-				EAC3B6CC3B60FA54BA23F360 /* [CP] Check Pods Manifest.lock */,
+				D79BBDDF996D04301BFBF4E4 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				26F333CE33C0AAF7878114F0 /* [CP] Copy Pods Resources */,
+				1E6D3B9BA1A3933298295B5B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -226,7 +226,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		26F333CE33C0AAF7878114F0 /* [CP] Copy Pods Resources */ = {
+		1E6D3B9BA1A3933298295B5B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -243,7 +243,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CarYaar/Pods-CarYaar-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EAC3B6CC3B60FA54BA23F360 /* [CP] Check Pods Manifest.lock */ = {
+		D79BBDDF996D04301BFBF4E4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -281,7 +281,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9181205818459A1CE4AAF31B /* Pods-CarYaar.debug.xcconfig */;
+			baseConfigurationReference = 8DA41DEBE0714208DC40CF29 /* Pods-CarYaar.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -310,7 +310,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 98B76F2A0C422C4D66A45725 /* Pods-CarYaar.release.xcconfig */;
+			baseConfigurationReference = 683354EE1429C9647B543B6C /* Pods-CarYaar.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -415,7 +415,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -495,7 +498,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = false;
