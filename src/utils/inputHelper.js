@@ -86,6 +86,13 @@ export const validateField = (key, value, isOptional) => {
           ? 'Applicant name should only contain alphabets and spaces'
           : '';
 
+    case 'ownerName':
+      return trimmedValue === ''
+        ? 'Please enter owner name'
+        : !nameRegex.test(trimmedValue)
+          ? 'Owner name should only contain alphabets and spaces'
+          : '';
+
     case 'email':
       return trimmedValue === ''
         ? 'Please enter your email address'
@@ -247,6 +254,91 @@ export const validateField = (key, value, isOptional) => {
     case 'cibilScore': {
       return trimmedValue === '' ? 'Please fetch the CIBIL Score' : '';
     }
+
+    case 'manufactureYear':
+      return validateYear(trimmedValue, key);
+
+    case 'make':
+      return trimmedValue === ''
+        ? 'Please enter the car brand.'
+        : !/^[A-Za-z\s]+$/.test(trimmedValue)
+          ? 'Car brand should contain only alphabets.'
+          : trimmedValue.length < 2
+            ? 'Car brand must be at least 2 characters long.'
+            : '';
+
+    case 'model':
+      return trimmedValue === ''
+        ? 'Please enter the car model.'
+        : !/^[A-Za-z0-9\s-]+$/.test(trimmedValue)
+          ? 'Car model should contain only letters, numbers, or hyphens.'
+          : trimmedValue.length < 2
+            ? 'Car model must be at least 2 characters long.'
+            : '';
+
+    case 'chassisNumber':
+      return trimmedValue === ''
+        ? 'Please enter the chassis number.'
+        : !/^[A-Z0-9]+$/i.test(trimmedValue)
+          ? 'Chassis number should contain only letters and numbers.'
+          : trimmedValue.length !== 17
+            ? 'Chassis number must be 17 characters long.'
+            : '';
+
+    case 'emissionNorm':
+      return trimmedValue === '' ? 'Please enter the engine number.' : '';
+
+    case 'engineNumber':
+      return trimmedValue === ''
+        ? 'Please enter the engine number.'
+        : !/^[A-Z0-9]+$/i.test(trimmedValue)
+          ? 'Engine number should contain only letters and numbers.'
+          : trimmedValue.length < 6
+            ? 'Engine number must be at least 6 characters long.'
+            : '';
+
+    case 'registrationAuthority':
+      return trimmedValue === ''
+        ? 'Please enter the registration authority.'
+        : !/^[A-Za-z0-9\s,.-]+$/.test(trimmedValue)
+          ? 'Registration authority should contain only letters, numbers, and limited punctuation (comma, period, hyphen).'
+          : trimmedValue.length < 3
+            ? 'Registration authority must be at least 3 characters long.'
+            : '';
+
+    case 'registrationDate':
+    case 'fitnessValidUpto':
+    case 'insuranceValidUpto':
+      return trimmedValue === '' ? 'Please enter the valid date.' : '';
+
+    case 'ownershipCount': {
+      if (trimmedValue === '') {
+        return 'Please enter the ownership count.';
+      }
+
+      const count = Number(trimmedValue);
+
+      if (isNaN(count)) {
+        return 'Ownership count must be a valid number.';
+      }
+
+      if (!Number.isInteger(count)) {
+        return 'Ownership count must be a whole number.';
+      }
+
+      if (count < 1) {
+        return 'Ownership count must be at least 1.';
+      }
+
+      if (count > 10) {
+        return 'Ownership count seems too high.';
+      }
+
+      return '';
+    }
+
+    case 'fuelType':
+      return trimmedValue === '' ? 'Please select the fuel type.' : '';
 
     default:
       return '';
@@ -493,4 +585,35 @@ function validateDate(trimmedValue, key) {
   }
 
   return ''; // ✅ All good
+}
+
+function validateYear(trimmedValue, key) {
+  if (trimmedValue === '') {
+    return 'Please enter a valid year';
+  }
+
+  // Remove spaces just in case
+  const yearStr = trimmedValue.trim();
+
+  // Must be exactly 4 digits
+  if (!/^\d{4}$/.test(yearStr)) {
+    return 'Please enter a 4-digit numeric year';
+  }
+
+  const year = Number(yearStr);
+  const currentYear = new Date().getFullYear();
+
+  if (year < 1900) {
+    return 'Please enter a valid year (1900 or later)';
+  }
+
+  if (key === 'manufactureYear' && year > currentYear) {
+    return 'Manufacture year cannot be in the future';
+  }
+
+  if (year > currentYear) {
+    return 'Year cannot be in the future';
+  }
+
+  return ''; //  All good
 }

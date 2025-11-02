@@ -470,3 +470,43 @@ export const documentType = Object.freeze({
 });
 
 export const MIN_LOAN_AMOUNT = 50000;
+
+// Fuel type constants
+export const fuelType = Object.freeze({
+  PETROL: 'PETROL',
+  DIESEL: 'DIESEL',
+  CNG: 'CNG',
+  ELECTRIC: 'ELECTRIC',
+  PETROL_HYBRID: 'PETROL/HYBRID',
+  DIESEL_HYBRID: 'DIESEL/HYBRID',
+  PETROL_CNG: 'PETROL/CNG',
+  OTHER: 'OTHER',
+});
+
+/**
+ * Dropdown options for Fuel Type selection.
+ * Used in forms, UI dropdowns, or selectors.
+ */
+export const fuelTypeOptions = [
+  {id: '1', label: 'Petrol', value: fuelType.PETROL},
+  {id: '2', label: 'Diesel', value: fuelType.DIESEL},
+  {id: '3', label: 'CNG', value: fuelType.CNG},
+  {id: '4', label: 'Electric', value: fuelType.ELECTRIC},
+  {id: '5', label: 'Petrol / Electric (Hybrid)', value: fuelType.PETROL_HYBRID},
+  {id: '6', label: 'Diesel / Electric (Hybrid)', value: fuelType.DIESEL_HYBRID},
+  {id: '7', label: 'Petrol / CNG', value: fuelType.PETROL_CNG},
+  {id: '7', label: 'Other', value: fuelType.OTHER},
+];
+
+/**
+ * Mapping of Fuel Type value to its display label.
+ */
+export const fuelTypeValue = {
+  [fuelType.PETROL]: 'Petrol',
+  [fuelType.DIESEL]: 'Diesel',
+  [fuelType.CNG]: 'CNG',
+  [fuelType.ELECTRIC]: 'Electric',
+  [fuelType.PETROL_HYBRID]: 'Petrol / Electric (Hybrid)',
+  [fuelType.DIESEL_HYBRID]: 'Diesel / Electric (Hybrid)',
+  [fuelType.PETROL_CNG]: 'Petrol / CNG',
+};

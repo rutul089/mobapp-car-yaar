@@ -58,6 +58,7 @@ const ScreenNames = {
   CIBILReportScreen: 'CIBILReportScreen',
   RedirectingScreen: 'DigiLockerRedirectScreen',
   DigiLockerAadhaarScreen: 'DigiLockerAadhaarScreen',
+  EditVehicleDetailScreen: 'EditVehicleDetailScreen',
 };
 
 export default ScreenNames;

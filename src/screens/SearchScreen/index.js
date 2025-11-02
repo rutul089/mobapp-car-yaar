@@ -37,7 +37,12 @@ class SearchScreen extends Component {
   };
 
   onAddVehicle = () => {
-    //TODO:Need add new vehicle flow
+    navigate(ScreenNames.EditVehicleDetailScreen, {
+      params: {
+        isEdit: false,
+        registerNumber: this.state.vehicleNumber,
+      },
+    });
   };
 
   onSearchVehicle = () => {
@@ -55,6 +60,7 @@ class SearchScreen extends Component {
     this.props.getVehicleByRegisterNumberThunk(
       vehicleNumber,
       _response => {
+        console.log('_response', JSON.stringify(_response));
         this.setState({isLoading: false, vehicleExists: true}, () => {
           navigate(ScreenNames.VehicleDetail, {
             addNewVehicle: true,

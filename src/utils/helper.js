@@ -200,9 +200,13 @@ export const formatVehicleDetails = ({
  * @param {string} outputFormat - The desired output format (default: 'DD MMM YYYY').
  * @returns {string} Formatted date or empty string if invalid.
  */
-export const formatDate = (inputDate, outputFormat = 'DD MMM YYYY') => {
+export const formatDate = (
+  inputDate,
+  outputFormat = 'DD MMM YYYY',
+  defaultValue = '-',
+) => {
   if (!inputDate || typeof inputDate !== 'string') {
-    return '-';
+    return defaultValue;
   }
 
   // List of known safe formats (add more if needed)
@@ -518,4 +522,26 @@ export const validateReferences = references => {
   }
 
   return {isValid: true};
+};
+
+export const toISODateNoShift = date => {
+  const d = new Date(date);
+  d.setHours(12, 0, 0, 0); // set to noon local
+  return d.toISOString().slice(0, 10);
+};
+
+export const calculateVehicleAge = manufactureYear => {
+  if (!manufactureYear) {
+    return '';
+  }
+
+  const year = parseInt(manufactureYear, 10);
+  const currentYear = new Date().getFullYear();
+
+  if (isNaN(year) || year < 1900 || year > currentYear) {
+    return '';
+  }
+
+  const age = currentYear - year;
+  return `${age < 0 ? 0 : age} Years`;
 };

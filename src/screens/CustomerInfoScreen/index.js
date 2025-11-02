@@ -148,6 +148,8 @@ class CustomerInfoScreen extends Component {
     const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
     const {details = {}} = selectedCustomer || {};
 
+    console.log({selectedCustomer});
+
     let customerNote = `${capitalizeFirstLetter(
       selectedCustomer?.customerCategory,
     )} - ${capitalizeFirstLetter(selectedCustomer?.customerType)}`;
@@ -183,7 +185,7 @@ class CustomerInfoScreen extends Component {
           profileImage: applicantPhoto,
           isValidUri: isValidUri,
           status: selectedCustomer?.isComplete ? 'SAVED' : 'DRAFT',
-          customerId: details?.customerId,
+          customerId: selectedCustomer?.customerNumber,
         }}
         personalDetail={[
           {

@@ -184,7 +184,7 @@ export const getVehicleByRegisterNumberThunk = (
         type: VEHICLE_DETAILS.FAILURE,
         payload: error.message,
       });
-      showApiErrorToast(error);
+      // showApiErrorToast(error);
       onFailure?.(error.message);
     }
   };

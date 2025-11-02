@@ -105,7 +105,7 @@ const Customers_Component = ({
               gradientColors={getGradientColors(status)}
               disableMargin={false}>
               <CustomerCard
-                customerId={formatShortId(item.customerId)}
+                customerId={formatShortId(item.customer?.customerNumber)}
                 customerName={customerDetails?.applicantName}
                 customerNote={customerNote}
                 footerInfo={[

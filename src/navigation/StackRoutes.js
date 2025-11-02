@@ -226,6 +226,10 @@ const StackRoutes = () => {
         component={Screens.DigiLockerRedirectScreen}
         // options={{gestureEnabled: false}}
       />
+      <Stack.Screen
+        name={ScreenNames.EditVehicleDetailScreen}
+        component={Screens.EditVehicleDetailScreen}
+      />
     </Stack.Navigator>
   );
 };

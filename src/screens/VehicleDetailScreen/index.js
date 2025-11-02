@@ -12,7 +12,6 @@ import {
   formatVehicleNumber,
 } from '../../utils/helper';
 import Vehicle_Detail_Component from './Vehicle_Detail_Component';
-import {Alert} from 'react-native';
 
 class VehicleDetail extends Component {
   constructor(props) {
@@ -100,7 +99,10 @@ class VehicleDetail extends Component {
     const {isCreatingLoanApplication, selectedLoanType, selectedVehicle} =
       this.props;
     let isDraft = selectedVehicle?.isDraft;
-
+    navigate(ScreenNames.EditVehicleDetailScreen, {
+      params: {isEdit: true},
+    });
+    return;
     // Removed vehicle is in draft state Alert based on the discussion 30 Oct 2025
 
     navigate(

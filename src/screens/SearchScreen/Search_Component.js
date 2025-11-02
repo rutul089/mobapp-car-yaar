@@ -26,6 +26,7 @@ const Search_Component = ({
   statusMsg,
   showStatusIcon,
   loading,
+  vehicleExists,
 }) => {
   const [caretHidden, setCaretHidden] = React.useState(false);
 

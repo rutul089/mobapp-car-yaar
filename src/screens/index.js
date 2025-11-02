@@ -56,3 +56,4 @@ export {default as ImagePreviewScreen} from './ImagePreviewScreen';
 //DigiLocker
 export {default as DigiLockerAadhaarScreen} from './DigiLocker/DigiLockerAadhaarScreen';
 export {default as DigiLockerRedirectScreen} from './DigiLocker/DigiLockerRedirectScreen';
+export {default as EditVehicleDetailScreen} from './EditVehicleDetailScreen';

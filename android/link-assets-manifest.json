@@ -36,6 +36,14 @@
     {
       "path": "src/assets/fonts/HankenGrotesk-Thin.ttf",
       "sha1": "bf74cbbc8769e7699ec4a376c44d6f28a88d1fe7"
+    },
+    {
+      "path": "src/assets/fonts/MaterialCommunityIcons.ttf",
+      "sha1": "4c2a838b00dbb5e8bb1b368fce0de534e8eb241c"
+    },
+    {
+      "path": "src/assets/fonts/MaterialIcons.ttf",
+      "sha1": "7e02c3f005532ff4d24148567c84089756a7848a"
     }
   ]
 }

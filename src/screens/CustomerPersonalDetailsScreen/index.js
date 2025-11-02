@@ -380,6 +380,7 @@ class CustomerPersonalDetails extends Component {
       maxEmiAfford: Number(state.maxEmiAfford),
       avgMonthlyBankBalance: Number(state.avgMonthlyBankBalance),
       customerId: selectedCustomerId,
+      // cibilScore: this.state?.cibilScore,
     };
 
     return payload;
