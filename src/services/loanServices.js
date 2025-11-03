@@ -154,3 +154,16 @@ export const submitLoanApplication = async applicationId => {
     throw error;
   }
 };
+
+export const fetchEmiPlans = async payload => {
+  try {
+    const response = await axiosInstance.post(
+      '/loan-applications/emi/plan',
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching EMI plans:', error);
+    throw error;
+  }
+};

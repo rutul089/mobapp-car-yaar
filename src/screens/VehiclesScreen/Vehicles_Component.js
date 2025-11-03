@@ -57,6 +57,7 @@ const Vehicles_Component = ({
   activeFilterOption,
   stopLoading,
   showUnavailableVehicleModalProp,
+  fullScreen,
 }) => {
   const [localActiveFilterOption, setLocalActiveFilterOption] =
     React.useState(activeFilterOption);
@@ -75,7 +76,7 @@ const Vehicles_Component = ({
   };
 
   return (
-    <SafeAreaWrapper hideBottom>
+    <SafeAreaWrapper hideBottom={!isCreatingLoanApplication}>
       {isCreatingLoanApplication ? (
         <>
           <Header title="Select Vehicle" onBackPress={() => goBack()} />

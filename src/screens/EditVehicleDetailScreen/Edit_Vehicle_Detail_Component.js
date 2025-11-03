@@ -57,6 +57,7 @@ const Edit_Vehicle_Detail_Component = ({
   onOwnershipCountChange,
   onMakeChange,
   onModelChange,
+  buttonLabel,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'ownerName',
@@ -353,7 +354,7 @@ const Edit_Vehicle_Detail_Component = ({
           <Spacing size="md" />
         </GroupWrapper>
         <Spacing size="lg" />
-        <Button variant="link" onPress={onNextPress} label={strings.next} />
+        <Button variant="link" onPress={onNextPress} label={buttonLabel} />
         <Spacing size={theme.sizes.padding + 10} />
       </KeyboardAwareScrollView>
 

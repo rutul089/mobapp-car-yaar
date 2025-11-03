@@ -92,19 +92,30 @@ class VehicleDetail extends Component {
   };
 
   onPressSecondaryButton = () => {
-    navigate(ScreenNames.VehicleImages);
-  };
-
-  onNextPress = () => {
+    // navigate(ScreenNames.VehicleImages);
     const {isCreatingLoanApplication, selectedLoanType, selectedVehicle} =
       this.props;
     let isDraft = selectedVehicle?.isDraft;
     navigate(ScreenNames.EditVehicleDetailScreen, {
       params: {isEdit: true},
     });
-    return;
-    // Removed vehicle is in draft state Alert based on the discussion 30 Oct 2025
+  };
 
+  onNextPress = () => {
+    const {isCreatingLoanApplication, selectedLoanType, selectedVehicle} =
+      this.props;
+    let isDraft = selectedVehicle?.isDraft;
+    // navigate(ScreenNames.EditVehicleDetailScreen, {
+    //   params: {isEdit: true},
+    // });
+    // return;
+    // // Removed vehicle is in draft state Alert based on the discussion 30 Oct 2025
+    if (isDraft && isCreatingLoanApplication) {
+      navigate(ScreenNames.EditVehicleDetailScreen, {
+        params: {isEdit: true},
+      });
+      return;
+    }
     navigate(
       isCreatingLoanApplication
         ? ScreenNames.CustomerFullScreen
@@ -249,6 +260,7 @@ class VehicleDetail extends Component {
           onModalHide: this.onModalHide,
           onPressPrimaryButton: this.onModalHide,
         }}
+        hideEditButton={selectedVehicle?.isDraft && isCreatingLoanApplication}
       />
     );
   }

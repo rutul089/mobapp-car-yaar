@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {MIN_LOAN_AMOUNT} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
+import strings from '../../locales/strings';
 import {
   getScreenParam,
   goBack,
@@ -10,9 +12,6 @@ import {addCustomerLoanAmountThunk} from '../../redux/actions';
 import {formatVehicleNumber, showToast} from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Loan_Amount_Component from './Loan_Amount_Component';
-import strings from '../../locales/strings';
-import {Alert} from 'react-native';
-import {MIN_LOAN_AMOUNT} from '../../constants/enums';
 
 class LoanAmountScreen extends Component {
   constructor(props) {

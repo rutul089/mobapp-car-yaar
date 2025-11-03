@@ -10,6 +10,7 @@ import {
   Spacing,
   Text,
   theme,
+  Loader,
 } from '@caryaar/components';
 import {goBack} from '../../navigation/NavigationUtils';
 import {Col, Grid, Row} from 'react-native-easy-grid';
@@ -22,6 +23,10 @@ const Loan_Offer_Detail_Component = ({
   loanDetail = {},
   emiData,
   registerNumber,
+  tenure,
+  loanApplicationId,
+  loading,
+  emi,
 }) => {
   const renderCellHeader = (value, style) => {
     return (
@@ -85,8 +90,8 @@ const Loan_Offer_Detail_Component = ({
           rightIcon={images.successCheck}
           showBreakdown
           footerData={[
-            {label: 'Tenure', value: '60 Month'},
-            {label: 'EMI', value: formatIndianCurrency('75000.12')},
+            {label: 'Tenure', value: `${tenure} Month`},
+            {label: 'EMI', value: formatIndianCurrency(emi)},
             {label: 'Processing Fee', value: formatIndianCurrency(5000)},
           ]}
           breakdownExpression={'(1.2 x 10,00,000) - 6,00,000 - 10,000 ='}
@@ -109,7 +114,7 @@ const Loan_Offer_Detail_Component = ({
         <View style={styles.rowWrapper}>
           <Text>Tentative EMI Payment</Text>
           <Text size={'small'} hankenGroteskBold color={'#F8A902'}>
-            #ABC123
+            {loanApplicationId}
           </Text>
         </View>
 
@@ -125,9 +130,9 @@ const Loan_Offer_Detail_Component = ({
             {/* S.No. */}
             <Grid>
               <Col>
-                {renderCellHeader('S.No.')}
-                {emiData.map((rowData, index) =>
-                  renderRow(rowData.sno, `sno-${index}`),
+                {renderCellHeader('Month')}
+                {emiData?.map((rowData, index) =>
+                  renderRow(rowData?.month, `sno-${index}`),
                 )}
               </Col>
             </Grid>
@@ -136,9 +141,9 @@ const Loan_Offer_Detail_Component = ({
             <Grid>
               <Col>
                 {renderCellHeader('Opn.Bal.')}
-                {emiData.map((rowData, index) =>
+                {emiData?.map((rowData, index) =>
                   renderRow(
-                    formatIndianCurrency(rowData.opening),
+                    formatIndianCurrency(rowData?.openingBalance),
                     `opening-${index}`,
                   ),
                 )}
@@ -149,7 +154,7 @@ const Loan_Offer_Detail_Component = ({
             <Grid>
               <Col>
                 {renderCellHeader('EMI')}
-                {emiData.map((rowData, index) =>
+                {emiData?.map((rowData, index) =>
                   renderRow(formatIndianCurrency(rowData.emi), `emi-${index}`),
                 )}
               </Col>
@@ -159,7 +164,7 @@ const Loan_Offer_Detail_Component = ({
             <Grid>
               <Col>
                 {renderCellHeader('Principal')}
-                {emiData.map((rowData, index) =>
+                {emiData?.map((rowData, index) =>
                   renderRow(
                     formatIndianCurrency(rowData.principal),
                     `principal-${index}`,
@@ -172,7 +177,7 @@ const Loan_Offer_Detail_Component = ({
             <Grid>
               <Col>
                 {renderCellHeader('Interest')}
-                {emiData.map((rowData, index) =>
+                {emiData?.map((rowData, index) =>
                   renderRow(
                     formatIndianCurrency(rowData.interest),
                     `interest-${index}`,
@@ -185,8 +190,11 @@ const Loan_Offer_Detail_Component = ({
             <Grid>
               <Col>
                 {renderCellHeader('O/S Bal.')}
-                {emiData.map((rowData, index) =>
-                  renderRow(formatIndianCurrency(rowData.os), `os-${index}`),
+                {emiData?.map((rowData, index) =>
+                  renderRow(
+                    formatIndianCurrency(rowData?.closingBalance),
+                    `os-${index}`,
+                  ),
                 )}
               </Col>
             </Grid>
@@ -197,6 +205,8 @@ const Loan_Offer_Detail_Component = ({
 
         <Button label={'Proceed'} onPress={onProceedPress} />
       </ScrollView>
+
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

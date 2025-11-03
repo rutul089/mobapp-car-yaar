@@ -278,6 +278,7 @@ class Vehicles extends Component {
       showFilterVehicles,
       activeFilterOption,
       showUnavailableVehicleModal,
+      fullScreen,
     } = this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
@@ -322,6 +323,7 @@ class Vehicles extends Component {
           onModalHide: this.onModalHide,
           onPressPrimaryButton: this.onModalHide,
         }}
+        fullScreen={fullScreen}
       />
     );
   }

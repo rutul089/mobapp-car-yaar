@@ -169,3 +169,41 @@ export const submitVehicleById = async (vehicleId, data) => {
     throw error;
   }
 };
+
+/**
+ * Updates an existing vehicle record on the server.
+ *
+ * @param {string} vehicleId - Unique ID of the vehicle to update.
+ * @param {Object} updatedData - Object containing the fields to update for the vehicle.
+ * @returns {Promise<Object>} - The updated vehicle data returned by the API.
+ * @throws {Error} - Throws an error if the API request fails.
+ *
+ */
+export const saveVehicleDetails = async (vehicleId, vehicleData) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/vehicles/used-vehicle/${vehicleId}`,
+      vehicleData,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating vehicle data:', error);
+    throw error;
+  }
+};
+
+// export const saveVehicleDetails = async (vehicleId, vehicleData) => {
+//   try {
+//     const endpoint = vehicleId
+//       ? `/vehicles/used-vehicle/${vehicleId}` // update existing
+//       : '/vehicles/used-vehicle'; // create new
+
+//     const method = vehicleId ? 'patch' : 'post';
+//     const response = await axiosInstance[method](endpoint, vehicleData);
+
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error saving vehicle details:', error);
+//     throw error;
+//   }
+// };

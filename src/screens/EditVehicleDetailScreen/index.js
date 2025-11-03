@@ -21,6 +21,7 @@ import {
 } from '../../constants/enums';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import strings from '../../locales/strings';
+import {saveVehicleDetailsThunk} from '../../redux/actions';
 
 class EditVehicleDetailScreen extends Component {
   constructor(props) {
@@ -87,7 +88,10 @@ class EditVehicleDetailScreen extends Component {
   }
 
   onNextPress = () => {
-    const {isCreatingLoanApplication} = this.props;
+    const {isCreatingLoanApplication, selectedVehicle} = this.props;
+
+    let selectedId = selectedVehicle?.id;
+
     const isFormValid = this.validateAllFields();
 
     if (!isFormValid) {
@@ -96,12 +100,25 @@ class EditVehicleDetailScreen extends Component {
     }
 
     let payload = this.getPayload();
-    return;
-    navigate(
-      isCreatingLoanApplication
-        ? ScreenNames.CustomerFullScreen
-        : ScreenNames.VehicleImages,
+
+    this.props.saveVehicleDetailsThunk(
+      selectedId,
+      payload,
+      success => {
+        if (isCreatingLoanApplication) {
+          navigate(ScreenNames.VehicleImages);
+        } else {
+          goBack();
+        }
+      },
+      error => {},
     );
+
+    // if (!isCreatingLoanApplication) {
+    //   return goBack();
+    // }
+
+    // navigate(ScreenNames.VehicleImages);
   };
 
   setSelectedFuelType = item => {
@@ -200,7 +217,7 @@ class EditVehicleDetailScreen extends Component {
       insuranceValidUpto: state.insuranceValidUpto,
       fitnessValidUpto: state.fitnessValidUpto,
       PUCC: state.PUCC,
-      ownershipCount: state.ownershipCount,
+      ownershipCount: Number(state.ownershipCount),
       make: state.make, // Brand
       model: state.model,
       fuelType: state.fuelType,
@@ -210,7 +227,7 @@ class EditVehicleDetailScreen extends Component {
   };
 
   render() {
-    const {selectedVehicle} = this.props;
+    const {selectedVehicle, isCreatingLoanApplication} = this.props;
     const {fuelType, errors, isEdit, registerNumber, vehicleAge} = this.state;
 
     return (
@@ -285,7 +302,7 @@ class EditVehicleDetailScreen extends Component {
             isError: errors?.registrationAuthority,
             statusMsg: errors?.registrationAuthority,
             autoCapitalize: 'characters',
-            isDisabled: isEdit,
+            // isDisabled: isEdit,
           },
           model: {
             isError: errors?.model,
@@ -330,12 +347,13 @@ class EditVehicleDetailScreen extends Component {
             statusMsg: errors?.insuranceValidUpto,
           },
         }}
+        buttonLabel={isCreatingLoanApplication ? strings.next : 'Save'}
       />
     );
   }
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {saveVehicleDetailsThunk};
 const mapStateToProps = ({vehicleData, loanData}) => {
   return {
     selectedVehicle: vehicleData?.selectedVehicle,

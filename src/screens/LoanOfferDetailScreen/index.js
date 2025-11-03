@@ -4,6 +4,7 @@ import Loan_Offer_Detail_Component from './Loan_Offer_Detail_Component';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 import {formatVehicleNumber} from '../../utils/helper';
+import {fetchEmiPlanThunk} from '../../redux/actions/emiPlanActions';
 const emiData = [
   {
     sno: 1,
@@ -102,10 +103,35 @@ class LoanOfferDetailScreen extends Component {
     let route = this.props.route;
     let loanDetail =
       getScreenParam(route, 'params') || route?.params?.loanDetail;
-    this.setState({
-      loanDetail,
-    });
+    this.setState(
+      {
+        loanDetail,
+      },
+      () => {
+        this.callFetchEmiPlanThunk();
+      },
+    );
   }
+
+  callFetchEmiPlanThunk = () => {
+    const {selectedLoanApplication} = this.props;
+
+    let loanAmount = selectedLoanApplication?.loanAmount;
+    let interestRate = selectedLoanApplication?.interesetRate;
+    let tenureMonths = selectedLoanApplication?.tenure;
+
+    let payload = {
+      loanAmount,
+      interestRate,
+      tenureMonths,
+    };
+    this.props.fetchEmiPlanThunk(
+      payload,
+      success => {},
+      error => {},
+    );
+  };
+
   onProceedPress = () => {
     let params = this.props.route?.params;
 
@@ -117,28 +143,37 @@ class LoanOfferDetailScreen extends Component {
   };
 
   render() {
-    const {selectedLoanApplication} = this.props;
+    const {selectedLoanApplication, emiPlan, loading} = this.props;
     const _registerNumber =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
+    let loanAmount = selectedLoanApplication?.loanAmount || 100000;
+    let tenure = emiPlan?.tenureMonths;
+
     return (
       <Loan_Offer_Detail_Component
         onProceedPress={this.onProceedPress}
         onLoanOfferPress={this.onLoanOfferPress}
         loanDetail={this.state.loanDetail}
-        emiData={emiData}
+        emiData={emiPlan?.schedule}
         registerNumber={formatVehicleNumber(_registerNumber)}
+        loanAmount={loanAmount}
+        tenure={tenure}
+        loading={loading}
+        loanApplicationId={selectedLoanApplication?.loanApplicationId}
+        emi={emiPlan?.emi}
       />
     );
   }
 }
 
-const mapActionCreators = {};
-const mapStateToProps = ({loanData}) => {
+const mapActionCreators = {fetchEmiPlanThunk};
+const mapStateToProps = ({loanData, emiPlan}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
-    loading: loanData.loading,
+    loading: loanData.loading || emiPlan.loading,
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
+    emiPlan: emiPlan.emiPlanData,
   };
 };
 export default connect(

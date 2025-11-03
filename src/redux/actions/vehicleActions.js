@@ -3,18 +3,20 @@ import {
   fetchVehicleById,
   fetchVehicles,
   getVehicleByRegisterNumber,
+  saveVehicleDetails,
   searchVehiclesByKeyword,
   submitVehicleById,
   updateVehicleById,
 } from '../../services';
 import {showApiErrorToast} from '../../utils/helper';
 import {
-  VEHICLE_BY_ID,
   RESET_SELECTED_VEHICLE,
-  UPDATE,
-  VEHICLE_EXISTS,
-  VEHICLE_DETAILS,
+  SAVE_VEHICLE,
   SUBMIT_VEHICLE,
+  UPDATE,
+  VEHICLE_BY_ID,
+  VEHICLE_DETAILS,
+  VEHICLE_EXISTS,
 } from './actionType';
 
 import types from './types';
@@ -208,6 +210,28 @@ export const submitVehicleThunk = (id, onSuccess, onFailure) => {
     } catch (error) {
       dispatch({
         type: SUBMIT_VEHICLE.FAILURE,
+        payload: error.message,
+      });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const saveVehicleDetailsThunk = (id, payLoad, onSuccess, onFailure) => {
+  return async dispatch => {
+    dispatch({type: SAVE_VEHICLE.REQUEST});
+
+    try {
+      const response = await saveVehicleDetails(id, payLoad);
+      dispatch({
+        type: SAVE_VEHICLE.SUCCESS,
+        payload: response.data,
+      });
+      onSuccess?.(response?.data);
+    } catch (error) {
+      dispatch({
+        type: SAVE_VEHICLE.FAILURE,
         payload: error.message,
       });
       showApiErrorToast(error);

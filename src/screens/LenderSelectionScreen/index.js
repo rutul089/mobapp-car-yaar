@@ -42,16 +42,18 @@ class LenderSelection extends Component {
     const {selectedLoanApplication, loading} = this.props;
     const _registerNumber =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
+    let loanAmount = selectedLoanApplication?.loanAmount || 100000;
+    let tenure = selectedLoanApplication?.tenure || 100000;
 
     return (
-      <>
-        <Lender_Selection_Component
-          registerNumber={formatVehicleNumber(_registerNumber)}
-          loanApplicationId={selectedLoanApplication?.loanApplicationId}
-          onItemPress={this.onItemPress}
-          loading={loading}
-        />
-      </>
+      <Lender_Selection_Component
+        registerNumber={formatVehicleNumber(_registerNumber)}
+        loanApplicationId={selectedLoanApplication?.loanApplicationId}
+        onItemPress={this.onItemPress}
+        loading={loading}
+        loanAmount={loanAmount}
+        tenure={tenure}
+      />
     );
   }
 }

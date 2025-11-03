@@ -19,6 +19,7 @@ const Lender_Selection_Component = ({
   loading,
   loanApplicationId,
   registerNumber,
+  tenure,
 }) => {
   const financeData = [
     {
@@ -26,13 +27,13 @@ const Lender_Selection_Component = ({
       logo: images.hdfcImg,
 
       interestRate: '8',
-      tenure: '60',
+      tenure: tenure,
       emi: '11,093',
       processingFee: '1,000',
       badge: 1,
       showBadge: true,
       footerInfo: [
-        {label: 'Tenure', value: '60 Month'},
+        {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
         {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
@@ -49,7 +50,7 @@ const Lender_Selection_Component = ({
       showNewBreakDown: true,
       isEligibleForBT: true,
       footerInfo: [
-        {label: 'Tenure', value: '60 Month'},
+        {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
         {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
@@ -64,7 +65,7 @@ const Lender_Selection_Component = ({
       showBadge: true,
       logo: images.hdfcImg,
       footerInfo: [
-        {label: 'Tenure', value: '60 Month'},
+        {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
         {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
@@ -80,7 +81,7 @@ const Lender_Selection_Component = ({
       showBadge: true,
       showNewBreakDown: true,
       footerInfo: [
-        {label: 'Tenure', value: '60 Month'},
+        {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000')},
         {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],

@@ -270,11 +270,11 @@ export const validateField = (key, value, isOptional) => {
     case 'model':
       return trimmedValue === ''
         ? 'Please enter the car model.'
-        : !/^[A-Za-z0-9\s-]+$/.test(trimmedValue)
-          ? 'Car model should contain only letters, numbers, or hyphens.'
-          : trimmedValue.length < 2
-            ? 'Car model must be at least 2 characters long.'
-            : '';
+        : // : !/^[A-Za-z0-9\s-]+$/.test(trimmedValue)
+          //   ? 'Car model should contain only letters, numbers, or hyphens.'
+          trimmedValue.length < 2
+          ? 'Car model must be at least 2 characters long.'
+          : '';
 
     case 'chassisNumber':
       return trimmedValue === ''
@@ -300,11 +300,11 @@ export const validateField = (key, value, isOptional) => {
     case 'registrationAuthority':
       return trimmedValue === ''
         ? 'Please enter the registration authority.'
-        : !/^[A-Za-z0-9\s,.-]+$/.test(trimmedValue)
-          ? 'Registration authority should contain only letters, numbers, and limited punctuation (comma, period, hyphen).'
-          : trimmedValue.length < 3
-            ? 'Registration authority must be at least 3 characters long.'
-            : '';
+        : // : !/^[A-Za-z0-9\s,.-]+$/.test(trimmedValue)
+          //   ? 'Registration authority should contain only letters, numbers, and limited punctuation (comma, period, hyphen).'
+          trimmedValue.length < 3
+          ? 'Registration authority must be at least 3 characters long.'
+          : '';
 
     case 'registrationDate':
     case 'fitnessValidUpto':
@@ -339,6 +339,28 @@ export const validateField = (key, value, isOptional) => {
 
     case 'fuelType':
       return trimmedValue === '' ? 'Please select the fuel type.' : '';
+
+    case 'interestRate':
+      return trimmedValue === ''
+        ? 'Please enter the interest rate.'
+        : isNaN(trimmedValue)
+          ? 'Interest rate must be a number.'
+          : parseFloat(trimmedValue) <= 0
+            ? 'Interest rate must be greater than 0.'
+            : parseFloat(trimmedValue) > 100
+              ? 'Interest rate cannot exceed 100%.'
+              : '';
+
+    case 'tenureMonths':
+      return trimmedValue === ''
+        ? 'Please enter the tenure in months.'
+        : isNaN(trimmedValue)
+          ? 'Tenure must be a valid number.'
+          : parseInt(trimmedValue, 10) <= 0
+            ? 'Tenure must be greater than 0.'
+            : parseInt(trimmedValue, 10) > 1200
+              ? 'Tenure value seems too high.'
+              : '';
 
     default:
       return '';

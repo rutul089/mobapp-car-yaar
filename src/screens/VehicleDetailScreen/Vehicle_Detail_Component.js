@@ -32,6 +32,7 @@ const Vehicle_Detail_Component = ({
   carImage,
   onRefreshDetailPress,
   ownerShipModalProp,
+  hideEditButton,
 }) => {
   return (
     <SafeAreaWrapper>
@@ -76,7 +77,7 @@ const Vehicle_Detail_Component = ({
             primaryButtonLabel={strings.next}
             secondaryButtonLabel={'Edit'}
             onPressPrimaryButton={onNextPress}
-            hideSecondaryButton={!isCreatingLoanApplication}
+            hideSecondaryButton={hideEditButton}
             onPressSecondaryButton={onPressSecondaryButton}
           />
         </View>

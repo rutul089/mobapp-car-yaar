@@ -102,3 +102,6 @@ export const SUBMIT_LOAN_APPLICATION = createAsyncActionTypes(
 export const DELETE_CUSTOMER = createAsyncActionTypes('DELETE_CUSTOMER');
 
 export const SUBMIT_VEHICLE = createAsyncActionTypes('SUBMIT_VEHICLE');
+
+export const SAVE_VEHICLE = createAsyncActionTypes('SAVE_VEHICLE');
+export const EMI_PLAN = createAsyncActionTypes('EMI_PLAN');
