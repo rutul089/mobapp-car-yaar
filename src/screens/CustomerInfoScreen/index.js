@@ -148,8 +148,6 @@ class CustomerInfoScreen extends Component {
     const {loading, selectedCustomer, isCreatingLoanApplication} = this.props;
     const {details = {}} = selectedCustomer || {};
 
-    console.log({selectedCustomer});
-
     let customerNote = `${capitalizeFirstLetter(
       selectedCustomer?.customerCategory,
     )} - ${capitalizeFirstLetter(selectedCustomer?.customerType)}`;

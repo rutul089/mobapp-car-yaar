@@ -179,6 +179,8 @@ export const submitVehicleById = async (vehicleId, data) => {
  * @throws {Error} - Throws an error if the API request fails.
  *
  */
+
+/**
 export const saveVehicleDetails = async (vehicleId, vehicleData) => {
   try {
     const response = await axiosInstance.patch(
@@ -191,19 +193,20 @@ export const saveVehicleDetails = async (vehicleId, vehicleData) => {
     throw error;
   }
 };
+ */
 
-// export const saveVehicleDetails = async (vehicleId, vehicleData) => {
-//   try {
-//     const endpoint = vehicleId
-//       ? `/vehicles/used-vehicle/${vehicleId}` // update existing
-//       : '/vehicles/used-vehicle'; // create new
+export const saveVehicleDetails = async (vehicleId, vehicleData) => {
+  try {
+    const endpoint = vehicleId
+      ? `/vehicles/used-vehicle/${vehicleId}` // update existing
+      : '/vehicles/used-vehicle'; // create new
 
-//     const method = vehicleId ? 'patch' : 'post';
-//     const response = await axiosInstance[method](endpoint, vehicleData);
+    const method = vehicleId ? 'patch' : 'post';
+    const response = await axiosInstance[method](endpoint, vehicleData);
 
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error saving vehicle details:', error);
-//     throw error;
-//   }
-// };
+    return response.data;
+  } catch (error) {
+    console.error('Error saving vehicle details:', error);
+    throw error;
+  }
+};

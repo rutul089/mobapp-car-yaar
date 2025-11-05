@@ -251,7 +251,7 @@ export const postCustomerLenderDetailsThunk = (
         lenderData,
       );
 
-      dispatch(fetchLoanApplicationFromIdThunk(applicationId));
+      await dispatch(fetchLoanApplicationFromIdThunk(applicationId));
 
       onSuccess?.(response);
     } catch (error) {

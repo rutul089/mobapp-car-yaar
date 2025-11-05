@@ -58,6 +58,7 @@ const Add_References_Component = ({
         contentContainerStyle={styles.wrapper}
         extraScrollHeight={100}
         enableOnAndroid
+        keyboardShouldPersistTaps="handled"
         bounces={false}>
         <GroupWrapper title={'Home Verification'}>
           <Input

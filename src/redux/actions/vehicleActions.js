@@ -98,6 +98,7 @@ export const fetchVehicleFromIdThunk = (id, onSuccess, onFailure) => {
         type: VEHICLE_BY_ID.SUCCESS,
         payload: response.data,
       });
+      console.log('fetchVehicleFromIdThunk', JSON.stringify(response.data));
       onSuccess?.(response?.data);
     } catch (error) {
       dispatch({
@@ -173,7 +174,7 @@ export const getVehicleByRegisterNumberThunk = (
 ) => {
   return async dispatch => {
     dispatch({type: VEHICLE_DETAILS.REQUEST});
-
+    console.log('registerNumber', registerNumber);
     try {
       const response = await getVehicleByRegisterNumber(registerNumber);
       dispatch({
@@ -218,22 +219,52 @@ export const submitVehicleThunk = (id, onSuccess, onFailure) => {
   };
 };
 
-export const saveVehicleDetailsThunk = (id, payLoad, onSuccess, onFailure) => {
+// export const saveVehicleDetailsThunk = (id, payLoad, onSuccess, onFailure) => {
+//   return async dispatch => {
+//     dispatch({type: SAVE_VEHICLE.REQUEST});
+
+//     try {
+//       const response = await saveVehicleDetails(id, payLoad);
+//       dispatch({
+//         type: SAVE_VEHICLE.SUCCESS,
+//         payload: response.data,
+//       });
+//       onSuccess?.(response?.data);
+//     } catch (error) {
+//       dispatch({
+//         type: SAVE_VEHICLE.FAILURE,
+//         payload: error.message,
+//       });
+//       showApiErrorToast(error);
+//       onFailure?.(error.message);
+//     }
+//   };
+// };
+
+export const saveVehicleDetailsThunk = (id, payload, onSuccess, onFailure) => {
   return async dispatch => {
     dispatch({type: SAVE_VEHICLE.REQUEST});
 
     try {
-      const response = await saveVehicleDetails(id, payLoad);
+      const response = await saveVehicleDetails(id, payload);
+      const {data, success} = response;
+
       dispatch({
         type: SAVE_VEHICLE.SUCCESS,
-        payload: response.data,
+        payload: data,
       });
-      onSuccess?.(response?.data);
+
+      if (success && data?.vehicleId) {
+        await dispatch(fetchVehicleFromIdThunk(data.vehicleId));
+      }
+
+      onSuccess?.(response);
     } catch (error) {
       dispatch({
         type: SAVE_VEHICLE.FAILURE,
         payload: error.message,
       });
+
       showApiErrorToast(error);
       onFailure?.(error.message);
     }

@@ -45,6 +45,9 @@ const Vehicle_Odometer_Component = ({
       <Header title={strings.vehicleDetailTitle} onBackPress={onBackPress} />
       <KeyboardAwareScrollView
         bounces={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraHeight={100}
         contentContainerStyle={{
           backgroundColor: theme.colors.background,
           flex: 1,

@@ -40,6 +40,9 @@ const CreateCIBIL_Component = ({
       <Header {...headerProp} />
       <KeyboardAwareScrollView
         bounces={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraHeight={100}
         contentContainerStyle={styles.wrapper}>
         <GroupWrapper title="Generate Your CIBIL Score">
           <Input

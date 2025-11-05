@@ -52,7 +52,7 @@ class LoanAmountScreen extends Component {
       showToast('warning', strings.errorMissingField, 'bottom', 3000);
       return;
     }
-
+    /*
     if (loanAmount < MIN_LOAN_AMOUNT) {
       this.setState({
         errors: {
@@ -61,6 +61,7 @@ class LoanAmountScreen extends Component {
       });
       return;
     }
+      */
 
     let payload = {loanAmount};
 

@@ -103,6 +103,7 @@ class LoanOfferDetailScreen extends Component {
     let route = this.props.route;
     let loanDetail =
       getScreenParam(route, 'params') || route?.params?.loanDetail;
+    console.log('loanDetail', JSON.stringify(loanDetail));
     this.setState(
       {
         loanDetail,
@@ -115,9 +116,13 @@ class LoanOfferDetailScreen extends Component {
 
   callFetchEmiPlanThunk = () => {
     const {selectedLoanApplication} = this.props;
+    console.log(
+      '----selectedLoanApplication----',
+      JSON.stringify(selectedLoanApplication),
+    );
 
     let loanAmount = selectedLoanApplication?.loanAmount;
-    let interestRate = selectedLoanApplication?.interesetRate;
+    let interestRate = selectedLoanApplication?.interesetRate || 8;
     let tenureMonths = selectedLoanApplication?.tenure;
 
     let payload = {
@@ -125,6 +130,7 @@ class LoanOfferDetailScreen extends Component {
       interestRate,
       tenureMonths,
     };
+
     this.props.fetchEmiPlanThunk(
       payload,
       success => {},

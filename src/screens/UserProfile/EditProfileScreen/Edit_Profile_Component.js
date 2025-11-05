@@ -76,6 +76,9 @@ const Edit_Profile_Component = ({
       <Header title={'Edit Profile'} onBackPress={() => goBack()} />
       <KeyboardAwareScrollView
         bounces={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraHeight={100}
         contentContainerStyle={styles.wrapper}>
         <View style={styles.profileWrapper}>{profileCard()}</View>
         <View style={{padding: theme.sizes.padding}}>

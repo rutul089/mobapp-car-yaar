@@ -34,6 +34,9 @@ const CheckCIBIL_Component = ({
       <Header {...headerProp} />
       <KeyboardAwareScrollView
         bounces={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraHeight={100}
         contentContainerStyle={styles.wrapper}>
         <GroupWrapper title="Verify Your CIBIL Score">
           <Input

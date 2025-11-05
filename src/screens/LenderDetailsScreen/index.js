@@ -27,7 +27,7 @@ class index extends Component {
     this.props.postCustomerLenderDetailsThunk(
       selectedApplicationId,
       param,
-      success => {
+      async success => {
         let rawParams = getScreenParam(this.props.route, 'params');
         navigate(ScreenNames.LoanOfferDetail, {
           ...rawParams,

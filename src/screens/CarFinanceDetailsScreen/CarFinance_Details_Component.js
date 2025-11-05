@@ -95,6 +95,7 @@ const CarFinance_Details_Component = ({
         contentContainerStyle={styles.wrapper}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
+        extraHeight={100}
         bounces={false}>
         <Text>Basic Details</Text>
         <Spacing size="smd" />

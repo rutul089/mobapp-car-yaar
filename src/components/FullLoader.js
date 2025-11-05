@@ -3,15 +3,15 @@ import {View, ActivityIndicator, StyleSheet, Modal} from 'react-native';
 
 const FullLoader = ({visible = false}) => {
   return (
-    <Modal
-      transparent
-      visible={visible}
-      animationType="fade"
-      statusBarTranslucent>
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" />
-      </View>
-    </Modal>
+    // <Modal
+    //   transparent
+    //   visible={visible}
+    //   animationType="fade"
+    //   statusBarTranslucent>
+    <View style={styles.loaderContainer}>
+      <ActivityIndicator size="large" />
+    </View>
+    // </Modal>
   );
 };
 
@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
 

@@ -125,7 +125,7 @@ const Customer_Personal_Details_Component = ({
     <SafeAreaWrapper>
       <Header {...headerProp} />
       <KeyboardAwareScrollView
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
         bounces={true}
         extraScrollHeight={150}
         enableOnAndroid
@@ -149,7 +149,7 @@ const Customer_Personal_Details_Component = ({
             btnLabel={'Click to Upload PAN Card Photo'}
             image={state.pancardPhotoLink}
             handleImagePick={() => handleFilePicker?.('pancardPhoto')}
-            viewImage={() => handleViewDocument?.(state.pancardPhoto)}
+            viewImage={() => handleViewDocument?.(state.pancardPhotoLink)}
             onDeletePress={() => handleDeleteDocument?.('pancardPhoto')}
             isDocument={
               Platform.OS === 'android' &&
@@ -186,7 +186,7 @@ const Customer_Personal_Details_Component = ({
               wrapperStyle={styles.halfWidth}
               image={state.aadharFrontPhotoLink}
               handleImagePick={() => handleFilePicker?.('aadharFrontPhoto')}
-              viewImage={() => handleViewDocument?.(state.aadharFrontPhoto)}
+              viewImage={() => handleViewDocument?.(state.aadharFrontPhotoLink)}
               onDeletePress={() => handleDeleteDocument?.('aadharFrontPhoto')}
               isDocument={
                 Platform.OS === 'android' &&
@@ -200,7 +200,7 @@ const Customer_Personal_Details_Component = ({
               wrapperStyle={styles.halfWidth}
               image={state.aadharBackphotoLink}
               handleImagePick={() => handleFilePicker?.('aadharBackphoto')}
-              viewImage={() => handleViewDocument?.(state.aadharBackphoto)}
+              viewImage={() => handleViewDocument?.(state.aadharBackphotoLink)}
               onDeletePress={() => handleDeleteDocument?.('aadharBackphoto')}
               isDocument={
                 Platform.OS === 'android' &&

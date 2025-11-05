@@ -23,30 +23,55 @@ import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import strings from '../../locales/strings';
 import {saveVehicleDetailsThunk} from '../../redux/actions';
 
+// const initialState = {
+//   PUCC: false,
+//   chassisNumber: 'YV1LF68ACJ1197242',
+//   emissionNorm: 'BHARAT STAGE IV',
+//   engineNumber: '2126912',
+//   fitnessValidUpto: '2026-11-03T00:00:00+05:30',
+//   fuelType: 'DIESEL',
+//   insuranceValidUpto: '2025-11-04T00:00:00+05:30',
+//   make: 'VOLVO AUTO INDIA PVT LTD',
+//   manufactureYear: '2018',
+//   model: 'VOLVO XC90 D4',
+//   ownerName: 'Jethalal Gadda',
+//   ownershipCount: 1 + '',
+//   registerNumber: 'FF53FG3535',
+//   registrationAuthority: 'Ahmedabad,Gujarat',
+//   registrationDate: '2025-08-04T00:00:00+05:30',
+//   vehicleAge: '',
+//   vehicleStatus: 'inventory',
+// };
+const initialState = {
+  fuelType: '',
+  ownerName: '',
+  manufactureYear: '',
+  chassisNumber: '',
+  engineNumber: '',
+  registrationDate: '',
+  registrationAuthority: '',
+  emissionNorm: '',
+  vehicleAge: '',
+  vehicleStatus: '',
+  insuranceValidUpto: '',
+  fitnessValidUpto: '',
+  PUCC: currentLoanOptions.NO,
+  ownershipCount: '',
+  make: '',
+  model: '',
+};
+
 class EditVehicleDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fuelType: '',
-      ownerName: '',
-      manufactureYear: '',
-      chassisNumber: '',
-      engineNumber: '',
-      registrationDate: '',
-      registrationAuthority: '',
-      emissionNorm: '',
-      vehicleAge: '',
-      vehicleStatus: '',
-      insuranceValidUpto: '',
-      fitnessValidUpto: '',
-      PUCC: currentLoanOptions.NO,
-      ownershipCount: '',
-      make: '',
-      model: '',
+      ...initialState,
       isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
       registerNumber:
         getScreenParam(props.route, 'params')?.registerNumber || '',
       errors: {},
+      addNewVehicle:
+        getScreenParam(props.route, 'params')?.addNewVehicle || false,
       isManYearEdited: false,
     };
     this.setSelectedFuelType = this.setSelectedFuelType.bind(this);
@@ -89,8 +114,11 @@ class EditVehicleDetailScreen extends Component {
 
   onNextPress = () => {
     const {isCreatingLoanApplication, selectedVehicle} = this.props;
+    const {addNewVehicle} = this.state;
 
-    let selectedId = selectedVehicle?.id;
+    let selectedId = selectedVehicle?.UsedVehicle?.id;
+
+    console.log({selectedId});
 
     const isFormValid = this.validateAllFields();
 
@@ -105,7 +133,17 @@ class EditVehicleDetailScreen extends Component {
       selectedId,
       payload,
       success => {
-        if (isCreatingLoanApplication) {
+        if (addNewVehicle && isCreatingLoanApplication) {
+          navigate(ScreenNames.VehicleImages);
+        } else if (addNewVehicle) {
+          navigate(ScreenNames.VehicleDetail, {
+            addNewVehicle: true,
+            UsedVehicle: {
+              vehicleId: success?.data?.vehicleId,
+            },
+            vehicleId: success?.data?.vehicleId,
+          });
+        } else if (isCreatingLoanApplication) {
           navigate(ScreenNames.VehicleImages);
         } else {
           goBack();
@@ -144,7 +182,7 @@ class EditVehicleDetailScreen extends Component {
     let formattedDate = toISODateNoShift(date);
     this.setState(
       {
-        [key]: formattedDate,
+        [key]: formatDate(date, 'YYYY-MM-DDTHH:mm:ssZ'),
       },
       () => {
         this.onChangeField(key, this.state?.[key]);
@@ -212,7 +250,10 @@ class EditVehicleDetailScreen extends Component {
       registrationDate: state.registrationDate,
       registrationAuthority: state.registrationAuthority,
       emissionNorm: state.emissionNorm,
-      vehicleAge: state.vehicleAge,
+      vehicleAge:
+        state?.vehicleAge && !this.state.isManYearEdited
+          ? state?.vehicleAge
+          : calculateVehicleAge(this.state.manufactureYear),
       vehicleStatus: 'inventory', // Pending
       insuranceValidUpto: state.insuranceValidUpto,
       fitnessValidUpto: state.fitnessValidUpto,

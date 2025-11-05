@@ -1,76 +1,3 @@
-// import React, {useEffect, useState} from 'react';
-// import {View, StyleSheet, Image} from 'react-native';
-// import {DatePickerModal} from 'react-native-paper-dates';
-
-// import {images} from '@caryaar/components';
-
-// const CustomDatePickerModal = ({
-//   visible,
-//   onDismiss,
-//   onConfirm,
-//   initialDate = new Date(),
-//   title = 'Select a date',
-//   mode = 'single', // "single", "range", "multiple"
-//   confirmLabel = 'Confirm',
-//   dismissLabel = 'Cancel',
-//   restProps,
-// }) => {
-//   const [date, setDate] = useState(initialDate);
-//   console.log('initialDate', initialDate);
-
-//   useEffect(() => {
-//     const [date, setDate] = useState(initialDate);
-//   }, [initialDate]);
-
-//   const today = new Date();
-//   const endOfToday = new Date(
-//     today.getFullYear(),
-//     today.getMonth(),
-//     today.getDate(),
-//   );
-
-//   const handleConfirm = params => {
-//     if (mode === 'single') {
-//       setDate(params.date);
-//       onConfirm?.(params.date);
-//     } else if (mode === 'range') {
-//       onConfirm?.(params.startDate, params.endDate);
-//     }
-//     onDismiss?.();
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <DatePickerModal
-//         mode={mode}
-//         visible={visible}
-//         date={date}
-//         onDismiss={onDismiss}
-//         onConfirm={handleConfirm}
-//         locale="en"
-//         saveLabel={confirmLabel}
-//         label={title}
-//         {...restProps}
-
-//         // validRange={{endDate: endOfToday}}
-
-//         // validRange={{
-//         //   startDate: new Date(2000, 0, 1),
-//         //   endDate: endOfToday, // till today
-//         // }}
-//       />
-//     </View>
-//   );
-// };
-
-// export default CustomDatePickerModal;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-// });
-
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {DatePickerModal} from 'react-native-paper-dates';
@@ -85,6 +12,8 @@ const CustomDatePickerModal = ({
   confirmLabel = 'Confirm',
   dismissLabel = 'Cancel',
   disableFutureDates = false, // custom prop
+  disablePastDates = false, // disables past dates
+  restProps,
 }) => {
   const [date, setDate] = useState(initialDate);
 
@@ -95,15 +24,23 @@ const CustomDatePickerModal = ({
 
   // 🔧 Prevent selecting future dates (optional)
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const validRange = disableFutureDates
-    ? {
-        endDate: new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-        ),
-      }
-    : undefined;
+    ? {endDate: today} // only past and today allowed
+    : disablePastDates
+      ? {startDate: today} // only today and future allowed
+      : undefined;
+
+  // const validRange = disableFutureDates
+  //   ? {
+  //       endDate: new Date(
+  //         today.getFullYear(),
+  //         today.getMonth(),
+  //         today.getDate(),
+  //       ),
+  //     }
+  //   : undefined;
 
   const handleConfirm = params => {
     if (mode === 'single') {
@@ -122,19 +59,18 @@ const CustomDatePickerModal = ({
   };
 
   return (
-    <View style={styles.container}>
-      <DatePickerModal
-        mode={mode}
-        visible={visible}
-        date={date}
-        onDismiss={onDismiss}
-        onConfirm={handleConfirm}
-        locale="en"
-        saveLabel={confirmLabel}
-        label={title}
-        validRange={validRange}
-      />
-    </View>
+    <DatePickerModal
+      mode={mode}
+      visible={visible}
+      date={date}
+      onDismiss={onDismiss}
+      onConfirm={handleConfirm}
+      locale="en"
+      saveLabel={confirmLabel}
+      label={title}
+      validRange={validRange}
+      {...restProps}
+    />
   );
 };
 

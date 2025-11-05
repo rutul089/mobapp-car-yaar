@@ -1,7 +1,12 @@
 import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
-import {getPresignedUploadUrl, uploadFileWithFormData} from '../services';
+import {
+  getPresignedUploadUrl,
+  uploadAadhaarForOcr,
+  uploadFileWithFormData,
+} from '../services';
 import {Image as ImageCompressor} from 'react-native-compressor';
+import {showApiErrorToast} from './helper';
 
 /**
  * Uploads a photo using multipart/form-data.
@@ -115,4 +120,45 @@ const validateFileSize = async uri => {
     return false;
   }
   return true;
+};
+
+/**
+ * Uploads media (image or PDF) after compression and returns uploaded URL.
+ * Handles errors from server, network, and general exceptions cleanly.
+ *
+ * @param {Object} asset - File asset object (from picker or camera)
+ * @param {string} type - Optional type (e.g. "aadhaarFront", "rcBook", etc.)
+ * @returns {Promise<string>} - Uploaded file URL
+ */
+export const uploadMedia = async (asset, type) => {
+  try {
+    if (!asset?.uri) {
+      throw new Error('Invalid file. Please select a valid image or document.');
+    }
+
+    const fileName = asset.name || asset.fileName || `${type || 'upload'}.jpg`;
+    const mimeType = asset.type || 'application/octet-stream';
+
+    const isPDF = mimeType.toLowerCase().includes('pdf');
+    const fileUri = isPDF ? asset.uri : await compressImage(asset.uri);
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: fileUri,
+      type: mimeType,
+      name: fileName,
+    });
+
+    // 🔹 Upload file
+    const response = await uploadAadhaarForOcr(formData, type);
+
+    const url = response?.data;
+    if (!url) {
+      throw new Error('Upload failed — no file URL returned from server.');
+    }
+
+    return url;
+  } catch (error) {
+    throw new Error(error);
+  }
 };

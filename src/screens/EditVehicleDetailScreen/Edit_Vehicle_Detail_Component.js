@@ -1,6 +1,7 @@
 import {
-  AutocompleteInput,
-  Card,
+  Button,
+  DropdownModal,
+  GroupWrapper,
   Header,
   images,
   Input,
@@ -8,29 +9,15 @@ import {
   RadioGroupRow,
   SafeAreaWrapper,
   Spacing,
-  Text,
   theme,
-  DropdownModal,
-  GroupWrapper,
-  Button,
 } from '@caryaar/components';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {
-  currentLoanTypes,
-  fuelTypeOptions,
-  vehicleConditionOptions,
-} from '../../constants/enums';
-import strings from '../../locales/strings';
-import {formatDate, formatIndianCurrency} from '../../utils/helper';
-import {
-  formatInputDate,
-  isValidInput,
-  sanitizeAmount,
-} from '../../utils/inputHelper';
-import {useInputRefs} from '../../utils/useInputRefs';
 import {CustomDatePickerModal} from '../../components';
+import {currentLoanTypes, fuelTypeOptions} from '../../constants/enums';
+import {formatDate} from '../../utils/helper';
+import {useInputRefs} from '../../utils/useInputRefs';
 
 const Edit_Vehicle_Detail_Component = ({
   headerProp,
@@ -104,6 +91,11 @@ const Edit_Vehicle_Detail_Component = ({
     today.getMonth(),
     today.getDate(),
   );
+
+  const handleOnConfirmPress = () => {
+    onNextPress?.();
+    setDatePickerVisible(false);
+  };
 
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -348,13 +340,17 @@ const Edit_Vehicle_Detail_Component = ({
             onChangeText={onOwnershipCountChange}
             keyboardType="number-pad"
             maxLength={2}
-            onSubmitEditing={onNextPress}
+            onSubmitEditing={handleOnConfirmPress}
             {...(restInputProps?.ownershipCount || {})}
           />
           <Spacing size="md" />
         </GroupWrapper>
         <Spacing size="lg" />
-        <Button variant="link" onPress={onNextPress} label={buttonLabel} />
+        <Button
+          variant="link"
+          onPress={handleOnConfirmPress}
+          label={buttonLabel}
+        />
         <Spacing size={theme.sizes.padding + 10} />
       </KeyboardAwareScrollView>
 
@@ -368,22 +364,26 @@ const Edit_Vehicle_Detail_Component = ({
         onClose={() => setFuelTypeModalVisible(false)}
         title="Select Fuel Type"
       />
-
-      <CustomDatePickerModal
-        visible={isDatePickerVisible}
-        onDismiss={() => {
-          setDatePickerVisible(false);
-          setDatePickerField(null);
-        }}
-        onConfirm={handleDateConfirm}
-        initialDate={getInitialDate()}
-        // restProps={{
-        //   validRange: {
-        //     startDate: new Date(2000, 0, 1),
-        //     endDate: endOfToday, // till today
-        //   },
-        // }}
-      />
+      {isDatePickerVisible && (
+        <CustomDatePickerModal
+          visible={isDatePickerVisible}
+          onDismiss={() => {
+            setDatePickerVisible(false);
+            setDatePickerField(null);
+          }}
+          onConfirm={handleDateConfirm}
+          initialDate={getInitialDate()}
+          // disablePastDates={['insuranceValidUpto', 'fitnessValidUpto'].includes(
+          //   datePickerField,
+          // )}
+          // restProps={{
+          //   validRange: {
+          //     startDate: new Date(2000, 0, 1),
+          //     endDate: endOfToday, // till today
+          //   },
+          // }}
+        />
+      )}
     </SafeAreaWrapper>
   );
 };

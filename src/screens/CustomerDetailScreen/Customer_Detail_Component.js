@@ -55,6 +55,9 @@ const Customer_Detail_Component = ({
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraHeight={100}
         contentContainerStyle={{
           backgroundColor: theme.colors.background,
           flexGrow: 1,

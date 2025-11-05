@@ -261,11 +261,11 @@ export const validateField = (key, value, isOptional) => {
     case 'make':
       return trimmedValue === ''
         ? 'Please enter the car brand.'
-        : !/^[A-Za-z\s]+$/.test(trimmedValue)
-          ? 'Car brand should contain only alphabets.'
-          : trimmedValue.length < 2
-            ? 'Car brand must be at least 2 characters long.'
-            : '';
+        : // : !/^[A-Za-z\s]+$/.test(trimmedValue)
+          //   ? 'Car brand should contain only alphabets.'
+          trimmedValue.length < 2
+          ? 'Car brand must be at least 2 characters long.'
+          : '';
 
     case 'model':
       return trimmedValue === ''
@@ -281,9 +281,9 @@ export const validateField = (key, value, isOptional) => {
         ? 'Please enter the chassis number.'
         : !/^[A-Z0-9]+$/i.test(trimmedValue)
           ? 'Chassis number should contain only letters and numbers.'
-          : trimmedValue.length !== 17
-            ? 'Chassis number must be 17 characters long.'
-            : '';
+          : // : trimmedValue.length !== 17
+            //   ? 'Chassis number must be 17 characters long.'
+            '';
 
     case 'emissionNorm':
       return trimmedValue === '' ? 'Please enter the engine number.' : '';
@@ -293,9 +293,9 @@ export const validateField = (key, value, isOptional) => {
         ? 'Please enter the engine number.'
         : !/^[A-Z0-9]+$/i.test(trimmedValue)
           ? 'Engine number should contain only letters and numbers.'
-          : trimmedValue.length < 6
-            ? 'Engine number must be at least 6 characters long.'
-            : '';
+          : // : trimmedValue.length < 6
+            //   ? 'Engine number must be at least 6 characters long.'
+            '';
 
     case 'registrationAuthority':
       return trimmedValue === ''
@@ -639,3 +639,23 @@ function validateYear(trimmedValue, key) {
 
   return ''; //  All good
 }
+
+export const validateMaxEmiAfford = (
+  _occupation,
+  _monthlyIncome,
+  _maxEmiAfford,
+) => {
+  // Convert to number safely
+  const monthlyIncome = parseFloat(_monthlyIncome) || 0;
+  const maxEmiAfford = parseFloat(_maxEmiAfford) || 0;
+
+  // If salaried, check EMI limit
+  if (_occupation) {
+    const allowedEmi = monthlyIncome * 0.6; // 60%
+    if (maxEmiAfford > allowedEmi) {
+      return `Maximum EMI should not exceed 60% of Monthly Income (${allowedEmi.toFixed(2)})`;
+    }
+  }
+
+  return ''; // ✅ Valid
+};

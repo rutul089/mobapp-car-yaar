@@ -15,7 +15,7 @@ class SearchScreen extends Component {
     super(props);
     this.state = {
       showAddVehicle: false,
-      vehicleNumber: '',
+      vehicleNumber: 'GJ01WW8451',
       showError: false,
       statusMsg: '',
       showStatusIcon: false,
@@ -41,6 +41,7 @@ class SearchScreen extends Component {
       params: {
         isEdit: false,
         registerNumber: this.state.vehicleNumber,
+        addNewVehicle: true,
       },
     });
   };
@@ -60,7 +61,6 @@ class SearchScreen extends Component {
     this.props.getVehicleByRegisterNumberThunk(
       vehicleNumber,
       _response => {
-        console.log('_response', JSON.stringify(_response));
         this.setState({isLoading: false, vehicleExists: true}, () => {
           navigate(ScreenNames.VehicleDetail, {
             addNewVehicle: true,

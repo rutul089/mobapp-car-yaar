@@ -17,6 +17,7 @@ class LenderSelection extends Component {
 
   onItemPress = item => {
     const {selectedApplicationId} = this.props;
+
     let param = {
       lenderName: item?.title,
       interesetRate: Number(item?.interestRate),
@@ -25,12 +26,13 @@ class LenderSelection extends Component {
       processingFee: parseFloat(item?.processingFee.replace(/[,₹]/g, '')),
       principalAmount: 1000,
     };
+
     this.props.postCustomerLenderDetailsThunk(
       selectedApplicationId,
       param,
-      success => {
+      async success => {
         let rawParams = getScreenParam(this.props.route, 'params');
-        navigate(ScreenNames.LoanOfferDetail, {
+        await navigate(ScreenNames.LoanOfferDetail, {
           ...rawParams,
           loanDetail: {title: item?.title, interestRate: item?.interestRate},
         });
@@ -42,8 +44,8 @@ class LenderSelection extends Component {
     const {selectedLoanApplication, loading} = this.props;
     const _registerNumber =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
-    let loanAmount = selectedLoanApplication?.loanAmount || 100000;
-    let tenure = selectedLoanApplication?.tenure || 100000;
+    let loanAmount = selectedLoanApplication?.loanAmount || 500000;
+    let tenure = selectedLoanApplication?.tenure || 60;
 
     return (
       <Lender_Selection_Component
