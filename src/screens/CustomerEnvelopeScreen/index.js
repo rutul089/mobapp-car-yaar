@@ -212,8 +212,9 @@ class CustomerEnvelopeScreen extends Component {
     } = selectedLoanApplication || {};
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
     const {errors, salesExecutive, carYarPartner, showError} = this.state;
+
     let _mobileNumber =
-      customer?.customerDetails.mobileNumber || customer?.mobileNumber || '-';
+      customer?.customerDetails?.mobileNumber || customer?.mobileNumber || '-';
 
     return (
       <Customer_Envelop_Component

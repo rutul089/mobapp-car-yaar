@@ -38,7 +38,11 @@ class LoanAmountScreen extends Component {
   onNextButtonPress = () => {
     const {loanAmount} = this.state;
 
-    const {selectedApplicationId, isReadOnlyLoanApplication} = this.props;
+    const {
+      selectedApplicationId,
+      isReadOnlyLoanApplication,
+      selectedLoanApplication,
+    } = this.props;
 
     let params = getScreenParam(this.props.route, 'params');
 
@@ -69,6 +73,11 @@ class LoanAmountScreen extends Component {
       payload,
       selectedApplicationId,
       success => {
+        const cibilScore = selectedLoanApplication?.customer?.cibilScore;
+        if (cibilScore) {
+          return navigate(ScreenNames.CustomerEnvelope);
+        }
+
         navigate(ScreenNames.CreateCIBILScreen, {params});
       },
       error => {},
@@ -108,7 +117,9 @@ class LoanAmountScreen extends Component {
       selectedLoanApplication,
       loading,
       isReadOnlyLoanApplication,
+      selectedCustomer,
     } = this.props;
+
     const {UsedVehicle = {}} = selectedVehicle || {};
 
     return (
@@ -149,6 +160,7 @@ const mapActionCreators = {addCustomerLoanAmountThunk};
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({
   selectedLoanType: loanData.selectedLoanType,
   selectedCustomerId: customerData?.selectedCustomerId,
+  selectedCustomer: customerData?.selectedCustomer,
   documentDetail: customerData?.documentDetail,
   selectedApplicationId: loanData?.selectedApplicationId,
   loading: loanData?.loading,

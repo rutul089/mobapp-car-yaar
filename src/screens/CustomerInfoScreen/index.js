@@ -164,6 +164,12 @@ class CustomerInfoScreen extends Component {
 
     const {isDeleteModalVisible, isLoading} = this.state;
 
+    let cibilScore =
+      details?.cibilScore ||
+      details?.customer?.cibilScore ||
+      selectedCustomer?.cibilScore ||
+      '-';
+
     return (
       <Customer_Info_Component
         state={this.state}
@@ -216,7 +222,7 @@ class CustomerInfoScreen extends Component {
           {label: 'Current Pincode', value: this._safeGet(details, 'pincode')},
           {
             label: 'CIBIL Score',
-            value: this._safeGet(selectedCustomer, 'cibilScore'),
+            value: cibilScore,
           },
         ]}
         professionalDetails={[

@@ -98,7 +98,6 @@ export const fetchVehicleFromIdThunk = (id, onSuccess, onFailure) => {
         type: VEHICLE_BY_ID.SUCCESS,
         payload: response.data,
       });
-      console.log('fetchVehicleFromIdThunk', JSON.stringify(response.data));
       onSuccess?.(response?.data);
     } catch (error) {
       dispatch({
@@ -174,7 +173,6 @@ export const getVehicleByRegisterNumberThunk = (
 ) => {
   return async dispatch => {
     dispatch({type: VEHICLE_DETAILS.REQUEST});
-    console.log('registerNumber', registerNumber);
     try {
       const response = await getVehicleByRegisterNumber(registerNumber);
       dispatch({
