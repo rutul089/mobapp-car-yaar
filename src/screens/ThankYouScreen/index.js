@@ -121,6 +121,11 @@ class ThankYouScreen extends Component {
     let _mobileNumber =
       mobileNumber || selectedLoanApplication?.customer?.mobileNumber;
 
+    console.log(
+      'selectedLoanApplication',
+      JSON.stringify(selectedLoanApplication),
+    );
+
     return (
       <Thank_You_Component
         createdAt={formatDate(createdAt, 'DD MMM YYYY, hh:mm A')}
@@ -159,7 +164,7 @@ class ThankYouScreen extends Component {
           {label: 'Customer Name', value: loading ? '-' : applicantName},
           {
             label: 'Customer ID',
-            value: formatShortId(selectedLoanApplication?.customerId) ?? '-',
+            value: formatShortId(customer?.customerNumber) ?? '-',
           },
           {
             label: 'Customer Type',
@@ -250,8 +255,7 @@ class ThankYouScreen extends Component {
           {
             label: 'Partner ID',
             value:
-              formatShortId(selectedLoanApplication?.partnerUser?.partnerId) ??
-              '-',
+              selectedLoanApplication?.partnerUser?.partnerUserNumber ?? '-',
           },
           {
             label: 'Partner Name',

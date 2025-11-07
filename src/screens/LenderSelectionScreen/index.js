@@ -46,6 +46,7 @@ class LenderSelection extends Component {
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 500000;
     let tenure = selectedLoanApplication?.tenure || 60;
+    let interesetRate = selectedLoanApplication?.interesetRate || 8;
 
     return (
       <Lender_Selection_Component
@@ -55,6 +56,7 @@ class LenderSelection extends Component {
         loading={loading}
         loanAmount={loanAmount}
         tenure={tenure}
+        interesetRate={interesetRate}
       />
     );
   }

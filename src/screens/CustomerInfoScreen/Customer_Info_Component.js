@@ -13,7 +13,7 @@ import {
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
-import {DeleteConfirmationContent} from '../../components';
+import {DeleteConfirmationContent, FullLoader} from '../../components';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {
@@ -33,6 +33,7 @@ const Customer_Info_Component = ({
   deleteModalProps,
   showDeleteCustomerModal,
   isCreatingLoanApplication,
+  isLoadingDocument,
 }) => {
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -111,6 +112,8 @@ const Customer_Info_Component = ({
       />
 
       {loading ? <Loader visible={loading} /> : null}
+
+      {isLoadingDocument ? <FullLoader visible={isLoadingDocument} /> : null}
     </SafeAreaWrapper>
   );
 };

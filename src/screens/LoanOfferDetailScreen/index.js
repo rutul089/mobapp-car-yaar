@@ -115,10 +115,6 @@ class LoanOfferDetailScreen extends Component {
 
   callFetchEmiPlanThunk = () => {
     const {selectedLoanApplication} = this.props;
-    console.log(
-      '----selectedLoanApplication----',
-      JSON.stringify(selectedLoanApplication),
-    );
 
     let loanAmount = selectedLoanApplication?.loanAmount;
     let interestRate = selectedLoanApplication?.interesetRate || 8;
@@ -153,6 +149,7 @@ class LoanOfferDetailScreen extends Component {
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 100000;
     let tenure = emiPlan?.tenureMonths;
+    let interesetRate = selectedLoanApplication?.interesetRate || 8;
 
     return (
       <Loan_Offer_Detail_Component
@@ -166,6 +163,7 @@ class LoanOfferDetailScreen extends Component {
         loading={loading}
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
         emi={emiPlan?.emi}
+        interesetRate={interesetRate}
       />
     );
   }

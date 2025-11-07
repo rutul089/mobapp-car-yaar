@@ -20,13 +20,14 @@ const Lender_Selection_Component = ({
   loanApplicationId,
   registerNumber,
   tenure,
+  interesetRate,
 }) => {
   const financeData = [
     {
       title: 'Fortune Finance',
       logo: images.hdfcImg,
 
-      interestRate: '8',
+      interestRate: interesetRate,
       tenure: tenure,
       emi: '11,093',
       processingFee: '1,000',
@@ -41,7 +42,7 @@ const Lender_Selection_Component = ({
     {
       title: 'Speed Loans',
       logo: images.hdfcImg,
-      interestRate: '8',
+      interestRate: interesetRate,
       tenure: tenure,
       emi: '12,420',
       processingFee: '1,250',
@@ -57,7 +58,7 @@ const Lender_Selection_Component = ({
     },
     {
       title: 'HDB Financial Services',
-      interestRate: '8',
+      interestRate: interesetRate,
       tenure: tenure,
       emi: '12,420',
       processingFee: '1,250',
@@ -73,7 +74,7 @@ const Lender_Selection_Component = ({
     {
       logo: images.hdfcImg,
       title: 'HDB Financial Services',
-      interestRate: '8',
+      interestRate: interesetRate,
       tenure: tenure,
       emi: '12,420',
       processingFee: '1,250',

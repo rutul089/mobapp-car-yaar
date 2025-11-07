@@ -11,6 +11,7 @@ import {updateVehicleByIdThunk} from '../../redux/actions';
 import {
   generateImageUploadPayload,
   handleFileSelection,
+  validateRequiredDocuments,
   viewDocumentHelper,
 } from '../../utils/documentUtils';
 import {uploadApplicantPhoto} from '../../utils/fileUploadUtils';
@@ -21,6 +22,8 @@ import {
 } from '../../utils/helper';
 import Vehicle_Images_Component from './Vehicle_Images_Component';
 import strings from '../../locales/strings';
+
+const requiredFields = ['rcBook'];
 
 class VehicleImagesScreen extends Component {
   constructor(props) {
@@ -63,6 +66,10 @@ class VehicleImagesScreen extends Component {
     );
 
     delete payload.customerId;
+
+    if (!validateRequiredDocuments(this.state.documents, requiredFields)) {
+      return;
+    }
 
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
       return navigate(ScreenNames.VehicleOdometer);
@@ -227,6 +234,7 @@ class VehicleImagesScreen extends Component {
             documents[type]?.uri
               ? this.handleViewImage(documents[type]?.uri)
               : this.handleUploadMedia(type),
+          isRequired: requiredFields.includes(type),
         }))}
         saveAsDraftPress={this.saveAsDraftPress}
         onNextPress={this.onNextPress}

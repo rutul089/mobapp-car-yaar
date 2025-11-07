@@ -640,22 +640,14 @@ function validateYear(trimmedValue, key) {
   return ''; //  All good
 }
 
-export const validateMaxEmiAfford = (
-  _occupation,
-  _monthlyIncome,
-  _maxEmiAfford,
-) => {
+export const validateMaxEmiAfford = (_occupation, _monthlyIncome) => {
   // Convert to number safely
   const monthlyIncome = parseFloat(_monthlyIncome) || 0;
-  const maxEmiAfford = parseFloat(_maxEmiAfford) || 0;
 
   // If salaried, check EMI limit
   if (_occupation) {
-    const allowedEmi = monthlyIncome * 0.6; // 60%
-    if (maxEmiAfford > allowedEmi) {
-      return `Maximum EMI should not exceed 60% of Monthly Income (${allowedEmi.toFixed(2)})`;
-    }
+    return monthlyIncome * 0.6;
   }
 
-  return ''; // ✅ Valid
+  return '';
 };

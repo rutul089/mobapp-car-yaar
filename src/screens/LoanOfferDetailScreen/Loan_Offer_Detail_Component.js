@@ -27,6 +27,7 @@ const Loan_Offer_Detail_Component = ({
   loanApplicationId,
   loading,
   emi,
+  interesetRate,
 }) => {
   const renderCellHeader = (value, style) => {
     return (
@@ -84,7 +85,7 @@ const Loan_Offer_Detail_Component = ({
         <FinanceCard
           statusImg={images.successCheck}
           bankName={loanDetail?.title}
-          interestRate={loanDetail?.interestRate}
+          interestRate={interesetRate}
           hideTopMargin
           showRightArrow
           rightIcon={images.successCheck}

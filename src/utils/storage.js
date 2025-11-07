@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const STORAGE_KEYS = {
   IS_LOGGED_IN: 'IS_LOGGED_IN',
   ACCESS_TOKEN: 'ACCESS_TOKEN',
+  TENURE_TOKEN: 'TENURE_TOKEN',
+  INTEREST_RATE_TOKEN: 'INTEREST_RATE_TOKEN',
 };
 
 // Internal token cache
@@ -62,4 +64,12 @@ export const clearLoginStatus = async () => {
     STORAGE_KEYS.ACCESS_TOKEN,
   ]);
   clearCachedToken(); // Also clear cached token
+};
+
+export const setTenureToken = async value => {
+  await AsyncStorage.setItem(STORAGE_KEYS.TENURE_TOKEN, value);
+};
+
+export const setInterestRateToken = async value => {
+  await AsyncStorage.setItem(STORAGE_KEYS.INTEREST_RATE_TOKEN, value);
 };

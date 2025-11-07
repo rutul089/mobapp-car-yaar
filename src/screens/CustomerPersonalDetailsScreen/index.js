@@ -273,23 +273,6 @@ class CustomerPersonalDetails extends Component {
     if (skipVerification) {
       let _occupation = occupation === occupationType.SALARIED;
 
-      const errorMsg = validateMaxEmiAfford(
-        _occupation,
-        monthlyIncome,
-        maxEmiAfford,
-      );
-
-      if (errorMsg) {
-        this.setState(prevState => ({
-          errors: {
-            ...prevState.errors,
-            maxEmiAfford: errorMsg,
-          },
-        }));
-
-        return;
-      }
-
       // 1️⃣ Validate the form
       const isFormValid = this.validateAllFields();
       if (!isFormValid) {
@@ -310,7 +293,7 @@ class CustomerPersonalDetails extends Component {
     }
 
     // 3️⃣ Prepare payload
-    const payload = this.getPayload();
+    const payload = this.x();
 
     // 4️⃣ Success & Error callbacks
     const onSuccess = response => {
@@ -496,6 +479,17 @@ class CustomerPersonalDetails extends Component {
 
   onChangeField = (key, value, isOptional = false) => {
     handleFieldChange(this, key, value, value?.toString()?.trim().length === 0);
+    // if (key === 'monthlyIncome') {
+    //   let _occupation = this.state.occupation === occupationType.SALARIED;
+    //   this.setState(
+    //     {
+    //       maxEmiAfford: validateMaxEmiAfford(_occupation, value) + '',
+    //     },
+    //     () => {
+    //       this.onChangeField('maxEmiAfford', this.state.maxEmiAfford);
+    //     },
+    //   );
+    // }
   };
 
   handleFileUpload = type => {
@@ -1006,6 +1000,7 @@ class CustomerPersonalDetails extends Component {
 
     const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
+    let _occupation = occupation === occupationType.SALARIED;
 
     return (
       <Customer_Personal_Details_Component
@@ -1047,9 +1042,15 @@ class CustomerPersonalDetails extends Component {
         onSelectedLoanOption={this.onSelectedLoanOption}
         onSelectedOccupation={this.onSelectedOccupation}
         onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
-        onChangeMonthlyIncome={value =>
-          this.onChangeField('monthlyIncome', value)
-        }
+        onChangeMonthlyIncome={value => {
+          this.onChangeField('monthlyIncome', value);
+          if (_occupation) {
+            this.onChangeField(
+              'maxEmiAfford',
+              validateMaxEmiAfford(_occupation, value) + '',
+            );
+          }
+        }}
         onChangeAccountNumber={value =>
           this.onChangeField('accountNumber', value)
         }
@@ -1073,16 +1074,17 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.panCardNumber,
             statusMsg: errors?.panCardNumber,
             autoCapitalize: 'characters',
-            // isDisabled: panCardVerification && isEdit,
+            isDisabled: panCardVerification && isEdit,
             // rightLabel: panCardVerification && isEdit ? '' : 'VERIFY',
             rightLabelPress: this.verifyPanCard,
             isRightIconVisible: panCardVerification,
+            rightLabel: panCardVerification && isEdit ? '' : 'VERIFY',
 
-            isDisabled:
-              this.state.panCardNumber === ''
-                ? false
-                : panCardVerification && isEdit,
-            rightLabel: 'VERIFY',
+            // isDisabled:
+            //   this.state.panCardNumber === ''
+            //     ? false
+            //     : panCardVerification && isEdit,
+            // rightLabel: 'VERIFY',
             // isRightIconVisible:
             //   this.state.panCardNumber === '' ? false : panCardVerification,
           },

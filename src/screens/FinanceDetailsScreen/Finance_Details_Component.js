@@ -90,7 +90,7 @@ const Finance_Details_Component = ({
       <Header {...headerProp} />
       <KeyboardAwareScrollView
         enableOnAndroid
-        // extraScrollHeight={50}
+        extraScrollHeight={100}
         bounces={false}
         contentContainerStyle={styles.wrapper}
         keyboardShouldPersistTaps="handled">

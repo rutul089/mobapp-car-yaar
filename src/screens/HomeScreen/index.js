@@ -119,6 +119,7 @@ class HomeScreen extends Component {
 
   render() {
     const {userData, partnerStats} = this.props;
+
     return (
       <Home_Component
         onSelectedCarType={this.onSelectedCarType}
@@ -131,7 +132,7 @@ class HomeScreen extends Component {
         profileImage={userData?.profileImage}
         userName={userData?.name || ''}
         userRole={getLabelFromEnum(userRoleValue, userData?.role)}
-        partnerID={userData?.id}
+        partnerID={userData?.partnerUser?.partnerUserNumber}
         partnerStats={partnerStats}
         onApprovedLoanPress={this.onApprovedLoanPress}
         onPendingLoanPress={this.onPendingLoanPress}

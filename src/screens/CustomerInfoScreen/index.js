@@ -20,6 +20,9 @@ import {
   showToast,
 } from '../../utils/helper';
 import Customer_Info_Component from './Customer_Info_Component';
+import {viewDocumentHelper} from '../../utils/documentUtils';
+import strings from '../../locales/strings';
+import {getPresignedDownloadUrl} from '../../services';
 
 class CustomerInfoScreen extends Component {
   constructor(props) {
@@ -30,6 +33,7 @@ class CustomerInfoScreen extends Component {
       isDeleteModalVisible: false,
       isLoading: false,
       onNextPress: false,
+      isLoadingDocument: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
     this.handleEditDetailPress = this.handleEditDetailPress.bind(this);
@@ -63,7 +67,39 @@ class CustomerInfoScreen extends Component {
     });
   };
 
-  viewIncomeProof = () => {};
+  viewIncomeProof = async uri => {
+    const {selectedCustomer} = this.props;
+
+    let incomeProofImage =
+      selectedCustomer?.details?.customer?.CustomerLoanDocuments?.[0]
+        ?.incomeProofImage;
+
+    if (!incomeProofImage) {
+      return showToast('error', strings.errorNoDocumentUpload);
+    }
+
+    this.setState({isLoadingDocument: true});
+
+    const downloadUrlResponse = await getPresignedDownloadUrl({
+      objectKey: incomeProofImage,
+    });
+
+    let downloadedUrl = downloadUrlResponse?.data?.url;
+
+    try {
+      await viewDocumentHelper(
+        downloadedUrl,
+        imageUri => {
+          navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
+        },
+        error => {
+          showToast('error', 'Could not open the document.', 'bottom', 3000);
+        },
+      );
+    } finally {
+      this.setState({isLoadingDocument: false});
+    }
+  };
 
   _safeGet = (obj, path) => {
     const {onNextPress} = this.state;
@@ -292,6 +328,7 @@ class CustomerInfoScreen extends Component {
           isLoading: isLoading,
         }}
         isCreatingLoanApplication={isCreatingLoanApplication}
+        isLoadingDocument={this.state.isLoadingDocument}
       />
     );
   }

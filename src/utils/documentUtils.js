@@ -9,8 +9,8 @@ import {
   documentType,
 } from '../constants/enums';
 import {getPresignedDownloadUrl} from '../services';
-import {showToast} from './helper';
 import {compressImage} from './fileUploadUtils';
+import {showToast} from './helper';
 
 export const handleFileSelection = async (type, callback) => {
   try {

@@ -243,6 +243,7 @@ class LoanDocumentsScreen extends Component {
   };
 
   handleViewImage = async uri => {
+    console.log('12321312123', uri);
     if (!uri) {
       return showToast('error', strings.errorNoDocumentUpload);
     }

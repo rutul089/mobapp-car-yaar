@@ -6,6 +6,7 @@ import {showToast} from '../../utils/helper';
 import strings from '../../locales/strings';
 import {fetchEmiPlanThunk} from '../../redux/actions/emiPlanActions';
 import {goBack} from '../../navigation/NavigationUtils';
+import {postCustomerLenderDetailsThunk} from '../../redux/actions';
 
 class CustomizeLoanOffer extends Component {
   constructor(props) {
@@ -54,7 +55,8 @@ class CustomizeLoanOffer extends Component {
     };
     this.props.fetchEmiPlanThunk(
       payload,
-      success => {
+      async success => {
+        await this.saveTenureAndInterest(payload);
         goBack();
       },
       error => {},
@@ -83,6 +85,33 @@ class CustomizeLoanOffer extends Component {
 
     this.setState({errors, isFormValid});
     return isFormValid;
+  };
+
+  saveTenureAndInterest = async item => {
+    const {selectedApplicationId} = this.props;
+
+    let param = {
+      // lenderName: item?.title,
+      interesetRate: Number(item?.interestRate),
+      tenure: Number(item?.tenureMonths),
+      // emi: parseFloat(item?.emi.replace(/[,₹]/g, '')),
+      // processingFee: parseFloat(item?.processingFee.replace(/[,₹]/g, '')),
+      principalAmount: 1000,
+    };
+
+    await new Promise(resolve => {
+      this.props.postCustomerLenderDetailsThunk(
+        selectedApplicationId,
+        param,
+        success => {
+          resolve();
+        },
+        error => {
+          showToast('error', 'Failed to save lender details');
+          resolve();
+        },
+      );
+    });
   };
 
   render() {
@@ -129,11 +158,12 @@ class CustomizeLoanOffer extends Component {
   }
 }
 
-const mapActionCreators = {fetchEmiPlanThunk};
+const mapActionCreators = {fetchEmiPlanThunk, postCustomerLenderDetailsThunk};
 const mapStateToProps = ({loanData, emiPlan}) => {
   return {
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
-    loading: emiPlan.loading,
+    loading: emiPlan.loading || loanData.loading,
+    selectedApplicationId: loanData?.selectedApplicationId,
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(CustomizeLoanOffer);
