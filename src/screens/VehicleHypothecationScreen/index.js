@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {currentLoanOptions, loanType} from '../../constants/enums';
+import {currentLoanOptions} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
+import {submitVehicleThunk, updateVehicleByIdThunk} from '../../redux/actions';
+import {formatVehicleNumber} from '../../utils/helper';
 import Vehicle_Hypothecation_Component from './Vehicle_Hypothecation_Component';
-import {formatVehicleNumber, showToast} from '../../utils/helper';
-import {updateVehicleByIdThunk, submitVehicleThunk} from '../../redux/actions';
 
 class VehicleHypothecationScreen extends Component {
   constructor(props) {
@@ -17,8 +17,15 @@ class VehicleHypothecationScreen extends Component {
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
     this.onNextPress = this.onNextPress.bind(this);
   }
-
-  componentDidMount() {}
+  // hypothecationStatus
+  componentDidMount() {
+    const {selectedVehicle} = this.props;
+    if (selectedVehicle) {
+      this.setState({
+        carHypoStatus: selectedVehicle?.UsedVehicle?.hypothecationStatus,
+      });
+    }
+  }
 
   onSelectedAnswer = value => {
     this.setState({
@@ -51,23 +58,6 @@ class VehicleHypothecationScreen extends Component {
         error => {},
       );
     });
-
-    // switch (selectedLoanType) {
-    //   case loanType.refinance:
-    //     return navigate(ScreenNames.FinanceDetails);
-
-    //   case loanType.topUp:
-    //   case loanType.internalBT:
-    //   case loanType.externalBT:
-    //     return navigate(ScreenNames.CarFinanceDetails);
-
-    //   case loanType.loan:
-    //     return navigate(ScreenNames.CheckCIBIL);
-
-    //   default:
-    //     return navigate(ScreenNames.LoanAmount);
-    // }
-    // navigate(ScreenNames.CustomerDetail);
   };
 
   render() {
@@ -76,32 +66,30 @@ class VehicleHypothecationScreen extends Component {
       isCreatingLoanApplication,
       selectedLoanApplication,
       loading,
-      selectedCustomer,
     } = this.props;
     const {UsedVehicle = {}} = selectedVehicle || {};
+
     return (
-      <>
-        <Vehicle_Hypothecation_Component
-          headerProp={{
-            title: 'Vehicle Details',
-            subtitle: isCreatingLoanApplication
-              ? formatVehicleNumber(UsedVehicle?.registerNumber)
-              : '',
-            showRightContent: true,
-            rightLabel: isCreatingLoanApplication
-              ? selectedLoanApplication?.loanApplicationId || ''
-              : '',
-            rightLabelColor: '#F8A902',
-            onBackPress: () => goBack(),
-          }}
-          state={this.state}
-          onSelectedAnswer={this.onSelectedAnswer}
-          onNextPress={this.onNextPress}
-          saveAsDraftPress={this.saveAsDraftPress}
-          isCreatingLoanApplication={isCreatingLoanApplication}
-          loading={loading}
-        />
-      </>
+      <Vehicle_Hypothecation_Component
+        headerProp={{
+          title: 'Vehicle Details',
+          subtitle: isCreatingLoanApplication
+            ? formatVehicleNumber(UsedVehicle?.registerNumber)
+            : '',
+          showRightContent: true,
+          rightLabel: isCreatingLoanApplication
+            ? selectedLoanApplication?.loanApplicationId || ''
+            : '',
+          rightLabelColor: '#F8A902',
+          onBackPress: () => goBack(),
+        }}
+        state={this.state}
+        onSelectedAnswer={this.onSelectedAnswer}
+        onNextPress={this.onNextPress}
+        saveAsDraftPress={this.saveAsDraftPress}
+        isCreatingLoanApplication={isCreatingLoanApplication}
+        loading={loading}
+      />
     );
   }
 }
