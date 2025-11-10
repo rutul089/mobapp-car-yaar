@@ -980,6 +980,72 @@ class CustomerPersonalDetails extends Component {
     // navigate(ScreenNames.CustomerEnvelope);
   };
 
+  setMaxEmiAfford = (source, value) => {
+    const {currentLoan, currentEmi, monthlyIncome} = this.state;
+    const isOccupation = this.state.occupation === occupationType.SALARIED;
+
+    // Determine base income value
+    const incomeValue = source === 'monthlyIncome' ? value : monthlyIncome;
+
+    // Base validation
+    let maxEmiAfford = Number(
+      validateMaxEmiAfford(isOccupation, incomeValue) || 0,
+    );
+
+    // Subtract current EMI if applicable
+    if (currentLoan) {
+      const emiValue =
+        Number(source === 'currentEmi' ? value : currentEmi) || 0;
+      maxEmiAfford = Math.max(maxEmiAfford - emiValue, 0);
+    }
+
+    if (isOccupation) {
+      this.onChangeField('maxEmiAfford', String(maxEmiAfford));
+    }
+  };
+
+  getFieldHandlers = () => ({
+    onChangePanCardNumber: value => this.onChangeField('panCardNumber', value),
+    onChangeAadharNumber: value => this.onChangeField('aadharNumber', value),
+    onChangeApplicantName: value => this.onChangeField('applicantName', value),
+    onChangeCurrentAddress: value => this.onChangeField('address', value),
+    onChangemobileNumber: value => this.onChangeField('mobileNumber', value),
+    onChangeFatherMotherName: value => this.onChangeField('fatherName', value),
+    onChangeSpouseName: value => this.onChangeField('spouseName', value),
+    onChangeAccountNumber: value => this.onChangeField('accountNumber', value),
+    onChangeMaxEMIAfford: value => this.onChangeField('maxEmiAfford', value),
+    onChangeDob: value => this.onChangeField('dob', value),
+    onChangeMonthlyBankBalance: value =>
+      this.onChangeField('avgMonthlyBankBalance', value),
+    onBankNameChange: value => this.onChangeField('bankName', value),
+    onChangeEmail: value => this.onChangeField('email', value),
+    onChangeCurrentPincode: value => this.onChangeField('pincode', value),
+    onChangeMonthlyIncome: value => {
+      (this.onChangeField('monthlyIncome', value),
+        this.setMaxEmiAfford('monthlyIncome', value));
+    },
+    onChangeCurrentEMI: value => {
+      (this.onChangeField('currentEmi', value, !this.state.currentLoan),
+        this.setMaxEmiAfford('currentEmi', value));
+    },
+  });
+
+  getHeaderProps = () => {
+    const {isEdit} = this.state;
+    const {selectedVehicle, isCreatingLoanApplication} = this.props;
+    const {UsedVehicle = {}} = selectedVehicle || {};
+
+    return {
+      title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
+      subtitle: isCreatingLoanApplication
+        ? formatVehicleNumber(UsedVehicle?.registerNumber)
+        : '',
+      showRightContent: true,
+      rightLabelColor: '#F8A902',
+      onBackPress: () => goBack(),
+    };
+  };
+
   render() {
     const {
       gender,
@@ -995,76 +1061,21 @@ class CustomerPersonalDetails extends Component {
       panCardVerification,
       aadharVerification,
       cibilScore,
-      monthlyIncome,
     } = this.state;
 
-    const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
-    const {UsedVehicle = {}} = selectedVehicle || {};
-    let _occupation = occupation === occupationType.SALARIED;
+    const {isCreatingLoanApplication, loading} = this.props;
 
     return (
       <Customer_Personal_Details_Component
         isEdit={isEdit}
-        headerProp={{
-          title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
-          subtitle: isCreatingLoanApplication
-            ? formatVehicleNumber(UsedVehicle?.registerNumber)
-            : '',
-          showRightContent: true,
-          // rightLabel: isOnboard ? '' : registrationNumber,
-          rightLabelColor: '#F8A902',
-          onBackPress: () => goBack(),
-        }}
+        headerProp={this.getHeaderProps()}
         state={this.state}
         onSelectedGender={this.onSelectedGender}
         selectedGender={gender}
-        onChangePanCardNumber={value =>
-          this.onChangeField('panCardNumber', value)
-        }
-        onChangeAadharNumber={value =>
-          this.onChangeField('aadharNumber', value)
-        }
-        onChangeApplicantName={value =>
-          this.onChangeField('applicantName', value)
-        }
-        onChangemobileNumber={value =>
-          this.onChangeField('mobileNumber', value)
-        }
-        onChangeFatherMotherName={value =>
-          this.onChangeField('fatherName', value)
-        }
-        onChangeSpouseName={value =>
-          this.onChangeField('spouseName', value, true)
-        }
-        onChangeEmail={value => this.onChangeField('email', value)}
-        onChangeCurrentAddress={value => this.onChangeField('address', value)}
-        onChangeCurrentPincode={value => this.onChangeField('pincode', value)}
+        {...this.getFieldHandlers()}
         onSelectedLoanOption={this.onSelectedLoanOption}
         onSelectedOccupation={this.onSelectedOccupation}
         onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
-        onChangeMonthlyIncome={value => {
-          this.onChangeField('monthlyIncome', value);
-          if (_occupation) {
-            this.onChangeField(
-              'maxEmiAfford',
-              validateMaxEmiAfford(_occupation, value) + '',
-            );
-          }
-        }}
-        onChangeAccountNumber={value =>
-          this.onChangeField('accountNumber', value)
-        }
-        onChangeCurrentEMI={value =>
-          this.onChangeField('currentEmi', value, !this.state.currentLoan)
-        }
-        onChangeMaxEMIAfford={value =>
-          this.onChangeField('maxEmiAfford', value)
-        }
-        onChangeDob={value => this.onChangeField('dob', value)}
-        onChangeMonthlyBankBalance={value =>
-          this.onChangeField('avgMonthlyBankBalance', value)
-        }
-        onBankNameChange={value => this.onChangeField('bankName', value)}
         onNextPress={this.onNextPress}
         occupation={getLabelFromEnum(occupationLabelMap, occupation)}
         onSelectSuggestion={this.onSelectBank}
@@ -1079,14 +1090,6 @@ class CustomerPersonalDetails extends Component {
             rightLabelPress: this.verifyPanCard,
             isRightIconVisible: panCardVerification,
             rightLabel: panCardVerification && isEdit ? '' : 'VERIFY',
-
-            // isDisabled:
-            //   this.state.panCardNumber === ''
-            //     ? false
-            //     : panCardVerification && isEdit,
-            // rightLabel: 'VERIFY',
-            // isRightIconVisible:
-            //   this.state.panCardNumber === '' ? false : panCardVerification,
           },
           aadharNumber: {
             value: aadharNumber,

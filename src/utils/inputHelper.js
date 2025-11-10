@@ -164,6 +164,7 @@ export const validateField = (key, value, isOptional) => {
     case 'pancardPhoto':
     case 'aadharFrontPhoto':
     case 'aadharBackphoto':
+    case 'odometerImage':
       return trimmedValue === '' ? 'Please upload required image' : '';
 
     case 'dob':

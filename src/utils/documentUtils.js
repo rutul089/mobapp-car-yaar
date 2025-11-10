@@ -7,10 +7,12 @@ import {
   documentImageLabelMap,
   documentImageType,
   documentType,
+  vehicleImageLabelMap,
 } from '../constants/enums';
 import {getPresignedDownloadUrl} from '../services';
 import {compressImage} from './fileUploadUtils';
 import {showToast} from './helper';
+import {handleFieldChange} from './inputHelper';
 
 export const handleFileSelection = async (type, callback) => {
   try {
@@ -261,9 +263,15 @@ export const validateRequiredDocuments = (documents, requiredFields) => {
 
   if (missingFields.length > 0) {
     const missingLabels = missingFields
-      .map(field => documentImageLabelMap?.[field] || field)
+      .map(
+        field =>
+          documentImageLabelMap?.[field] ||
+          vehicleImageLabelMap?.[field] ||
+          field,
+      )
       .join(', ');
     showToast('error', `Please upload: ${missingLabels}`, 'bottom', 3500);
+
     return false;
   }
 

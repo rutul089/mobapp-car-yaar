@@ -22,6 +22,7 @@ import {
 } from '../../utils/helper';
 import Vehicle_Images_Component from './Vehicle_Images_Component';
 import strings from '../../locales/strings';
+import {validateField} from '../../utils/inputHelper';
 
 const requiredFields = ['rcBook'];
 
@@ -67,9 +68,14 @@ class VehicleImagesScreen extends Component {
 
     delete payload.customerId;
 
-    if (!validateRequiredDocuments(this.state.documents, requiredFields)) {
+    const isValid = validateRequiredDocuments(
+      this.state.documents,
+      requiredFields,
+    );
+
+    if (!isValid) {
       return;
-    }
+    } // stops submission if missing
 
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
       return navigate(ScreenNames.VehicleOdometer);
@@ -117,29 +123,29 @@ class VehicleImagesScreen extends Component {
     if (!uri) {
       return;
     }
+    await new Promise(resolve => setTimeout(resolve, 50));
 
-    setTimeout(async () => {
-      this.setState({isLoadingDocument: true});
-      try {
-        await viewDocumentHelper(
-          uri,
-          imageUri => {
-            navigate(ScreenNames.ImagePreviewScreen, {
-              imageList: this.formatImageUploadData(
-                this.state.documents,
-                imageUri,
-              ),
-            });
-          },
-          error => {
-            console.warn('Error opening file:', error);
-            showToast('error', 'Could not open the document.', 'bottom', 3000);
-          },
-        );
-      } finally {
-        this.setState({isLoadingDocument: false});
-      }
-    }, 50);
+    this.setState({isLoadingDocument: true});
+
+    try {
+      await viewDocumentHelper(
+        uri,
+        imageUri => {
+          navigate(ScreenNames.ImagePreviewScreen, {
+            imageList: this.formatImageUploadData(
+              this.state.documents,
+              imageUri,
+            ),
+          });
+        },
+        error => {
+          console.warn('Error opening file:', error);
+          showToast('error', 'Could not open the document.', 'bottom', 3000);
+        },
+      );
+    } finally {
+      this.setState({isLoadingDocument: false});
+    }
   };
 
   handleFile = type => {

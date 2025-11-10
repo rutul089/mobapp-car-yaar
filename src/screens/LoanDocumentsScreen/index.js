@@ -164,11 +164,11 @@ class LoanDocumentsScreen extends Component {
     let typeOfIndividual =
       selectedLoanApplication?.customer?.customerDetails?.occupation;
     let documentType = type;
-    let loadProduct = selectedLoanApplication?.loanType;
+    let loanProduct = selectedLoanApplication?.loanType;
 
     const matched = loan_document_requirements.find(
       item =>
-        item.loadProduct === loadProduct &&
+        item.loanProduct === loanProduct &&
         item.typeOfIndividual === typeOfIndividual &&
         item.documentType === documentType,
     );
@@ -178,7 +178,6 @@ class LoanDocumentsScreen extends Component {
 
     // Trigger file picker modal
     this.setState({
-      // showFilePicker: true,
       showFilePicker: !acceptedDocuments.length,
       showAcceptedDocModal: acceptedDocuments.length,
       selectedDocType: type,

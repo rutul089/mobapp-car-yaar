@@ -60,8 +60,19 @@ const Home_Component = ({
     <Card
       onPress={onPress}
       disabled={isDisabled}
-      style={[{width: '32%', opacity: isDisabled ? 0.8 : 1}, style]}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      style={[{width: '32%', opacity: isDisabled ? 0.8 : 1}, style]}
+      cardContainerStyle={[
+        isDisabled && {
+          backgroundColor: '#bfc1c450',
+          borderColor: '#9a9a9a80',
+          borderWidth: 1,
+        },
+      ]}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
         <Image source={icon} style={styles.loanIcon} />
         <Image source={images.arrow_right} style={{height: 20, width: 20}} />
       </View>

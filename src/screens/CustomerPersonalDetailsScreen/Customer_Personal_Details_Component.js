@@ -267,7 +267,9 @@ const Customer_Personal_Details_Component = ({
             label={'Gender'}
             options={genderTypes}
             selectedValue={selectedGender}
-            onChange={onSelectedGender}
+            onChange={value => {
+              onSelectedGender?.(value);
+            }}
           />
           <Spacing size="md" />
           <Input
@@ -463,7 +465,11 @@ const Customer_Personal_Details_Component = ({
             label={'Current Loan?'}
             options={currentLoanTypes}
             selectedValue={state.currentLoan}
-            onChange={onSelectedLoanOption}
+            onChange={value => {
+              onSelectedLoanOption?.(value);
+              scrollToInput('maxEmiAfford');
+              focusNext('maxEmiAfford');
+            }}
           />
           <Spacing size="md" />
           <View style={styles.rowSpaceBetween}>

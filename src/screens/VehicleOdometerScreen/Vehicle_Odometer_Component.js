@@ -61,6 +61,7 @@ const Vehicle_Odometer_Component = ({
             handleImagePick={handleOdometerImageSelect}
             onDeletePress={onDeletePress}
             viewImage={viewImage}
+            {...(restInputProps?.odometerReadingPhoto || {})}
           />
           <Spacing size="md_lg" />
           <Input

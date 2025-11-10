@@ -361,7 +361,7 @@ class EditVehicleDetailScreen extends Component {
           ownershipCount: {
             isError: errors?.ownershipCount,
             statusMsg: errors?.ownershipCount,
-            // isDisabled: isEdit,
+            isDisabled: isEdit,
           },
           vehicleAge: {
             isError: errors?.vehicleAge,

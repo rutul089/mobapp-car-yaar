@@ -31,6 +31,7 @@ class VehicleOdometerScreen extends Component {
       errors: {
         odometerReading: '',
         vehicleCondition: '',
+        odometerImage: '',
       },
       isFormValid: false,
       isLoading: false,
@@ -90,11 +91,16 @@ class VehicleOdometerScreen extends Component {
           asset.type,
         );
 
-        this.setState(prev => ({
-          selectedDocType: '',
-          odometerImage: url,
-          showFilePicker: false,
-        }));
+        this.setState(
+          prev => ({
+            selectedDocType: '',
+            odometerImage: url,
+            showFilePicker: false,
+          }),
+          () => {
+            this.onChangeField('odometerImage', url);
+          },
+        );
       } catch (error) {
         showApiErrorToast(error);
       } finally {
@@ -149,7 +155,11 @@ class VehicleOdometerScreen extends Component {
   };
 
   validateAllFields = () => {
-    const fieldsToValidate = ['odometerReading', 'vehicleCondition'];
+    const fieldsToValidate = [
+      'odometerReading',
+      'vehicleCondition',
+      'odometerImage',
+    ];
 
     const errors = {};
     let isFormValid = true;
@@ -240,6 +250,10 @@ class VehicleOdometerScreen extends Component {
             vehicleCondition: {
               isError: errors.vehicleCondition,
               statusMsg: errors.vehicleCondition,
+            },
+            odometerReadingPhoto: {
+              isError: errors?.odometerImage,
+              statusMsg: errors?.odometerImage,
             },
           }}
           loading={loading}
