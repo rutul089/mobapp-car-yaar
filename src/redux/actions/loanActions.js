@@ -26,6 +26,7 @@ import {
   RESET_LOAN_APPLICATION,
   DELETE_LOAN_APPLICATION,
   SUBMIT_LOAN_APPLICATION,
+  SET_LOAN_FILTER_VALUE,
 } from './actionType';
 import types from './types';
 
@@ -437,3 +438,13 @@ export const submitLoanApplicationThunk = (
     }
   };
 };
+
+export const setLoanFilterFromHomePage = value => ({
+  type: SET_LOAN_FILTER_VALUE.SUCCESS,
+  payload: value,
+});
+
+export const isFirstTimeNavigate = value => ({
+  type: SET_LOAN_FILTER_VALUE.REQUEST,
+  payload: value,
+});

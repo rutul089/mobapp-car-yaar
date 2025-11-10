@@ -173,7 +173,7 @@ const mapActionCreators = {fetchEmiPlanThunk};
 const mapStateToProps = ({loanData, emiPlan}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
-    loading: loanData.loading || emiPlan.loading,
+    loading: loanData.loading && !emiPlan.loading,
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
     emiPlan: emiPlan.emiPlanData,

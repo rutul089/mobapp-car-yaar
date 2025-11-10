@@ -28,6 +28,7 @@ class CustomizeLoanOffer extends Component {
 
     this.setState({
       tenureMonths: String(tenureMonths),
+      interestRate: String(interestRate),
     });
   }
 
@@ -162,7 +163,7 @@ const mapActionCreators = {fetchEmiPlanThunk, postCustomerLenderDetailsThunk};
 const mapStateToProps = ({loanData, emiPlan}) => {
   return {
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
-    loading: emiPlan.loading || loanData.loading,
+    loading: emiPlan.loading && !loanData?.loading,
     selectedApplicationId: loanData?.selectedApplicationId,
   };
 };

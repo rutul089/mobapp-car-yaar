@@ -9,7 +9,7 @@ import {
   resetLoanApplication,
   resetSelectedCustomer,
 } from '../../redux/actions';
-import {API_TRIGGER} from '../../constants/enums';
+import {API_TRIGGER, vehicleFilterOption} from '../../constants/enums';
 
 class CustomersScreen extends Component {
   constructor(props) {
@@ -26,6 +26,8 @@ class CustomersScreen extends Component {
       // Optional full-screen toggle state
       fullScreen: false,
       stopLoading: false,
+
+      showFilterOption: false,
     };
 
     this.limit = 10; // Items per page
@@ -57,7 +59,7 @@ class CustomersScreen extends Component {
    */
   handleLoadMore = () => {
     const {loading} = this.props;
-    const {isSearch, searchText} = this.state;
+    const {isSearch, searchText, activeFilterOption} = this.state;
 
     if (loading) {
       return;
@@ -71,10 +73,16 @@ class CustomersScreen extends Component {
     const nextPage = currentPage + 1;
     this.setState({apiTrigger: API_TRIGGER.LOAD_MORE});
 
+    let payload = {
+      params: {
+        isComplete: activeFilterOption === vehicleFilterOption.SAVED,
+      },
+    };
+
     if (isSearch) {
       this.fetchAllCustomer(nextPage, {params: {search: searchText.trim()}});
     } else {
-      this.fetchAllCustomer(nextPage);
+      this.fetchAllCustomer(nextPage, activeFilterOption ? payload : {});
     }
   };
 
@@ -164,9 +172,56 @@ class CustomersScreen extends Component {
     });
   };
 
+  handleFilterClick = () => {
+    this.setState({showFilterOption: true});
+  };
+
+  onPressPrimaryButton = value => {
+    this.setState({
+      showFilterOption: false,
+      activeFilterOption: value,
+    });
+  };
+
+  onClearFilterButton = () => {
+    this.setState({
+      showFilterOption: false,
+      activeFilterOption: '',
+    });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const {activeFilterOption, isSearch, searchText} = this.state;
+
+    // Run filter fetch if activeFilterOption changes and it's not a search
+    if (prevState.activeFilterOption !== activeFilterOption && !isSearch) {
+      let payload = {};
+      if (
+        [vehicleFilterOption.DRAFT, vehicleFilterOption.SAVED].includes(
+          activeFilterOption,
+        )
+      ) {
+        payload = {
+          params: {
+            isComplete: activeFilterOption === vehicleFilterOption.SAVED,
+          },
+        };
+      }
+
+      this.fetchAllCustomer(1, payload);
+    }
+  }
+
   render() {
-    const {apiTrigger, refreshing, searchText, isSearch, stopLoading} =
-      this.state;
+    const {
+      apiTrigger,
+      refreshing,
+      searchText,
+      isSearch,
+      stopLoading,
+      showFilterOption,
+      activeFilterOption,
+    } = this.state;
     const {
       customers,
       loading,
@@ -202,6 +257,14 @@ class CustomersScreen extends Component {
         onAddButtonPress={this.onAddButtonPress}
         isCreatingLoanApplication={isCreatingLoanApplication}
         profileImage={userData?.profileImage}
+        handleFilterClick={this.handleFilterClick}
+        filterProps={{
+          isVisible: showFilterOption,
+          handleCloseFilter: () => this.setState({showFilterOption: false}),
+          onPressPrimaryButton: value => this.onPressPrimaryButton(value),
+          onClearFilterButton: this.onClearFilterButton,
+        }}
+        activeFilterOption={activeFilterOption}
       />
     );
   }

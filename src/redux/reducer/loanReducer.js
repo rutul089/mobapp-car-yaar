@@ -10,6 +10,7 @@ import {
   RESET_LOAN_APPLICATION,
   DELETE_LOAN_APPLICATION,
   SUBMIT_LOAN_APPLICATION,
+  SET_LOAN_FILTER_VALUE,
 } from '../actions/actionType';
 
 const initialState = {
@@ -31,6 +32,8 @@ const initialState = {
   financeDocuments: null,
   referenceDetail: null,
   isReadOnlyLoanApplication: false,
+  loanFilterValue: '',
+  isFirstTimeNavigation: false,
 };
 
 const loanReducer = (state = initialState, action) => {
@@ -175,8 +178,14 @@ const loanReducer = (state = initialState, action) => {
       };
     }
 
+    case SET_LOAN_FILTER_VALUE.SUCCESS:
+      return {...state, loanFilterValue: action.payload};
+
     case SUBMIT_LOAN_APPLICATION.SUCCESS:
       return {...state, loading: false};
+
+    case SET_LOAN_FILTER_VALUE.REQUEST:
+      return {...state, isFirstTimeNavigation: action.payload};
 
     case types.RESET_APP_STATE:
       return {...initialState};

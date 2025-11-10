@@ -121,11 +121,6 @@ class ThankYouScreen extends Component {
     let _mobileNumber =
       mobileNumber || selectedLoanApplication?.customer?.mobileNumber;
 
-    console.log(
-      'selectedLoanApplication',
-      JSON.stringify(selectedLoanApplication),
-    );
-
     return (
       <Thank_You_Component
         createdAt={formatDate(createdAt, 'DD MMM YYYY, hh:mm A')}

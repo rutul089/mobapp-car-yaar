@@ -293,7 +293,7 @@ class CustomerPersonalDetails extends Component {
     }
 
     // 3️⃣ Prepare payload
-    const payload = this.x();
+    const payload = this.getPayload();
 
     // 4️⃣ Success & Error callbacks
     const onSuccess = response => {
