@@ -1,22 +1,21 @@
+import debounce from 'lodash.debounce';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import ScreenNames from '../../constants/ScreenNames';
-import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
-import {
-  clearVehicleSearch,
-  fetchVehiclesThunk,
-  searchVehiclesByKeywordThunk,
-  resetSelectedVehicle,
-  selectedLoanType,
-} from '../../redux/actions';
-import Vehicles_Component from './Vehicles_Component';
 import {
   API_TRIGGER,
   loanType,
   vehicleFilterOption,
 } from '../../constants/enums';
-import debounce from 'lodash.debounce';
-import {Alert} from 'react-native';
+import ScreenNames from '../../constants/ScreenNames';
+import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
+import {
+  clearVehicleSearch,
+  fetchVehiclesThunk,
+  resetSelectedVehicle,
+  searchVehiclesByKeywordThunk,
+  selectedLoanType,
+} from '../../redux/actions';
+import Vehicles_Component from './Vehicles_Component';
 
 class Vehicles extends Component {
   constructor(props) {

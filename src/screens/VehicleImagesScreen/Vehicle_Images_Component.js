@@ -35,7 +35,7 @@ const Vehicle_Images_Component = ({
           return (
             <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
               <VehicleImageCard
-                label={doc.label}
+                label={doc.label + `${doc?.isRequired ? ' *' : ''} `}
                 image={fileUri}
                 onDeletePress={doc.onDeletePress}
                 viewImage={doc.viewImage}
@@ -43,6 +43,7 @@ const Vehicle_Images_Component = ({
                 uploadMedia={doc.uploadMedia}
                 fileType={fileType}
                 // isDocument={fileType !== 'image'}
+                isRequired
               />
             </View>
           );

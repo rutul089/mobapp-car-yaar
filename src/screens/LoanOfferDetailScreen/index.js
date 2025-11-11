@@ -103,7 +103,6 @@ class LoanOfferDetailScreen extends Component {
     let route = this.props.route;
     let loanDetail =
       getScreenParam(route, 'params') || route?.params?.loanDetail;
-    console.log('loanDetail', JSON.stringify(loanDetail));
     this.setState(
       {
         loanDetail,
@@ -116,10 +115,6 @@ class LoanOfferDetailScreen extends Component {
 
   callFetchEmiPlanThunk = () => {
     const {selectedLoanApplication} = this.props;
-    console.log(
-      '----selectedLoanApplication----',
-      JSON.stringify(selectedLoanApplication),
-    );
 
     let loanAmount = selectedLoanApplication?.loanAmount;
     let interestRate = selectedLoanApplication?.interesetRate || 8;
@@ -154,6 +149,8 @@ class LoanOfferDetailScreen extends Component {
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 100000;
     let tenure = emiPlan?.tenureMonths;
+    let interesetRate = selectedLoanApplication?.interesetRate || 8;
+    let processingFee = selectedLoanApplication?.processingFee || 1000;
 
     return (
       <Loan_Offer_Detail_Component
@@ -167,6 +164,8 @@ class LoanOfferDetailScreen extends Component {
         loading={loading}
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
         emi={emiPlan?.emi}
+        interesetRate={interesetRate}
+        processingFee={processingFee}
       />
     );
   }
@@ -176,7 +175,7 @@ const mapActionCreators = {fetchEmiPlanThunk};
 const mapStateToProps = ({loanData, emiPlan}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,
-    loading: loanData.loading || emiPlan.loading,
+    loading: loanData.loading && !emiPlan.loading,
     selectedLoanApplication: loanData?.selectedLoanApplication, // Single view
     selectedApplicationId: loanData?.selectedApplicationId,
     emiPlan: emiPlan.emiPlanData,

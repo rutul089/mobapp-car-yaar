@@ -1,3 +1,4 @@
+import debounce from 'lodash.debounce';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {API_TRIGGER} from '../../constants/enums';
@@ -8,9 +9,9 @@ import {
   fetchLoanApplicationsThunk,
   resetLoanApplication,
   setIsCreatingLoanApplication,
+  setLoanFilterFromHomePage,
 } from '../../redux/actions';
 import Applications_Component from './Applications_Component';
-import debounce from 'lodash.debounce';
 
 /**
  * Screen that displays and manages a paginated and searchable list of loan applications.
@@ -45,8 +46,43 @@ class ApplicationsScreen extends Component {
    * Initial data fetch on screen mount.
    */
   componentDidMount = () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
+      // let activeFilterOption = getScreenParam(
+      //   this.props.route,
+      //   'params',
+      // )?.activeFilterOption;
+      // const {applications} = this.props;
+      // if (!applications && !activeFilterOption) {
+      //   return this.fetchAllApplication();
+      // }
+      // console.log('activeFilterOption------>', activeFilterOption);
+      // let payload = {};
+      // if (activeFilterOption) {
+      //   payload = {
+      //     params: {
+      //       status: activeFilterOption,
+      //     },
+      //   };
+      // }
+      // this.fetchAllApplication(1, payload);
+    });
+
+    this.blurListener = this.props.navigation.addListener('blur', () => {
+      // Remove the param on blur
+      this.props.navigation.setParams({params: null});
+      console.log('Params cleared on blur');
+    });
     this.fetchAllApplication();
   };
+
+  componentWillUnmount() {
+    if (this.focusListener) {
+      this.focusListener();
+    }
+    if (this.blurListener) {
+      this.blurListener();
+    }
+  }
 
   /**
    * Fetches all loan applications with optional page and filter params.
@@ -219,7 +255,10 @@ class ApplicationsScreen extends Component {
         isSearch: false,
         searchText: '',
       },
-      () => this.clearSearch(),
+      () => {
+        this.clearSearch();
+        this.props.setLoanFilterFromHomePage(value);
+      },
     );
   };
 
@@ -228,18 +267,20 @@ class ApplicationsScreen extends Component {
       showFilterApplications: false,
       activeFilterOption: '',
     });
+    this.props.setLoanFilterFromHomePage('');
   };
 
   componentDidUpdate(prevProps, prevState) {
     const {activeFilterOption, isSearch, searchText} = this.state;
+    const {loanFilterValue, isFirstTimeNavigation} = this.props;
 
-    // Run filter fetch if activeFilterOption changes and it's not a search
-    if (prevState.activeFilterOption !== activeFilterOption && !isSearch) {
+    if (prevProps.loanFilterValue !== loanFilterValue && !isSearch) {
+      this.setState({activeFilterOption: loanFilterValue});
       let payload = {};
-      if (activeFilterOption) {
+      if (loanFilterValue) {
         payload = {
           params: {
-            status: activeFilterOption,
+            status: loanFilterValue,
           },
         };
       }
@@ -260,7 +301,13 @@ class ApplicationsScreen extends Component {
       showFilterApplications,
       activeFilterOption,
     } = this.state;
-    const {applications, loading, searchApplications, userData} = this.props;
+    const {
+      applications,
+      loading,
+      searchApplications,
+      userData,
+      loanFilterValue,
+    } = this.props;
 
     const [currentPage, totalPages] = this.getPageInfo();
     const initialLoading =
@@ -309,6 +356,7 @@ const mapDispatchToProps = {
   clearSearchApplication,
   resetLoanApplication,
   setIsCreatingLoanApplication,
+  setLoanFilterFromHomePage,
 };
 
 // Redux: map state to props
@@ -322,6 +370,8 @@ const mapStateToProps = ({loanData, user}) => {
     searchPage: loanData.searchPage,
     searchTotalPages: loanData.searchTotalPages,
     userData: user?.userProfile,
+    loanFilterValue: loanData?.loanFilterValue,
+    isFirstTimeNavigation: loanData?.isFirstTimeNavigation,
   };
 };
 

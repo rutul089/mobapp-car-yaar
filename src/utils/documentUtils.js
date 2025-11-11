@@ -7,64 +7,12 @@ import {
   documentImageLabelMap,
   documentImageType,
   documentType,
+  vehicleImageLabelMap,
 } from '../constants/enums';
 import {getPresignedDownloadUrl} from '../services';
-import {showToast} from './helper';
 import {compressImage} from './fileUploadUtils';
-
-/**
- * Launches a file picker based on type: camera, gallery, or document.
- *
- * @param {'camera' | 'gallery' | 'document'} type - Picker type.
- * @param {(file: object | null) => void} callback - Callback with selected file or null.
- */
-// export const handleFileSelection = async (type, callback) => {
-//   try {
-//     if (type === 'camera') {
-//       const result = await launchCamera({
-//         mediaType: 'photo',
-//         quality: 0.5,
-//         saveToPhotos: true,
-//         conversionQuality: 0.9,
-//       });
-
-//       const file = result.assets[0];
-
-//       if (!result.didCancel && result.assets?.length > 0) {
-//         const compressedUri = await compressImage(file?.uri);
-//         callback({...file, uri: compressedUri});
-//       } else {
-//         callback(null);
-//       }
-//     } else if (type === 'gallery') {
-//       const result = await launchImageLibrary({
-//         mediaType: 'photo',
-//         quality: 0.3,
-//         conversionQuality: 0.9,
-//       });
-//       const file = result.assets[0];
-
-//       if (!result.didCancel && result.assets?.length > 0) {
-//         const compressedUri = await compressImage(file?.uri);
-//         callback({...file, uri: compressedUri});
-//       } else {
-//         callback(null);
-//       }
-//     } else if (type === 'document') {
-//       const res = await pick({
-//         allowMultiSelection: false,
-//         type: [types.pdf, types.images],
-//       });
-//       callback(res[0]);
-//     }
-//   } catch (err) {
-//     if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
-//       callback(null);
-//     } else {
-//       callback(null);
-//     }
-//   }
-// };
+import {showToast} from './helper';
+import {handleFieldChange} from './inputHelper';
 
 export const handleFileSelection = async (type, callback) => {
   try {
@@ -315,9 +263,15 @@ export const validateRequiredDocuments = (documents, requiredFields) => {
 
   if (missingFields.length > 0) {
     const missingLabels = missingFields
-      .map(field => documentImageLabelMap?.[field] || field)
+      .map(
+        field =>
+          documentImageLabelMap?.[field] ||
+          vehicleImageLabelMap?.[field] ||
+          field,
+      )
       .join(', ');
     showToast('error', `Please upload: ${missingLabels}`, 'bottom', 3500);
+
     return false;
   }
 
@@ -409,37 +363,6 @@ export const transformDocumentData = async (responseData, documentKey = []) => {
 
   return formattedData;
 };
-
-// export const transformDocumentData = async (responseData, documentKey) => {
-//   console.log({responseData});
-//   console.log({documentKey});
-//   const formattedData = {};
-//   const fileKeys = Object.keys(responseData).filter(
-//     key => responseData[key] && typeof responseData[key] === 'string',
-//   );
-
-//   for (const key of fileKeys) {
-//     const uri = responseData[key];
-//     try {
-//       const {data} = await getPresignedDownloadUrl({objectKey: uri});
-//       formattedData[key] = {
-//         uploadKey: uri,
-//         uploadedUrl: uri,
-//         uri: data?.url || null,
-//         isLocal: false,
-//       };
-//     } catch (error) {
-//       console.error(`Failed to get presigned URL for ${key}`, error);
-//       formattedData[key] = {
-//         uploadKey: uri,
-//         uploadedUrl: uri,
-//         uri: uri,
-//       };
-//     }
-//   }
-
-//   return formattedData;
-// };
 
 export const openInBrowser = async url => {
   try {

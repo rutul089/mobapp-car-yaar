@@ -267,7 +267,9 @@ const Customer_Personal_Details_Component = ({
             label={'Gender'}
             options={genderTypes}
             selectedValue={selectedGender}
-            onChange={onSelectedGender}
+            onChange={value => {
+              onSelectedGender?.(value);
+            }}
           />
           <Spacing size="md" />
           <Input
@@ -330,7 +332,7 @@ const Customer_Personal_Details_Component = ({
             returnKeyType="next"
             onSubmitEditing={() => focusNext('address')}
             onFocus={() => !isEdit && scrollToInput('dob')}
-            onPress={() => setShowPicker(true)}
+            // onPress={() => setShowPicker(true)}
             {...(restInputProps?.dob || {})}
           />
           <Spacing size="md" />
@@ -377,7 +379,9 @@ const Customer_Personal_Details_Component = ({
             isAsDropdown
             isRightIconVisible
             label="Occupation"
-            onPress={() => setIsOccupationModalVisible(true)}
+            onPress={() => {
+              setIsOccupationModalVisible(true);
+            }}
             {...(restInputProps?.occupation || {})}
           />
           <Spacing size="md" />
@@ -461,7 +465,11 @@ const Customer_Personal_Details_Component = ({
             label={'Current Loan?'}
             options={currentLoanTypes}
             selectedValue={state.currentLoan}
-            onChange={onSelectedLoanOption}
+            onChange={value => {
+              onSelectedLoanOption?.(value);
+              scrollToInput('maxEmiAfford');
+              focusNext('maxEmiAfford');
+            }}
           />
           <Spacing size="md" />
           <View style={styles.rowSpaceBetween}>
@@ -571,8 +579,16 @@ const Customer_Personal_Details_Component = ({
         visible={isOccupationModalVisible}
         data={occupationOptions}
         selectedItem={occupation}
-        onSelect={(item, index) => onSelectedOccupation?.(item)}
-        onClose={() => setIsOccupationModalVisible(false)}
+        onSelect={(item, index) => {
+          onSelectedOccupation?.(item);
+          !isEdit && scrollToInput('monthlyIncome');
+          focusNext('monthlyIncome');
+        }}
+        onClose={() => {
+          setIsOccupationModalVisible(false);
+          scrollToInput('incomeSource');
+          focusNext('monthlyIncome');
+        }}
         title="Select Occupation Type"
       />
 
@@ -580,8 +596,17 @@ const Customer_Personal_Details_Component = ({
         visible={showIncomeSourceModal}
         data={state.incomeSourceOptions}
         selectedItem={state.incomeSource}
-        onSelect={(item, index) => onSelectIncomeSourceOption?.(item)}
-        onClose={() => setShowIncomeSourceModal(false)}
+        onSelect={(item, index) => {
+          onSelectIncomeSourceOption?.(item);
+          scrollToInput('incomeSource');
+          focusNext('monthlyIncome');
+        }}
+        onClose={() => {
+          setShowIncomeSourceModal(false);
+          setIsOccupationModalVisible(false);
+          scrollToInput('incomeSource');
+          focusNext('monthlyIncome');
+        }}
         title="Select Income Source Type"
       />
 

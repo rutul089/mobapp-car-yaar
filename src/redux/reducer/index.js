@@ -11,6 +11,7 @@ import performanceReducer from './performanceReducer';
 import sendCustomerOtpForCibilReducer from './sendCustomerOtpForCibilReducer';
 import salesExecutiveReducer from './salesExecutiveReducer';
 import emiPlanReducer from './emiPlanReducer';
+import envelopeReducer from './envelopeReducer';
 
 const rootReducer = combineReducers({
   appState: appStateReducer,
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   cibilReducer: sendCustomerOtpForCibilReducer,
   salesExecutives: salesExecutiveReducer,
   emiPlan: emiPlanReducer,
+  envelopeData: envelopeReducer,
 });
 
 export default rootReducer;

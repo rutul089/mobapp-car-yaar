@@ -167,3 +167,23 @@ export const fetchEmiPlans = async payload => {
     throw error;
   }
 };
+
+export const fetchLoanDocumentsByCategory = async (
+  category,
+  customerType,
+  documentRequired,
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/loan-documents/documents/${category}/${customerType}`,
+      {
+        params: {document_required: documentRequired},
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching loan documents by category:', error);
+    throw error;
+  }
+};

@@ -15,7 +15,7 @@ class SearchScreen extends Component {
     super(props);
     this.state = {
       showAddVehicle: false,
-      vehicleNumber: 'GJ01WW8451',
+      vehicleNumber: '',
       showError: false,
       statusMsg: '',
       showStatusIcon: false,

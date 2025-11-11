@@ -56,9 +56,23 @@ const Home_Component = ({
   /**
    * Render a loan type card with an icon and arrow
    */
-  const renderLoanTypeCard = (label, icon, style, onPress) => (
-    <Card onPress={onPress} style={[{width: '32%'}, style]} noShadow>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+  const renderLoanTypeCard = (label, icon, style, onPress, isDisabled) => (
+    <Card
+      onPress={onPress}
+      disabled={isDisabled}
+      style={[{width: '32%', opacity: isDisabled ? 0.8 : 1}, style]}
+      cardContainerStyle={[
+        isDisabled && {
+          backgroundColor: '#bfc1c450',
+          borderColor: '#9a9a9a80',
+          borderWidth: 1,
+        },
+      ]}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
         <Image source={icon} style={styles.loanIcon} />
         <Image source={images.arrow_right} style={{height: 20, width: 20}} />
       </View>
@@ -142,13 +156,6 @@ const Home_Component = ({
                 isSelected={selectedCarType === vehicleType.used}
               />
             </View>
-            {/* <OptionCard
-              value={vehicleType.new}
-              label="New Vehicle"
-              icon={images.newVehicle}
-              onSelect={onSelectedCarType}
-              isSelected={selectedCarType === vehicleType.new}
-            /> */}
           </View>
 
           {/* ---------- Loan Type Selection ---------- */}
@@ -163,11 +170,19 @@ const Home_Component = ({
                 {renderLoanTypeCard('Purchase', images.icPurchase, null, () =>
                   handleLoanTypeSelection?.(loanType.purchase),
                 )}
-                {renderLoanTypeCard('Refinance', images.icRefinance, null, () =>
-                  handleLoanTypeSelection?.(loanType.refinance),
+                {renderLoanTypeCard(
+                  'Refinance',
+                  images.icRefinance,
+                  null,
+                  () => handleLoanTypeSelection?.(loanType.refinance),
+                  true,
                 )}
-                {renderLoanTypeCard('Top Up', images.icTopUp, null, () =>
-                  handleLoanTypeSelection?.(loanType.topUp),
+                {renderLoanTypeCard(
+                  'Top Up',
+                  images.icTopUp,
+                  null,
+                  () => handleLoanTypeSelection?.(loanType.topUp),
+                  true,
                 )}
               </View>
               <View style={styles.row}>
@@ -176,6 +191,7 @@ const Home_Component = ({
                   images.icInternalBT,
                   styles.carTypeBox,
                   () => handleLoanTypeSelection?.(loanType.internalBT),
+                  true,
                 )}
                 <Spacing direction="x" size="md" />
                 {renderLoanTypeCard(
@@ -183,6 +199,7 @@ const Home_Component = ({
                   images.icExternalBT,
                   styles.carTypeBox,
                   () => handleLoanTypeSelection?.(loanType.externalBT),
+                  true,
                 )}
               </View>
             </>

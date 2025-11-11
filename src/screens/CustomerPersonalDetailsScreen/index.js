@@ -7,8 +7,10 @@ import {
   genderType,
   getLabelFromEnum,
   occupationLabelMap,
+  occupationType,
 } from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
+import strings from '../../locales/strings';
 import {
   getScreenParam,
   goBack,
@@ -34,10 +36,13 @@ import {
 import {
   uploadApplicantPhoto,
   uploadDocumentViaPresignedUrl,
+  uploadMedia,
 } from '../../utils/fileUploadUtils';
 import {getNameMatchPercentage} from '../../utils/getNameMatchPercentage';
 import {
   convertToISODate,
+  extractAadhaarDetails,
+  extractPanDetails,
   formatDate,
   formatVehicleNumber,
   generateMaskedAadhaar,
@@ -47,9 +52,12 @@ import {
   showToast,
   uploadOptions,
 } from '../../utils/helper';
-import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import {
+  handleFieldChange,
+  validateField,
+  validateMaxEmiAfford,
+} from '../../utils/inputHelper';
 import Customer_Personal_Details_Component from './Customer_Personal_Details_Component';
-import strings from '../../locales/strings';
 
 const initialState = {
   applicantPhoto: '',
@@ -155,6 +163,7 @@ class CustomerPersonalDetails extends Component {
       aadharBackphotoLink: null,
       aadharFrontPhotoLink: null,
       pancardPhotoLink: null,
+      isLoading: false,
     };
     this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
     this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
@@ -208,6 +217,7 @@ class CustomerPersonalDetails extends Component {
       aadharVerification: detail?.aadharVerification,
       mobileNumber: detail?.mobileNumber || selectedCustomer?.mobileNumber,
       cibilScore: selectedCustomer?.cibilScore,
+      nameOnAadharCard: detail?.applicantName,
     };
 
     const [back, front, pancard] = await Promise.all([
@@ -256,22 +266,30 @@ class CustomerPersonalDetails extends Component {
     );
   };
 
-  onNextPress = async () => {
-    const {isEdit} = this.state;
+  onNextPress = async (skipVerification = false) => {
+    const {isEdit, occupation, monthlyIncome, maxEmiAfford} = this.state;
     const {isCreatingLoanApplication} = this.props;
 
-    // 1️⃣ Validate the form
-    const isFormValid = this.validateAllFields();
-    if (!isFormValid) {
-      showToast('warning', strings.errorMissingField, 'bottom', 3000);
-      return;
-    }
+    if (skipVerification) {
+      let _occupation = occupation === occupationType.SALARIED;
 
-    // 2️⃣ Verify PAN & Aadhaar
-    const isVerified = await this.handleVerifyDocuments();
+      // 1️⃣ Validate the form
+      const isFormValid = this.validateAllFields();
+      if (!isFormValid) {
+        showToast('warning', strings.errorMissingField, 'bottom', 3000);
+        return;
+      }
 
-    if (!isVerified && !isEdit) {
-      return; // toast already shown in handleVerifyDocuments
+      // 2️⃣ Verify PAN & Aadhaar
+      const isVerified = await this.handleVerifyDocuments(isEdit);
+
+      if (!isVerified && !isEdit) {
+        return; // toast already shown in handleVerifyDocuments
+      }
+
+      // if (!isVerified) {
+      //   return; // toast already shown in handleVerifyDocuments
+      // }
     }
 
     // 3️⃣ Prepare payload
@@ -300,7 +318,7 @@ class CustomerPersonalDetails extends Component {
     this.props.updateCustomerDetailsThunk(payload, onSuccess, onError);
   };
 
-  handleVerifyDocuments = async () => {
+  handleVerifyDocuments = async skip => {
     const {
       nameOnPanCard,
       nameOnAadharCard,
@@ -309,9 +327,12 @@ class CustomerPersonalDetails extends Component {
       panCardVerification,
     } = this.state;
 
-    if (isEdit) {
-      return true;
+    if (skip) {
+      return;
     }
+    // if (isEdit) {
+    //   return true;
+    // }
 
     if (!nameOnPanCard && !panCardVerification) {
       return showToast('warning', 'Please verify your Pancard...');
@@ -380,7 +401,7 @@ class CustomerPersonalDetails extends Component {
       maxEmiAfford: Number(state.maxEmiAfford),
       avgMonthlyBankBalance: Number(state.avgMonthlyBankBalance),
       customerId: selectedCustomerId,
-      // cibilScore: this.state?.cibilScore,
+      cibilScore: this.state?.cibilScore,
     };
 
     return payload;
@@ -452,14 +473,23 @@ class CustomerPersonalDetails extends Component {
       }
     });
 
-    console.log('errors', JSON.stringify(errors));
-
     this.setState({errors, isFormValid});
     return isFormValid;
   };
 
   onChangeField = (key, value, isOptional = false) => {
     handleFieldChange(this, key, value, value?.toString()?.trim().length === 0);
+    // if (key === 'monthlyIncome') {
+    //   let _occupation = this.state.occupation === occupationType.SALARIED;
+    //   this.setState(
+    //     {
+    //       maxEmiAfford: validateMaxEmiAfford(_occupation, value) + '',
+    //     },
+    //     () => {
+    //       this.onChangeField('maxEmiAfford', this.state.maxEmiAfford);
+    //     },
+    //   );
+    // }
   };
 
   handleFileUpload = type => {
@@ -470,26 +500,30 @@ class CustomerPersonalDetails extends Component {
       }
 
       this.setState({showFilePicker: false, isLoadingDocument: true});
-      await new Promise(resolve => setTimeout(resolve, 100));
-
+      // await new Promise(resolve => setTimeout(resolve, 200));
       const fileName = asset.name || asset.fileName || 'upload';
       const mimeType = asset.type || 'application/octet-stream';
 
       try {
         if (selectionType === 'applicantPhoto') {
           const url = await uploadApplicantPhoto(asset, fileName, mimeType);
-          await this.updateDocumentState('applicantPhoto', url);
+          await this.updateDocumentState('applicantPhoto', url, true);
         } else {
           const uploadedKey = await uploadDocumentViaPresignedUrl(
             asset,
             selectionType,
           );
-          await this.updateDocumentState(selectionType, uploadedKey);
+          await this.updateDocumentState(
+            selectionType,
+            uploadedKey,
+            true,
+            asset,
+          );
         }
       } catch (error) {
         showToast('error', 'Upload failed');
       } finally {
-        this.setState({isLoadingDocument: false, showFilePicker: false});
+        this.setState({showFilePicker: false, isLoadingDocument: false});
       }
     });
   };
@@ -545,7 +579,7 @@ class CustomerPersonalDetails extends Component {
 
     try {
       await viewDocumentHelper(
-        downloadedUrl,
+        uri,
         imageUri => {
           navigate(ScreenNames.ImagePreviewScreen, {uri: imageUri});
         },
@@ -559,7 +593,7 @@ class CustomerPersonalDetails extends Component {
   };
 
   handleDeleteDocument = type => {
-    this.updateDocumentState(type, null, false);
+    this.updateDocumentState(type, null, false, null, true);
   };
 
   verifyPanCard = () => {
@@ -644,6 +678,11 @@ class CustomerPersonalDetails extends Component {
         applicantName: aadhaarInfo?.full_name,
         nameOnAadharCard: aadhaarInfo?.full_name,
         dob: formattedDob,
+        gender:
+          aadhaarInfo?.gender?.toLowerCase() === 'm'
+            ? genderType.MALE
+            : genderType.FEMALE,
+        address: aadhaarInfo?.full_address,
       },
       () => {
         this.callVerifyAadharCard();
@@ -677,15 +716,38 @@ class CustomerPersonalDetails extends Component {
           aadharVerification: true,
         });
         if (this.state.isEdit) {
-          this.onNextPress();
+          this.onNextPress(true);
         }
       }
     });
   };
 
-  updateDocumentState = async (type, uri, isCheck = true) => {
+  updateDocumentState = async (
+    type,
+    uri,
+    isCheck = true,
+    asset,
+    isDelete = false,
+  ) => {
     if (!type) {
       return;
+    }
+
+    if (type === 'pancardPhoto') {
+      this.setState({
+        panCardNumber: '',
+      });
+    }
+
+    if (type === 'aadharFrontPhoto') {
+      this.setState({
+        aadharNumber: '',
+        applicantName: '',
+        nameOnAadharCard: '',
+        dob: '',
+        gender: '',
+        address: '',
+      });
     }
 
     let link = null;
@@ -698,19 +760,189 @@ class CustomerPersonalDetails extends Component {
         [type]: uri,
         [`${type}Link`]: link,
       },
-      () => {
+      async () => {
         if (!isCheck) {
           return;
         }
+        this.fetchDetailFromOCR(asset, type, isDelete);
         this.onChangeField(type, uri);
       },
     );
   };
 
+  fetchDetailFromOCR = async (asset, type, isDelete) => {
+    if (isDelete) {
+      return;
+    }
+
+    const uploadTypes = {
+      aadharFrontPhoto: {
+        uploadKey: 'aadharFrontPhoto',
+        extractFn: extractAadhaarDetails,
+        onSuccess: data => {
+          const formattedDob = data?.dob?.split('-').reverse().join('/');
+          return {
+            aadharNumber: data?.aadhaarNumber || '',
+            applicantName: data?.fullName || '',
+            nameOnAadharCard: data?.fullName || '',
+            dob: formattedDob || '',
+            gender:
+              data?.gender?.toLowerCase() === 'm'
+                ? genderType.MALE
+                : genderType.FEMALE,
+          };
+        },
+        errorKey: 'aadharFrontPhoto',
+        errorMsg: 'Failed to upload Aadhar card',
+      },
+      pancardPhoto: {
+        uploadKey: 'pancardPhoto',
+        extractFn: extractPanDetails,
+        onSuccess: data => ({
+          panCardNumber: data?.panNumber || '',
+        }),
+        errorKey: 'pancardPhoto',
+        errorMsg: 'Failed to upload PAN card',
+      },
+    };
+
+    const config = uploadTypes[type];
+    if (!config) {
+      return;
+    }
+
+    this.setState({isLoadingDocument: true});
+
+    try {
+      const response = await uploadMedia(asset, config.uploadKey);
+
+      if (response?.success) {
+        const extractedData = config.extractFn(response);
+        const successState = config.onSuccess(extractedData);
+        this.setState({...successState, isLoadingDocument: false});
+      } else {
+        this.setState(prevState => ({
+          isLoadingDocument: false,
+          [config.errorKey]: null,
+          errors: {
+            ...prevState.errors,
+            [config.errorKey]:
+              response?.error || response?.message || config.errorMsg,
+          },
+        }));
+      }
+    } catch (error) {
+      this.setState(prevState => ({
+        isLoadingDocument: false,
+        [config.errorKey]: null,
+        errors: {
+          ...prevState.errors,
+          [config.errorKey]:
+            error?.message || error?.response?.data?.error || config.errorMsg,
+        },
+      }));
+    }
+  };
+
+  // fetchDetailFromOCR = async (asset, type, isDelete) => {
+  //   if (type === 'aadharFrontPhoto' && !isDelete) {
+  //     this.setState({isLoadingDocument: true});
+
+  //     try {
+  //       const response = await uploadMedia(asset, 'aadharFrontPhoto');
+  //       let aadharCardData = extractAadhaarDetails(response);
+
+  //       if (response?.success) {
+  //         const formattedDob = aadharCardData?.dob
+  //           ?.split('-')
+  //           .reverse()
+  //           .join('/');
+
+  //         this.setState({
+  //           isLoadingDocument: false,
+  //           aadharNumber: aadharCardData?.aadhaarNumber,
+  //           applicantName: aadharCardData?.fullName,
+  //           nameOnAadharCard: aadharCardData?.fullName,
+  //           dob: formattedDob,
+  //           gender:
+  //             aadharCardData?.gender?.toLowerCase() === 'm'
+  //               ? genderType.MALE
+  //               : genderType.FEMALE,
+  //         });
+  //         return;
+  //       }
+
+  //       if (!response?.success) {
+  //         this.setState(prevState => ({
+  //           aadharFrontPhoto: null,
+  //           isLoadingDocument: false,
+  //           aadharNumber: '',
+  //           errors: {
+  //             ...prevState.errors,
+  //             aadharFrontPhoto: response?.error || 'Failed to upload PAN card',
+  //           },
+  //         }));
+  //       }
+  //       return;
+  //     } catch (error) {
+  //       this.setState(prevState => ({
+  //         aadharFrontPhoto: null,
+  //         isLoadingDocument: false,
+  //         aadharNumber: '',
+  //         errors: {
+  //           ...prevState.errors,
+  //           errors: {
+  //             ...prevState.errors,
+  //             aadharFrontPhoto: error?.error || 'Failed to upload Aadhar card',
+  //           },
+  //         },
+  //       }));
+  //     }
+  //   }
+
+  //   if (type === 'pancardPhoto' && !isDelete) {
+  //     this.setState({isLoadingDocument: true});
+  //     try {
+  //       const response = await uploadMedia(asset, 'pancardPhoto');
+  //       if (response?.success) {
+  //         const panData = extractPanDetails(response);
+  //         this.setState({
+  //           panCardNumber: panData?.panNumber,
+  //           isLoadingDocument: false,
+  //         });
+  //       } else {
+  //         this.setState(prevState => ({
+  //           panCardNumber: '',
+  //           pancardPhoto: null,
+  //           isLoadingDocument: false,
+  //           errors: {
+  //             ...prevState.errors,
+  //             pancardPhoto:
+  //               response?.error ||
+  //               response?.message ||
+  //               'Failed to upload PAN card',
+  //           },
+  //         }));
+  //       }
+  //     } catch (error) {
+  //       this.setState(prevState => ({
+  //         panCardNumber: '',
+  //         pancardPhoto: null,
+  //         isLoadingDocument: false,
+  //         errors: {
+  //           ...prevState.errors,
+  //           pancardPhoto:
+  //             error?.message ||
+  //             error?.response?.data?.error ||
+  //             'Something went wrong while uploading PAN card',
+  //         },
+  //       }));
+  //     }
+  //   }
+  // };
+
   fetchCibilScore = () => {
     const isFormValid = this.validateAllFields(true);
-
-    console.log({isFormValid});
 
     const {mobileNumber, panCardNumber, applicantName, gender} = this.state;
     let params = getScreenParam(this.props.route, 'params');
@@ -748,6 +980,72 @@ class CustomerPersonalDetails extends Component {
     // navigate(ScreenNames.CustomerEnvelope);
   };
 
+  setMaxEmiAfford = (source, value) => {
+    const {currentLoan, currentEmi, monthlyIncome} = this.state;
+    const isOccupation = this.state.occupation === occupationType.SALARIED;
+
+    // Determine base income value
+    const incomeValue = source === 'monthlyIncome' ? value : monthlyIncome;
+
+    // Base validation
+    let maxEmiAfford = Number(
+      validateMaxEmiAfford(isOccupation, incomeValue) || 0,
+    );
+
+    // Subtract current EMI if applicable
+    if (currentLoan) {
+      const emiValue =
+        Number(source === 'currentEmi' ? value : currentEmi) || 0;
+      maxEmiAfford = Math.max(maxEmiAfford - emiValue, 0);
+    }
+
+    if (isOccupation) {
+      this.onChangeField('maxEmiAfford', String(maxEmiAfford));
+    }
+  };
+
+  getFieldHandlers = () => ({
+    onChangePanCardNumber: value => this.onChangeField('panCardNumber', value),
+    onChangeAadharNumber: value => this.onChangeField('aadharNumber', value),
+    onChangeApplicantName: value => this.onChangeField('applicantName', value),
+    onChangeCurrentAddress: value => this.onChangeField('address', value),
+    onChangemobileNumber: value => this.onChangeField('mobileNumber', value),
+    onChangeFatherMotherName: value => this.onChangeField('fatherName', value),
+    onChangeSpouseName: value => this.onChangeField('spouseName', value),
+    onChangeAccountNumber: value => this.onChangeField('accountNumber', value),
+    onChangeMaxEMIAfford: value => this.onChangeField('maxEmiAfford', value),
+    onChangeDob: value => this.onChangeField('dob', value),
+    onChangeMonthlyBankBalance: value =>
+      this.onChangeField('avgMonthlyBankBalance', value),
+    onBankNameChange: value => this.onChangeField('bankName', value),
+    onChangeEmail: value => this.onChangeField('email', value),
+    onChangeCurrentPincode: value => this.onChangeField('pincode', value),
+    onChangeMonthlyIncome: value => {
+      (this.onChangeField('monthlyIncome', value),
+        this.setMaxEmiAfford('monthlyIncome', value));
+    },
+    onChangeCurrentEMI: value => {
+      (this.onChangeField('currentEmi', value, !this.state.currentLoan),
+        this.setMaxEmiAfford('currentEmi', value));
+    },
+  });
+
+  getHeaderProps = () => {
+    const {isEdit} = this.state;
+    const {selectedVehicle, isCreatingLoanApplication} = this.props;
+    const {UsedVehicle = {}} = selectedVehicle || {};
+
+    return {
+      title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
+      subtitle: isCreatingLoanApplication
+        ? formatVehicleNumber(UsedVehicle?.registerNumber)
+        : '',
+      showRightContent: true,
+      rightLabelColor: '#F8A902',
+      onBackPress: () => goBack(),
+    };
+  };
+
   render() {
     const {
       gender,
@@ -765,65 +1063,19 @@ class CustomerPersonalDetails extends Component {
       cibilScore,
     } = this.state;
 
-    const {selectedVehicle, isCreatingLoanApplication, loading} = this.props;
-    const {UsedVehicle = {}} = selectedVehicle || {};
+    const {isCreatingLoanApplication, loading} = this.props;
+
     return (
       <Customer_Personal_Details_Component
         isEdit={isEdit}
-        headerProp={{
-          title: `${isEdit ? 'Edit' : 'Add'} Customer Details`,
-          subtitle: isCreatingLoanApplication
-            ? formatVehicleNumber(UsedVehicle?.registerNumber)
-            : '',
-          showRightContent: true,
-          // rightLabel: isOnboard ? '' : registrationNumber,
-          rightLabelColor: '#F8A902',
-          onBackPress: () => goBack(),
-        }}
+        headerProp={this.getHeaderProps()}
         state={this.state}
         onSelectedGender={this.onSelectedGender}
         selectedGender={gender}
-        onChangePanCardNumber={value =>
-          this.onChangeField('panCardNumber', value)
-        }
-        onChangeAadharNumber={value =>
-          this.onChangeField('aadharNumber', value)
-        }
-        onChangeApplicantName={value =>
-          this.onChangeField('applicantName', value)
-        }
-        onChangemobileNumber={value =>
-          this.onChangeField('mobileNumber', value)
-        }
-        onChangeFatherMotherName={value =>
-          this.onChangeField('fatherName', value)
-        }
-        onChangeSpouseName={value =>
-          this.onChangeField('spouseName', value, true)
-        }
-        onChangeEmail={value => this.onChangeField('email', value)}
-        onChangeCurrentAddress={value => this.onChangeField('address', value)}
-        onChangeCurrentPincode={value => this.onChangeField('pincode', value)}
+        {...this.getFieldHandlers()}
         onSelectedLoanOption={this.onSelectedLoanOption}
         onSelectedOccupation={this.onSelectedOccupation}
         onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
-        onChangeMonthlyIncome={value =>
-          this.onChangeField('monthlyIncome', value)
-        }
-        onChangeAccountNumber={value =>
-          this.onChangeField('accountNumber', value)
-        }
-        onChangeCurrentEMI={value =>
-          this.onChangeField('currentEmi', value, !this.state.currentLoan)
-        }
-        onChangeMaxEMIAfford={value =>
-          this.onChangeField('maxEmiAfford', value)
-        }
-        onChangeDob={value => this.onChangeField('dob', value)}
-        onChangeMonthlyBankBalance={value =>
-          this.onChangeField('avgMonthlyBankBalance', value)
-        }
-        onBankNameChange={value => this.onChangeField('bankName', value)}
         onNextPress={this.onNextPress}
         occupation={getLabelFromEnum(occupationLabelMap, occupation)}
         onSelectSuggestion={this.onSelectBank}
@@ -834,9 +1086,10 @@ class CustomerPersonalDetails extends Component {
             statusMsg: errors?.panCardNumber,
             autoCapitalize: 'characters',
             isDisabled: panCardVerification && isEdit,
-            rightLabel: panCardVerification && isEdit ? '' : 'VERIFY',
+            // rightLabel: panCardVerification && isEdit ? '' : 'VERIFY',
             rightLabelPress: this.verifyPanCard,
             isRightIconVisible: panCardVerification,
+            rightLabel: panCardVerification && isEdit ? '' : 'VERIFY',
           },
           aadharNumber: {
             value: aadharNumber,

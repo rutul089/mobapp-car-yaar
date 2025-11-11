@@ -1,5 +1,6 @@
 import {
   changeUserPassword,
+  fetchLoanDocumentsByCategory,
   getUserProfile,
   loginWithType,
   updateUserProfile,
@@ -200,6 +201,29 @@ export const changePasswordThunk = (param, onSuccess, onFailure) => {
         type: types.CHANGE_PASSWORD_FAILURE,
         payload: error.message,
       });
+      showApiErrorToast(error);
+      onFailure?.(error.message);
+    }
+  };
+};
+
+export const fetchLoanDocumentsByCategoryThunk = (
+  category,
+  customerType,
+  documentType,
+  onSuccess,
+  onFailure,
+) => {
+  return async dispatch => {
+    try {
+      const response = await fetchLoanDocumentsByCategory(
+        category,
+        customerType,
+        documentType,
+      );
+
+      onSuccess?.(response);
+    } catch (error) {
       showApiErrorToast(error);
       onFailure?.(error.message);
     }

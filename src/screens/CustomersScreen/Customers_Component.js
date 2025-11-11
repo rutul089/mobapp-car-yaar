@@ -9,12 +9,17 @@ import {
   SearchBar,
   images,
   theme,
+  CommonModal,
+  RadioButton,
+  Spacing,
+  Text,
+  StatusChip,
 } from '@caryaar/components';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 
 import {NoDataFound} from '../../components';
-import {API_TRIGGER} from '../../constants/enums';
+import {API_TRIGGER, vehicleFilterOption} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
 import {goBack, navigate} from '../../navigation/NavigationUtils';
 import {
@@ -41,7 +46,26 @@ const Customers_Component = ({
   onAddButtonPress,
   isCreatingLoanApplication,
   profileImage,
+  filterProps,
+  activeFilterOption,
+  handleFilterClick,
 }) => {
+  const [localActiveFilterOption, setLocalActiveFilterOption] =
+    React.useState(activeFilterOption);
+
+  useEffect(() => {
+    setLocalActiveFilterOption(activeFilterOption);
+  }, [activeFilterOption]);
+
+  const handleApplyFilter = () => {
+    filterProps?.onPressPrimaryButton?.(localActiveFilterOption);
+  };
+
+  const handleClearFilter = () => {
+    setLocalActiveFilterOption('');
+    filterProps?.onClearFilterButton?.();
+  };
+
   return (
     <SafeAreaWrapper hideBottom>
       {isCreatingLoanApplication ? (
@@ -73,7 +97,22 @@ const Customers_Component = ({
           hideSubHeaderTop={false}
           showAddBtn
           onAddButtonPress={onAddButtonPress}
+          onFilterPress={handleFilterClick}
         />
+      )}
+
+      {activeFilterOption && (
+        <View style={styles.filterWrapper}>
+          <Text type="helper-text">FilterView</Text>
+          <StatusChip
+            label={`${
+              activeFilterOption === vehicleFilterOption.DRAFT
+                ? 'Draft'
+                : 'Saved'
+            } Vehicles`}
+            onRemove={handleClearFilter}
+          />
+        </View>
       )}
 
       <FlatList
@@ -145,6 +184,39 @@ const Customers_Component = ({
           />
         }
       />
+
+      <CommonModal
+        isVisible={filterProps?.isVisible}
+        onModalHide={() => {
+          filterProps?.handleCloseFilter?.();
+        }}
+        primaryButtonLabel={'Apply'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        showSecondaryButton
+        secondaryButtonText={'Clear'}
+        onPressPrimaryButton={handleApplyFilter}
+        onSecondaryPress={handleClearFilter}
+        isTextCenter={false}
+        title="Filter by">
+        <View style={styles.filterWrapperStyle}>
+          <RadioButton
+            label={'Saved Vehicles'}
+            selected={localActiveFilterOption === vehicleFilterOption.SAVED}
+            onPress={() =>
+              setLocalActiveFilterOption(vehicleFilterOption.SAVED)
+            }
+          />
+          <Spacing />
+          <RadioButton
+            label={'Draft Vehicles'}
+            selected={localActiveFilterOption === vehicleFilterOption.DRAFT}
+            onPress={() =>
+              setLocalActiveFilterOption(vehicleFilterOption.DRAFT)
+            }
+          />
+        </View>
+      </CommonModal>
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
@@ -161,6 +233,16 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primaryBlack,
     padding: theme.sizes.spacing.md,
     paddingTop: 0,
+  },
+  filterWrapperStyle: {paddingVertical: 10, marginBottom: -12},
+  filterWrapper: {
+    paddingHorizontal: 25,
+    paddingTop: 15,
+    paddingBottom: 5,
+    backgroundColor: theme.colors.background,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
 

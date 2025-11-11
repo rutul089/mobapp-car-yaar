@@ -103,10 +103,10 @@ export const compressImage = async (uri, options = {}) => {
       ...options, // allow overrides
     });
 
-    console.log('✅ Image compressed successfully:', compressedUri);
+    // console.log('✅ Image compressed successfully:', compressedUri);
     return compressedUri;
   } catch (error) {
-    console.error('❌ Image compression failed:', error);
+    // console.error('❌ Image compression failed:', error);
     return uri; // fallback to original if compression fails
   }
 };

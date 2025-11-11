@@ -86,7 +86,6 @@ class EditVehicleDetailScreen extends Component {
     if (!isEdit) {
       return;
     }
-    console.log('selectedVehicle', JSON.stringify(selectedVehicle));
 
     const mappedFields = {
       make: selectedVehicle?.make,
@@ -117,8 +116,6 @@ class EditVehicleDetailScreen extends Component {
     const {addNewVehicle} = this.state;
 
     let selectedId = selectedVehicle?.UsedVehicle?.id;
-
-    console.log({selectedId});
 
     const isFormValid = this.validateAllFields();
 
@@ -364,7 +361,7 @@ class EditVehicleDetailScreen extends Component {
           ownershipCount: {
             isError: errors?.ownershipCount,
             statusMsg: errors?.ownershipCount,
-            // isDisabled: isEdit,
+            isDisabled: isEdit,
           },
           vehicleAge: {
             isError: errors?.vehicleAge,

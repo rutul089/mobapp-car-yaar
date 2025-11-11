@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
+  applicationStatus,
   getLabelFromEnum,
   loanType,
   userRoleValue,
@@ -11,10 +12,12 @@ import {navigate} from '../../navigation/NavigationUtils';
 import {
   fetchPartnerStatsThunk,
   fetchUser,
+  isFirstTimeNavigate,
   resetLoanApplication,
   resetSelectedCustomer,
   selectedLoanType,
   setIsCreatingLoanApplication,
+  setLoanFilterFromHomePage,
 } from '../../redux/actions';
 import Home_Component from './Home_Component';
 
@@ -106,11 +109,24 @@ class HomeScreen extends Component {
   };
 
   onApprovedLoanPress = () => {
-    navigate(ScreenNames.Applications);
+    this.props.setLoanFilterFromHomePage(applicationStatus.APPROVED);
+    this.props.isFirstTimeNavigate(true);
+    navigate(ScreenNames.Applications, {
+      params: {
+        activeFilterOption: applicationStatus.APPROVED,
+      },
+    });
   };
 
   onPendingLoanPress = () => {
-    navigate(ScreenNames.Applications);
+    this.props.setLoanFilterFromHomePage(applicationStatus.IN_REVIEW);
+    this.props.isFirstTimeNavigate(true);
+
+    navigate(ScreenNames.Applications, {
+      params: {
+        activeFilterOption: applicationStatus.IN_REVIEW,
+      },
+    });
   };
 
   onVehicleOnboardedPress = () => {
@@ -119,6 +135,7 @@ class HomeScreen extends Component {
 
   render() {
     const {userData, partnerStats} = this.props;
+
     return (
       <Home_Component
         onSelectedCarType={this.onSelectedCarType}
@@ -131,7 +148,7 @@ class HomeScreen extends Component {
         profileImage={userData?.profileImage}
         userName={userData?.name || ''}
         userRole={getLabelFromEnum(userRoleValue, userData?.role)}
-        partnerID={userData?.id}
+        partnerID={userData?.partnerUser?.partnerUserNumber}
         partnerStats={partnerStats}
         onApprovedLoanPress={this.onApprovedLoanPress}
         onPendingLoanPress={this.onPendingLoanPress}
@@ -148,6 +165,8 @@ const mapDispatchToProps = {
   fetchPartnerStatsThunk,
   resetLoanApplication,
   resetSelectedCustomer,
+  setLoanFilterFromHomePage,
+  isFirstTimeNavigate,
 };
 
 const mapStateToProps = ({user, partnerPerformance}) => ({

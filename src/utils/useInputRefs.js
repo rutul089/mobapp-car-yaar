@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {useRef} from 'react';
+import {InteractionManager} from 'react-native';
 
 export const useInputRefs = (fieldKeys = []) => {
   const scrollRef = useRef(null);
@@ -19,5 +20,12 @@ export const useInputRefs = (fieldKeys = []) => {
     }
   };
 
-  return {refs, focusNext, scrollToInput};
+  const focusAfterInteractions = key => {
+    InteractionManager.runAfterInteractions(() => {
+      scrollToInput(key);
+      focusNext(key);
+    });
+  };
+
+  return {refs, focusNext, scrollToInput, focusAfterInteractions};
 };

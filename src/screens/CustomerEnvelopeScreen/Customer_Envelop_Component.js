@@ -1,4 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import {Image, StyleSheet, View} from 'react-native';
+import React from 'react';
 
 import {
   AutocompleteInput,
@@ -11,6 +13,8 @@ import {
   Text,
   theme,
   Loader,
+  Input,
+  DropdownModal,
 } from '@caryaar/components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useInputRefs} from '../../utils/useInputRefs';
@@ -28,11 +32,18 @@ const Customer_Envelop_Component = ({
   onSelectSalesExecutive,
   restInputProps = {},
   loading,
+  onPartnerSelected,
+  partnersList,
+  salesExecutives,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'partner',
     'salesExecutive',
   ]);
+
+  const [showModal, setShowModal] = React.useState(false);
+  const [partnerType, setPartnerType] = React.useState('');
+
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       {/* Header */}
@@ -73,6 +84,22 @@ const Customer_Envelop_Component = ({
           />
           <Spacing size="lg" />
           <Card>
+            <Input
+              placeholder=""
+              isLeftIconVisible
+              leftIconName={images.user}
+              isAsDropdown
+              isRightIconVisible
+              label="CarYaar Partner *"
+              value={restInputProps?.carYarPartner?.value || ''}
+              onPress={() => {
+                setShowModal(true);
+                setPartnerType('partner');
+              }}
+              ref={refs?.partner}
+              {...(restInputProps?.carYarPartner || {})}
+            />
+            {/* <Spacing size="md" />
             <AutocompleteInput
               ref={refs.partner}
               restProps={{
@@ -89,8 +116,25 @@ const Customer_Envelop_Component = ({
               value={restInputProps?.carYarPartner?.value || ''}
               suggestionTextKey={'name'}
               {...(restInputProps?.carYarPartner || {})}
-            />
+            /> */}
             <Spacing size="md" />
+            <Input
+              placeholder=""
+              isLeftIconVisible
+              leftIconName={images.user}
+              isAsDropdown
+              isRightIconVisible
+              label="CarYaar Sales Exec *"
+              value={restInputProps?.salesExecutive?.value || ''}
+              onPress={() => {
+                setShowModal(true);
+                setPartnerType('sales_exec');
+              }}
+              ref={refs?.partner}
+              {...(restInputProps?.salesExecutive || {})}
+            />
+            {/* <Spacing size="md" />
+
             <AutocompleteInput
               ref={refs.salesExecutive}
               restProps={{
@@ -105,12 +149,29 @@ const Customer_Envelop_Component = ({
               value={restInputProps?.salesExecutive?.value || ''}
               suggestionTextKey={'user.name'}
               {...(restInputProps?.salesExecutive || {})}
-            />
+            /> */}
           </Card>
           <Spacing size="xl" />
           <Button label={'View Lenders'} onPress={onViewLenderPress} />
         </View>
       </KeyboardAwareScrollView>
+
+      <DropdownModal
+        visible={showModal}
+        data={partnerType === 'partner' ? partnersList : salesExecutives}
+        selectedItem={
+          partnerType === 'partner'
+            ? restInputProps?.carYarPartner?.value
+            : restInputProps?.salesExecutive?.value
+        }
+        onSelect={(item, index) => {
+          onPartnerSelected?.(item, partnerType);
+        }}
+        onClose={() => setShowModal(false)}
+        title={`Select CarYaar ${partnerType === 'partner' ? 'Partner' : 'Sales Exec'}`}
+        keyValue={partnerType === 'partner' ? 'name' : 'user.name'}
+      />
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );

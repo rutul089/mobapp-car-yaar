@@ -258,7 +258,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ADDRESS_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -278,7 +278,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.BANKING_PROOF,
     acceptedDocuments: [
       "Last 6 months' bank statements",
@@ -288,7 +288,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ID_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -299,7 +299,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.INCOME_PROOF,
     acceptedDocuments: [
       'All self-employed documents',
@@ -308,7 +308,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.OTHER_DOCUMENTS,
     acceptedDocuments: [
       'Application Form (Signed by Applicant and Co-Applicant, if applicable)',
@@ -318,7 +318,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.PERMANENT_ADDRESS,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -330,7 +330,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.externalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
@@ -586,7 +586,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ADDRESS_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -606,7 +606,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.BANKING_PROOF,
     acceptedDocuments: [
       "Last 6 months' bank statements",
@@ -616,7 +616,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ID_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -627,7 +627,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.INCOME_PROOF,
     acceptedDocuments: [
       'All self-employed documents',
@@ -636,7 +636,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.OTHER_DOCUMENTS,
     acceptedDocuments: [
       'Application Form (Signed by Applicant and Co-Applicant, if applicable)',
@@ -646,7 +646,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.PERMANENT_ADDRESS,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -658,7 +658,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.internalBT,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Loan Sanction Letter',
@@ -920,7 +920,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ADDRESS_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -940,7 +940,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.BANKING_PROOF,
     acceptedDocuments: [
       "Last 6 months' bank statements",
@@ -950,7 +950,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ID_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -961,7 +961,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.INCOME_PROOF,
     acceptedDocuments: [
       'All self-employed documents',
@@ -970,7 +970,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.OTHER_DOCUMENTS,
     acceptedDocuments: [
       'Application Form (Signed by Applicant and Co-Applicant, if applicable)',
@@ -980,7 +980,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.PERMANENT_ADDRESS,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -992,7 +992,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.refinance,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Existing Vehicle RC',
@@ -1091,6 +1091,7 @@ export const loan_document_requirements = [
       'Bank Passbook/Statement (updated within the last 6 months)',
       'Registered Sale Deed',
       'Property Tax Receipt',
+      'Electricity Bill (not older than 3 months)',
     ],
   },
   {
@@ -1222,7 +1223,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.purchase,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ADDRESS_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -1242,7 +1243,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.purchase,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.BANKING_PROOF,
     acceptedDocuments: [
       "Last 6 months' bank statements",
@@ -1252,7 +1253,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.purchase,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ID_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -1263,7 +1264,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.purchase,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.INCOME_PROOF,
     acceptedDocuments: [
       'All self-employed documents',
@@ -1272,7 +1273,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.purchase,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.OTHER_DOCUMENTS,
     acceptedDocuments: [
       'Application Form (Signed by Applicant and Co-Applicant, if applicable)',
@@ -1282,7 +1283,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.purchase,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.PERMANENT_ADDRESS,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -1543,7 +1544,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ADDRESS_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -1563,7 +1564,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.BANKING_PROOF,
     acceptedDocuments: [
       "Last 6 months' bank statements",
@@ -1573,7 +1574,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.ID_PROOF,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -1584,7 +1585,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.INCOME_PROOF,
     acceptedDocuments: [
       'All self-employed documents',
@@ -1593,7 +1594,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.OTHER_DOCUMENTS,
     acceptedDocuments: [
       'Application Form (Signed by Applicant and Co-Applicant, if applicable)',
@@ -1603,7 +1604,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.PERMANENT_ADDRESS,
     acceptedDocuments: [
       'Aadhaar Card',
@@ -1615,7 +1616,7 @@ export const loan_document_requirements = [
   },
   {
     loanProduct: loanType.topUp,
-    typeOfIndividual: occupationType.SELF_EMPLOYED,
+    typeOfIndividual: occupationType.SELF_EMPLOYED_PROFESSIONAL,
     documentType: documentImageType.SPECIAL_DOCUMENTS,
     acceptedDocuments: [
       'Current Loan Statement',

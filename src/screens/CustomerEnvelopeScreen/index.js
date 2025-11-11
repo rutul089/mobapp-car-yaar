@@ -6,10 +6,12 @@ import {
   loanType,
   loanTypeLabelMap,
 } from '../../constants/enums';
+import strings from '../../locales/strings';
 import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import {
   fetchLoanApplicationFromIdThunk,
   fetchPartnerEmployeeByIdThunk,
+  fetchSalesExecutivesThunk,
   searchSalesExecutivesThunk,
   setPartnerAndSalesExecutiveThunk,
 } from '../../redux/actions';
@@ -22,7 +24,6 @@ import {
 } from '../../utils/helper';
 import {handleFieldChange, validateField} from '../../utils/inputHelper';
 import Customer_Envelop_Component from './Customer_Envelop_Component';
-import strings from '../../locales/strings';
 
 class CustomerEnvelopeScreen extends Component {
   constructor(props) {
@@ -38,10 +39,15 @@ class CustomerEnvelopeScreen extends Component {
       errors: {},
       showError: false,
     };
+    this.limit = 10; // Items per page
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {selectedApplicationId} = this.props;
+
+    await this.fetchPartnerData();
+    await this.fetchSalesExecutives();
+
     this.props.fetchLoanApplicationFromIdThunk(
       selectedApplicationId,
       {},
@@ -97,17 +103,32 @@ class CustomerEnvelopeScreen extends Component {
     }
   };
 
+  fetchPartnerData = async () => {
+    const {partnerId} = this.props;
+
+    this.props.fetchPartnerEmployeeByIdThunk(
+      partnerId,
+      {},
+      response => {},
+      error => {},
+    );
+  };
+
+  fetchSalesExecutives = (page = 1, limit = 100) => {
+    this.props
+      .fetchSalesExecutivesThunk(page, limit)
+      .finally(() => this.setState({refreshing: false, loadingMore: false}));
+  };
+
   searchPartnerFromAPI = async query => {
     const {partnerId} = this.props;
     this.onChangeField('carYarPartner', query);
     try {
-      const response = await this.props.fetchPartnerEmployeeByIdThunk(
-        partnerId,
-        {
-          search: query,
-        },
-      );
+      const response =
+        await this.props.fetchPartnerEmployeeByIdThunk(partnerId);
       const employees = response?.data?.employees ?? [];
+
+      console.log('response---->', JSON.stringify(response));
       if (!response?.success || employees.length === 0) {
         this.resetPartnerFields();
       } else {
@@ -201,8 +222,21 @@ class CustomerEnvelopeScreen extends Component {
     );
   };
 
+  onPartnerSelected = (value, type) => {
+    if (type === 'partner') {
+      this.onChangeField('carYarPartner', value?.name);
+      this.onChangeField('partnerUserId', value?.id);
+      this.onChangeField('carYarPartnerValue', value?.id);
+    } else {
+      this.onChangeField('salesExecutiveUserId', value?.id);
+      this.onChangeField('salesExecutive', value?.user?.name);
+      this.onChangeField('salesExecutiveValue', value?.user?.name);
+    }
+  };
+
   render() {
-    const {selectedLoanApplication, loading} = this.props;
+    const {selectedLoanApplication, loading, partnersList, salesExecutives} =
+      this.props;
     const {
       loanAmount,
       loanApplicationId,
@@ -212,8 +246,9 @@ class CustomerEnvelopeScreen extends Component {
     } = selectedLoanApplication || {};
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
     const {errors, salesExecutive, carYarPartner, showError} = this.state;
+
     let _mobileNumber =
-      customer?.customerDetails.mobileNumber || customer?.mobileNumber || '-';
+      customer?.customerDetails?.mobileNumber || customer?.mobileNumber || '-';
 
     return (
       <Customer_Envelop_Component
@@ -285,18 +320,23 @@ class CustomerEnvelopeScreen extends Component {
           },
         }}
         loading={loading}
+        partnersList={partnersList}
+        salesExecutives={salesExecutives}
+        onPartnerSelected={this.onPartnerSelected}
       />
     );
   }
 }
 
-const mapStateToProps = ({loanData, user}) => ({
+const mapStateToProps = ({loanData, user, envelopeData, salesExecutives}) => ({
   selectedLoanType: loanData.selectedLoanType,
   loading: loanData.loading,
   selectedLoanApplication: loanData.selectedLoanApplication,
   selectedApplicationId: loanData.selectedApplicationId,
   partnerId: user?.userProfile?.partnerUser?.partnerId,
   userProfile: user?.userProfile,
+  partnersList: envelopeData?.partners,
+  salesExecutives: salesExecutives.salesExecutives,
 });
 
 const mapDispatchToProps = {
@@ -304,6 +344,7 @@ const mapDispatchToProps = {
   fetchPartnerEmployeeByIdThunk,
   searchSalesExecutivesThunk,
   setPartnerAndSalesExecutiveThunk,
+  fetchSalesExecutivesThunk,
 };
 
 export default connect(

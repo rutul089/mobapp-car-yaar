@@ -579,3 +579,67 @@ export const calculateVehicleAge = manufactureYear => {
   const age = currentYear - year;
   return `${age < 0 ? 0 : age} Years`;
 };
+
+/**
+ * Extracts PAN details (like PAN number, name, etc.) from OCR API response.
+ * @param {Object} response - API response object
+ * @returns {Object} - Extracted PAN data or empty object
+ */
+export const extractPanDetails = response => {
+  try {
+    const fields = response?.data?.ocr_fields?.[0];
+    if (!fields || fields.document_type !== 'pan') {
+      console.warn('Invalid or missing PAN OCR data');
+      return {};
+    }
+
+    const panNumber = fields?.pan_number?.value || '';
+    const fullName = fields?.full_name?.value || '';
+    const fatherName = fields?.father_name?.value || '';
+    const dob = fields?.dob?.value || '';
+
+    return {
+      panNumber,
+      fullName,
+      fatherName,
+      dob,
+    };
+  } catch (error) {
+    console.error('Error extracting PAN details:', error);
+    return {};
+  }
+};
+
+/**
+ * Extracts Aadhaar details (name, number, DOB, gender, etc.) from OCR API response.
+ * @param {Object} response - API response object
+ * @returns {Object} - Extracted Aadhaar data or empty object
+ */
+export const extractAadhaarDetails = response => {
+  try {
+    const fields = response?.data?.ocr_fields?.[0];
+    if (!fields || !fields.document_type?.includes('aadhaar')) {
+      console.warn('Invalid or missing Aadhaar OCR data');
+      return {};
+    }
+
+    const fullName = fields?.full_name?.value || '';
+    const gender = fields?.gender?.value || '';
+    const dob = fields?.dob?.value || '';
+    const aadhaarNumber = fields?.aadhaar_number?.value || '';
+    const fatherName = fields?.father_name?.value || '';
+    const motherName = fields?.mother_name?.value || '';
+
+    return {
+      fullName,
+      gender,
+      dob,
+      aadhaarNumber,
+      fatherName,
+      motherName,
+    };
+  } catch (error) {
+    console.error('Error extracting Aadhaar details:', error);
+    return {};
+  }
+};
