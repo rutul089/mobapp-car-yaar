@@ -28,6 +28,7 @@ const Loan_Offer_Detail_Component = ({
   loading,
   emi,
   interesetRate,
+  processingFee,
 }) => {
   const renderCellHeader = (value, style) => {
     return (
@@ -93,7 +94,10 @@ const Loan_Offer_Detail_Component = ({
           footerData={[
             {label: 'Tenure', value: `${tenure} Month`},
             {label: 'EMI', value: formatIndianCurrency(emi)},
-            {label: 'Processing Fee', value: formatIndianCurrency(5000)},
+            {
+              label: 'Processing Fee',
+              value: formatIndianCurrency(processingFee),
+            },
           ]}
           breakdownExpression={'(1.2 x 10,00,000) - 6,00,000 - 10,000 ='}
           breakdownValue={'5,90,000'}

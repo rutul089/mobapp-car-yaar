@@ -150,6 +150,7 @@ class LoanOfferDetailScreen extends Component {
     let loanAmount = selectedLoanApplication?.loanAmount || 100000;
     let tenure = emiPlan?.tenureMonths;
     let interesetRate = selectedLoanApplication?.interesetRate || 8;
+    let processingFee = selectedLoanApplication?.processingFee || 1000;
 
     return (
       <Loan_Offer_Detail_Component
@@ -164,6 +165,7 @@ class LoanOfferDetailScreen extends Component {
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
         emi={emiPlan?.emi}
         interesetRate={interesetRate}
+        processingFee={processingFee}
       />
     );
   }

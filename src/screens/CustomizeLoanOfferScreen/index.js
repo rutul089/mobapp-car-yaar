@@ -15,6 +15,7 @@ class CustomizeLoanOffer extends Component {
       interestRate: '8',
       tenureMonths: 0,
       errors: {},
+      processingFee: '',
     };
     this.onSelectLoanType = this.onSelectLoanType.bind(this);
     this.onSubmitPress = this.onSubmitPress.bind(this);
@@ -25,10 +26,12 @@ class CustomizeLoanOffer extends Component {
     let loanAmount = selectedLoanApplication?.loanAmount;
     let interestRate = selectedLoanApplication?.interesetRate;
     let tenureMonths = selectedLoanApplication?.tenure;
+    let processingFee = selectedLoanApplication?.processingFee;
 
     this.setState({
       tenureMonths: String(tenureMonths),
       interestRate: String(interestRate),
+      processingFee: String(processingFee),
     });
   }
 
@@ -38,7 +41,7 @@ class CustomizeLoanOffer extends Component {
 
   onSubmitPress = () => {
     const {selectedLoanApplication} = this.props;
-    const {interestRate, tenureMonths} = this.state;
+    const {interestRate, tenureMonths, processingFee} = this.state;
 
     const isFormValid = this.validateAllFields();
 
@@ -53,7 +56,9 @@ class CustomizeLoanOffer extends Component {
       loanAmount,
       interestRate,
       tenureMonths,
+      processingFee,
     };
+
     this.props.fetchEmiPlanThunk(
       payload,
       async success => {
@@ -69,7 +74,7 @@ class CustomizeLoanOffer extends Component {
   };
 
   validateAllFields = () => {
-    const fieldsToValidate = ['interestRate', 'tenureMonths'];
+    const fieldsToValidate = ['interestRate', 'tenureMonths', 'processingFee'];
 
     const errors = {};
     let isFormValid = true;
@@ -96,7 +101,7 @@ class CustomizeLoanOffer extends Component {
       interesetRate: Number(item?.interestRate),
       tenure: Number(item?.tenureMonths),
       // emi: parseFloat(item?.emi.replace(/[,₹]/g, '')),
-      // processingFee: parseFloat(item?.processingFee.replace(/[,₹]/g, '')),
+      processingFee: parseFloat(item?.processingFee.replace(/[,₹]/g, '')),
       principalAmount: 1000,
     };
 
@@ -116,7 +121,7 @@ class CustomizeLoanOffer extends Component {
   };
 
   render() {
-    const {interestRate, tenureMonths, errors} = this.state;
+    const {interestRate, tenureMonths, errors, processingFee} = this.state;
     const {loading} = this.props;
 
     // tenureMonths interestRate
@@ -141,6 +146,10 @@ class CustomizeLoanOffer extends Component {
         onTenureMonthsChange={value =>
           this.onChangeField('tenureMonths', value)
         }
+        onProcessingFeeChange={value =>
+          this.onChangeField('processingFee', value)
+        }
+        processingFee={processingFee}
         restInputProps={{
           interestRate: {
             isError: errors?.interestRate,
@@ -151,6 +160,10 @@ class CustomizeLoanOffer extends Component {
             isError: errors?.tenureMonths,
             statusMsg: errors?.tenureMonths,
             value: tenureMonths,
+          },
+          processingFee: {
+            isError: errors?.processingFee,
+            statusMsg: errors?.processingFee,
           },
         }}
         loading={loading}

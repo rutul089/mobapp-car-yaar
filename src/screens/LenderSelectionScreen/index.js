@@ -23,7 +23,7 @@ class LenderSelection extends Component {
       interesetRate: Number(item?.interestRate),
       tenure: Number(item?.tenure),
       emi: parseFloat(item?.emi.replace(/[,₹]/g, '')),
-      processingFee: parseFloat(item?.processingFee.replace(/[,₹]/g, '')),
+      processingFee: parseFloat(item?.processingFee),
       principalAmount: 1000,
     };
 
@@ -47,6 +47,7 @@ class LenderSelection extends Component {
     let loanAmount = selectedLoanApplication?.loanAmount || 500000;
     let tenure = selectedLoanApplication?.tenure || 60;
     let interesetRate = selectedLoanApplication?.interesetRate || 8;
+    let processingFee = selectedLoanApplication?.processingFee || 1000;
 
     return (
       <Lender_Selection_Component
@@ -57,6 +58,7 @@ class LenderSelection extends Component {
         loanAmount={loanAmount}
         tenure={tenure}
         interesetRate={interesetRate}
+        processingFee={processingFee}
       />
     );
   }

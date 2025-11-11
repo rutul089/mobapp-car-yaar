@@ -16,6 +16,8 @@ import {goBack} from '../../navigation/NavigationUtils';
 
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useInputRefs} from '../../utils/useInputRefs';
+import {formatIndianCurrency} from '../../utils/helper';
+import {sanitizeAmount} from '../../utils/inputHelper';
 
 const Customize_LoanOffer_Component = ({
   params,
@@ -28,11 +30,26 @@ const Customize_LoanOffer_Component = ({
   onTenureMonthsChange,
   restInputProps,
   loading,
+  processingFee,
+  onProcessingFeeChange,
 }) => {
   const {refs, focusNext, scrollToInput} = useInputRefs([
     'interestRate',
     'tenureMonths',
+    'processingFee',
   ]);
+
+  const [editingStates, setEditingStates] = React.useState({
+    processingFee: false,
+  });
+
+  const setFieldEditing = (field, value) => {
+    setEditingStates(prev => ({...prev, [field]: value}));
+  };
+
+  const getDisplayValue = (isEditing, value) => {
+    return isEditing ? value : formatIndianCurrency(value, false, true);
+  };
 
   const [selectedType, setSelectedType] = React.useState('Vanilla Loan');
   const totalRows = Math.ceil(loanTypes?.length / 2);
@@ -89,17 +106,38 @@ const Customize_LoanOffer_Component = ({
           />
           <Spacing size="smd" />
           <Input
-            leftIconName={images.percentage_circle}
+            leftIconName={images.calendar}
             label={'Tenure in Months'}
             isLeftIconVisible
             ref={refs?.tenureMonths}
-            returnKeyType="done"
-            onSubmitEditing={() => focusNext('mobileNumberHome')}
-            onFocus={() => scrollToInput('referenceNameHome')}
+            returnKeyType="next"
+            onSubmitEditing={() => focusNext('processingFee')}
+            onFocus={() => scrollToInput('processingFee')}
             onChangeText={onTenureMonthsChange}
             keyboardType="number-pad"
             value={tenureMonths}
             {...(restInputProps?.tenureMonths || {})}
+          />
+          <Spacing size="smd" />
+          <Input
+            leftIconName={images.icRupee}
+            label={'Processing Fee'}
+            isLeftIconVisible
+            ref={refs?.processingFee}
+            returnKeyType="done"
+            onSubmitEditing={() => focusNext('mobileNumberHome')}
+            onChangeText={value => {
+              const sanitizedText = sanitizeAmount(value);
+              onProcessingFeeChange?.(sanitizedText);
+            }}
+            keyboardType="decimal-pad"
+            value={getDisplayValue(editingStates.processingFee, processingFee)}
+            onFocus={() => {
+              scrollToInput('processingFee');
+              setFieldEditing('processingFee', true);
+            }}
+            onBlur={() => setFieldEditing('processingFee', false)}
+            {...(restInputProps?.processingFee || {})}
           />
         </GroupWrapper>
         <Spacing size="xl" />

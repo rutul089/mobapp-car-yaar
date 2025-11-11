@@ -21,6 +21,7 @@ const Lender_Selection_Component = ({
   registerNumber,
   tenure,
   interesetRate,
+  processingFee,
 }) => {
   const financeData = [
     {
@@ -30,13 +31,13 @@ const Lender_Selection_Component = ({
       interestRate: interesetRate,
       tenure: tenure,
       emi: '11,093',
-      processingFee: '1,000',
+      processingFee: processingFee,
       badge: 1,
       showBadge: true,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
-        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
+        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
       ],
     },
     {
@@ -45,15 +46,15 @@ const Lender_Selection_Component = ({
       interestRate: interesetRate,
       tenure: tenure,
       emi: '12,420',
-      processingFee: '1,250',
+      processingFee: processingFee,
       badge: 2,
       showBadge: true,
       showNewBreakDown: true,
-      isEligibleForBT: true,
+      isEligibleForBT: false,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
-        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
+        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
       ],
     },
     {
@@ -61,14 +62,14 @@ const Lender_Selection_Component = ({
       interestRate: interesetRate,
       tenure: tenure,
       emi: '12,420',
-      processingFee: '1,250',
+      processingFee: processingFee,
       badge: 4,
       showBadge: true,
       logo: images.hdfcImg,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
-        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
+        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
       ],
     },
     {
@@ -77,14 +78,14 @@ const Lender_Selection_Component = ({
       interestRate: interesetRate,
       tenure: tenure,
       emi: '12,420',
-      processingFee: '1,250',
+      processingFee: processingFee,
       badge: 3,
       showBadge: true,
       showNewBreakDown: true,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000')},
-        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
+        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
       ],
     },
   ];

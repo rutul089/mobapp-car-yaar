@@ -106,6 +106,7 @@ export const documentImageLabelMap = {
   [documentImageType.SOA]: 'Form24 or SOA',
   [documentImageType.PASSPORT_SIZE_PHOTO]: 'Passport Image',
   [documentImageType.CO_APPLICANT_DOCUMENTS]: 'Co-applicant Image',
+  [documentImageType.SPECIAL_DOCUMENTS]: 'Special Documents',
 };
 
 export const documentImageTypes = Object.values(documentImageType).map(v => [
@@ -264,7 +265,7 @@ export const gender = Object.freeze({
   male: 'male',
 });
 
-export const loanType = Object.freeze({
+export const loanType = {
   addVehicle: 9,
   externalBT: 'EXTERNAL_BALANCE_TRANSFER',
   internalBT: 'INTERNAL_BALACE_TRANSFER',
@@ -274,7 +275,7 @@ export const loanType = Object.freeze({
   refinance: 'REFINANCE',
   subscribe: 8,
   topUp: 'TOP_UP',
-});
+};
 
 export const loanTypeLabelMap = {
   [loanType.addVehicle]: 'Add Vehicle',
@@ -509,4 +510,33 @@ export const fuelTypeValue = {
   [fuelType.PETROL_HYBRID]: 'Petrol / Electric (Hybrid)',
   [fuelType.DIESEL_HYBRID]: 'Diesel / Electric (Hybrid)',
   [fuelType.PETROL_CNG]: 'Petrol / CNG',
+};
+
+export const loanCategory = {
+  [loanType.purchase]: 'Sale Purchase',
+  [loanType.refinance]: 'Refinance',
+  [loanType.internalBT]: 'Internal BT',
+  [loanType.externalBT]: 'External BT',
+  [loanType.topUp]: 'Top-Up',
+};
+
+export const documentImageMap = {
+  [documentImageType.ADDRESS_PROOF]: 'Address Proof',
+  [documentImageType.APPLICATION_FORM]: 'Application Form',
+  [documentImageType.BANKING_PROOF]: 'Banking Proof',
+  [documentImageType.BUSINESS_PROOF]: 'Business Proof',
+  [documentImageType.CO_APPLICANT]: 'Co-applicant Image',
+  [documentImageType.FORM_34]: 'Form 34',
+  [documentImageType.ID_PROOF]: 'ID Proof',
+  [documentImageType.INCOME_PROOF]: 'Income Proof',
+  [documentImageType.INSURANCE]: 'Insurance',
+  [documentImageType.NOC]: 'NOC',
+  [documentImageType.OTHER_DOCUMENTS]: 'Other Documents',
+  [documentImageType.PASSPORT]: 'Passport',
+  [documentImageType.PERMANENT_ADDRESS]: 'Permanent Address Proof',
+  [documentImageType.SANCTION_LETTER]: 'Sanction Letter',
+  [documentImageType.SOA]: 'Form24 or SOA',
+  [documentImageType.PASSPORT_SIZE_PHOTO]: 'Passport Image',
+  [documentImageType.CO_APPLICANT_DOCUMENTS]: 'Co-applicant Image',
+  [documentImageType.SPECIAL_DOCUMENTS]: 'Special Documents',
 };

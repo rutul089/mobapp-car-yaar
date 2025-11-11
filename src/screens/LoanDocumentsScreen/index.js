@@ -4,8 +4,11 @@ import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
 import {
   documentImageLabelMap,
+  documentImageMap,
   documentImageType,
+  loanCategory,
   loanType,
+  occupationLabelMap,
 } from '../../constants/enums';
 import {loan_document_requirements} from '../../constants/loan_document_requirements';
 import strings from '../../locales/strings';
@@ -17,11 +20,15 @@ import {
 } from '../../navigation/NavigationUtils';
 import {
   fetchCustomerDocumentsThunk,
+  fetchLoanDocumentsByCategoryThunk,
   setIsCreatingLoanApplication,
   updateCustomerDocumentsThunk,
   uploadCustomerDocumentsThunk,
 } from '../../redux/actions';
-import {getPresignedDownloadUrl} from '../../services';
+import {
+  fetchLoanDocumentsByCategory,
+  getPresignedDownloadUrl,
+} from '../../services';
 import {
   generateImageUploadPayload,
   handleFileSelection,
@@ -159,35 +166,65 @@ class LoanDocumentsScreen extends Component {
   };
 
   handleUploadMedia = async type => {
-    const {selectedLoanApplication} = this.props;
+    try {
+      const {selectedLoanApplication} = this.props;
 
-    let typeOfIndividual =
-      selectedLoanApplication?.customer?.customerDetails?.occupation;
-    let documentType = type;
-    let loanProduct = selectedLoanApplication?.loanType;
+      const typeOfIndividual =
+        selectedLoanApplication?.customer?.customerDetails?.occupation;
+      const loanProduct = selectedLoanApplication?.loanType;
+      const documentType = type;
 
-    const matched = loan_document_requirements.find(
-      item =>
-        item.loanProduct === loanProduct &&
-        item.typeOfIndividual === typeOfIndividual &&
-        item.documentType === documentType,
-    );
+      const matched = loan_document_requirements.find(
+        item =>
+          item.loanProduct === loanProduct &&
+          item.typeOfIndividual === typeOfIndividual &&
+          item.documentType === documentType,
+      );
 
-    let acceptedDocuments =
-      matched?.acceptedDocuments?.map(doc => ({label: doc})) || [];
+      const defaultAcceptedDocs =
+        matched?.acceptedDocuments?.map(doc => ({document_accepted: doc})) ||
+        [];
 
-    // Trigger file picker modal
-    this.setState({
-      showFilePicker: !acceptedDocuments.length,
-      showAcceptedDocModal: acceptedDocuments.length,
-      selectedDocType: type,
-      acceptedDocuments,
-      selectedAcceptedDocument:
-        this.state.selectedDocType === type
-          ? this.state.selectedAcceptedDocument
-          : '',
-      acceptedDocModalTitle: documentImageLabelMap[type],
-    });
+      const _typeOfIndividual = occupationLabelMap[typeOfIndividual];
+      const _documentType = documentImageMap[documentType];
+      const _loanProduct = loanCategory[loanProduct];
+
+      this.props.fetchLoanDocumentsByCategoryThunk(
+        _loanProduct,
+        _typeOfIndividual,
+        _documentType,
+        async response => {
+          const acceptedDocuments = response?.data || [];
+
+          this.setState(prev => ({
+            showFilePicker: acceptedDocuments.length === 0,
+            showAcceptedDocModal: acceptedDocuments.length > 0,
+            selectedDocType: type,
+            acceptedDocuments,
+            selectedAcceptedDocument:
+              prev.selectedDocType === type
+                ? prev.selectedAcceptedDocument
+                : '',
+            acceptedDocModalTitle: documentImageLabelMap[type],
+          }));
+        },
+        error => {
+          this.setState(prev => ({
+            showFilePicker: defaultAcceptedDocs.length === 0,
+            showAcceptedDocModal: defaultAcceptedDocs.length > 0,
+            selectedDocType: type,
+            acceptedDocuments: defaultAcceptedDocs,
+            selectedAcceptedDocument:
+              prev.selectedDocType === type
+                ? prev.selectedAcceptedDocument
+                : '',
+            acceptedDocModalTitle: documentImageLabelMap[type],
+          }));
+        },
+      );
+    } catch (err) {
+      console.error('Unexpected error in handleUploadMedia:', err);
+    }
   };
 
   handleFile = type => {
@@ -242,7 +279,6 @@ class LoanDocumentsScreen extends Component {
   };
 
   handleViewImage = async uri => {
-    console.log('12321312123', uri);
     if (!uri) {
       return showToast('error', strings.errorNoDocumentUpload);
     }
@@ -325,7 +361,7 @@ class LoanDocumentsScreen extends Component {
   setSelectedAcceptedDocument = async item => {
     this.setState(
       {
-        selectedAcceptedDocument: item?.label,
+        selectedAcceptedDocument: item?.document_accepted,
         showAcceptedDocModal: false,
       },
       async () => {
@@ -477,6 +513,7 @@ class LoanDocumentsScreen extends Component {
             });
           },
           title: `Select ${acceptedDocModalTitle} Type`,
+          keyValue: 'document_accepted',
         }}
         isReadOnlyLoanApplication={isReadOnlyLoanApplication}
         exitConformationModalProp={{
@@ -495,6 +532,7 @@ const mapActionCreators = {
   fetchCustomerDocumentsThunk,
   updateCustomerDocumentsThunk,
   setIsCreatingLoanApplication,
+  fetchLoanDocumentsByCategoryThunk,
 };
 
 const mapStateToProps = ({loanData, customerData, vehicleData}) => ({

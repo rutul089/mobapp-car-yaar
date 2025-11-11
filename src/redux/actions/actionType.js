@@ -107,5 +107,11 @@ export const SAVE_VEHICLE = createAsyncActionTypes('SAVE_VEHICLE');
 export const EMI_PLAN = createAsyncActionTypes('EMI_PLAN');
 
 export const SET_LOAN_FILTER_VALUE = createAsyncActionTypes(
-  SET_LOAN_FILTER_VALUE,
+  'SET_LOAN_FILTER_VALUE',
 );
+
+export const PARTNER_ENVELOPE_VALUE = createAsyncActionTypes(
+  'PARTNER_ENVELOPE_VALUE',
+);
+
+export const SALES_EXEC_VALUE = createAsyncActionTypes('SALES_EXEC_VALUE');

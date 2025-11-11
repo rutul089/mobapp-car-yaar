@@ -152,6 +152,7 @@ export const validateField = (key, value, isOptional) => {
     case 'monthlyIncome':
     case 'loanAmount':
     case 'monthlyEmi':
+    case 'processingFee':
       return trimmedValue === ''
         ? 'Please enter a valid amount.'
         : !/^\d+(\.\d{1,2})?$/.test(trimmedValue)
