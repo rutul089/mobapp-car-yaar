@@ -13,6 +13,8 @@ import {
 } from '@caryaar/components';
 import images from '../../assets/images';
 import {getCibilScoreStatus} from '../../utils/helper';
+import RNSpeedometer from 'react-native-speedometer';
+import typography from '../../theme/typography';
 
 const CIBILReport_Component = ({
   params,
@@ -31,7 +33,44 @@ const CIBILReport_Component = ({
       <View bounces={false} style={styles.wrapper}>
         <View style={{flex: 1}}>
           <DetailInfoCard label={'CIBIL Score'} data={null} isSemiBold={false}>
-            <View style={styles.cibilWrapper}>
+            <RNSpeedometer
+              value={500}
+              size={300}
+              maxValue={900}
+              minValue={300}
+              labels={[
+                {
+                  name: 'Poor',
+                  labelColor: '#1D3B63',
+                  activeBarColor: '#FF0508',
+                },
+                {
+                  name: 'Fair',
+                  labelColor: '#1D3B63',
+                  activeBarColor: '#FF9D2D',
+                },
+                {
+                  name: 'Good',
+                  labelColor: '#1D3B63',
+                  activeBarColor: '#FFED2D',
+                },
+                {
+                  name: 'Excellent',
+                  labelColor: '#1D3B63',
+                  activeBarColor: '#16D154',
+                },
+              ]}
+              wrapperStyle={{height: 220}}
+              innerCircleStyle={{backgroundColor: 'white'}}
+              labelNoteStyle={{top: 5}}
+              labelStyle={[
+                typography.fontStyles.hankenGroteskBold,
+                {fontSize: typography.fontSizes.h1},
+              ]}
+              // outerCircleStyle={{backgroundColor: 'red'}}
+            />
+
+            {/* <View style={styles.cibilWrapper}>
               <Text
                 textAlign={'center'}
                 color={theme.colors.primary}
@@ -48,7 +87,7 @@ const CIBILReport_Component = ({
                   {getCibilScoreStatus(Number(cibilScore))}
                 </Text>
               )}
-            </View>
+            </View> */}
             {lastUpdatedOn && (
               <Text hankenGroteskSemiBold type={'label'} textAlign={'center'}>
                 {`Score as of ${lastUpdatedOn}`}

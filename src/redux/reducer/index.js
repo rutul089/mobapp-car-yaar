@@ -12,6 +12,7 @@ import sendCustomerOtpForCibilReducer from './sendCustomerOtpForCibilReducer';
 import salesExecutiveReducer from './salesExecutiveReducer';
 import emiPlanReducer from './emiPlanReducer';
 import envelopeReducer from './envelopeReducer';
+import lenderReducer from './lenderReducer';
 
 const rootReducer = combineReducers({
   appState: appStateReducer,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   salesExecutives: salesExecutiveReducer,
   emiPlan: emiPlanReducer,
   envelopeData: envelopeReducer,
+  lenderData: lenderReducer,
 });
 
 export default rootReducer;

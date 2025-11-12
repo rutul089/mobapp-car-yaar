@@ -6,12 +6,15 @@ import {
   Text,
   images,
   theme,
+  PaginationFooter,
 } from '@caryaar/components';
 import React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
 import {goBack} from '../../navigation/NavigationUtils';
 import {formatIndianCurrency} from '../../utils/helper';
+import {NoDataFound} from '../../components';
+import {API_TRIGGER} from '../../constants/enums';
 
 const Lender_Selection_Component = ({
   params,
@@ -22,6 +25,13 @@ const Lender_Selection_Component = ({
   tenure,
   interestRate,
   processingFee,
+  lenders,
+  handleLoadMore,
+  onRefresh,
+  refreshing,
+  apiTrigger,
+  currentPage,
+  totalPages,
 }) => {
   const financeData = [
     {
@@ -183,15 +193,22 @@ const Lender_Selection_Component = ({
 
   const renderItem = ({item}) => (
     <FinanceCard
-      bankName={item.title}
-      interestRate={item.interestRate}
+      bankName={item.lenderName}
+      interestRate={item.interestRate || 8}
       showRightArrow
       logo={images.hdfcImg}
       showBadge={item.badge}
       badgeLevel={item.badge}
-      footerData={item.footerInfo}
+      footerData={[
+        {label: 'Tenure', value: `${item?.tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency(item?.emi)},
+        {
+          label: 'Processing Fee',
+          value: formatIndianCurrency(item?.processingFee),
+        },
+      ]}
       onItemPress={() => onItemPress(item)}
-      showBreakdown={item.showNewBreakDown}
+      showBreakdown={true}
       breakdownExpression={'(1.2 × 10,00,000) - 6,00,000 - 10,000'}
       breakdownValue={1.2 * 1000000 - 600000 - 10000}
       onPress={() => onItemPress(item)}
@@ -207,7 +224,7 @@ const Lender_Selection_Component = ({
         onBackPress={() => goBack()}
       />
       <FlatList
-        data={financeData}
+        data={lenders}
         bounces={true}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
@@ -220,6 +237,21 @@ const Lender_Selection_Component = ({
               {loanApplicationId}
             </Text>
           </Text>
+        }
+        ListEmptyComponent={!loading && <NoDataFound />}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        ListFooterComponent={
+          <PaginationFooter
+            loadingMore={apiTrigger === API_TRIGGER.LOAD_MORE}
+            loading={loading}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            footerMessage={'You’ve reached the end!'}
+            minTotalPagesToShowMessage={1}
+          />
         }
       />
       {loading && <Loader visible={loading} />}

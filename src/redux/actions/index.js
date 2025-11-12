@@ -11,3 +11,4 @@ export * from './cibilScoreActions';
 export * from './referenceActions';
 export * from './salesExecutiveActions';
 export * from './partnerActions';
+export * from './lenderAction';
