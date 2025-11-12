@@ -1,21 +1,20 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {StyleSheet} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
-  FormFooterButtons,
+  Button,
   Header,
   Input,
+  Loader,
   SafeAreaWrapper,
   Spacing,
   Text,
   theme,
-  Loader,
-  Button,
 } from '@caryaar/components';
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import strings from '../../locales/strings';
-import {sanitizeAmount} from '../../utils/inputHelper';
 import {formatIndianCurrency} from '../../utils/helper';
+import {sanitizeAmount} from '../../utils/inputHelper';
 
 const Loan_Amount_Component = ({
   headerProp,
@@ -31,7 +30,11 @@ const Loan_Amount_Component = ({
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header {...headerProp} />
-      <KeyboardAwareScrollView bounces={false} style={styles.wrapper}>
+      <KeyboardAwareScrollView
+        bounces={false}
+        style={styles.wrapper}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled">
         <Text>What is the desired Loan Amount?</Text>
         <Spacing size="xs" />
         <Text type={'label'} size={'caption'}>

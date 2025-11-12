@@ -163,7 +163,7 @@ class LoanOfferDetailScreen extends Component {
         tenure={tenure}
         loading={loading}
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
-        emi={emiPlan?.emi}
+        emi={emiPlan?.schedule?.[0]?.emi}
         interesetRate={interesetRate}
         processingFee={processingFee}
       />

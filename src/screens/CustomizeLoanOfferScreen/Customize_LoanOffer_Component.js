@@ -79,7 +79,7 @@ const Customize_LoanOffer_Component = ({
 
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
-      <Header title="Customise Loan Offer" onBackPress={() => goBack()} />
+      <Header title="Customize Loan Offer" onBackPress={() => goBack()} />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.wrapper}
         extraScrollHeight={100}

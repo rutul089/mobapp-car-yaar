@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Customize_LoanOffer_Component from './Customize_LoanOffer_Component';
-import {handleFieldChange, validateField} from '../../utils/inputHelper';
-import {showToast} from '../../utils/helper';
 import strings from '../../locales/strings';
-import {fetchEmiPlanThunk} from '../../redux/actions/emiPlanActions';
 import {goBack} from '../../navigation/NavigationUtils';
 import {postCustomerLenderDetailsThunk} from '../../redux/actions';
+import {fetchEmiPlanThunk} from '../../redux/actions/emiPlanActions';
+import {showToast} from '../../utils/helper';
+import {handleFieldChange, validateField} from '../../utils/inputHelper';
+import Customize_LoanOffer_Component from './Customize_LoanOffer_Component';
 
 class CustomizeLoanOffer extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class CustomizeLoanOffer extends Component {
 
   componentDidMount() {
     const {selectedLoanApplication} = this.props;
-    let loanAmount = selectedLoanApplication?.loanAmount;
+
     let interestRate = selectedLoanApplication?.interesetRate;
     let tenureMonths = selectedLoanApplication?.tenure;
     let processingFee = selectedLoanApplication?.processingFee;

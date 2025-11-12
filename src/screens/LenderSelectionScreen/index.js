@@ -56,8 +56,8 @@ class LenderSelection extends Component {
         onItemPress={this.onItemPress}
         loading={loading}
         loanAmount={loanAmount}
-        tenure={tenure}
-        interesetRate={interesetRate}
+        tenure={'60'}
+        interestRate={'8'}
         processingFee={processingFee}
       />
     );

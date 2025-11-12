@@ -25,10 +25,7 @@ import {
   updateCustomerDocumentsThunk,
   uploadCustomerDocumentsThunk,
 } from '../../redux/actions';
-import {
-  fetchLoanDocumentsByCategory,
-  getPresignedDownloadUrl,
-} from '../../services';
+import {getPresignedDownloadUrl} from '../../services';
 import {
   generateImageUploadPayload,
   handleFileSelection,
@@ -132,15 +129,7 @@ class LoanDocumentsScreen extends Component {
   };
 
   onNextPress = () => {
-    const {selectedLoanType} = this.props;
-    const {isOnboard, isEdit} = this.state;
-    // if (isOnboard || isEdit) {
-    //   this.handleCustomerDocumentSubmission();
-    //   return;
-    // }
     this.handleCustomerDocumentSubmission();
-
-    // this.navigateToNextScreenBasedOnLoanType(selectedLoanType);
   };
 
   navigateToNextScreenBasedOnLoanType = selectedLoanType => {
@@ -149,7 +138,6 @@ class LoanDocumentsScreen extends Component {
     switch (selectedLoanType) {
       case loanType.refinance:
         return navigate(ScreenNames.FinanceDetails, {params: params});
-      // return navigate(ScreenNames.VehicleHypothecation);
 
       case loanType.topUp:
       case loanType.internalBT:
@@ -157,7 +145,6 @@ class LoanDocumentsScreen extends Component {
         return navigate(ScreenNames.CarFinanceDetails, {params: params});
 
       case loanType.loan:
-        // return navigate(ScreenNames.CheckCIBIL);
         return navigate(ScreenNames.CreateCIBILScreen);
 
       default:
@@ -168,6 +155,7 @@ class LoanDocumentsScreen extends Component {
   handleUploadMedia = async type => {
     try {
       const {selectedLoanApplication} = this.props;
+      this.setState({isLoadingDocument: true});
 
       const typeOfIndividual =
         selectedLoanApplication?.customer?.customerDetails?.occupation;
@@ -197,6 +185,7 @@ class LoanDocumentsScreen extends Component {
           const acceptedDocuments = response?.data || [];
 
           this.setState(prev => ({
+            isLoadingDocument: false,
             showFilePicker: acceptedDocuments.length === 0,
             showAcceptedDocModal: acceptedDocuments.length > 0,
             selectedDocType: type,
@@ -210,6 +199,7 @@ class LoanDocumentsScreen extends Component {
         },
         error => {
           this.setState(prev => ({
+            isLoadingDocument: false,
             showFilePicker: defaultAcceptedDocs.length === 0,
             showAcceptedDocModal: defaultAcceptedDocs.length > 0,
             selectedDocType: type,
@@ -223,6 +213,7 @@ class LoanDocumentsScreen extends Component {
         },
       );
     } catch (err) {
+      this.setState({isLoadingDocument: false});
       console.error('Unexpected error in handleUploadMedia:', err);
     }
   };
@@ -319,7 +310,6 @@ class LoanDocumentsScreen extends Component {
     if (isReadOnlyLoanApplication) {
       return this.navigateToNextScreenBasedOnLoanType(selectedLoanType);
     }
-    const customerId = isEdit ? selectedCustomerId : selectedApplicationId;
 
     if (!validateRequiredDocuments(documents, requiredFields)) {
       return;

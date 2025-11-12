@@ -1,14 +1,14 @@
-import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
 import {
   FinanceCard,
   Header,
+  Loader,
   SafeAreaWrapper,
   Text,
   images,
   theme,
-  Loader,
 } from '@caryaar/components';
+import React from 'react';
+import {FlatList, StyleSheet} from 'react-native';
 
 import {goBack} from '../../navigation/NavigationUtils';
 import {formatIndianCurrency} from '../../utils/helper';
@@ -20,72 +20,163 @@ const Lender_Selection_Component = ({
   loanApplicationId,
   registerNumber,
   tenure,
-  interesetRate,
+  interestRate,
   processingFee,
 }) => {
   const financeData = [
     {
       title: 'Fortune Finance',
-      logo: images.hdfcImg,
-
-      interestRate: interesetRate,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/HDFC_Bank_Logo.svg',
+      interestRate: interestRate,
       tenure: tenure,
       emi: '11,093',
-      processingFee: processingFee,
+      processingFee: '5000',
       badge: 1,
       showBadge: true,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency('75000.12')},
-        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
+        {label: 'Processing Fee', value: formatIndianCurrency(5000)},
       ],
     },
     {
       title: 'Speed Loans',
-      logo: images.hdfcImg,
-      interestRate: interesetRate,
+      logo: 'https://upload.wikimedia.org/wikipedia/en/f/f3/Axis_Bank_logo.svg',
+      interestRate: interestRate,
       tenure: tenure,
       emi: '12,420',
-      processingFee: processingFee,
+      processingFee: '4500',
       badge: 2,
       showBadge: true,
       showNewBreakDown: true,
       isEligibleForBT: false,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
-        {label: 'EMI', value: formatIndianCurrency('75000.12')},
-        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
+        {label: 'EMI', value: formatIndianCurrency('75500.55')},
+        {label: 'Processing Fee', value: formatIndianCurrency(4500)},
       ],
     },
     {
       title: 'HDB Financial Services',
-      interestRate: interesetRate,
+      logo: 'https://upload.wikimedia.org/wikipedia/en/9/9b/HDB_Financial_Services_logo.png',
+      interestRate: interestRate,
       tenure: tenure,
       emi: '12,420',
-      processingFee: processingFee,
-      badge: 4,
+      processingFee: '2500',
+      badge: 3,
       showBadge: true,
-      logo: images.hdfcImg,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
-        {label: 'EMI', value: formatIndianCurrency('75000.12')},
-        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
+        {label: 'EMI', value: formatIndianCurrency('78000.10')},
+        {label: 'Processing Fee', value: formatIndianCurrency(2500)},
       ],
     },
     {
-      logo: images.hdfcImg,
-      title: 'HDB Financial Services',
-      interestRate: interesetRate,
+      title: 'Muthoot Finance',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/d/d3/Muthoot_Finance_logo.png',
+      interestRate: interestRate,
       tenure: tenure,
-      emi: '12,420',
-      processingFee: processingFee,
-      badge: 3,
+      emi: '10,875',
+      processingFee: '3000',
+      badge: 4,
+      showBadge: true,
+      footerInfo: [
+        {label: 'Tenure', value: `${tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency('71000.25')},
+        {label: 'Processing Fee', value: formatIndianCurrency(3000)},
+      ],
+    },
+    {
+      title: 'Hero FinCorp',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/2/2f/Hero_FinCorp_logo.png',
+      interestRate: interestRate,
+      tenure: tenure,
+      emi: '11,765',
+      processingFee: '1000',
+      badge: 5,
+      showBadge: true,
+      footerInfo: [
+        {label: 'Tenure', value: `${tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency('73500.30')},
+        {label: 'Processing Fee', value: formatIndianCurrency(1000)},
+      ],
+    },
+    {
+      title: 'Tata Capital',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/9/9b/Tata_Capital_logo.svg',
+      interestRate: interestRate,
+      tenure: tenure,
+      emi: '12,032',
+      processingFee: '6000',
+      badge: 6,
+      showBadge: true,
+      footerInfo: [
+        {label: 'Tenure', value: `${tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency('76890.42')},
+        {label: 'Processing Fee', value: formatIndianCurrency(6000)},
+      ],
+    },
+    {
+      title: 'ICICI Bank Loans',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/4/4b/ICICI_Bank_Logo.svg',
+      interestRate: interestRate,
+      tenure: tenure,
+      emi: '11,230',
+      processingFee: '2000',
+      badge: 7,
+      showBadge: true,
+      footerInfo: [
+        {label: 'Tenure', value: `${tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency('74000.00')},
+        {label: 'Processing Fee', value: formatIndianCurrency(2000)},
+      ],
+    },
+    {
+      title: 'Bajaj Finance',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/5/59/Bajaj_Finserv_Logo.svg',
+      interestRate: interestRate,
+      tenure: tenure,
+      emi: '10,995',
+      processingFee: '1500',
+      badge: 8,
       showBadge: true,
       showNewBreakDown: true,
       footerInfo: [
         {label: 'Tenure', value: `${tenure} Month`},
-        {label: 'EMI', value: formatIndianCurrency('75000')},
-        {label: 'Processing Fee', value: formatIndianCurrency(processingFee)},
+        {label: 'EMI', value: formatIndianCurrency('72500.77')},
+        {label: 'Processing Fee', value: formatIndianCurrency(1500)},
+      ],
+    },
+    {
+      title: 'Shriram Finance',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/8/8c/Shriram_Finance_logo.png',
+      interestRate: interestRate,
+      tenure: tenure,
+      emi: '11,675',
+      processingFee: '3000',
+      badge: 9,
+      showBadge: true,
+      footerInfo: [
+        {label: 'Tenure', value: `${tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency('74800.15')},
+        {label: 'Processing Fee', value: formatIndianCurrency(3000)},
+      ],
+    },
+    {
+      title: 'IndusInd Loans',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/2/25/IndusInd_Bank_Logo.svg',
+      interestRate: interestRate,
+      tenure: tenure,
+      emi: '12,005',
+      processingFee: '4000',
+      badge: 10,
+      showBadge: true,
+      showNewBreakDown: true,
+      isEligibleForBT: false,
+      footerInfo: [
+        {label: 'Tenure', value: `${tenure} Month`},
+        {label: 'EMI', value: formatIndianCurrency('76200.90')},
+        {label: 'Processing Fee', value: formatIndianCurrency(4000)},
       ],
     },
   ];
@@ -95,7 +186,7 @@ const Lender_Selection_Component = ({
       bankName={item.title}
       interestRate={item.interestRate}
       showRightArrow
-      logo={item.logo}
+      logo={images.hdfcImg}
       showBadge={item.badge}
       badgeLevel={item.badge}
       footerData={item.footerInfo}
