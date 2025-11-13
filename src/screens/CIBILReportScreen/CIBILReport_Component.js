@@ -11,10 +11,10 @@ import {
   Text,
   theme,
 } from '@caryaar/components';
+// import RNSpeedometer from 'react-native-speedometer';
 import images from '../../assets/images';
-import {getCibilScoreStatus} from '../../utils/helper';
-import RNSpeedometer from 'react-native-speedometer';
 import typography from '../../theme/typography';
+import {RNSpeedometer} from '../../components';
 
 const CIBILReport_Component = ({
   params,
@@ -24,7 +24,7 @@ const CIBILReport_Component = ({
   restInputProps = {},
   loading,
   lastUpdatedOn,
-  cibilScore = '800',
+  cibilScore = '',
   cibilStatus,
 }) => {
   return (
@@ -34,39 +34,35 @@ const CIBILReport_Component = ({
         <View style={{flex: 1}}>
           <DetailInfoCard label={'CIBIL Score'} data={null} isSemiBold={false}>
             <RNSpeedometer
-              value={500}
+              value={cibilScore}
               size={300}
               maxValue={900}
               minValue={300}
-              labels={[
-                {
-                  name: 'Poor',
-                  labelColor: '#1D3B63',
-                  activeBarColor: '#FF0508',
-                },
-                {
-                  name: 'Fair',
-                  labelColor: '#1D3B63',
-                  activeBarColor: '#FF9D2D',
-                },
-                {
-                  name: 'Good',
-                  labelColor: '#1D3B63',
-                  activeBarColor: '#FFED2D',
-                },
-                {
-                  name: 'Excellent',
-                  labelColor: '#1D3B63',
-                  activeBarColor: '#16D154',
-                },
-              ]}
-              wrapperStyle={{height: 220}}
-              innerCircleStyle={{backgroundColor: 'white'}}
-              labelNoteStyle={{top: 5}}
-              labelStyle={[
-                typography.fontStyles.hankenGroteskBold,
-                {fontSize: typography.fontSizes.h1},
-              ]}
+              // labels={[
+              //   {
+              //     name: 'Poor',
+              //     labelColor: '#1D3B63',
+              //     activeBarColor: '#FF0508',
+              //   },
+              //   {
+              //     name: 'Fair',
+              //     labelColor: '#1D3B63',
+              //     activeBarColor: '#FF9D2D',
+              //   },
+              //   {
+              //     name: 'Good',
+              //     labelColor: '#1D3B63',
+              //     activeBarColor: '#FFED2D',
+              //   },
+              //   {
+              //     name: 'Excellent',
+              //     labelColor: '#1D3B63',
+              //     activeBarColor: '#16D154',
+              //   },
+              // ]}
+              wrapperStyle={{height: 230}}
+              // innerCircleStyle={{backgroundColor: 'white'}}
+              // labelNoteStyle={{top: 5}}
               // outerCircleStyle={{backgroundColor: 'red'}}
             />
 

@@ -29,6 +29,7 @@ const Loan_Offer_Detail_Component = ({
   emi,
   interesetRate,
   processingFee,
+  lenderLogo,
 }) => {
   const renderCellHeader = (value, style) => {
     return (
@@ -101,7 +102,7 @@ const Loan_Offer_Detail_Component = ({
           ]}
           breakdownExpression={'(1.2 x 10,00,000) - 6,00,000 - 10,000 ='}
           breakdownValue={'5,90,000'}
-          logo={images.hdfcImg}
+          logo={{uri: lenderLogo}}
         />
 
         <Spacing size="md" />

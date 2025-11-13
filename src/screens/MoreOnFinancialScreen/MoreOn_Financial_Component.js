@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Button,
   DetailInfoCard,
@@ -16,6 +17,7 @@ import {
   referenceLabelMap,
   relationshipTypeValue,
 } from '../../constants/enums';
+import {RNSpeedometer} from '../../components';
 
 const MoreOn_Financial_Component = ({
   cibilList,
@@ -40,7 +42,19 @@ const MoreOn_Financial_Component = ({
           label={'CIBIL Score'}
           data={cibilList}
           isSemiBold={false}>
-          <View style={styles.cibilWrapper}>
+          {cibilScore && (
+            <RNSpeedometer
+              value={cibilScore}
+              size={250}
+              maxValue={900}
+              minValue={300}
+              wrapperStyle={{height: 230}}
+              // innerCircleStyle={{backgroundColor: 'white'}}
+              // labelNoteStyle={{top: 5}}
+              // outerCircleStyle={{backgroundColor: 'red'}}
+            />
+          )}
+          {/* <View style={styles.cibilWrapper}>
             <Text
               textAlign={'center'}
               color={theme.colors.primary}
@@ -56,7 +70,7 @@ const MoreOn_Financial_Component = ({
                 Last updated on 12 Dec 2024, 10:34 AM
               </Text>
             )}
-          </View>
+          </View> */}
         </DetailInfoCard>
         {loanReferences?.map((item, index) => {
           return (

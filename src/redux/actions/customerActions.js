@@ -45,7 +45,6 @@ export const fetchAllCustomersThunk = (
 
     try {
       const response = await fetchAllCustomers(page, limit, payload);
-      console.log('response', JSON.stringify(response));
       const isSearch = payload?.params?.search;
       const customers = response.data || [];
 

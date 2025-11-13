@@ -66,6 +66,7 @@ const Home_Component = ({
           backgroundColor: '#bfc1c450',
           borderColor: '#9a9a9a80',
           borderWidth: 1,
+          elevation: 0,
         },
       ]}>
       <View

@@ -62,6 +62,7 @@ class LenderSelection extends Component {
             tenure: Number(item?.tenure) || 60,
             emi: parseFloat(item?.emi) || 20000,
             processingFee: parseFloat(item?.processingFee),
+            lenderLogo: item?.lenderLogo,
           },
         });
       },

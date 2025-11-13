@@ -14,9 +14,19 @@ class CIBILReportScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEdit: getScreenParam(props.route, 'params')?.isEdit || false,
+      isEdit: this.props.route?.params?.isEdit || false,
+      cibilScore: '',
     };
     this.onSavePress = this.onSavePress.bind(this);
+  }
+
+  componentDidMount() {
+    const {params, cibil} = this.props.route.params;
+    if (cibil) {
+      this.setState({
+        cibilScore: cibil?.score,
+      });
+    }
   }
 
   onSavePress = () => {
@@ -31,6 +41,8 @@ class CIBILReportScreen extends Component {
       cibilReport,
       loading,
     } = this.props;
+
+    const {cibilScore} = this.state;
 
     const {UsedVehicle = {}} = selectedVehicle || {};
     const {isEdit} = this.state;

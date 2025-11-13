@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import ScreenNames from '../../constants/ScreenNames';
-import {goBack, navigateAndSimpleReset} from '../../navigation/NavigationUtils';
+import {goBack} from '../../navigation/NavigationUtils';
 import {fetchCustomerMoreFinanceDetailThunk} from '../../redux/actions';
 import {formatIndianCurrency, formatShortId, safeGet} from '../../utils/helper';
 import MoreOn_Financial_Component from './MoreOn_Financial_Component';
@@ -33,8 +32,7 @@ class MoreOnFinancialScreen extends Component {
 
   render() {
     const {loading, moreOnFinance} = this.props;
-    let partnerId = safeGet(loading, moreOnFinance, 'partnerId');
-    let salesExecutiveId = safeGet(loading, moreOnFinance, 'salesExecutiveId');
+
     return (
       <MoreOn_Financial_Component
         cibilScore={safeGet(loading, moreOnFinance, 'cibilScore') || '-'}
@@ -46,10 +44,13 @@ class MoreOnFinancialScreen extends Component {
               safeGet(loading, moreOnFinance, 'loanAmount'),
             ),
           },
-          {label: 'CarYaar Partner ID', value: formatShortId(partnerId)},
+          {
+            label: 'CarYaar Partner ID',
+            value: safeGet(loading, moreOnFinance, 'partnerUserNumber'),
+          },
           {
             label: 'CarYaar Sale Executive ID',
-            value: formatShortId(salesExecutiveId),
+            value: safeGet(loading, moreOnFinance, 'salesExecutiveNumber'),
           },
         ]}
         loanReferences={moreOnFinance?.loanReferences}

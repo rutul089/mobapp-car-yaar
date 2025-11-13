@@ -490,3 +490,53 @@ export const fetchAadhaarFromDigilocker = async clientId => {
     throw error;
   }
 };
+
+/**
+ * Removes PAN details of a customer by their unique identifier.
+ *
+ * @param {string} customerId - The unique ID of the customer whose PAN needs to be removed.
+ * @returns {Promise<Object>} The response data from the API.
+ * @throws Will throw an error if the API call fails.
+ */
+export const removeCustomerPan = async customerId => {
+  if (!customerId) {
+    throw new Error('Customer ID is required to remove PAN.');
+  }
+  try {
+    const response = await axiosInstance.patch(
+      `/customers/removePan/${customerId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Error removing PAN for customer ID ${customerId}:`,
+      error?.response?.data || error,
+    );
+    throw error;
+  }
+};
+
+/**
+ * Removes Aadhaar details of a customer by their unique identifier.
+ *
+ * @param {string} customerId - The unique ID of the customer whose Aadhaar needs to be removed.
+ * @returns {Promise<Object>} The response data from the API.
+ * @throws Will throw an error if the API call fails.
+ */
+export const removeCustomerAadhaar = async customerId => {
+  if (!customerId) {
+    throw new Error('Customer ID is required to remove Aadhaar.');
+  }
+  try {
+    const response = await axiosInstance.patch(
+      `/customers/removeAadhar/${customerId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Error removing Aadhaar for customer ID ${customerId}:`,
+      error?.response?.data || error,
+    );
+    throw error;
+  }
+};

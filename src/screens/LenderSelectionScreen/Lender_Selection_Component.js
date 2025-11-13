@@ -193,12 +193,12 @@ const Lender_Selection_Component = ({
 
   const renderItem = ({item}) => (
     <FinanceCard
-      bankName={item.lenderName}
-      interestRate={item.interestRate || 8}
+      bankName={item?.lenderName}
+      interestRate={item?.interestRate || 8}
       showRightArrow
-      logo={images.hdfcImg}
-      showBadge={item.badge}
-      badgeLevel={item.badge}
+      logo={{uri: item?.lenderLogo}}
+      showBadge={item?.badge}
+      badgeLevel={item?.badge}
       footerData={[
         {label: 'Tenure', value: `${item?.tenure} Month`},
         {label: 'EMI', value: formatIndianCurrency(item?.emi)},

@@ -6,3 +6,4 @@ export {default as FullLoader} from './FullLoader';
 export {default as DeleteConfirmationContent} from './DeleteConfirmationContent';
 export {default as CustomDatePickerModal} from './CustomDatePickerModal';
 export {default as CustomDatePicker} from './CustomDatePicker';
+export {default as RNSpeedometer} from './RNSpeedometer';

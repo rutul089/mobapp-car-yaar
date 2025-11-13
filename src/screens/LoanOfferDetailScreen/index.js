@@ -86,6 +86,7 @@ class LoanOfferDetailScreen extends Component {
         emi={emiPlan?.schedule?.[0]?.emi}
         interesetRate={interesetRate}
         processingFee={processingFee}
+        lenderLogo={loanDetail?.lenderLogo}
       />
     );
   }

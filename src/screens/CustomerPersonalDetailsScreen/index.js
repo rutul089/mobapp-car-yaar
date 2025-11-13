@@ -19,6 +19,7 @@ import {
 } from '../../navigation/NavigationUtils';
 import {
   fetchCibilScoreThunk,
+  fetchCustomerDetailsThunk,
   initiateAadharDigilockerThunk,
   initiateLoanApplicationThunk,
   searchBanksThunk,
@@ -27,7 +28,7 @@ import {
   verifyAadharThunk,
   verifyPanThunk,
 } from '../../redux/actions';
-import {getPresignedDownloadUrl} from '../../services';
+import {getPresignedDownloadUrl, removeCustomerPan} from '../../services';
 import {
   getDocumentLink,
   handleFileSelection,
@@ -267,7 +268,7 @@ class CustomerPersonalDetails extends Component {
   };
 
   onNextPress = async (skipVerification = false) => {
-    const {isEdit, occupation, monthlyIncome, maxEmiAfford} = this.state;
+    const {isEdit, occupation} = this.state;
     const {isCreatingLoanApplication} = this.props;
 
     if (skipVerification) {
@@ -479,17 +480,6 @@ class CustomerPersonalDetails extends Component {
 
   onChangeField = (key, value, isOptional = false) => {
     handleFieldChange(this, key, value, value?.toString()?.trim().length === 0);
-    // if (key === 'monthlyIncome') {
-    //   let _occupation = this.state.occupation === occupationType.SALARIED;
-    //   this.setState(
-    //     {
-    //       maxEmiAfford: validateMaxEmiAfford(_occupation, value) + '',
-    //     },
-    //     () => {
-    //       this.onChangeField('maxEmiAfford', this.state.maxEmiAfford);
-    //     },
-    //   );
-    // }
   };
 
   handleFileUpload = type => {
@@ -734,20 +724,30 @@ class CustomerPersonalDetails extends Component {
     }
 
     if (type === 'pancardPhoto') {
-      this.setState({
-        panCardNumber: '',
-      });
+      this.setState(
+        {
+          panCardNumber: '',
+        },
+        () => {
+          this._removeCustomerPan(this.props.selectedCustomerId);
+        },
+      );
     }
 
     if (type === 'aadharFrontPhoto') {
-      this.setState({
-        aadharNumber: '',
-        applicantName: '',
-        nameOnAadharCard: '',
-        dob: '',
-        gender: '',
-        address: '',
-      });
+      this.setState(
+        {
+          aadharNumber: '',
+          applicantName: '',
+          nameOnAadharCard: '',
+          dob: '',
+          gender: '',
+          address: '',
+        },
+        () => {
+          this.removeCustomerAadhaar();
+        },
+      );
     }
 
     let link = null;
@@ -843,103 +843,6 @@ class CustomerPersonalDetails extends Component {
       }));
     }
   };
-
-  // fetchDetailFromOCR = async (asset, type, isDelete) => {
-  //   if (type === 'aadharFrontPhoto' && !isDelete) {
-  //     this.setState({isLoadingDocument: true});
-
-  //     try {
-  //       const response = await uploadMedia(asset, 'aadharFrontPhoto');
-  //       let aadharCardData = extractAadhaarDetails(response);
-
-  //       if (response?.success) {
-  //         const formattedDob = aadharCardData?.dob
-  //           ?.split('-')
-  //           .reverse()
-  //           .join('/');
-
-  //         this.setState({
-  //           isLoadingDocument: false,
-  //           aadharNumber: aadharCardData?.aadhaarNumber,
-  //           applicantName: aadharCardData?.fullName,
-  //           nameOnAadharCard: aadharCardData?.fullName,
-  //           dob: formattedDob,
-  //           gender:
-  //             aadharCardData?.gender?.toLowerCase() === 'm'
-  //               ? genderType.MALE
-  //               : genderType.FEMALE,
-  //         });
-  //         return;
-  //       }
-
-  //       if (!response?.success) {
-  //         this.setState(prevState => ({
-  //           aadharFrontPhoto: null,
-  //           isLoadingDocument: false,
-  //           aadharNumber: '',
-  //           errors: {
-  //             ...prevState.errors,
-  //             aadharFrontPhoto: response?.error || 'Failed to upload PAN card',
-  //           },
-  //         }));
-  //       }
-  //       return;
-  //     } catch (error) {
-  //       this.setState(prevState => ({
-  //         aadharFrontPhoto: null,
-  //         isLoadingDocument: false,
-  //         aadharNumber: '',
-  //         errors: {
-  //           ...prevState.errors,
-  //           errors: {
-  //             ...prevState.errors,
-  //             aadharFrontPhoto: error?.error || 'Failed to upload Aadhar card',
-  //           },
-  //         },
-  //       }));
-  //     }
-  //   }
-
-  //   if (type === 'pancardPhoto' && !isDelete) {
-  //     this.setState({isLoadingDocument: true});
-  //     try {
-  //       const response = await uploadMedia(asset, 'pancardPhoto');
-  //       if (response?.success) {
-  //         const panData = extractPanDetails(response);
-  //         this.setState({
-  //           panCardNumber: panData?.panNumber,
-  //           isLoadingDocument: false,
-  //         });
-  //       } else {
-  //         this.setState(prevState => ({
-  //           panCardNumber: '',
-  //           pancardPhoto: null,
-  //           isLoadingDocument: false,
-  //           errors: {
-  //             ...prevState.errors,
-  //             pancardPhoto:
-  //               response?.error ||
-  //               response?.message ||
-  //               'Failed to upload PAN card',
-  //           },
-  //         }));
-  //       }
-  //     } catch (error) {
-  //       this.setState(prevState => ({
-  //         panCardNumber: '',
-  //         pancardPhoto: null,
-  //         isLoadingDocument: false,
-  //         errors: {
-  //           ...prevState.errors,
-  //           pancardPhoto:
-  //             error?.message ||
-  //             error?.response?.data?.error ||
-  //             'Something went wrong while uploading PAN card',
-  //         },
-  //       }));
-  //     }
-  //   }
-  // };
 
   fetchCibilScore = () => {
     const isFormValid = this.validateAllFields(true);
@@ -1045,6 +948,17 @@ class CustomerPersonalDetails extends Component {
       onBackPress: () => goBack(),
     };
   };
+
+  _removeCustomerPan = async customerId => {
+    return;
+    const data = await removeCustomerPan(customerId);
+    if (data?.success && data?.data?.removed) {
+      this.props.fetchCustomerDetailsThunk(customerId);
+    }
+    console.log('-------data', JSON.stringify(data));
+  };
+
+  removeCustomerAadhaar = () => {};
 
   render() {
     const {
@@ -1233,6 +1147,7 @@ const mapActionCreators = {
   verifyPanThunk,
   initiateAadharDigilockerThunk,
   fetchCibilScoreThunk,
+  fetchCustomerDetailsThunk,
 };
 
 const mapStateToProps = ({

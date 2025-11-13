@@ -5,4 +5,5 @@ export default {
   cibil_banner: require('./cibil_banner.png'),
   icDigiLocker: require('./icDigiLocker.png'),
   needle: require('./needle.png'),
+  speedometer_needle: require('./speedometer_needle.png'),
 };

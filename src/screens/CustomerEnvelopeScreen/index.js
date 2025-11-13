@@ -128,7 +128,6 @@ class CustomerEnvelopeScreen extends Component {
         await this.props.fetchPartnerEmployeeByIdThunk(partnerId);
       const employees = response?.data?.employees ?? [];
 
-      console.log('response---->', JSON.stringify(response));
       if (!response?.success || employees.length === 0) {
         this.resetPartnerFields();
       } else {

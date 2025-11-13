@@ -32,7 +32,7 @@ const initialState = {
   financeDocuments: null,
   referenceDetail: null,
   isReadOnlyLoanApplication: false,
-  loanFilterValue: '',
+  loanFilterValue: 'undefined',
   isFirstTimeNavigation: false,
 };
 

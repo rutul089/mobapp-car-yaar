@@ -36,7 +36,7 @@ class LoanAmountScreen extends Component {
   }
 
   onNextButtonPress = () => {
-    const {loanAmount} = this.state;
+    const {loanAmount, isEdit} = this.state;
 
     const {
       selectedApplicationId,
@@ -74,7 +74,7 @@ class LoanAmountScreen extends Component {
       selectedApplicationId,
       success => {
         const cibilScore = selectedLoanApplication?.customer?.cibilScore;
-        if (cibilScore) {
+        if (isEdit && cibilScore) {
           return navigate(ScreenNames.CustomerEnvelope);
         }
 
