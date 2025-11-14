@@ -14,7 +14,6 @@ import {
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {CustomDatePickerModal, DatePicker} from '../../components';
 import {currentLoanTypes, fuelTypeOptions} from '../../constants/enums';
 import {formatDate} from '../../utils/helper';
 import {useInputRefs} from '../../utils/useInputRefs';
@@ -379,26 +378,6 @@ const Edit_Vehicle_Detail_Component = ({
           datePickerField,
         )}
       />
-      {/* {isDatePickerVisible && (
-        <CustomDatePickerModal
-          visible={isDatePickerVisible}
-          onDismiss={() => {
-            setDatePickerVisible(false);
-            setDatePickerField(null);
-          }}
-          onConfirm={handleDateConfirm}
-          initialDate={getInitialDate()}
-          // disablePastDates={['insuranceValidUpto', 'fitnessValidUpto'].includes(
-          //   datePickerField,
-          // )}
-          // restProps={{
-          //   validRange: {
-          //     startDate: new Date(2000, 0, 1),
-          //     endDate: endOfToday, // till today
-          //   },
-          // }}
-        />
-      )} */}
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );

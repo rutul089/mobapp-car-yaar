@@ -6,9 +6,6 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {Toast, toastConfig} from '@caryaar/components';
 import RootNavigator from './src/navigation/RootNavigator';
 import {persistor, store} from './src/redux';
-import {Provider as PaperProvider} from 'react-native-paper';
-import {en, registerTranslation} from 'react-native-paper-dates';
-registerTranslation('en', en);
 
 if (!__DEV__) {
   console.log = () => {};
@@ -18,15 +15,13 @@ if (!__DEV__) {
 
 export default function App() {
   return (
-    <PaperProvider>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <RootNavigator />
-          <View pointerEvents="none" style={{marginHorizontal: 20}}>
-            <Toast config={toastConfig} />
-          </View>
-        </PersistGate>
-      </Provider>
-    </PaperProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <RootNavigator />
+        <View pointerEvents="none" style={{marginHorizontal: 20}}>
+          <Toast config={toastConfig} />
+        </View>
+      </PersistGate>
+    </Provider>
   );
 }
