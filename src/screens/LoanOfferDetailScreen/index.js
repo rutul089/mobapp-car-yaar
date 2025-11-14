@@ -5,6 +5,7 @@ import {getScreenParam, navigate} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
 import {formatVehicleNumber} from '../../utils/helper';
 import {fetchEmiPlanThunk} from '../../redux/actions/emiPlanActions';
+import {postCustomerLenderDetailsThunk} from '../../redux/actions';
 
 class LoanOfferDetailScreen extends Component {
   constructor(props) {
@@ -52,9 +53,9 @@ class LoanOfferDetailScreen extends Component {
     );
   };
 
-  onProceedPress = () => {
+  onProceedPress = async () => {
     let params = this.props.route?.params;
-
+    await this.saveTenureAndInterest(params);
     navigate(ScreenNames.AddReference, {params});
   };
 
@@ -62,15 +63,43 @@ class LoanOfferDetailScreen extends Component {
     navigate(ScreenNames.CustomizeLoanOffer);
   };
 
+  saveTenureAndInterest = async item => {
+    const {selectedApplicationId, emiPlan, selectedLoanApplication} =
+      this.props;
+
+    let param = {
+      // lenderName: item?.title,
+      interesetRate: Number(selectedLoanApplication?.interesetRate),
+      tenure: Number(emiPlan?.tenureMonths),
+      emi: parseFloat(emiPlan?.schedule?.[0]?.emi),
+      processingFee: parseFloat(selectedLoanApplication?.processingFee),
+      principalAmount: parseFloat(emiPlan?.schedule?.[0]?.principal), //principal
+    };
+
+    await new Promise(resolve => {
+      this.props.postCustomerLenderDetailsThunk(
+        selectedApplicationId,
+        param,
+        success => {
+          resolve();
+        },
+        error => {
+          resolve();
+        },
+      );
+    });
+  };
+
   render() {
     const {loanDetail} = this.state;
     const {selectedLoanApplication, emiPlan, loading} = this.props;
+
     const _registerNumber =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 100000;
     let tenure = emiPlan?.tenureMonths;
     let interesetRate = selectedLoanApplication?.interesetRate || 8;
-    let processingFee = loanDetail?.processingFee || 1000;
+    let processingFee = selectedLoanApplication?.processingFee || 1000;
 
     return (
       <Loan_Offer_Detail_Component
@@ -92,7 +121,7 @@ class LoanOfferDetailScreen extends Component {
   }
 }
 
-const mapActionCreators = {fetchEmiPlanThunk};
+const mapActionCreators = {fetchEmiPlanThunk, postCustomerLenderDetailsThunk};
 const mapStateToProps = ({loanData, emiPlan}) => {
   return {
     selectedLoanType: loanData.selectedLoanType,

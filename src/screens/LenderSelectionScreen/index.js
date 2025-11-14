@@ -42,11 +42,11 @@ class LenderSelection extends Component {
 
     let param = {
       lenderName: item?.lenderName,
-      interesetRate: Number(item?.interestRate) || 8,
-      tenure: Number(item?.tenure) || 60,
-      emi: parseFloat(item?.emi) || 20000,
+      interesetRate: Number(item?.interestRate),
+      tenure: Number(item?.tenure),
+      emi: parseFloat(item?.emi),
       processingFee: parseFloat(item?.processingFee),
-      principalAmount: 1000,
+      principalAmount: item?.principalAmount ?? item?.principal ?? 1000,
     };
 
     this.props.postCustomerLenderDetailsThunk(
@@ -122,8 +122,6 @@ class LenderSelection extends Component {
     const _registerNumber =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 500000;
-    let tenure = selectedLoanApplication?.tenure || 60;
-    let interesetRate = selectedLoanApplication?.interesetRate || 8;
     let processingFee = selectedLoanApplication?.processingFee || 1000;
 
     const initialLoading =
@@ -139,8 +137,6 @@ class LenderSelection extends Component {
         onItemPress={this.onItemPress}
         loading={initialLoading}
         loanAmount={loanAmount}
-        tenure={'60'}
-        interestRate={'8'}
         processingFee={processingFee}
         lenders={lenders}
         apiTrigger={apiTrigger}

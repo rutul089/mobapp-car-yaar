@@ -1,5 +1,5 @@
 // 📁 DatePickerModal.js
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Modal,
   View,
@@ -23,15 +23,17 @@ const DatePickerModal = ({
   const [tempYear, setTempYear] = useState(initialDate.getFullYear());
   const [days, setDays] = useState([]);
 
-  const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const years = Array.from({ length: 80 }, (_, i) => 1990 + i);
+  const months = Array.from({length: 12}, (_, i) => i + 1);
+  const years = Array.from({length: 80}, (_, i) => 1990 + i);
 
   // 🔁 Auto-adjust days based on month/year
   useEffect(() => {
     const daysInMonth = new Date(tempYear, tempMonth, 0).getDate();
-    const newDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const newDays = Array.from({length: daysInMonth}, (_, i) => i + 1);
     setDays(newDays);
-    if (tempDay > daysInMonth) setTempDay(daysInMonth);
+    if (tempDay > daysInMonth) {
+      setTempDay(daysInMonth);
+    }
   }, [tempMonth, tempYear]);
 
   // ✨ Fade animation
@@ -56,20 +58,19 @@ const DatePickerModal = ({
       <Text style={styles.listTitle}>{title}</Text>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.toString()}
+        keyExtractor={item => item.toString()}
         showsVerticalScrollIndicator={false}
         snapToInterval={40}
         decelerationRate="fast"
         style={styles.scrollList}
-        contentContainerStyle={{ alignItems: 'center' }}
-        renderItem={({ item }) => (
+        contentContainerStyle={{alignItems: 'center'}}
+        renderItem={({item}) => (
           <TouchableOpacity onPress={() => onSelect(item)}>
             <Text
               style={[
                 styles.listItem,
                 item === selected && styles.selectedItem,
-              ]}
-            >
+              ]}>
               {item}
             </Text>
           </TouchableOpacity>
@@ -83,11 +84,8 @@ const DatePickerModal = ({
       transparent
       visible={visible}
       animationType="none"
-      onRequestClose={onClose}
-    >
-      <Animated.View
-        style={[styles.modalOverlay, { opacity: fadeAnim }]}
-      >
+      onRequestClose={onClose}>
+      <Animated.View style={[styles.modalOverlay, {opacity: fadeAnim}]}>
         <Animated.View
           style={[
             styles.modalContainer,
@@ -101,8 +99,7 @@ const DatePickerModal = ({
                 },
               ],
             },
-          ]}
-        >
+          ]}>
           <Text style={styles.modalTitle}>Select Date</Text>
 
           <View style={styles.selectorRow}>
@@ -114,14 +111,12 @@ const DatePickerModal = ({
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={[styles.actionButton, styles.cancelButton]}
-              onPress={onClose}
-            >
+              onPress={onClose}>
               <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.actionButton, styles.okButton]}
-              onPress={handleConfirm}
-            >
+              onPress={handleConfirm}>
               <Text style={styles.okText}>OK</Text>
             </TouchableOpacity>
           </View>
@@ -211,7 +206,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-
 
 //  <DatePickerModal
 //         visible={showPicker}

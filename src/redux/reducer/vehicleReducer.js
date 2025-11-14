@@ -6,6 +6,7 @@ import {
   VEHICLE_EXISTS,
   VEHICLE_DETAILS,
   SUBMIT_VEHICLE,
+  SAVE_VEHICLE,
 } from '../actions/actionType';
 
 const initialState = {
@@ -35,6 +36,7 @@ const vehicleReducer = (state = initialState, action) => {
     case VEHICLE_EXISTS.REQUEST:
     case VEHICLE_DETAILS.REQUEST:
     case SUBMIT_VEHICLE.REQUEST:
+    case SAVE_VEHICLE.REQUEST:
       return {
         ...state,
         loading: true,
@@ -130,6 +132,8 @@ const vehicleReducer = (state = initialState, action) => {
       };
 
     case VEHICLE_DETAILS.FAILURE:
+    case SAVE_VEHICLE.FAILURE:
+    case SAVE_VEHICLE.SUCCESS:
       return {
         ...state,
         loading: false,

@@ -4,9 +4,9 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
   AutocompleteInput,
+  Button,
   DropdownModal,
   FilePickerModal,
-  FormFooterButtons,
   GroupWrapper,
   Header,
   images,
@@ -18,10 +18,9 @@ import {
   Spacing,
   Text,
   theme,
-  Button,
 } from '@caryaar/components';
 // import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {FullLoader} from '../../components';
+import {DatePicker, FullLoader} from '../../components';
 import {
   currentLoanTypes,
   genderTypes,
@@ -29,12 +28,9 @@ import {
 } from '../../constants/enums';
 import {getFileType, getMimeFromUrl} from '../../utils/documentUtils';
 import {formatIndianCurrency} from '../../utils/helper';
-import {
-  formatInputDate,
-  isValidInput,
-  sanitizeAmount,
-} from '../../utils/inputHelper';
+import {sanitizeAmount} from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
+import moment from 'moment';
 
 const Customer_Personal_Details_Component = ({
   selectedGender,
@@ -120,6 +116,8 @@ const Customer_Personal_Details_Component = ({
   const getDisplayValue = (isEditing, value) => {
     return formatIndianCurrency(value, false, true);
   };
+
+  const [showDatePicker, setShowDatePicker] = React.useState(false);
 
   return (
     <SafeAreaWrapper>
@@ -270,6 +268,7 @@ const Customer_Personal_Details_Component = ({
             onChange={value => {
               onSelectedGender?.(value);
             }}
+            {...(restInputProps?.gender || {})}
           />
           <Spacing size="md" />
           <Input
@@ -321,18 +320,20 @@ const Customer_Personal_Details_Component = ({
             isLeftIconVisible
             leftIconName={images.calendar}
             label="Date Of Birth"
-            onChangeText={text => {
-              if (!isValidInput(text)) {
-                return;
-              }
-              const formatted = formatInputDate(text);
-              onChangeDob?.(formatted);
-            }}
+            // onChangeText={text => {
+            //   if (!isValidInput(text)) {
+            //     return;
+            //   }
+            //   const formatted = formatInputDate(text);
+            //   onChangeDob?.(formatted);
+            // }}
             keyboardType="number-pad"
             returnKeyType="next"
             onSubmitEditing={() => focusNext('address')}
             onFocus={() => !isEdit && scrollToInput('dob')}
-            // onPress={() => setShowPicker(true)}
+            isAsButton
+            isAsDropdown
+            onPress={() => setShowDatePicker(true)} // 👈 open picker on click
             {...(restInputProps?.dob || {})}
           />
           <Spacing size="md" />
@@ -411,7 +412,7 @@ const Customer_Personal_Details_Component = ({
               const sanitizedText = sanitizeAmount(value);
               onChangeMonthlyIncome?.(sanitizedText);
             }}
-            keyboardType="decimal-pad"
+            keyboardType="number-pad"
             returnKeyType="next"
             onSubmitEditing={() => focusNext('bankName')}
             onFocus={() => {
@@ -468,7 +469,7 @@ const Customer_Personal_Details_Component = ({
             onChange={value => {
               onSelectedLoanOption?.(value);
               scrollToInput('maxEmiAfford');
-              focusNext('maxEmiAfford');
+              focusNext('monthlyIncome');
             }}
           />
           <Spacing size="md" />
@@ -481,7 +482,7 @@ const Customer_Personal_Details_Component = ({
                   isLeftIconVisible
                   leftIconName={images.icRupee}
                   label="Current EMI"
-                  keyboardType="decimal-pad"
+                  keyboardType="number-pad"
                   returnKeyType="next"
                   onChangeText={value => {
                     const sanitizedText = sanitizeAmount(value);
@@ -509,7 +510,7 @@ const Customer_Personal_Details_Component = ({
                 isLeftIconVisible
                 leftIconName={images.icRupee}
                 label="Max EMI Afford"
-                keyboardType="decimal-pad"
+                keyboardType="number-pad"
                 value={getDisplayValue(
                   editingStates.maxEmiAfford,
                   state.maxEmiAfford,
@@ -615,6 +616,16 @@ const Customer_Personal_Details_Component = ({
       {loading && <Loader visible={loading} />}
 
       {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}
+
+      <DatePicker
+        visible={showDatePicker}
+        value={state.dob}
+        onConfirm={date => {
+          onChangeDob?.(date);
+        }}
+        onClose={() => setShowDatePicker(false)}
+        stopUpdate
+      />
     </SafeAreaWrapper>
   );
 };

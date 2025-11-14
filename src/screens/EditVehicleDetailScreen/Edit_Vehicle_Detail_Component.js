@@ -14,10 +14,11 @@ import {
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {CustomDatePickerModal} from '../../components';
+import {CustomDatePickerModal, DatePicker} from '../../components';
 import {currentLoanTypes, fuelTypeOptions} from '../../constants/enums';
 import {formatDate} from '../../utils/helper';
 import {useInputRefs} from '../../utils/useInputRefs';
+import moment from 'moment';
 
 const Edit_Vehicle_Detail_Component = ({
   headerProp,
@@ -75,12 +76,13 @@ const Edit_Vehicle_Detail_Component = ({
       return new Date();
     }
     const selectedDate = state?.[datePickerField];
-    return selectedDate ? new Date(selectedDate) : new Date();
+    return selectedDate ? moment(selectedDate) : moment();
   };
 
   //Handle the selected date
   const handleDateConfirm = date => {
-    handleDateSelection?.(date.toISOString(), datePickerField);
+    console.log('12312312313', date);
+    handleDateSelection?.(date, datePickerField);
     setDatePickerVisible(false);
     setDatePickerField(null);
   };
@@ -364,7 +366,20 @@ const Edit_Vehicle_Detail_Component = ({
         onClose={() => setFuelTypeModalVisible(false)}
         title="Select Fuel Type"
       />
-      {isDatePickerVisible && (
+      <DatePicker
+        visible={isDatePickerVisible}
+        onClose={() => {
+          setDatePickerVisible(false);
+          setDatePickerField(null);
+        }}
+        onConfirm={handleDateConfirm}
+        momentFormat="YYYY-MM-DDTHH:mm:ssZ"
+        value={getInitialDate()}
+        allowFuture={['insuranceValidUpto', 'fitnessValidUpto'].includes(
+          datePickerField,
+        )}
+      />
+      {/* {isDatePickerVisible && (
         <CustomDatePickerModal
           visible={isDatePickerVisible}
           onDismiss={() => {
@@ -383,7 +398,8 @@ const Edit_Vehicle_Detail_Component = ({
           //   },
           // }}
         />
-      )}
+      )} */}
+      {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
 };

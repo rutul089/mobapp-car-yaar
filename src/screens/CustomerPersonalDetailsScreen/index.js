@@ -87,6 +87,15 @@ const initialState = {
   incomeSource: null,
   bankNameValue: '',
 };
+const INCOME_SOURCE_OPTIONS = [
+  {label: 'Salary', value: 'Salary'},
+  {label: 'Business', value: 'Business'},
+  {label: 'Freelancing', value: 'Freelancing'},
+  {label: 'Rental Income', value: 'Rental Income'},
+  {label: 'Investment', value: 'Investment'},
+  {label: 'Pension', value: 'Pension'},
+  {label: 'Other', value: 'Other'},
+];
 
 // const initialState = {
 //   applicantPhoto: '',
@@ -121,15 +130,7 @@ class CustomerPersonalDetails extends Component {
     this.state = {
       ...initialState,
       cibilScore: null,
-      incomeSourceOptions: [
-        {label: 'Salary', value: 'Salary'},
-        {label: 'Business', value: 'Business'},
-        {label: 'Freelancing', value: 'Freelancing'},
-        {label: 'Rental Income', value: 'Rental Income'},
-        {label: 'Investment', value: 'Investment'},
-        {label: 'Pension', value: 'Pension'},
-        {label: 'Other', value: 'Other'},
-      ],
+      incomeSourceOptions: INCOME_SOURCE_OPTIONS,
       isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
       registrationNumber: '',
       nameOnPanCard: '',
@@ -166,11 +167,7 @@ class CustomerPersonalDetails extends Component {
       pancardPhotoLink: null,
       isLoading: false,
     };
-    this.onSelectedLoanOption = this.onSelectedLoanOption.bind(this);
-    this.onSelectedOccupation = this.onSelectedOccupation.bind(this);
-    this.onSelectIncomeSourceOption =
-      this.onSelectIncomeSourceOption.bind(this);
-    this.onNextPress = this.onNextPress.bind(this);
+    this.fieldHandlers = this._createFieldHandlers();
   }
 
   async componentDidMount() {
@@ -235,6 +232,13 @@ class CustomerPersonalDetails extends Component {
     });
   }
 
+  // --- small helper to keep setState calls consistent/readable ---
+  _safeSetState = (patch, cb) => {
+    this.setState(patch, cb);
+  };
+
+  // --- Handlers (arrow methods to retain `this` and avoid explicit binds) ---
+
   onSelectedGender = value => {
     this.onChangeField('gender', value);
   };
@@ -246,34 +250,22 @@ class CustomerPersonalDetails extends Component {
   };
 
   onSelectedOccupation = (item, index) => {
-    this.setState(
-      {
-        occupation: item.value,
-      },
-      () => {
-        this.onChangeField('occupation', this.state.occupation);
-      },
+    this._safeSetState({occupation: item.value}, () =>
+      this.onChangeField('occupation', this.state.occupation),
     );
   };
 
   onSelectIncomeSourceOption = (item, index) => {
-    this.setState(
-      {
-        incomeSource: item?.value,
-      },
-      () => {
-        this.onChangeField('incomeSource', this.state.incomeSource);
-      },
+    this._safeSetState({incomeSource: item.value}, () =>
+      this.onChangeField('incomeSource', this.state.incomeSource),
     );
   };
 
   onNextPress = async (skipVerification = false) => {
-    const {isEdit, occupation} = this.state;
+    const {isEdit} = this.state;
     const {isCreatingLoanApplication} = this.props;
 
     if (skipVerification) {
-      let _occupation = occupation === occupationType.SALARIED;
-
       // 1️⃣ Validate the form
       const isFormValid = this.validateAllFields();
       if (!isFormValid) {
@@ -323,7 +315,6 @@ class CustomerPersonalDetails extends Component {
     const {
       nameOnPanCard,
       nameOnAadharCard,
-      isEdit,
       aadharVerification,
       panCardVerification,
     } = this.state;
@@ -331,9 +322,6 @@ class CustomerPersonalDetails extends Component {
     if (skip) {
       return;
     }
-    // if (isEdit) {
-    //   return true;
-    // }
 
     if (!nameOnPanCard && !panCardVerification) {
       return showToast('warning', 'Please verify your Pancard...');
@@ -409,72 +397,72 @@ class CustomerPersonalDetails extends Component {
   };
 
   validateAllFields = (fetchCibil = false) => {
-    const {currentLoan} = this.state;
+    const {currentLoan, ...state} = this.state;
+
     const fieldValidationRules = {
       applicantPhoto: {required: false},
-      currentEmi: {required: currentLoan},
+      currentEmi: {required: !!currentLoan},
       spouseName: {required: false},
       aadharBackphoto: {required: false},
       aadharNumber: {required: true},
       panCardNumber: {required: true},
     };
 
-    const fieldsToValidate = [
-      'panCardNumber',
-      'aadharNumber',
-      'applicantName',
-      'fatherName',
-      'spouseName',
-      'email',
-      'dob',
-      'address',
-      'pincode',
-      'monthlyIncome',
-      'accountNumber',
-      'currentEmi',
-      'maxEmiAfford',
-      'avgMonthlyBankBalance',
-      'occupation',
-      'incomeSource',
-      'applicantPhoto',
-      'aadharFrontPhoto',
-      'aadharBackphoto',
-      'pancardPhoto',
-      'bankName',
-      'bankNameValue',
-      'cibilScore',
-    ];
+    const fields = fetchCibil
+      ? [
+          'mobileNumber',
+          'panCardNumber',
+          'applicantName',
+          'gender',
+          'pancardPhoto',
+        ]
+      : [
+          'panCardNumber',
+          'aadharNumber',
+          'applicantName',
+          'fatherName',
+          'spouseName',
+          'email',
+          'dob',
+          'address',
+          'pincode',
+          'monthlyIncome',
+          'accountNumber',
+          'currentEmi',
+          'maxEmiAfford',
+          'avgMonthlyBankBalance',
+          'occupation',
+          'incomeSource',
+          'applicantPhoto',
+          'aadharFrontPhoto',
+          'aadharBackphoto',
+          'pancardPhoto',
+          'bankName',
+          'bankNameValue',
+          'cibilScore',
+          'gender',
+        ];
 
-    const fieldsToValidateCibil = [
-      'mobileNumber',
-      'panCardNumber',
-      'applicantName',
-      'gender',
-    ];
-    let _fieldsToValidate = fetchCibil
-      ? fieldsToValidateCibil
-      : fieldsToValidate;
     const errors = {};
     let isFormValid = true;
 
-    _fieldsToValidate.forEach(key => {
-      const value = this.state[key];
+    for (const key of fields) {
       const {required = true} = fieldValidationRules[key] || {};
+      const value = state[key];
 
-      // Skip validation if field is optional and empty
-      if (!required) {
-        errors[key] = '';
-        return;
+      // Skip optional empty fields
+      if (!required && (value === '' || value == null)) {
+        continue;
       }
 
       const error = validateField(key, value);
-      errors[key] = error;
-      if (error !== '') {
+      if (error) {
         isFormValid = false;
+        errors[key] = error;
       }
-    });
+    }
 
-    this.setState({errors, isFormValid});
+    this._safeSetState({errors, isFormValid});
     return isFormValid;
   };
 
@@ -482,6 +470,7 @@ class CustomerPersonalDetails extends Component {
     handleFieldChange(this, key, value, value?.toString()?.trim().length === 0);
   };
 
+  // --- File selection & upload flow ---
   handleFileUpload = type => {
     const {selectionType} = this.state;
     handleFileSelection(type, async asset => {
@@ -526,6 +515,7 @@ class CustomerPersonalDetails extends Component {
     this.setState({showFilePicker: true, selectionType: type});
   };
 
+  // --- Bank search ---
   searchBankNameFromAPI = async query => {
     this.onChangeField('bankName', query);
     this.onChangeField('bankNameValue', '');
@@ -550,22 +540,14 @@ class CustomerPersonalDetails extends Component {
     this.onChangeField('bankNameValue', item?.bank);
   };
 
+  // --- Document view/delete ---
+
   handleViewImage = async (uri, type) => {
     if (!uri) {
       return showToast('error', strings.errorNoDocumentUpload);
     }
 
-    let downloadedUrl = uri;
-
-    this.setState({isLoadingDocument: true});
-
-    if (type !== 'applicantPhoto') {
-      const downloadUrlResponse = await getPresignedDownloadUrl({
-        objectKey: uri,
-      });
-
-      downloadedUrl = downloadUrlResponse?.data?.url;
-    }
+    this._safeSetState({isLoadingDocument: true});
 
     try {
       await viewDocumentHelper(
@@ -578,7 +560,7 @@ class CustomerPersonalDetails extends Component {
         },
       );
     } finally {
-      this.setState({isLoadingDocument: false});
+      this._safeSetState({isLoadingDocument: false});
     }
   };
 
@@ -586,6 +568,7 @@ class CustomerPersonalDetails extends Component {
     this.updateDocumentState(type, null, false, null, true);
   };
 
+  // --- PAN / AADHAAR verification ---
   verifyPanCard = () => {
     const {selectedCustomerId} = this.props;
     const {panCardNumber, errors} = this.state;
@@ -660,7 +643,7 @@ class CustomerPersonalDetails extends Component {
     const aadhaarInfo = aadhaarData.data?.aadhaar_xml_data;
     const formattedDob = aadhaarInfo?.dob?.split('-').reverse().join('/');
 
-    this.setState(
+    this._safeSetState(
       {
         aadharNumber: __DEV__
           ? generateMaskedAadhaar()
@@ -702,9 +685,7 @@ class CustomerPersonalDetails extends Component {
 
     this.props.verifyAadharThunk(payload, response => {
       if (response?.success) {
-        this.setState({
-          aadharVerification: true,
-        });
+        this._safeSetState({aadharVerification: true});
         if (this.state.isEdit) {
           this.onNextPress(true);
         }
@@ -712,6 +693,7 @@ class CustomerPersonalDetails extends Component {
     });
   };
 
+  // --- Document state update & OCR extraction ---
   updateDocumentState = async (
     type,
     uri,
@@ -724,18 +706,13 @@ class CustomerPersonalDetails extends Component {
     }
 
     if (type === 'pancardPhoto') {
-      this.setState(
-        {
-          panCardNumber: '',
-        },
-        () => {
-          this._removeCustomerPan(this.props.selectedCustomerId);
-        },
-      );
+      this._safeSetState({panCardNumber: ''}, () => {
+        this._removeCustomerPan(this.props.selectedCustomerId);
+      });
     }
 
     if (type === 'aadharFrontPhoto') {
-      this.setState(
+      this._safeSetState(
         {
           aadharNumber: '',
           applicantName: '',
@@ -755,19 +732,13 @@ class CustomerPersonalDetails extends Component {
       link = await getDocumentLink(uri);
     }
 
-    this.setState(
-      {
-        [type]: uri,
-        [`${type}Link`]: link,
-      },
-      async () => {
-        if (!isCheck) {
-          return;
-        }
-        this.fetchDetailFromOCR(asset, type, isDelete);
-        this.onChangeField(type, uri);
-      },
-    );
+    this._safeSetState({[type]: uri, [`${type}Link`]: link}, async () => {
+      if (!isCheck) {
+        return;
+      }
+      this.fetchDetailFromOCR(asset, type, isDelete);
+      this.onChangeField(type, uri);
+    });
   };
 
   fetchDetailFromOCR = async (asset, type, isDelete) => {
@@ -811,7 +782,7 @@ class CustomerPersonalDetails extends Component {
       return;
     }
 
-    this.setState({isLoadingDocument: true});
+    this._safeSetState({isLoadingDocument: true});
 
     try {
       const response = await uploadMedia(asset, config.uploadKey);
@@ -819,7 +790,7 @@ class CustomerPersonalDetails extends Component {
       if (response?.success) {
         const extractedData = config.extractFn(response);
         const successState = config.onSuccess(extractedData);
-        this.setState({...successState, isLoadingDocument: false});
+        this._safeSetState({...successState, isLoadingDocument: false});
       } else {
         this.setState(prevState => ({
           isLoadingDocument: false,
@@ -844,11 +815,11 @@ class CustomerPersonalDetails extends Component {
     }
   };
 
+  // --- CIBIL fetch ---
   fetchCibilScore = () => {
     const isFormValid = this.validateAllFields(true);
 
     const {mobileNumber, panCardNumber, applicantName, gender} = this.state;
-    let params = getScreenParam(this.props.route, 'params');
 
     if (!isFormValid) {
       showToast('warning', strings.errorMissingField, 'bottom', 3000);
@@ -868,19 +839,13 @@ class CustomerPersonalDetails extends Component {
       payload,
       res => {
         if (res?.success) {
-          this.setState({
-            cibilScore: res?.data?.score,
-          });
+          this._safeSetState({cibilScore: res?.data?.score});
         }
       },
       error => {
-        this.setState({
-          cibilScore: null,
-        });
+        this._safeSetState({cibilScore: null});
       },
     );
-
-    // navigate(ScreenNames.CustomerEnvelope);
   };
 
   setMaxEmiAfford = (source, value) => {
@@ -907,7 +872,8 @@ class CustomerPersonalDetails extends Component {
     }
   };
 
-  getFieldHandlers = () => ({
+  // create field handlers once (stable reference)
+  _createFieldHandlers = () => ({
     onChangePanCardNumber: value => this.onChangeField('panCardNumber', value),
     onChangeAadharNumber: value => this.onChangeField('aadharNumber', value),
     onChangeApplicantName: value => this.onChangeField('applicantName', value),
@@ -917,7 +883,9 @@ class CustomerPersonalDetails extends Component {
     onChangeSpouseName: value => this.onChangeField('spouseName', value),
     onChangeAccountNumber: value => this.onChangeField('accountNumber', value),
     onChangeMaxEMIAfford: value => this.onChangeField('maxEmiAfford', value),
-    onChangeDob: value => this.onChangeField('dob', value),
+    onChangeDob: value => {
+      this.onChangeField('dob', value);
+    },
     onChangeMonthlyBankBalance: value =>
       this.onChangeField('avgMonthlyBankBalance', value),
     onBankNameChange: value => this.onChangeField('bankName', value),
@@ -951,11 +919,10 @@ class CustomerPersonalDetails extends Component {
 
   _removeCustomerPan = async customerId => {
     return;
-    const data = await removeCustomerPan(customerId);
-    if (data?.success && data?.data?.removed) {
-      this.props.fetchCustomerDetailsThunk(customerId);
-    }
-    console.log('-------data', JSON.stringify(data));
+    // const data = await removeCustomerPan(customerId);
+    // if (data?.success && data?.data?.removed) {
+    //   this.props.fetchCustomerDetailsThunk(customerId);
+    // }
   };
 
   removeCustomerAadhaar = () => {};
@@ -986,7 +953,7 @@ class CustomerPersonalDetails extends Component {
         state={this.state}
         onSelectedGender={this.onSelectedGender}
         selectedGender={gender}
-        {...this.getFieldHandlers()}
+        {...this.fieldHandlers}
         onSelectedLoanOption={this.onSelectedLoanOption}
         onSelectedOccupation={this.onSelectedOccupation}
         onSelectIncomeSourceOption={this.onSelectIncomeSourceOption}
@@ -1019,7 +986,7 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.applicantName,
             statusMsg: errors?.applicantName,
             autoCapitalize: 'words',
-            isDisabled: aadharVerification && isEdit,
+            isDisabled: aadharVerification && isEdit && aadharNumber !== '',
           },
           mobileNumber: {
             isError: errors?.mobileNumber,
@@ -1095,7 +1062,7 @@ class CustomerPersonalDetails extends Component {
           dob: {
             isError: errors?.dob,
             statusMsg: errors?.dob,
-            isDisabled: aadharVerification && isEdit,
+            isDisabled: aadharVerification && isEdit && aadharNumber !== '',
           },
           bankName: {
             value: bankName,
@@ -1110,6 +1077,10 @@ class CustomerPersonalDetails extends Component {
             rightLabel: 'FETCH',
             rightLabelPress: this.fetchCibilScore,
             isRightIconVisible: false,
+          },
+          gender: {
+            isError: errors.gender,
+            statusMsg: errors.gender,
           },
         }}
         filePickerProps={{

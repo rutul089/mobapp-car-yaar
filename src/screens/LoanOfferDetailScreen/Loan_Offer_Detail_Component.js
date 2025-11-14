@@ -68,7 +68,7 @@ const Loan_Offer_Detail_Component = ({
       />
 
       <ScrollView contentContainerStyle={styles.wrapper}>
-        <CardWithActionButton
+        {/* <CardWithActionButton
           buttonLabel={'Apply Now'}
           description={
             'Based on your eligibility, HDB Financial Services offers a balance transfer with an LTV of up to 120%'
@@ -82,7 +82,7 @@ const Loan_Offer_Detail_Component = ({
           icon={images.moneyCycleIcon}
         />
 
-        <Spacing size="md" />
+        <Spacing size="md" /> */}
 
         <FinanceCard
           statusImg={images.successCheck}
@@ -91,7 +91,7 @@ const Loan_Offer_Detail_Component = ({
           hideTopMargin
           showRightArrow
           rightIcon={images.successCheck}
-          showBreakdown
+          showBreakdown={false}
           footerData={[
             {label: 'Tenure', value: `${tenure} Month`},
             {label: 'EMI', value: formatIndianCurrency(emi)},

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
+  currentLoanLabelMap,
   customerCategoryValue,
   customerIndividualTypeValue,
   getLabelFromEnum,
@@ -130,6 +131,12 @@ class ViewLoanDetailsScreen extends Component {
       safeGet(loading, customer?.customerDetails, 'monthlyIncome') ?? '-';
     const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
     let customerID = safeGet(loading, customer, 'id') ?? '-';
+
+    const hypothecationStatus = safeGet(
+      loading,
+      usedVehicle,
+      'hypothecationStatus',
+    );
 
     return (
       <View_Loan_Details_Component
@@ -292,7 +299,8 @@ class ViewLoanDetailsScreen extends Component {
           },
           {
             label: 'Hypothecated',
-            value: safeGet(loading, usedVehicle, 'hypothecationStatus') || '-',
+            value:
+              getLabelFromEnum(currentLoanLabelMap, hypothecationStatus) || '-',
           },
           {
             label: 'Vehicle Status',

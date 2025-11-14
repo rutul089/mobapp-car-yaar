@@ -33,7 +33,6 @@ const MoreOn_Financial_Component = ({
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
       <Header
         title="More On Financials"
-        // rightLabel="@1231313"
         showRightContent={true}
         onBackPress={() => goBack()}
       />

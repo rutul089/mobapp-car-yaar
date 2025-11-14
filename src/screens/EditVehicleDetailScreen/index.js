@@ -265,7 +265,7 @@ class EditVehicleDetailScreen extends Component {
   };
 
   render() {
-    const {selectedVehicle, isCreatingLoanApplication} = this.props;
+    const {loading, isCreatingLoanApplication} = this.props;
     const {fuelType, errors, isEdit, registerNumber, vehicleAge} = this.state;
 
     return (
@@ -386,6 +386,7 @@ class EditVehicleDetailScreen extends Component {
           },
         }}
         buttonLabel={isCreatingLoanApplication ? strings.next : 'Save'}
+        loading={loading}
       />
     );
   }
