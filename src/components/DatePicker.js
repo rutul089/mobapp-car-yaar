@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import DateTimePicker, {useDefaultStyles} from 'react-native-ui-datepicker';
-import typography from '../theme/typography';
+// import typography from '../theme/typography';
 
 const DatePicker = ({
   visible = false,
@@ -77,7 +77,7 @@ const DatePicker = ({
           maxDate={finalMaxDate}
           weekdaysFormat="min"
           style={styles.datePickerContainer}
-          containerHeight={320}
+          containerHeight={315} // 320
         />
       </View>
     </CommonModal>
@@ -87,12 +87,20 @@ const DatePicker = ({
 const datePickerStyles = StyleSheet.create({
   header: {marginBottom: theme.sizes.spacing.smd},
   weekdays: {marginBottom: theme.sizes.spacing.sm},
-  today: {borderColor: theme.colors.primary, borderWidth: 1}, // Add a border to today's date
+  today: {
+    borderColor: theme.colors.primary,
+    borderWidth: 1,
+    // borderRadius: 50
+  }, // Add a border to today's date
   selected: {
     color: theme.colors.white,
     backgroundColor: theme.colors.primary,
+    // borderRadius: 50,
   },
-  selected_label: {color: theme.colors.white}, //Text style
+  selected_label: {
+    color: theme.colors.white,
+    ...theme.typography.fontStyles.hankenGroteskSemiBold,
+  }, //Text style
   selected_year: {
     // Year which is selected
     backgroundColor: theme.colors.primaryLight,
@@ -109,7 +117,7 @@ const datePickerStyles = StyleSheet.create({
   active_year_label: {
     // backgroundColor: theme.colors.primary,
     color: theme.colors.white,
-    ...typography.fontStyles.hankenGroteskMedium,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
   },
   active_year: {
     // Year which is currently selected by user
@@ -126,37 +134,37 @@ const datePickerStyles = StyleSheet.create({
   },
   selected_month_label: {
     color: theme.colors.white,
-    ...typography.fontStyles.hankenGroteskMedium,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
   },
   selected_year_label: {
     color: theme.colors.white,
-    ...typography.fontStyles.hankenGroteskMedium,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
   },
   day_label: {
     color: theme.colors.textPrimary,
-    ...typography.fontStyles.hankenGroteskRegular,
+    ...theme.typography.fontStyles.hankenGroteskRegular,
   },
   month_label: {
     color: theme.colors.textPrimary,
-    ...typography.fontStyles.hankenGroteskRegular,
+    ...theme.typography.fontStyles.hankenGroteskRegular,
   },
   year_label: {
     color: theme.colors.textPrimary,
-    ...typography.fontStyles.hankenGroteskRegular,
+    ...theme.typography.fontStyles.hankenGroteskRegular,
   },
   weekday_label: {
     color: theme.colors.textPrimary,
-    ...typography.fontStyles.hankenGroteskRegular,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
   },
   month_selector_label: {
     color: theme.colors.textPrimary,
-    fontSize: typography.fontSizes.body,
-    ...typography.fontStyles.hankenGroteskMedium,
+    fontSize: theme.typography.fontSizes.body,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
   },
   year_selector_label: {
     color: theme.colors.textPrimary,
-    fontSize: typography.fontSizes.body,
-    ...typography.fontStyles.hankenGroteskMedium,
+    fontSize: theme.typography.fontSizes.body,
+    ...theme.typography.fontStyles.hankenGroteskMedium,
   },
   month: {
     color: theme.colors.textPrimary,
@@ -176,6 +184,7 @@ const datePickerStyles = StyleSheet.create({
   },
   today_label: {
     color: theme.colors.textPrimary,
+    ...theme.typography.fontStyles.hankenGroteskSemiBold,
   },
 });
 

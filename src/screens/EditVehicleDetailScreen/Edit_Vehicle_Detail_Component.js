@@ -18,6 +18,7 @@ import {currentLoanTypes, fuelTypeOptions} from '../../constants/enums';
 import {formatDate} from '../../utils/helper';
 import {useInputRefs} from '../../utils/useInputRefs';
 import moment from 'moment';
+import {DatePicker} from '../../components';
 
 const Edit_Vehicle_Detail_Component = ({
   headerProp,

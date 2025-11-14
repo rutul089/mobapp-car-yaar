@@ -1697,7 +1697,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.29.0):
+  - RNGestureHandler (2.29.1):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1739,7 +1739,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.19.3):
+  - RNReanimated (3.19.4):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1759,10 +1759,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.19.3)
-    - RNReanimated/worklets (= 3.19.3)
+    - RNReanimated/reanimated (= 3.19.4)
+    - RNReanimated/worklets (= 3.19.4)
     - Yoga
-  - RNReanimated/reanimated (3.19.3):
+  - RNReanimated/reanimated (3.19.4):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1782,9 +1782,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.19.3)
+    - RNReanimated/reanimated/apple (= 3.19.4)
     - Yoga
-  - RNReanimated/reanimated/apple (3.19.3):
+  - RNReanimated/reanimated/apple (3.19.4):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1805,7 +1805,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.19.3):
+  - RNReanimated/worklets (3.19.4):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1825,9 +1825,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 3.19.3)
+    - RNReanimated/worklets/apple (= 3.19.4)
     - Yoga
-  - RNReanimated/worklets/apple (3.19.3):
+  - RNReanimated/worklets/apple (3.19.4):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -2261,9 +2261,9 @@ SPEC CHECKSUMS:
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
-  RNGestureHandler: f11062fe57326636c9cfa15a14e784d7f25f5f93
+  RNGestureHandler: 46d0b8e6fbea192b29be38c47fb06f6f6ab22b82
   RNPermissions: c97b798be36e9b4c269197ce90d9d240826dfbef
-  RNReanimated: 22841a595fb970c9d917a9481d2b4a2a9bd72ba6
+  RNReanimated: 3ff8cc2ee703e06f73039e89214392435aaf5fd2
   RNScreens: 239a97dcb197b2e25383f8428b13d3f67d97cbaa
   RNVectorIcons: 4deb5acb18b6dfc8da128993fb8ef0ef5b7cbf32
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
