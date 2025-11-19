@@ -11,7 +11,6 @@ function limitValue(value, minValue, maxValue, allowedDecimals) {
       currentValue = parseInt(value);
     }
   }
-  console.log('currentValue', currentValue);
   return Math.min(Math.max(currentValue, minValue), maxValue);
 }
 

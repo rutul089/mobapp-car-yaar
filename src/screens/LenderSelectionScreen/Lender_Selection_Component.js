@@ -2,19 +2,18 @@ import {
   FinanceCard,
   Header,
   Loader,
+  PaginationFooter,
   SafeAreaWrapper,
   Text,
-  images,
   theme,
-  PaginationFooter,
 } from '@caryaar/components';
 import React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 
-import {goBack} from '../../navigation/NavigationUtils';
-import {formatIndianCurrency} from '../../utils/helper';
 import {NoDataFound} from '../../components';
 import {API_TRIGGER} from '../../constants/enums';
+import {goBack} from '../../navigation/NavigationUtils';
+import {formatIndianCurrency} from '../../utils/helper';
 
 const Lender_Selection_Component = ({
   params,

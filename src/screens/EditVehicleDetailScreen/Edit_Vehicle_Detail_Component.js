@@ -81,7 +81,6 @@ const Edit_Vehicle_Detail_Component = ({
 
   //Handle the selected date
   const handleDateConfirm = date => {
-    console.log('12312312313', date);
     handleDateSelection?.(date, datePickerField);
     setDatePickerVisible(false);
     setDatePickerField(null);

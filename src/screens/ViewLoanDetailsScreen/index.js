@@ -124,13 +124,19 @@ class ViewLoanDetailsScreen extends Component {
     } = selectedLoanApplication || {};
 
     let dob = safeGet(loading, customer?.customerDetails, 'dob');
-    let _customerCategory = safeGet(loading, customer, 'customerCategory');
-    let _customerType = safeGet(loading, customer, 'customerType');
-    let _occupation = safeGet(loading, customer?.customerDetails, 'occupation');
+    let customerCategory = safeGet(loading, customer, 'customerCategory');
+    let customerType = safeGet(loading, customer, 'customerType');
+    let occupation = safeGet(loading, customer?.customerDetails, 'occupation');
     let monthlyIncome =
       safeGet(loading, customer?.customerDetails, 'monthlyIncome') ?? '-';
-    const _registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
-    let customerID = safeGet(loading, customer, 'id') ?? '-';
+    const registerNumber = safeGet(loading, usedVehicle, 'registerNumber');
+    const registrationDate = safeGet(loading, usedVehicle, 'registrationDate');
+    const insuranceValidUpto = safeGet(
+      loading,
+      usedVehicle,
+      'insuranceValidUpto',
+    );
+    const fitnessValidUpto = safeGet(loading, usedVehicle, 'fitnessValidUpto');
 
     const hypothecationStatus = safeGet(
       loading,
@@ -201,14 +207,17 @@ class ViewLoanDetailsScreen extends Component {
             label: 'Customer Name',
             value: safeGet(loading, customer?.customerDetails, 'applicantName'),
           },
-          {label: 'Customer ID', value: formatShortId(customerID)},
+          {
+            label: 'Customer ID',
+            value: safeGet(loading, customer, 'customerNumber'),
+          },
           {
             label: 'Customer Type',
-            value: getLabelFromEnum(customerCategoryValue, _customerCategory),
+            value: getLabelFromEnum(customerCategoryValue, customerCategory),
           },
           {
             label: 'Individual Type',
-            value: getLabelFromEnum(customerIndividualTypeValue, _customerType),
+            value: getLabelFromEnum(customerIndividualTypeValue, customerType),
           },
           {
             label: 'Mobile Number',
@@ -246,7 +255,7 @@ class ViewLoanDetailsScreen extends Component {
           },
           {
             label: 'Occupation',
-            value: getLabelFromEnum(occupationLabelMap, _occupation) || '-',
+            value: getLabelFromEnum(occupationLabelMap, occupation) || '-',
           },
           {
             label: 'Income Source',
@@ -265,7 +274,7 @@ class ViewLoanDetailsScreen extends Component {
           {label: 'Vehicle Type', value: 'Private Car'},
           {
             label: 'Register Number',
-            value: formatVehicleNumber(_registerNumber),
+            value: formatVehicleNumber(registerNumber),
           },
           {
             label: 'Owner Name',
@@ -283,7 +292,7 @@ class ViewLoanDetailsScreen extends Component {
             label: 'Engine Number',
             value: safeGet(loading, usedVehicle, 'engineNumber'),
           },
-          {label: 'Registration Date', value: '17 Sep 2019'},
+          {label: 'Registration Date', value: formatDate(registrationDate)},
           {
             label: 'Registration Authority',
             value: safeGet(loading, usedVehicle, 'registrationAuthority'),
@@ -306,8 +315,14 @@ class ViewLoanDetailsScreen extends Component {
             label: 'Vehicle Status',
             value: safeGet(loading, usedVehicle, 'vehicleStatus'),
           },
-          {label: 'Insurance Valid Upto', value: '17 Sep 2025'},
-          {label: 'Fitness Valid Upto', value: '17 Sep 2025'},
+          {
+            label: 'Insurance Valid Upto',
+            value: formatDate(insuranceValidUpto),
+          },
+          {
+            label: 'Fitness Valid Upto',
+            value: formatDate(fitnessValidUpto),
+          },
           {
             label: 'PUCC',
             value: usedVehicle?.PUCC ? ' Yes' : 'No',

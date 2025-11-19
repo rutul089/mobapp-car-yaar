@@ -6,4 +6,5 @@ export default {
   icDigiLocker: require('./icDigiLocker.png'),
   needle: require('./needle.png'),
   speedometer_needle: require('./speedometer_needle.png'),
+  iconNumber: require('./iconNumber.png'),
 };

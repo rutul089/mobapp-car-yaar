@@ -45,7 +45,7 @@ class Speedometer extends Component {
     } = this.props;
     const degree = 180;
     const perLevelDegree = calculateDegreeFromLabels(degree, labels);
-    console.log({perLevelDegree});
+
     const label = calculateLabelFromValue(
       limitValue(value, minValue, maxValue, allowedDecimals),
       labels,

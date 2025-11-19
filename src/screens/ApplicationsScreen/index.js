@@ -158,18 +158,6 @@ class ApplicationsScreen extends Component {
    * Clears search if text is empty.
    * @param {string} value - Input text.
    */
-  // onSearchText = value => {
-  //   const trimmed = value.trim();
-  //   this.setState({searchText: value, apiTrigger: API_TRIGGER.DEFAULT}, () => {
-  //     if (trimmed === '') {
-  //       this.setState({isSearch: false});
-  //       this.props.clearSearchApplication();
-  //     } else {
-  //       this.setState({stopLoading: true});
-  //       this.searchFromAPI(value);
-  //     }
-  //   });
-  // };
 
   onSearchText = text => {
     const trimmed = text.trim();
@@ -301,13 +289,7 @@ class ApplicationsScreen extends Component {
       showFilterApplications,
       activeFilterOption,
     } = this.state;
-    const {
-      applications,
-      loading,
-      searchApplications,
-      userData,
-      loanFilterValue,
-    } = this.props;
+    const {applications, loading, searchApplications, userData} = this.props;
 
     const [currentPage, totalPages] = this.getPageInfo();
     const initialLoading =
