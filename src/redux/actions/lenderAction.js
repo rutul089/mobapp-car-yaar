@@ -5,6 +5,7 @@ import {FETCH_LENDERS} from './actionType';
 export const fetchAllLendersThunk = (
   page = 1,
   limit = 10,
+  principalAmount,
   payload = {},
   onSuccess,
   onFailure,
@@ -13,7 +14,12 @@ export const fetchAllLendersThunk = (
     dispatch({type: FETCH_LENDERS.REQUEST});
 
     try {
-      const response = await fetchAllLenders(page, limit, payload);
+      const response = await fetchAllLenders(
+        page,
+        limit,
+        principalAmount,
+        payload,
+      );
       const lenders = response.data || [];
 
       dispatch({

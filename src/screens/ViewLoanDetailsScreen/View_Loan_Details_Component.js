@@ -9,6 +9,7 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  images,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
@@ -74,7 +75,11 @@ const View_Loan_Details_Component = ({
               showCTAButton
               ctaLabel="Track Loan Application"
               footerData={loanOverviewCard.footerInfo}
-              // logo={{uri: loanDetail.image}}
+              logo={
+                loanOverviewCard?.lenderLogo
+                  ? {uri: loanOverviewCard?.lenderLogo}
+                  : images.placeholder_image
+              }
               wrapperColor={theme.colors.gray900}
               textColor={theme.colors.white}
               infoValueColor={theme.colors.white}

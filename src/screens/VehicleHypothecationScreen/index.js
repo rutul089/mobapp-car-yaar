@@ -12,6 +12,7 @@ class VehicleHypothecationScreen extends Component {
     super(props);
     this.state = {
       carHypoStatus: currentLoanOptions.NO,
+      isLoading: false,
     };
     this.onSelectedAnswer = this.onSelectedAnswer.bind(this);
     this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
@@ -45,19 +46,31 @@ class VehicleHypothecationScreen extends Component {
       hypothecationStatus: carHypoStatus,
     };
 
-    this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
-      this.props.submitVehicleThunk(
-        vehicleId,
-        () => {
-          if (isCreatingLoanApplication) {
-            navigate(ScreenNames.CustomerFullScreen);
-          } else {
-            navigate(ScreenNames.SuccessScreen);
-          }
-        },
-        error => {},
-      );
-    });
+    this.setState({isLoading: true});
+
+    this.props.updateVehicleByIdThunk(
+      vehicleId,
+      payload,
+      () => {
+        this.props.submitVehicleThunk(
+          vehicleId,
+          () => {
+            this.setState({isLoading: false});
+            if (isCreatingLoanApplication) {
+              navigate(ScreenNames.CustomerFullScreen);
+            } else {
+              navigate(ScreenNames.SuccessScreen);
+            }
+          },
+          error => {
+            this.setState({isLoading: false});
+          },
+        );
+      },
+      () => {
+        this.setState({isLoading: false});
+      },
+    );
   };
 
   render() {
@@ -67,6 +80,7 @@ class VehicleHypothecationScreen extends Component {
       selectedLoanApplication,
       loading,
     } = this.props;
+    const {isLoading} = this.state;
     const {UsedVehicle = {}} = selectedVehicle || {};
 
     return (
@@ -88,7 +102,7 @@ class VehicleHypothecationScreen extends Component {
         onNextPress={this.onNextPress}
         saveAsDraftPress={this.saveAsDraftPress}
         isCreatingLoanApplication={isCreatingLoanApplication}
-        loading={loading}
+        loading={isLoading}
       />
     );
   }

@@ -148,6 +148,7 @@ class ViewLoanDetailsScreen extends Component {
       <View_Loan_Details_Component
         loanOverviewCard={{
           status: safeGet(loading, selectedLoanApplication, 'status'),
+          lenderLogo: selectedLoanApplication?.lenderLogo,
           loanApplicationId: safeGet(
             loading,
             selectedLoanApplication,

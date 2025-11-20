@@ -11,6 +11,7 @@ import {
   Spacing,
   Text,
   StatusChip,
+  images,
 } from '@caryaar/components';
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
@@ -100,7 +101,9 @@ const Applications_Component = ({
           },
         ]}
         showBadge={false}
-        // logo={{uri: item.image}}
+        logo={
+          item?.lenderLogo ? {uri: item?.lenderLogo} : images.placeholder_image
+        }
         showCTAButton
         onPress={() => onItemPress && onItemPress(item)}
       />

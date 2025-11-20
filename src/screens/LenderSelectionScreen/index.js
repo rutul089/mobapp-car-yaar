@@ -28,13 +28,22 @@ class LenderSelection extends Component {
   }
 
   fetchLendersDetail = (page = 1, param = {}) => {
-    this.props.fetchAllLendersThunk(page, this.limit, param).finally(() => {
-      this.setState({
-        refreshing: false,
-        apiTrigger: API_TRIGGER.DEFAULT,
-        stopLoading: false,
+    const {selectedLoanApplication} = this.props;
+
+    this.props
+      .fetchAllLendersThunk(
+        page,
+        this.limit,
+        selectedLoanApplication?.loanAmount,
+        param,
+      )
+      .finally(() => {
+        this.setState({
+          refreshing: false,
+          apiTrigger: API_TRIGGER.DEFAULT,
+          stopLoading: false,
+        });
       });
-    });
   };
 
   onItemPress = item => {

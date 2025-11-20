@@ -48,12 +48,9 @@ class SearchScreen extends Component {
 
   onSearchVehicle = () => {
     const {vehicleNumber} = this.state;
-    const isValid = isValidIndianVehicleNumber(vehicleNumber);
+
+    const isValid = this.checkForVehicleValidation(vehicleNumber);
     if (!isValid) {
-      this.setState({
-        showError: true,
-        statusMsg: 'Please add valid vehicle number',
-      });
       return;
     }
     this.setState({isLoading: true});
@@ -64,9 +61,7 @@ class SearchScreen extends Component {
         this.setState({isLoading: false, vehicleExists: true}, () => {
           navigate(ScreenNames.VehicleDetail, {
             addNewVehicle: true,
-            UsedVehicle: {
-              vehicleId: _response?.data?.vehicleId,
-            },
+            UsedVehicle: {vehicleId: _response?.data?.vehicleId},
             vehicleId: _response?.data?.vehicleId,
           });
         });
@@ -79,29 +74,30 @@ class SearchScreen extends Component {
         });
       },
     );
-    return;
-    // this.props.checkVehicleExistsThunk(vehicleNumber, response => {
-    //   if (!response?.data) {
-    //     return this.props.getVehicleByRegisterNumberThunk(
-    //       vehicleNumber,
-    //       _response => {
-    //         navigate(ScreenNames.VehicleDetail, {
-    //           addNewVehicle: true,
-    //           UsedVehicle: {
-    //             vehicleId: _response?.data?.vehicleId,
-    //           },
-    //           vehicleId: _response?.data?.vehicleId,
-    //         });
-    //       },
-    //       () => {},
-    //     );
-    //   }
+  };
 
-    //   this.setState({
-    //     statusMsg: 'Oh no! Vehicle not found',
-    //     vehicleExists: response?.data,
-    //   });
-    // });
+  checkForVehicleValidation = vehicleNumber => {
+    const isValid = isValidIndianVehicleNumber(vehicleNumber);
+    if (!vehicleNumber || vehicleNumber.trim() === '') {
+      this.setState({
+        showError: true,
+        statusMsg: 'Please enter vehicle number',
+        vehicleExists: true,
+      });
+      return false;
+    }
+
+    // Invalid
+    if (!isValid) {
+      this.setState({
+        showError: true,
+        statusMsg: 'Please add valid vehicle number',
+        vehicleExists: true,
+      });
+      return false;
+    }
+
+    return true;
   };
 
   onVehicleNumberChange = value => {

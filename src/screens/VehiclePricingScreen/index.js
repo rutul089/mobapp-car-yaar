@@ -114,7 +114,7 @@ class VehiclePricingScreen extends Component {
     let payload = {
       estimatedPrice: Number(estimatedPrice),
       salePrice: Number(salePrice),
-      trueValuePrice: Number(trueValuePrice),
+      trueValuePrice: trueValuePrice ? Number(trueValuePrice) : '',
       additionalNotes,
       valueReportUrl,
     };

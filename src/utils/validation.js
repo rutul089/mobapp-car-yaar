@@ -28,7 +28,7 @@ export const isValidIndianVehicleNumber = vehicleNumber => {
   const upper = vehicleNumber.toUpperCase();
 
   const oldFormat = /^[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{4}$/;
-  const bharatFormat = /^\d{2}BH\d{4}[A-Z]{2}$/;
+  const bharatFormat = /^\d{2}BH\d{4}[A-Z]$/;
 
   return oldFormat.test(upper) || bharatFormat.test(upper);
 };

@@ -195,16 +195,24 @@ export const fetchLoanDocumentsByCategory = async (
  * @returns {Promise<Object>} The response data containing the list of lenders.
  * @throws Will throw an error if the API call fails.
  */
-export const fetchAllLenders = async (page = 1, limit = 10, payload = {}) => {
+export const fetchAllLenders = async (
+  page = 1,
+  limit = 10,
+  principalAmount,
+  payload = {},
+) => {
   try {
-    const response = await axiosInstance.get('/lenders', {
-      ...payload,
-      params: {
-        page,
-        limit,
-        ...(payload.params || {}),
+    const response = await axiosInstance.get(
+      `/lenders?principalAmount=${principalAmount}&tenure=24`,
+      {
+        ...payload,
+        params: {
+          page,
+          limit,
+          ...(payload.params || {}),
+        },
       },
-    });
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching lenders:', error?.response?.data || error);
