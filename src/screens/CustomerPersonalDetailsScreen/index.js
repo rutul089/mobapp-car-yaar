@@ -6,6 +6,7 @@ import {
   currentLoanOptions,
   genderType,
   getLabelFromEnum,
+  incomeSourceOptions,
   occupationLabelMap,
   occupationType,
 } from '../../constants/enums';
@@ -216,6 +217,7 @@ class CustomerPersonalDetails extends Component {
       mobileNumber: detail?.mobileNumber || selectedCustomer?.mobileNumber,
       cibilScore: selectedCustomer?.cibilScore,
       nameOnAadharCard: detail?.applicantName,
+      incomeSourceOptions: incomeSourceOptions[detail?.occupation],
     };
 
     const [back, front, pancard] = await Promise.all([
@@ -250,9 +252,23 @@ class CustomerPersonalDetails extends Component {
   };
 
   onSelectedOccupation = (item, index) => {
-    this._safeSetState({occupation: item.value}, () =>
-      this.onChangeField('occupation', this.state.occupation),
-    );
+    this._safeSetState({occupation: item.value}, () => {
+      this.onChangeField('occupation', this.state.occupation);
+      this.checkValueChange(item);
+      this._safeSetState({
+        incomeSourceOptions: incomeSourceOptions[item?.value],
+        incomeSource: '',
+      });
+    });
+  };
+
+  checkValueChange = item => {
+    if (item?.value !== occupationType.SALARIED) {
+      return this.onChangeField('maxEmiAfford', '');
+    }
+    if (item?.value === occupationType.SALARIED) {
+      this.setMaxEmiAfford('occupation', '');
+    }
   };
 
   onSelectIncomeSourceOption = (item, index) => {
@@ -446,23 +462,24 @@ class CustomerPersonalDetails extends Component {
     const errors = {};
     let isFormValid = true;
 
-    for (const key of fields) {
+    fields.forEach(key => {
+      const value = this.state[key];
       const {required = true} = fieldValidationRules[key] || {};
-      const value = state[key];
 
-      // Skip optional empty fields
-      if (!required && (value === '' || value == null)) {
-        continue;
+      // Skip validation if field is optional and empty
+      if (!required) {
+        errors[key] = '';
+        return;
       }
 
       const error = validateField(key, value);
-      if (error) {
+      errors[key] = error;
+      if (error !== '') {
         isFormValid = false;
-        errors[key] = error;
       }
-    }
+    });
 
-    this._safeSetState({errors, isFormValid});
+    this.setState({errors, isFormValid});
     return isFormValid;
   };
 
@@ -850,6 +867,7 @@ class CustomerPersonalDetails extends Component {
 
   setMaxEmiAfford = (source, value) => {
     const {currentLoan, currentEmi, monthlyIncome} = this.state;
+
     const isOccupation = this.state.occupation === occupationType.SALARIED;
 
     // Determine base income value
@@ -946,6 +964,8 @@ class CustomerPersonalDetails extends Component {
 
     const {isCreatingLoanApplication, loading} = this.props;
 
+    console.log('maxEmiAfford', this.state.maxEmiAfford);
+
     return (
       <Customer_Personal_Details_Component
         isEdit={isEdit}
@@ -1022,6 +1042,7 @@ class CustomerPersonalDetails extends Component {
             isError: errors?.incomeSource,
             statusMsg: errors?.incomeSource,
             value: incomeSource,
+            isDisabled: !occupation,
           },
           accountNumber: {
             isError: errors?.accountNumber,

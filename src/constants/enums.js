@@ -540,3 +540,45 @@ export const documentImageMap = {
   [documentImageType.CO_APPLICANT_DOCUMENTS]: 'Co-applicant Image',
   [documentImageType.SPECIAL_DOCUMENTS]: 'Special Documents',
 };
+
+export const incomeSourceOptions = {
+  [occupationType.SALARIED]: [
+    {label: 'Salary', value: 'Salary'},
+    {label: 'Rental Income', value: 'Rental Income'},
+    {label: 'Investment', value: 'Investment'},
+    {label: 'Other', value: 'Other'},
+  ],
+
+  [occupationType.SELF_EMPLOYED]: [
+    {label: 'Business income', value: 'Business income'},
+    {label: 'Freelancing', value: 'Freelancing'},
+    {label: 'Rental Income', value: 'Rental Income'},
+    {label: 'Investment', value: 'Investment'},
+    {label: 'Other', value: 'Other'},
+  ],
+
+  [occupationType.SELF_EMPLOYED_PROFESSIONAL]: [
+    {label: 'Business income', value: 'Business income'},
+    {label: 'Freelancing', value: 'Freelancing'},
+    {label: 'Rental Income', value: 'Rental Income'},
+    {label: 'Investment', value: 'Investment'},
+    {label: 'Other', value: 'Other'},
+  ],
+
+  [occupationType.AGRICULTURE]: [
+    {label: 'Business income', value: 'Business income'},
+    {label: 'Rental Income', value: 'Rental Income'},
+    {label: 'Investment', value: 'Investment'},
+    {label: 'Other', value: 'Other'},
+  ],
+
+  [occupationType.OTHER]: [
+    {label: 'Salary', value: 'Salary'},
+    {label: 'Business income', value: 'Business income'},
+    {label: 'Freelancing', value: 'Freelancing'},
+    {label: 'Rental Income', value: 'Rental Income'},
+    {label: 'Investment', value: 'Investment'},
+    {label: 'Pension', value: 'Pension'},
+    {label: 'Other', value: 'Other'},
+  ],
+};
