@@ -241,7 +241,7 @@ const Finance_Details_Component = ({
                   if (!isValidInput(text)) {
                     return;
                   }
-                  const formatted = formatInputDate(text);
+                  const formatted = formatInputDate(text); // TODO add datepicker here
                   onChangeLoanClosedDate?.(formatted);
                 }}
                 keyboardType="number-pad"

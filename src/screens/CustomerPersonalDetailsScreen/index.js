@@ -131,7 +131,7 @@ class CustomerPersonalDetails extends Component {
     this.state = {
       ...initialState,
       cibilScore: null,
-      incomeSourceOptions: INCOME_SOURCE_OPTIONS,
+      incomeSourceOptions: [],
       isOnboard: getScreenParam(props.route, 'params')?.isOnboard || false,
       registrationNumber: '',
       nameOnPanCard: '',
@@ -217,7 +217,8 @@ class CustomerPersonalDetails extends Component {
       mobileNumber: detail?.mobileNumber || selectedCustomer?.mobileNumber,
       cibilScore: selectedCustomer?.cibilScore,
       nameOnAadharCard: detail?.applicantName,
-      incomeSourceOptions: incomeSourceOptions[detail?.occupation],
+      incomeSourceOptions:
+        incomeSourceOptions[detail?.occupation] || INCOME_SOURCE_OPTIONS,
     };
 
     const [back, front, pancard] = await Promise.all([
@@ -963,8 +964,6 @@ class CustomerPersonalDetails extends Component {
     } = this.state;
 
     const {isCreatingLoanApplication, loading} = this.props;
-
-    console.log('maxEmiAfford', this.state.maxEmiAfford);
 
     return (
       <Customer_Personal_Details_Component

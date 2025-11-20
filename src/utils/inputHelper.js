@@ -13,8 +13,8 @@ export const validateField = (key, value, isOptional) => {
   const pincodeRegex = /^[0-9]{6}$/;
   const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
   const accountNumberRegex = /^[0-9]{9,18}$/;
-  // const aadharRegex = /^[1-9]{1}[0-9]{11}$/;
-  const aadharRegex = /^([1-9]{1}[0-9]{11}|X{8}[0-9]{4})$/;
+  const aadharRegex1 = /^[1-9]{1}[0-9]{11}$/; // Normal Aadhaar (12 digits, cannot start with 0)
+  const aadharRegex = /^([1-9]{1}[0-9]{11}|X{8}[0-9]{4})$/; // Normal or Masked XXXXXXXX1234
 
   const trimmedValue = typeof value === 'string' ? value.trim() : '';
 
@@ -75,7 +75,7 @@ export const validateField = (key, value, isOptional) => {
     case 'aadharNumber':
       return trimmedValue === ''
         ? 'Please enter a valid Aadhaar number.'
-        : !aadharRegex.test(trimmedValue)
+        : !(aadharRegex.test(trimmedValue) || aadharRegex1.test(trimmedValue))
           ? 'Please enter a valid 12-digit Aadhaar number.'
           : '';
 
@@ -411,43 +411,6 @@ export const handleFieldChange = (
  * @param {string} value
  * @returns {string}
  */
-// export const sanitizeAmount = value => {
-//   if (typeof value !== 'string') {
-//     return '';
-//   }
-
-//   // Remove invalid characters (keep digits and .)
-//   let cleaned = value.replace(/[^0-9.]/g, '');
-
-//   // Allow only one decimal point
-//   const parts = cleaned.split('.');
-//   if (parts.length > 2) {
-//     cleaned = parts[0] + '.' + parts.slice(1).join('');
-//   }
-
-//   // Prevent decimal at the start (e.g., ".5" => "0.5")
-//   if (cleaned.startsWith('.')) {
-//     cleaned = '0' + cleaned;
-//   }
-
-//   // Remove leading zeros (but keep "0." intact)
-//   if (/^0[0-9]+/.test(cleaned)) {
-//     cleaned = cleaned.replace(/^0+/, '');
-//   }
-
-//   // If number ends with '.', keep it as-is (user is still typing)
-//   if (cleaned.endsWith('.')) {
-//     return cleaned;
-//   }
-
-//   // If number has decimals like "12.0", convert to number and back
-//   const num = parseFloat(cleaned);
-//   if (!isNaN(num)) {
-//     return cleaned.includes('.') ? cleaned : String(num); // preserve decimal input like "12.01"
-//   }
-
-//   return '';
-// };
 
 export const sanitizeAmount = value => {
   if (typeof value !== 'string') {
@@ -486,40 +449,6 @@ export const sanitizeAmount = value => {
 
   return '';
 };
-
-// /**
-//  * Sanitizes and normalizes amount input:
-//  * - Allows digits and a single decimal point
-//  * - Removes leading zeros unless it's "0" or "0.xxx"
-//  * - Preserves trailing decimal (e.g. "12." or "12.0")
-//  *
-//  * @param {string} value
-//  * @returns {string}
-//  */
-// export const sanitizeAmount = value => {
-//   if (typeof value !== 'string') {
-//     return '';
-//   }
-
-//   // Remove invalid characters (keep digits and .)
-//   let cleaned = value.replace(/[^0-9.]/g, '');
-
-//   // Allow only one decimal point
-//   const parts = cleaned.split('.');
-//   if (parts.length > 2) {
-//     cleaned = parts[0] + '.' + parts.slice(1).join('');
-//   }
-
-//   // Remove leading zeros unless "0" or "0.xxx"
-//   cleaned = cleaned.replace(/^0+(?!\.)/, '');
-
-//   // Prevent input starting with a decimal (e.g., ".5" => "0.5")
-//   if (cleaned.startsWith('.')) {
-//     cleaned = '0' + cleaned;
-//   }
-
-//   return cleaned;
-// };
 
 export const formatInputDate = input => {
   // Remove non-digit characters

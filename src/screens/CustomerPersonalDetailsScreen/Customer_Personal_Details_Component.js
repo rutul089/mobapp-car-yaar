@@ -320,13 +320,6 @@ const Customer_Personal_Details_Component = ({
             isLeftIconVisible
             leftIconName={images.calendar}
             label="Date Of Birth"
-            // onChangeText={text => {
-            //   if (!isValidInput(text)) {
-            //     return;
-            //   }
-            //   const formatted = formatInputDate(text);
-            //   onChangeDob?.(formatted);
-            // }}
             keyboardType="number-pad"
             returnKeyType="next"
             onSubmitEditing={() => focusNext('address')}
