@@ -84,6 +84,7 @@ const Vehicle_Pricing_Component = ({
         showsVerticalScrollIndicator={false}
         enableOnAndroid
         extraScrollHeight={100}
+        keyboardShouldPersistTaps={'handled'}
         contentContainerStyle={{
           backgroundColor: theme.colors.background,
           flexGrow: 1,

@@ -16,6 +16,7 @@ class CustomizeLoanOffer extends Component {
       tenureMonths: 0,
       errors: {},
       processingFee: '',
+      principalAmount: '',
     };
     this.onSelectLoanType = this.onSelectLoanType.bind(this);
     this.onSubmitPress = this.onSubmitPress.bind(this);
@@ -27,11 +28,18 @@ class CustomizeLoanOffer extends Component {
     let interestRate = selectedLoanApplication?.interesetRate;
     let tenureMonths = selectedLoanApplication?.tenure;
     let processingFee = selectedLoanApplication?.processingFee;
+    let principalAmount = selectedLoanApplication?.principalAmount;
+
+    console.log(
+      'selectedLoanApplication',
+      JSON.stringify(selectedLoanApplication),
+    );
 
     this.setState({
       tenureMonths: String(tenureMonths),
       interestRate: String(interestRate),
       processingFee: String(processingFee),
+      principalAmount: String(principalAmount),
     });
   }
 
@@ -102,7 +110,7 @@ class CustomizeLoanOffer extends Component {
       tenure: Number(item?.tenureMonths),
       // emi: parseFloat(item?.emi.replace(/[,₹]/g, '')),
       processingFee: parseFloat(item?.processingFee.replace(/[,₹]/g, '')),
-      principalAmount: 1000,
+      // principalAmount: Number,
     };
 
     await new Promise(resolve => {

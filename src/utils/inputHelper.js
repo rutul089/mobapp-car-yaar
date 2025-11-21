@@ -293,11 +293,11 @@ export const validateField = (key, value, isOptional) => {
     case 'engineNumber':
       return trimmedValue === ''
         ? 'Please enter the engine number.'
-        : !/^[A-Z0-9]+$/i.test(trimmedValue)
-          ? 'Engine number should contain only letters and numbers.'
-          : // : trimmedValue.length < 6
-            //   ? 'Engine number must be at least 6 characters long.'
-            '';
+        : // : !/^[A-Z0-9]+$/i.test(trimmedValue)
+          //   ? 'Engine number should contain only letters and numbers.'
+          // : trimmedValue.length < 6
+          //   ? 'Engine number must be at least 6 characters long.'
+          '';
 
     case 'registrationAuthority':
       return trimmedValue === ''

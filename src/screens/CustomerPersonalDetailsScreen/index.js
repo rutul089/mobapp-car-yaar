@@ -861,7 +861,7 @@ class CustomerPersonalDetails extends Component {
         }
       },
       error => {
-        this._safeSetState({cibilScore: null});
+        this._safeSetState({cibilScore: this.state.cibilScore});
       },
     );
   };

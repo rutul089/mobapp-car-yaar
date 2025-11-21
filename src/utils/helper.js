@@ -643,3 +643,15 @@ export const extractAadhaarDetails = response => {
     return {};
   }
 };
+
+export const findTotalAmountNeedToPaid = (emi, tenure) => {
+  const numA = parseFloat(emi);
+  const numB = parseFloat(tenure);
+
+  // If either value is not a valid number → return "-"
+  if (isNaN(numA) || isNaN(numB)) {
+    return '-';
+  }
+
+  return numA * numB;
+};

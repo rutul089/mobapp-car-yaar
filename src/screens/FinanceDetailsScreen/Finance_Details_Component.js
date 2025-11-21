@@ -25,6 +25,7 @@ import {
   sanitizeAmount,
 } from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
+import {DatePicker} from '../../components';
 
 const defaultTenure = Array(60)
   .fill(0)
@@ -79,11 +80,9 @@ const Finance_Details_Component = ({
     return formatIndianCurrency(value, false, true);
   }, []);
 
-  const getDisplayValueTenure = React.useCallback((isEditing, value) => {
-    return isEditing ? value + '' : value > 0 ? `${value} Months` : '';
-  }, []);
-
   const [showTenureModal, setShowTenureModal] = React.useState(false);
+
+  const [showDatePicker, setShowDatePicker] = React.useState(false);
 
   return (
     <SafeAreaWrapper backgroundColor={theme.colors.background}>
@@ -167,39 +166,20 @@ const Finance_Details_Component = ({
                 onBlur={() => setFieldEditing('loanAmount', false)}
                 {...(restInputProps?.loanAmount || {})}
               />
-              {/* <Spacing size="md" />
-              <Input
-                ref={refs?.tenure}
-                placeholder=""
-                isLeftIconVisible
-                leftIconName={images.calendar}
-                label="Tenure"
-                keyboardType="number-pad"
-                returnKeyType="next"
-                onChangeText={onChangeTenure}
-                value={getDisplayValueTenure(
-                  editingStates.tenure,
-                  state.tenure,
-                )}
-                onSubmitEditing={() => focusNext('monthlyEmi')}
-                onFocus={() => {
-                  scrollToInput('tenure');
-                  setFieldEditing('tenure', true);
-                }}
-                onBlur={() => setFieldEditing('tenure', false)}
-                isAsDropdown
-                isRightIconVisible
-                {...(restInputProps?.tenure || {})}
-              /> */}
+
               <Spacing size="md" />
               <Input
                 ref={refs?.tenure}
-                placeholder=""
+                placeholder="Select Tenure"
                 isLeftIconVisible
                 leftIconName={images.calendar}
                 label="Tenure"
                 onChangeText={onChangeTenure}
-                value={`${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`}
+                value={
+                  state.tenure
+                    ? `${state.tenure} ${state.tenure > 1 ? 'Months' : 'Month'}`
+                    : ''
+                }
                 isAsDropdown
                 isRightIconVisible
                 onPress={() => setShowTenureModal(true)}
@@ -237,16 +217,19 @@ const Finance_Details_Component = ({
                 isLeftIconVisible
                 leftIconName={images.calendar}
                 label="When was this loan closed"
-                onChangeText={text => {
-                  if (!isValidInput(text)) {
-                    return;
-                  }
-                  const formatted = formatInputDate(text); // TODO add datepicker here
-                  onChangeLoanClosedDate?.(formatted);
-                }}
+                // onChangeText={text => {
+                //   if (!isValidInput(text)) {
+                //     return;
+                //   }
+                //   const formatted = formatInputDate(text); // TODO add datepicker here
+                //   onChangeLoanClosedDate?.(formatted);
+                // }}
                 keyboardType="number-pad"
                 returnKeyType="next"
                 onSubmitEditing={onNextPress}
+                isAsButton
+                isAsDropdown
+                onPress={() => setShowDatePicker(true)} // 👈 open picker on click
                 onFocus={() => scrollToInput('loanClosedDate')}
                 {...(restInputProps?.loanClosedDate || {})}
               />
@@ -267,6 +250,16 @@ const Finance_Details_Component = ({
         }}
         onClose={() => setShowTenureModal(false)}
         title="Select Tenure"
+      />
+
+      <DatePicker
+        visible={showDatePicker}
+        value={state.loanClosedDate}
+        onConfirm={date => {
+          onChangeLoanClosedDate?.(date);
+        }}
+        onClose={() => setShowDatePicker(false)}
+        stopUpdate
       />
 
       {loading && <Loader visible={loading} />}

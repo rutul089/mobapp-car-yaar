@@ -108,7 +108,7 @@ const Loan_Offer_Detail_Component = ({
         <Spacing size="md" />
 
         <CardWithActionButton
-          description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+          description="Explore customized loan choices with flexible rates, tenures, and processing fees."
           icon={images.filterFill}
           buttonLabel="Customize Loan Offer"
           arrowIcon={images.arrow_right}

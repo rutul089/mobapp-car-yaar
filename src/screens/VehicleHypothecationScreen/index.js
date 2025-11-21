@@ -14,9 +14,6 @@ class VehicleHypothecationScreen extends Component {
       carHypoStatus: currentLoanOptions.NO,
       isLoading: false,
     };
-    this.onSelectedAnswer = this.onSelectedAnswer.bind(this);
-    this.saveAsDraftPress = this.saveAsDraftPress.bind(this);
-    this.onNextPress = this.onNextPress.bind(this);
   }
   // hypothecationStatus
   componentDidMount() {

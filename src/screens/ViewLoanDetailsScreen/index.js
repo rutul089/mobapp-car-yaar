@@ -21,6 +21,7 @@ import {
   selectedLoanType,
 } from '../../redux/actions';
 import {
+  findTotalAmountNeedToPaid,
   formatDate,
   formatIndianCurrency,
   formatMonths,
@@ -144,6 +145,11 @@ class ViewLoanDetailsScreen extends Component {
       'hypothecationStatus',
     );
 
+    let totalAmountNeedToPaid = findTotalAmountNeedToPaid(
+      selectedLoanApplication?.emi,
+      selectedLoanApplication?.tenure,
+    );
+
     return (
       <View_Loan_Details_Component
         loanOverviewCard={{
@@ -174,10 +180,8 @@ class ViewLoanDetailsScreen extends Component {
               ),
             },
             {
-              label: 'Principal Amount',
-              value: formatIndianCurrency(
-                safeGet(loading, selectedLoanApplication, 'principalAmount'),
-              ),
+              label: 'Total Amount to be Paid',
+              value: formatIndianCurrency(totalAmountNeedToPaid),
             },
             {
               label: 'Processing Fee',

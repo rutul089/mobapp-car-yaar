@@ -159,7 +159,11 @@ class CustomersScreen extends Component {
       return;
     }
 
-    this.setState({isSearch: true, apiTrigger: API_TRIGGER.DEFAULT});
+    this.setState({
+      isSearch: true,
+      apiTrigger: API_TRIGGER.DEFAULT,
+      stopLoading: false,
+    });
     this.fetchAllCustomer(1, {params: {search: trimmed}});
   };
 

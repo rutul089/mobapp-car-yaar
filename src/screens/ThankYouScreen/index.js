@@ -15,6 +15,7 @@ import {
   setIsCreatingLoanApplication,
 } from '../../redux/actions';
 import {
+  findTotalAmountNeedToPaid,
   formatDate,
   formatIndianCurrency,
   formatMonths,
@@ -59,6 +60,11 @@ class ThankYouScreen extends Component {
 
   render() {
     const {selectedLoanApplication, loading} = this.props;
+
+    console.log(
+      'selectedLoanApplication',
+      JSON.stringify(selectedLoanApplication),
+    );
 
     const {
       loanApplicationId,
@@ -121,6 +127,8 @@ class ThankYouScreen extends Component {
     let _mobileNumber =
       mobileNumber || selectedLoanApplication?.customer?.mobileNumber;
 
+    let totalAmountNeedToPaid = findTotalAmountNeedToPaid(emi, tenure);
+
     return (
       <Thank_You_Component
         createdAt={formatDate(createdAt, 'DD MMM YYYY, hh:mm A')}
@@ -147,8 +155,8 @@ class ThankYouScreen extends Component {
             value: formatIndianCurrency(processingFee),
           },
           {
-            label: 'Principal Amount',
-            value: formatIndianCurrency(principalAmount),
+            label: 'Total amount to be paid',
+            value: formatIndianCurrency(totalAmountNeedToPaid),
           },
           {
             label: 'Loan Type',

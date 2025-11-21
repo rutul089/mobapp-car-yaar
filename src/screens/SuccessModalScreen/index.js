@@ -7,18 +7,33 @@ import {
   theme,
 } from '@caryaar/components';
 import React, {Component} from 'react';
-import {Image, View} from 'react-native';
+import {Image, View, BackHandler} from 'react-native';
 import images from '../../assets/images';
 import {navigateToTab} from '../../navigation/NavigationUtils';
 import ScreenNames from '../../constants/ScreenNames';
+
 class SuccessModalScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.handleButton = this.handleButton.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.onBackPress,
+    );
+  }
+
+  componentWillUnmount() {
+    if (this.backHandler) {
+      this.backHandler.remove();
+    }
+  }
+
+  onBackPress() {
+    return true;
+  }
 
   handleButton = () => {
     navigateToTab(ScreenNames.Vehicles);

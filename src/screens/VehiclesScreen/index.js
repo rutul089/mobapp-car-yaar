@@ -137,24 +137,6 @@ class Vehicles extends Component {
     return isSearch ? [searchPage, searchTotalPages] : [page, totalPage];
   };
 
-  /**
-   * Handles search input change
-   * @param {string} text
-   */
-  // onSearchText = text => {
-  //   const trimmed = text.trim();
-  //   this.setState({searchText: text, apiTrigger: API_TRIGGER.DEFAULT}, () => {
-  //     if (trimmed === '') {
-  //       this.setState({isSearch: false});
-  //       this.fetchVehicles();
-  //       this.props.clearVehicleSearch();
-  //     } else {
-  //       this.setState({stopLoading: true});
-  //       this.searchFromAPI(trimmed);
-  //     }
-  //   });
-  // };
-
   onSearchText = text => {
     const trimmed = text.trim();
 

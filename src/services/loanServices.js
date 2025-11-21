@@ -203,7 +203,7 @@ export const fetchAllLenders = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/lenders?principalAmount=${principalAmount}&tenure=24`,
+      `/lenders?principalAmount=${principalAmount}&tenure=60`,
       {
         ...payload,
         params: {

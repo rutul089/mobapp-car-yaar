@@ -64,9 +64,12 @@ class FinanceDetailsScreen extends Component {
             bankName: response?.bankName,
             loanAccountNumber: response?.loanAccountNumber,
             loanAmount: response?.loanAmount + '',
-            tenure: response?.tenure ? response?.tenure + '' : 1,
+            tenure: response?.tenure ? response?.tenure + '' : '',
             monthlyEmi: response?.monthlyEmi + '',
-            loanClosedDate: formatDate(response?.loanClosedDate, 'DD/MM/yyyy'),
+            loanClosedDate: response?.loanClosedDate
+              ? formatDate(response?.loanClosedDate, 'DD/MM/YYYY')
+              : '',
+            // loanClosedDate: formatDate(response?.loanClosedDate, 'DD/MM/yyyy'),
           });
         },
       );
