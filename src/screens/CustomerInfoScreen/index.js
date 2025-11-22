@@ -11,6 +11,7 @@ import {
   deleteCustomerThunk,
   fetchCustomerDetailsThunk,
   initiateLoanApplicationThunk,
+  submitLoanApplicationThunk,
 } from '../../redux/actions';
 import {
   capitalizeFirstLetter,
@@ -106,7 +107,7 @@ class CustomerInfoScreen extends Component {
     return safeGet(this.props.loading && !onNextPress, obj, path, '-');
   };
 
-  createLoanApplication = () => {
+  createLoanApplication = async () => {
     const {
       vehicleId,
       loanType,
@@ -135,7 +136,7 @@ class CustomerInfoScreen extends Component {
 
     this.props.initiateLoanApplicationThunk(
       payload,
-      success => {
+      response => {
         navigate(ScreenNames.LoanDocument);
       },
       error => {},
@@ -338,6 +339,7 @@ const mapActionCreators = {
   fetchCustomerDetailsThunk,
   initiateLoanApplicationThunk,
   deleteCustomerThunk,
+  submitLoanApplicationThunk,
 };
 const mapStateToProps = ({customerData, loanData, vehicleData}) => {
   return {

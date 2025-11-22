@@ -13,7 +13,7 @@ import axiosInstance from '../networking/axiosInstance';
 export const loginWithType = async (type, payload) => {
   try {
     const response = await axiosInstance.post(
-      `/user/login?type=${encodeURIComponent(type)}`,
+      `/v1/user/login?type=${encodeURIComponent(type)}`,
       payload,
       {
         skipAuth: true,
@@ -37,7 +37,10 @@ export const loginWithType = async (type, payload) => {
  */
 export const updateUserProfile = async payload => {
   try {
-    const response = await axiosInstance.put('/user/update-profile', payload);
+    const response = await axiosInstance.put(
+      '/v1/user/update-profile',
+      payload,
+    );
     return response.data;
   } catch (error) {
     console.error('Update profile failed:', error);
@@ -56,7 +59,10 @@ export const updateUserProfile = async payload => {
  */
 export const changeUserPassword = async payload => {
   try {
-    const response = await axiosInstance.post('/user/change-password', payload);
+    const response = await axiosInstance.post(
+      '/v1/user/change-password',
+      payload,
+    );
     return response.data;
   } catch (error) {
     console.error('Change password failed:', error);
@@ -73,7 +79,7 @@ export const changeUserPassword = async payload => {
  */
 export const getUserProfile = async payload => {
   try {
-    const response = await axiosInstance.get('/user/profile', payload);
+    const response = await axiosInstance.get('/v1/user/profile', payload);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch user profile:', error);
@@ -91,7 +97,7 @@ export const getUserProfile = async payload => {
 export const completeUserRegistration = async registrationData => {
   try {
     const response = await axiosInstance.patch(
-      '/user/complete-registration',
+      '/v1/user/complete-registration',
       registrationData,
     );
     return response.data;

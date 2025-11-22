@@ -10,7 +10,7 @@ import axiosInstance from '../networking/axiosInstance';
 export const initiateLoanApplication = async applicationData => {
   try {
     const response = await axiosInstance.post(
-      '/loan-applications/initiate',
+      '/v1/loan-applications/initiate',
       applicationData,
     );
     return response.data;
@@ -33,7 +33,7 @@ export const fetchCustomerLoanAmount = async (applicationId, config = {}) => {
   }
   try {
     const response = await axiosInstance.get(
-      `/loan-applications/customerLoanAmount/${applicationId}`,
+      `/v1/loan-applications/customerLoanAmount/${applicationId}`,
       config,
     );
     return response.data;
@@ -53,7 +53,7 @@ export const fetchCustomerLoanAmount = async (applicationId, config = {}) => {
 export const sendOtpForCibil = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/customers/sendOtpForCibil',
+      '/v1/customers/sendOtpForCibil',
       payload,
     );
     return response.data;
@@ -73,7 +73,7 @@ export const sendOtpForCibil = async payload => {
 export const verifyOtpForCibil = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/customers/verifyOtpForCibil',
+      '/v1/customers/verifyOtpForCibil',
       payload,
     );
     return response.data;
@@ -93,7 +93,7 @@ export const verifyOtpForCibil = async payload => {
 export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
   try {
     const response = await axiosInstance.patch(
-      `loan-applications/customerLoanAmount/${applicationId}`,
+      `/v1/loan-applications/customerLoanAmount/${applicationId}`,
       loanAmountData,
     );
     return response.data;
@@ -114,7 +114,7 @@ export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
 export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
   try {
     const response = await axiosInstance.patch(
-      `loan-applications/set-partner-and-sales-executive/${applicationId}`,
+      `/v1/loan-applications/set-partner-and-sales-executive/${applicationId}`,
       payload,
     );
     return response.data;
@@ -127,7 +127,7 @@ export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
 export const fetchLoanTrackingDetailsByAppId = async applicationId => {
   try {
     const response = await axiosInstance.get(
-      `loan-applications/tracking/${applicationId}`,
+      `/v1/loan-applications/tracking/${applicationId}`,
     );
     return response.data;
   } catch (error) {
@@ -146,7 +146,7 @@ export const fetchLoanTrackingDetailsByAppId = async applicationId => {
 export const submitLoanApplication = async applicationId => {
   try {
     const response = await axiosInstance.post(
-      `loan-applications/submit/${applicationId}`,
+      `/v1/loan-applications/submit/${applicationId}`,
     );
     return response.data;
   } catch (error) {
@@ -155,10 +155,19 @@ export const submitLoanApplication = async applicationId => {
   }
 };
 
+/**
+ * Fetches EMI plans based on the provided payload.
+ *
+ * @async
+ * @function fetchEmiPlans
+ * @param {Object} payload - The request body containing loan details required for EMI calculation.
+ * @returns {Promise<Object>} The response data containing available EMI plans.
+ * @throws {Error} If the API request fails.
+ */
 export const fetchEmiPlans = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/loan-applications/emi/plan',
+      '/v1/loan-applications/emi/plan',
       payload,
     );
     return response.data;
@@ -168,6 +177,19 @@ export const fetchEmiPlans = async payload => {
   }
 };
 
+/**
+ * Fetches required loan documents filtered by loan category, customer type, and document type.
+ *
+ * with an additional query parameter `document_required`.
+ *
+ * @async
+ * @function fetchLoanDocumentsByCategory
+ * @param {string} category - The loan category (e.g., "car-loan", "personal-loan").
+ * @param {string} customerType - The customer type or occupation label.
+ * @param {string} documentRequired - The specific document type required (e.g., "Aadhaar", "PAN").
+ * @returns {Promise<Object>} The response data containing matching document requirements.
+ * @throws {Error} If the API request fails.
+ */
 export const fetchLoanDocumentsByCategory = async (
   category,
   customerType,
@@ -175,7 +197,7 @@ export const fetchLoanDocumentsByCategory = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/loan-documents/documents/${category}/${customerType}`,
+      `/v1/loan-documents/documents/${category}/${customerType}`,
       {
         params: {document_required: documentRequired},
       },
@@ -203,7 +225,7 @@ export const fetchAllLenders = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/lenders?principalAmount=${principalAmount}&tenure=60`,
+      `/v1/lenders?principalAmount=${principalAmount}&tenure=60`,
       {
         ...payload,
         params: {

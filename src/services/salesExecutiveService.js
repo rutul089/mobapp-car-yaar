@@ -8,7 +8,7 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const fetchSalesExecutives = async query => {
   try {
-    const response = await axiosInstance.get(`/sales-executives/?${query}`);
+    const response = await axiosInstance.get(`/v1/sales-executives/?${query}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -24,7 +24,7 @@ export const fetchSalesExecutives = async query => {
  */
 export const fetchSalesExecutiveById = async id => {
   try {
-    const response = await axiosInstance.get(`/sales-executives/${id}`);
+    const response = await axiosInstance.get(`/v1/sales-executives/${id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -45,7 +45,7 @@ export const fetchSalesExecutiveById = async id => {
 export const createSalesExecutive = async salesExecutiveData => {
   try {
     const response = await axiosInstance.post(
-      '/sales-executives',
+      '/v1/sales-executives',
       salesExecutiveData,
     );
     return response.data;
@@ -63,7 +63,7 @@ export const createSalesExecutive = async salesExecutiveData => {
  */
 export const deleteSalesExecutiveById = async id => {
   try {
-    const response = await axiosInstance.delete(`/sales-executives/${id}`);
+    const response = await axiosInstance.delete(`/v1/sales-executives/${id}`);
     return response.data;
   } catch (error) {
     throw error;
