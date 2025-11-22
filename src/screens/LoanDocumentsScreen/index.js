@@ -29,6 +29,7 @@ import {
 import {getPresignedDownloadUrl} from '../../services';
 import {
   generateImageUploadPayload,
+  getDocumentRequirements,
   handleFileSelection,
   transformDocumentData,
   validateRequiredDocuments,
@@ -76,6 +77,8 @@ class LoanDocumentsScreen extends Component {
       showAcceptedDocModal: false,
       acceptedDocModalTitle: '',
       showExitConfirmation: false,
+      iaAadhar: false,
+      aadharCardLink: '',
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -97,18 +100,9 @@ class LoanDocumentsScreen extends Component {
     }
   }
 
-  getDocumentRequirements = (loanProduct, typeOfIndividual) => {
+  _getDocumentRequirements = (loanProduct, typeOfIndividual) => {
     if (!loanProduct || !typeOfIndividual) {
-      return [
-        documentImageType.ID_PROOF,
-        documentImageType.ADDRESS_PROOF,
-        documentImageType.PERMANENT_ADDRESS,
-        documentImageType.INCOME_PROOF,
-        documentImageType.BANKING_PROOF,
-        documentImageType.BUSINESS_PROOF,
-        documentImageType.INSURANCE,
-        documentImageType.OTHER_DOCUMENTS,
-      ];
+      return loanDocuments;
     }
 
     // Step 1: Get matching items
@@ -389,12 +383,63 @@ class LoanDocumentsScreen extends Component {
       },
       async () => {
         await new Promise(resolve => setTimeout(resolve, 330));
-        this.setState({
-          showAcceptedDocModal: false,
-          showFilePicker: true,
-        });
+        const {selectedAcceptedDocument} = this.state;
+
+        let isAadhaar = selectedAcceptedDocument
+          ?.toLowerCase()
+          ?.includes('aadhaar');
+
+        this.setState(
+          {
+            showAcceptedDocModal: false,
+            showFilePicker: !isAadhaar,
+            isAadhaar,
+            isLoadingDocument: isAadhaar,
+          },
+          () => {
+            this.autoUploadAadharCard();
+          },
+        );
       },
     );
+  };
+
+  autoUploadAadharCard = async () => {
+    const {selectedLoanApplication} = this.props;
+    const {isAadhaar} = this.state;
+    if (!isAadhaar) {
+      return;
+    }
+    let aadharKey =
+      selectedLoanApplication?.customer?.customerDetails?.aadharFrontPhoto;
+
+    try {
+      const {data} = await getPresignedDownloadUrl({objectKey: aadharKey});
+
+      const docObj = {
+        uri: data?.url,
+        uploadedUrl: aadharKey,
+        uploadKey: aadharKey,
+        selectedDocType: this.state.selectedAcceptedDocument,
+      };
+
+      this.setState(prev => ({
+        documents: {
+          ...prev.documents,
+          [this.state.selectedDocType]: docObj,
+        },
+        selectedDocType: '',
+        showFilePicker: false,
+      }));
+    } catch (error) {
+      showToast('error', 'Something went wrong please try again..');
+    } finally {
+      this.setState({
+        isLoadingDocument: false,
+        showFilePicker: false,
+        isAadhaar: false,
+      });
+    }
   };
 
   /**
@@ -467,7 +512,11 @@ class LoanDocumentsScreen extends Component {
       selectedLoanApplication?.customer?.customerDetails?.occupation;
     const loanProduct = selectedLoanApplication?.loanType;
 
-    const docs = this.getDocumentRequirements(loanProduct, typeOfIndividual);
+    const docs = getDocumentRequirements(
+      loanProduct,
+      typeOfIndividual,
+      loanDocuments,
+    );
 
     return (
       <Loan_Documents_Component
