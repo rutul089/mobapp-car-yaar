@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {API_TRIGGER} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
@@ -18,6 +18,7 @@ class LenderSelection extends Component {
       apiTrigger: API_TRIGGER.DEFAULT,
       refreshing: false,
       stopLoading: false,
+      activeFilterOption: '',
     };
     this.onItemPress = this.onItemPress.bind(this);
     this.limit = 10; // Items per page
@@ -46,7 +47,7 @@ class LenderSelection extends Component {
       });
   };
 
-  onItemPress = item => {
+  onItemPress = async item => {
     const {selectedApplicationId} = this.props;
 
     let param = {
@@ -122,13 +123,43 @@ class LenderSelection extends Component {
     }
   };
 
+  handleApplyFilter = value => {
+    this.setState({
+      activeFilterOption: value,
+    });
+  };
+
+  onClearFilterButton = () => {
+    this.setState({
+      activeFilterOption: [],
+    });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const {activeFilterOption} = this.state;
+
+    // Run filter fetch if activeFilterOption changes and it's not a search
+    if (prevState.activeFilterOption !== activeFilterOption) {
+      let payload = {};
+      if (activeFilterOption.length > 0) {
+        payload = {
+          params: {
+            filter: activeFilterOption, // send selected filters (array)
+          },
+        };
+      }
+      console.log('payload------->', JSON.stringify(payload));
+    }
+  }
+
   render() {
     const {selectedLoanApplication, loading, lenders} = this.props;
-    const {apiTrigger, refreshing, stopLoading} = this.state;
+    const {apiTrigger, refreshing, stopLoading, activeFilterOption} =
+      this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
 
-    const _registerNumber =
+    const registerNumberValue =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 500000;
     let processingFee = selectedLoanApplication?.processingFee || 1000;
@@ -141,7 +172,7 @@ class LenderSelection extends Component {
 
     return (
       <Lender_Selection_Component
-        registerNumber={formatVehicleNumber(_registerNumber)}
+        registerNumber={formatVehicleNumber(registerNumberValue)}
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
         onItemPress={this.onItemPress}
         loading={initialLoading}
@@ -154,6 +185,11 @@ class LenderSelection extends Component {
         refreshing={refreshing}
         onRefresh={this.pullToRefresh}
         handleLoadMore={this.handleLoadMore}
+        filterProps={{
+          handleApplyFilter: value => this.handleApplyFilter(value),
+          onClearFilterButton: this.onClearFilterButton,
+        }}
+        activeFilterOption={activeFilterOption}
       />
     );
   }

@@ -1,17 +1,22 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
+  CommonModal,
   FinanceCard,
   Header,
+  images,
   Loader,
   PaginationFooter,
+  RadioButton,
   SafeAreaWrapper,
+  StatusChip,
   Text,
   theme,
 } from '@caryaar/components';
-import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 
 import {NoDataFound} from '../../components';
-import {API_TRIGGER} from '../../constants/enums';
+import {API_TRIGGER, lenderFilterOptions} from '../../constants/enums';
 import {goBack} from '../../navigation/NavigationUtils';
 import {formatIndianCurrency} from '../../utils/helper';
 
@@ -31,7 +36,41 @@ const Lender_Selection_Component = ({
   apiTrigger,
   currentPage,
   totalPages,
+  activeFilterOption,
+  filterProps,
 }) => {
+  const [localActiveFilterOption, setLocalActiveFilterOption] = useState(
+    Array.isArray(activeFilterOption) ? activeFilterOption : [],
+  );
+
+  const [isFilterVisible, setFilterVisible] = useState(false);
+
+  useEffect(() => {
+    setLocalActiveFilterOption(
+      Array.isArray(activeFilterOption) ? activeFilterOption : [],
+    );
+  }, [activeFilterOption]);
+
+  const handleApplyFilter = () => {
+    setFilterVisible(false);
+    filterProps?.handleApplyFilter?.(localActiveFilterOption);
+  };
+
+  const handleClearFilter = () => {
+    setFilterVisible(false);
+    setLocalActiveFilterOption([]);
+    filterProps?.onClearFilterButton?.();
+  };
+
+  const toggleFilter = option => {
+    setLocalActiveFilterOption(prev => {
+      const arr = Array.isArray(prev) ? prev : [];
+      return arr.includes(option)
+        ? arr.filter(x => x !== option)
+        : [...arr, option];
+    });
+  };
+
   const renderItem = ({item}) => (
     <FinanceCard
       bankName={item?.lenderName}
@@ -57,24 +96,67 @@ const Lender_Selection_Component = ({
     />
   );
 
+  const renderActiveFilterChips = () => {
+    if (!activeFilterOption?.length) {
+      return null;
+    }
+
+    return (
+      <View style={styles.filterWrapper}>
+        <Text type="helper-text">Filter By</Text>
+
+        {activeFilterOption.map(value => {
+          const option = lenderFilterOptions.find(o => o.value === value);
+          if (!option) {
+            return null;
+          }
+
+          return (
+            <View style={styles.chipSpacing} key={value}>
+              <StatusChip
+                label={option.label}
+                onRemove={() =>
+                  filterProps?.handleApplyFilter(
+                    activeFilterOption.filter(f => f !== value),
+                  )
+                }
+              />
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
+
   return (
     <SafeAreaWrapper>
       <Header
         title="Lender Selection"
         subtitle={registerNumber}
         onBackPress={() => goBack()}
+        showRightContent
+        rightIconName={images.filter}
+        onPressRightContent={() => setFilterVisible(true)}
       />
+
+      {/* FILTER CHIPS */}
+      {renderActiveFilterChips()}
+
+      {/* LENDER LIST */}
       <FlatList
         data={lenders}
         bounces={true}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={[
+          styles.listContainer,
+          activeFilterOption.length && {paddingTop: 10},
+        ]}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <Text>
             Tailored Loans for{' '}
-            <Text color={'#F8A902'} hankenGroteskBold>
+            <Text color={theme.colors.yellow} hankenGroteskBold>
               {loanApplicationId}
             </Text>
           </Text>
@@ -95,6 +177,36 @@ const Lender_Selection_Component = ({
           />
         }
       />
+
+      {/* FILTER MODAL */}
+      <CommonModal
+        isVisible={isFilterVisible}
+        onModalHide={() => {
+          setFilterVisible(false);
+        }}
+        primaryButtonLabel={'Apply'}
+        isScrollableContent={true}
+        isPrimaryButtonVisible={true}
+        showSecondaryButton
+        secondaryButtonText={'Clear'}
+        onPressPrimaryButton={handleApplyFilter}
+        onSecondaryPress={handleClearFilter}
+        isTextCenter={false}
+        spacePrimaryBtn={0}
+        title="Filter by">
+        <View style={styles.filterWrapperStyle}>
+          {lenderFilterOptions.map((option, index) => (
+            <View key={index} style={styles.optionRow}>
+              <RadioButton
+                label={option.label}
+                selected={localActiveFilterOption.includes(option.value)}
+                onPress={() => toggleFilter(option.value)}
+              />
+            </View>
+          ))}
+        </View>
+      </CommonModal>
+
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>
   );
@@ -104,6 +216,23 @@ const styles = StyleSheet.create({
     padding: theme.sizes.padding,
     flexGrow: 1,
     backgroundColor: theme.colors.background,
+    paddingTop: theme.sizes.padding,
+  },
+  filterWrapperStyle: {paddingVertical: 5},
+  filterWrapper: {
+    paddingHorizontal: 25,
+    paddingTop: theme.sizes.spacing.md,
+    backgroundColor: theme.colors.background,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  chipSpacing: {
+    marginTop: 8,
+  },
+  optionRow: {
+    marginVertical: theme.sizes.spacing.xs,
   },
 });
 

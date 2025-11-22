@@ -35,6 +35,7 @@ class LoanOfferDetailScreen extends Component {
 
   callFetchEmiPlanThunk = () => {
     const {selectedLoanApplication} = this.props;
+    const {loanDetail} = this.state;
 
     let loanAmount = selectedLoanApplication?.loanAmount;
     let interestRate = selectedLoanApplication?.interesetRate || 8;
@@ -60,7 +61,11 @@ class LoanOfferDetailScreen extends Component {
   };
 
   onLoanOfferPress = () => {
-    navigate(ScreenNames.CustomizeLoanOffer);
+    let route = this.props.route;
+    let loanDetail =
+      getScreenParam(route, 'params') || route?.params?.loanDetail;
+
+    navigate(ScreenNames.CustomizeLoanOffer, {...loanDetail});
   };
 
   saveTenureAndInterest = async item => {
@@ -113,7 +118,7 @@ class LoanOfferDetailScreen extends Component {
         loading={loading}
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
         emi={emiPlan?.schedule?.[0]?.emi}
-        interesetRate={interesetRate}
+        interesetRate={interesetRate || loanDetail?.interesetRate}
         processingFee={processingFee}
         lenderLogo={loanDetail?.lenderLogo}
       />
