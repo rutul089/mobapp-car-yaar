@@ -13,6 +13,7 @@ import {getPresignedDownloadUrl} from '../services';
 import {compressImage} from './fileUploadUtils';
 import {showToast} from './helper';
 import {handleFieldChange} from './inputHelper';
+import {loan_document_requirements} from '../constants/loan_document_requirements';
 
 export const handleFileSelection = async (type, callback) => {
   try {
@@ -399,4 +400,30 @@ export const getDocumentLink = async uri => {
     console.error('Error fetching document link:', error);
     return null;
   }
+};
+
+export const getDocumentRequirements = (
+  loanProduct,
+  typeOfIndividual,
+  orderList,
+) => {
+  if (!loanProduct || !typeOfIndividual) {
+    return orderList;
+  }
+
+  // Step 1: Get matching items
+  const filtered = loan_document_requirements.filter(
+    item =>
+      item.loanProduct === loanProduct &&
+      item.typeOfIndividual === typeOfIndividual,
+  );
+
+  const _types = filtered.map(item => item.documentType);
+
+  // Step 3: Sort based on your enum order
+  const order = Object.values(documentImageType);
+
+  const sorted = _types.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+
+  return sorted;
 };

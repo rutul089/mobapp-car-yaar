@@ -77,6 +77,8 @@ export const getGradientColors = status => {
       return ['rgba(243, 105, 110, 0.12)', 'rgba(248, 169, 2, 0.2)'];
     case 'COMPLETED':
       return ['rgba(95, 197, 46, 0.12)', 'rgba(110, 238, 135, 0.2)'];
+    case 'COMMERCIAL':
+      return ['#FFE100', '#FFE100'];
     default:
       return ['#E8E8E8', '#E8E8E8']; // fallback
   }

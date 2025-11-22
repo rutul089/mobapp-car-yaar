@@ -582,3 +582,20 @@ export const incomeSourceOptions = {
     {label: 'Other', value: 'Other'},
   ],
 };
+
+export const lenderFilterOptions = [
+  {id: 1, label: 'Lender Name', value: 'sortOrder=asc'},
+  {id: 2, label: 'Pre-Approved Offer', value: 'preApproved=true'},
+  {id: 3, label: 'EMI (Low to High)', value: 'sortBy=emi'},
+  {
+    id: 4,
+    label: 'Interest Rate (Low to High)',
+    value: 'sortBy=interestRate',
+  },
+  {id: 5, label: 'Tenure (Low to High)', value: 'sortBy=tenure'},
+  {
+    id: 6,
+    label: 'Processing Fees (Low to High)',
+    value: 'sortBy=processingFee',
+  },
+];

@@ -10,7 +10,7 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const getBankList = async () => {
   try {
-    const response = await axiosInstance.get('/banks');
+    const response = await axiosInstance.get('/v1/banks');
     return response.data;
   } catch (error) {
     throw error;
@@ -30,7 +30,7 @@ export const getBankList = async () => {
 export const getBankBySearchCode = async (bankName, searchCode) => {
   try {
     const encodedBankName = encodeURIComponent(bankName); // Safe for URL path
-    const response = await axiosInstance.get(`/banks/${encodedBankName}`, {
+    const response = await axiosInstance.get(`/v1/banks/${encodedBankName}`, {
       params: {search: searchCode},
     });
     return response.data;
@@ -46,7 +46,7 @@ export const getBankBySearchCode = async (bankName, searchCode) => {
  */
 export const searchBanks = async query => {
   try {
-    const response = await axiosInstance.get(`/banks?search=${query}`);
+    const response = await axiosInstance.get(`/v1/banks?search=${query}`);
     return response.data;
   } catch (error) {
     console.error('Failed to search banks:', error);
@@ -68,7 +68,7 @@ export const verifyBankIFSC = async (bankName, ifscCode) => {
   try {
     const encodedBankName = encodeURIComponent(bankName);
     const response = await axiosInstance.get(
-      `/banks/verify-ifsc?bankName=${encodedBankName}&ifscCode=${ifscCode}`,
+      `/v1/banks/verify-ifsc?bankName=${encodedBankName}&ifscCode=${ifscCode}`,
     );
     return response.data;
   } catch (error) {

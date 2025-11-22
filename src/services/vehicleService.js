@@ -10,7 +10,7 @@ import axiosInstance from '../networking/axiosInstance';
 export const fetchVehicles = async (page = 1, limit = 10, payload = {}) => {
   try {
     const response = await axiosInstance.get(
-      '/vehicles/getVehicleByPartnerId',
+      '/v1/vehicles/getVehicleByPartnerId',
       {
         params: {page, limit, ...(payload.params || {})},
       },
@@ -32,7 +32,7 @@ export const fetchVehicles = async (page = 1, limit = 10, payload = {}) => {
  */
 export const updateVehicleById = async (id, data) => {
   try {
-    const response = await axiosInstance.put(`/vehicles/used/${id}`, data);
+    const response = await axiosInstance.put(`/v1/vehicles/used/${id}`, data);
     return response.data;
   } catch (error) {
     console.error('Failed to update vehicle data:', error);
@@ -49,7 +49,7 @@ export const updateVehicleById = async (id, data) => {
  */
 export const fetchVehicleById = async id => {
   try {
-    const response = await axiosInstance.get(`/vehicles/${id}`);
+    const response = await axiosInstance.get(`/v1/vehicles/${id}`);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch vehicle data:', error);
@@ -66,7 +66,7 @@ export const fetchVehicleById = async id => {
  */
 export const getVehicleByRegisterNumber = async registerNumber => {
   try {
-    const response = await axiosInstance.get('/vehicles/details', {
+    const response = await axiosInstance.get('/v1/vehicles/details', {
       params: {registerNumber},
     });
     return response.data;
@@ -88,7 +88,7 @@ export const getVehicleByRegisterNumber = async registerNumber => {
  */
 export const onboardNewVehicle = async vehicleData => {
   try {
-    const response = await axiosInstance.post('/vehicles/new', vehicleData);
+    const response = await axiosInstance.post('/v1/vehicles/new', vehicleData);
     return response.data;
   } catch (error) {
     console.error('Failed to onboard new vehicle:', error);
@@ -105,9 +105,12 @@ export const onboardNewVehicle = async vehicleData => {
  */
 export const checkVehicleExists = async registerNumber => {
   try {
-    const response = await axiosInstance.get('/vehicles/check-vehicle-exists', {
-      params: {registerNumber},
-    });
+    const response = await axiosInstance.get(
+      '/v1/vehicles/check-vehicle-exists',
+      {
+        params: {registerNumber},
+      },
+    );
     return response.data;
   } catch (error) {
     console.error('Failed to check if vehicle exists:', error);
@@ -125,7 +128,7 @@ export const checkVehicleExists = async registerNumber => {
 export const onboardUsedVehicle = async vehicleData => {
   try {
     const response = await axiosInstance.post(
-      '/vehicles/used/onboard',
+      '/v1/vehicles/used/onboard',
       vehicleData,
     );
     return response.data;
@@ -149,7 +152,7 @@ export const searchVehiclesByKeyword = async (search, page = 1, limit = 10) => {
   try {
     const params = {search, page, limit};
     const response = await axiosInstance.get(
-      '/vehicles/getVehicleByPartnerId',
+      '/v1/vehicles/getVehicleByPartnerId',
       {params},
     );
     return response.data;
@@ -157,10 +160,21 @@ export const searchVehiclesByKeyword = async (search, page = 1, limit = 10) => {
     throw error;
   }
 };
+
+/**
+ * Submits or updates vehicle details for a given vehicle ID.
+ *
+ * @async
+ * @function submitVehicleById
+ * @param {string|number} vehicleId - ID of the vehicle to be submitted or updated.
+ * @param {Object} data - The vehicle data payload to be sent in the request body.
+ * @returns {Promise<Object>} The response data returned from the API.
+ * @throws {Error} If the API request fails.
+ */
 export const submitVehicleById = async (vehicleId, data) => {
   try {
     const response = await axiosInstance.put(
-      `/vehicles/submit-vehicle/${vehicleId}`,
+      `/v1/vehicles/submit-vehicle/${vehicleId}`,
       data,
     );
     return response.data;
@@ -179,27 +193,11 @@ export const submitVehicleById = async (vehicleId, data) => {
  * @throws {Error} - Throws an error if the API request fails.
  *
  */
-
-/**
-export const saveVehicleDetails = async (vehicleId, vehicleData) => {
-  try {
-    const response = await axiosInstance.patch(
-      `/vehicles/used-vehicle/${vehicleId}`,
-      vehicleData,
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error updating vehicle data:', error);
-    throw error;
-  }
-};
- */
-
 export const saveVehicleDetails = async (vehicleId, vehicleData) => {
   try {
     const endpoint = vehicleId
-      ? `/vehicles/used-vehicle/${vehicleId}` // update existing
-      : '/vehicles/used-vehicle'; // create new
+      ? `/v1/vehicles/used-vehicle/${vehicleId}` // update existing
+      : '/v1/vehicles/used-vehicle'; // create new
 
     const method = vehicleId ? 'patch' : 'post';
     const response = await axiosInstance[method](endpoint, vehicleData);

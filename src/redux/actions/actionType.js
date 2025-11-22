@@ -117,3 +117,7 @@ export const PARTNER_ENVELOPE_VALUE = createAsyncActionTypes(
 export const SALES_EXEC_VALUE = createAsyncActionTypes('SALES_EXEC_VALUE');
 
 export const FETCH_LENDERS = createAsyncActionTypes('FETCH_LENDERS');
+
+export const START_LOADING = createAsyncActionTypes('START_LOADING');
+
+export const SET_NETWORK_STATUS = createAsyncActionTypes('SET_NETWORK_STATUS');

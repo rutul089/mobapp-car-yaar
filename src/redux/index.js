@@ -19,8 +19,8 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 // Middleware setup
 const middleware = [thunk];
 if (__DEV__) {
-  const logger = createLogger();
-  middleware.push(logger);
+  // const logger = createLogger();
+  // middleware.push(logger);
 }
 
 // Create store

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {API_TRIGGER} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
@@ -18,6 +18,7 @@ class LenderSelection extends Component {
       apiTrigger: API_TRIGGER.DEFAULT,
       refreshing: false,
       stopLoading: false,
+      activeFilterOption: '',
     };
     this.onItemPress = this.onItemPress.bind(this);
     this.limit = 10; // Items per page
@@ -46,7 +47,7 @@ class LenderSelection extends Component {
       });
   };
 
-  onItemPress = item => {
+  onItemPress = async item => {
     const {selectedApplicationId} = this.props;
 
     let param = {
@@ -111,8 +112,12 @@ class LenderSelection extends Component {
     const nextPage = currentPage + 1;
     this.setState({apiTrigger: API_TRIGGER.LOAD_MORE});
 
+    const extraParams = this.parseKeyValueArray(activeFilterOption);
+
     let payload = {
-      params: {},
+      params: {
+        ...extraParams,
+      },
     };
 
     if (isSearch) {
@@ -122,13 +127,60 @@ class LenderSelection extends Component {
     }
   };
 
+  handleApplyFilter = value => {
+    this.setState({
+      activeFilterOption: value,
+    });
+  };
+
+  onClearFilterButton = () => {
+    this.setState({
+      activeFilterOption: [],
+    });
+  };
+
+  parseKeyValueArray = arr => {
+    if (!Array.isArray(arr)) {
+      return {};
+    }
+
+    return arr.reduce((acc, item) => {
+      const [key, value] = item.split('=');
+      if (key) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const {activeFilterOption} = this.state;
+    // Run filter fetch if activeFilterOption changes and it's not a search
+    if (prevState.activeFilterOption !== activeFilterOption) {
+      let payload = {};
+
+      const extraParams = this.parseKeyValueArray(activeFilterOption);
+
+      if (activeFilterOption.length > 0) {
+        payload = {
+          params: {
+            ...extraParams, // ← add your sort params here
+            // sortOrder: 'asc',
+          },
+        };
+      }
+      this.fetchLendersDetail(1, payload);
+    }
+  }
+
   render() {
     const {selectedLoanApplication, loading, lenders} = this.props;
-    const {apiTrigger, refreshing, stopLoading} = this.state;
+    const {apiTrigger, refreshing, stopLoading, activeFilterOption} =
+      this.state;
 
     const [currentPage, totalPages] = this.getPageInfo();
 
-    const _registerNumber =
+    const registerNumberValue =
       selectedLoanApplication?.usedVehicle?.registerNumber || '-';
     let loanAmount = selectedLoanApplication?.loanAmount || 500000;
     let processingFee = selectedLoanApplication?.processingFee || 1000;
@@ -141,7 +193,7 @@ class LenderSelection extends Component {
 
     return (
       <Lender_Selection_Component
-        registerNumber={formatVehicleNumber(_registerNumber)}
+        registerNumber={formatVehicleNumber(registerNumberValue)}
         loanApplicationId={selectedLoanApplication?.loanApplicationId}
         onItemPress={this.onItemPress}
         loading={initialLoading}
@@ -154,6 +206,11 @@ class LenderSelection extends Component {
         refreshing={refreshing}
         onRefresh={this.pullToRefresh}
         handleLoadMore={this.handleLoadMore}
+        filterProps={{
+          handleApplyFilter: value => this.handleApplyFilter(value),
+          onClearFilterButton: this.onClearFilterButton,
+        }}
+        activeFilterOption={activeFilterOption}
       />
     );
   }

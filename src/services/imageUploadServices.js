@@ -11,7 +11,10 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const getPresignedUploadUrl = async payload => {
   try {
-    const response = await axiosInstance.post('/presigned/upload-url', payload);
+    const response = await axiosInstance.post(
+      '/v1/presigned/upload-url',
+      payload,
+    );
     return response.data; // usually includes `url` and maybe `key`
   } catch (error) {
     throw error;
@@ -30,7 +33,7 @@ export const getPresignedUploadUrl = async payload => {
 export const getPresignedDownloadUrl = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/presigned/download-url',
+      '/v1/presigned/download-url',
       payload,
     );
     return response.data; // usually includes `url`
@@ -70,7 +73,7 @@ export const uploadFileToPresignedUrl = async (
 
 export const uploadFileWithFormData = async formData => {
   try {
-    const response = await axiosInstance.post('/upload/image', formData, {
+    const response = await axiosInstance.post('/v1/upload/image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
