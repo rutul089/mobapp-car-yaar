@@ -9,6 +9,7 @@ import {
   loanCategory,
   loanType,
   occupationLabelMap,
+  occupationType,
 } from '../../constants/enums';
 import {loan_document_requirements} from '../../constants/loan_document_requirements';
 import strings from '../../locales/strings';
@@ -79,7 +80,7 @@ class LoanDocumentsScreen extends Component {
     this.onNextPress = this.onNextPress.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {isEdit} = this.state;
     const {isCreatingLoanApplication} = this.props;
     this.backHandlerListener = BackHandler.addEventListener(
@@ -95,6 +96,38 @@ class LoanDocumentsScreen extends Component {
       this.fetchCustomerDocuments();
     }
   }
+
+  getDocumentRequirements = (loanProduct, typeOfIndividual) => {
+    if (!loanProduct || !typeOfIndividual) {
+      return [
+        documentImageType.ID_PROOF,
+        documentImageType.ADDRESS_PROOF,
+        documentImageType.PERMANENT_ADDRESS,
+        documentImageType.INCOME_PROOF,
+        documentImageType.BANKING_PROOF,
+        documentImageType.BUSINESS_PROOF,
+        documentImageType.INSURANCE,
+        documentImageType.OTHER_DOCUMENTS,
+      ];
+    }
+
+    // Step 1: Get matching items
+    const filtered = loan_document_requirements.filter(
+      item =>
+        item.loanProduct === loanProduct &&
+        item.typeOfIndividual === typeOfIndividual,
+    );
+
+    // Step 2: Extract just documentType list
+    const types = filtered.map(item => item.documentType);
+
+    // Step 3: Sort based on your enum order
+    const order = Object.values(documentImageType);
+
+    const sorted = types.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+
+    return sorted;
+  };
 
   backHandler = () => {
     return this.props.isCreatingLoanApplication;
@@ -430,6 +463,12 @@ class LoanDocumentsScreen extends Component {
       showExitConfirmation,
     } = this.state;
 
+    const typeOfIndividual =
+      selectedLoanApplication?.customer?.customerDetails?.occupation;
+    const loanProduct = selectedLoanApplication?.loanType;
+
+    const docs = this.getDocumentRequirements(loanProduct, typeOfIndividual);
+
     return (
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}
@@ -446,16 +485,7 @@ class LoanDocumentsScreen extends Component {
           rightLabelColor: '#F8A902',
           onBackPress: this.handleBackPress,
         }}
-        documentList={[
-          documentImageType.ID_PROOF,
-          documentImageType.ADDRESS_PROOF,
-          documentImageType.PERMANENT_ADDRESS,
-          documentImageType.INCOME_PROOF,
-          documentImageType.BANKING_PROOF,
-          documentImageType.BUSINESS_PROOF,
-          documentImageType.INSURANCE,
-          documentImageType.OTHER_DOCUMENTS,
-        ].map(type => ({
+        documentList={docs?.map(type => ({
           type,
           label: documentImageLabelMap[type],
           docObject: documents[type],
@@ -466,21 +496,6 @@ class LoanDocumentsScreen extends Component {
               ? this.handleViewImage(documents[type]?.uploadedUrl)
               : this.handleUploadMedia(type),
           isRequired: requiredFields.includes(type),
-        }))}
-        otherDocuments={[
-          documentImageType.APPLICATION_FORM,
-          documentImageType.PASSPORT_SIZE_PHOTO,
-          documentImageType.CO_APPLICANT_DOCUMENTS,
-        ].map(type => ({
-          type,
-          label: documentImageLabelMap[type],
-          docObject: documents[type],
-          onDeletePress: () => this.handleDeleteMedia(type),
-          uploadMedia: () => this.handleUploadMedia(type),
-          viewImage: () =>
-            documents[type]?.uploadedUrl || isReadOnlyLoanApplication
-              ? this.handleViewImage(documents[type]?.uploadedUrl)
-              : this.handleUploadMedia(type),
         }))}
         onNextPress={this.onNextPress}
         fileModalProps={{

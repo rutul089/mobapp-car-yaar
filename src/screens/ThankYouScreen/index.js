@@ -155,7 +155,7 @@ class ThankYouScreen extends Component {
             value: formatIndianCurrency(processingFee),
           },
           {
-            label: 'Total amount to be paid',
+            label: 'Total Amount',
             value: formatIndianCurrency(totalAmountNeedToPaid),
           },
           {

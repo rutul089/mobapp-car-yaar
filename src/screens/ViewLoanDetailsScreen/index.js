@@ -180,7 +180,7 @@ class ViewLoanDetailsScreen extends Component {
               ),
             },
             {
-              label: 'Total Amount to be Paid',
+              label: 'Total Amount',
               value: formatIndianCurrency(totalAmountNeedToPaid),
             },
             {
