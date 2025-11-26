@@ -1,5 +1,6 @@
 import axiosInstance from '../networking/axiosInstance';
 import axios from 'axios';
+import {endpoints} from './endpoints';
 const DIGILOCKER_BASE_URL = 'https://kyc-api.surepass.app/api/v1/digilocker';
 /**
  * Fetches all customers from the backend.
@@ -13,7 +14,7 @@ const DIGILOCKER_BASE_URL = 'https://kyc-api.surepass.app/api/v1/digilocker';
 export const fetchAllCustomers = async (page = 1, limit = 10, payload = {}) => {
   try {
     //customers/all
-    const response = await axiosInstance.get('/v1/partners/customers', {
+    const response = await axiosInstance.get(endpoints.CUSTOMER.LIST, {
       ...payload,
       params: {
         page,
@@ -43,7 +44,7 @@ export const fetchCustomerDetailsById = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/v1/customers/customerDetails/${customerId}`,
+      endpoints.CUSTOMER.BASE_DETAILS(customerId),
       config,
     );
 
@@ -72,7 +73,7 @@ export const fetchCustomerDocuments = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/customerDocuments/${customerId}`,
+      endpoints.CUSTOMER.CUSTOMER_DOCS(customerId),
       config,
     );
     return response.data;
@@ -100,7 +101,7 @@ export const fetchCustomerById = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/v1/customers/${customerId}`,
+      endpoints.CUSTOMER.BASE_DETAILS(customerId),
       config,
     );
     return response.data;
@@ -118,7 +119,10 @@ export const fetchCustomerById = async (customerId, config = {}) => {
  */
 export const createCustomer = async customerData => {
   try {
-    const response = await axiosInstance.post('/v1/customers', customerData);
+    const response = await axiosInstance.post(
+      endpoints.CUSTOMER.CREATE,
+      customerData,
+    );
     return response.data;
   } catch (error) {
     console.error('Error creating customer:', error);
@@ -136,7 +140,7 @@ export const createCustomer = async customerData => {
 export const verifyCustomerOtp = async otpData => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/verifyOtp',
+      endpoints.CUSTOMER.VERIFY_OTP,
       otpData,
     );
     return response.data;
@@ -156,7 +160,7 @@ export const verifyCustomerOtp = async otpData => {
 export const submitCustomerDetails = async detailsData => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/customerDetails',
+      endpoints.CUSTOMER.SUBMIT_DETAILS,
       detailsData,
     );
     return response.data;
@@ -176,7 +180,7 @@ export const submitCustomerDetails = async detailsData => {
 export const submitCustomerLoanAmount = async loanAmountData => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/customerLoanAmount',
+      endpoints.CUSTOMER.SUBMIT_LOAN_AMOUNT,
       loanAmountData,
     );
     return response.data;
@@ -196,7 +200,7 @@ export const submitCustomerLoanAmount = async loanAmountData => {
 export const addCustomerReference = async (applicationId, referenceData) => {
   try {
     const response = await axiosInstance.post(
-      `/v1/loan-applications/customers/add-reference/${applicationId}`,
+      endpoints.CUSTOMER.ADD_REFERENCE(applicationId),
       referenceData,
     );
     return response.data;
@@ -216,7 +220,7 @@ export const addCustomerReference = async (applicationId, referenceData) => {
 export const submitFinanceDetails = async financeDetailsData => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/financeDetails',
+      endpoints.CUSTOMER.FINANCE_DETAILS,
       financeDetailsData,
     );
     return response.data;
@@ -236,7 +240,7 @@ export const submitFinanceDetails = async financeDetailsData => {
 export const uploadFinanceDocuments = async documentsData => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/financeDocuments',
+      endpoints.CUSTOMER.FINANCE_DOCUMENTS,
       documentsData,
     );
     return response.data;
@@ -256,7 +260,7 @@ export const uploadFinanceDocuments = async documentsData => {
 export const uploadCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.post(
-      `/v1/loan-applications/customerDocuments/${customerId}`,
+      endpoints.CUSTOMER.CUSTOMER_DOCS(customerId),
       documentsData,
     );
     return response.data;
@@ -276,7 +280,7 @@ export const uploadCustomerDocuments = async (documentsData, customerId) => {
 export const updateCustomerDetails = async detailsData => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/customers/customerDetails/${detailsData.customerId}`,
+      endpoints.CUSTOMER.UPDATE_DETAILS(detailsData.customerId),
       detailsData,
     );
     return response.data;
@@ -296,7 +300,7 @@ export const updateCustomerDetails = async detailsData => {
 export const updateCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/loan-applications/customerDocuments/${customerId}`,
+      endpoints.CUSTOMER.CUSTOMER_DOCS(customerId),
       documentsData,
     );
     return response.data;
@@ -316,7 +320,7 @@ export const updateCustomerDocuments = async (documentsData, customerId) => {
 export const updateCustomerReference = async referenceData => {
   try {
     const response = await axiosInstance.patch(
-      '/v1/customers/add-reference',
+      endpoints.CUSTOMER.UPDATE_REFERENCE,
       referenceData,
     );
     return response.data;
@@ -337,7 +341,7 @@ export const updateCustomerReference = async referenceData => {
 export const updateCustomerEnvelope = async (envelopeId, envelopeData) => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/customers/customer-envelope/${envelopeId}`,
+      endpoints.CUSTOMER.UPDATE_ENVELOPE(envelopeId),
       envelopeData,
     );
     return response.data;
@@ -359,7 +363,9 @@ export const updateCustomerEnvelope = async (envelopeId, envelopeData) => {
  */
 export const deleteCustomer = async customerId => {
   try {
-    const response = await axiosInstance.delete(`/v1/customers/${customerId}`);
+    const response = await axiosInstance.delete(
+      endpoints.CUSTOMER.DELETE(customerId),
+    );
     return response.data;
   } catch (error) {
     console.error(`Error deleting customer with ID ${customerId}:`, error);
@@ -375,7 +381,7 @@ export const deleteCustomer = async customerId => {
 export const verifyAadhar = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/verifyAadhar',
+      endpoints.CUSTOMER.VERIFY_AADHAAR,
       payload,
     );
     return response.data;
@@ -394,7 +400,7 @@ export const verifyAadhar = async payload => {
 export const initiateAadharDigilocker = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/initiateAadharDigilocker',
+      endpoints.CUSTOMER.INITIATE_AADHAAR_DIGILOCKER,
       payload,
     );
     return response.data;
@@ -413,7 +419,7 @@ export const initiateAadharDigilocker = async payload => {
 export const verifyPan = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/verifyPan',
+      endpoints.CUSTOMER.VERIFY_PAN,
       payload,
     );
     return response.data;
@@ -438,7 +444,7 @@ export const verifyPan = async payload => {
 export const fetchCibilScore = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/fetchCibilScore',
+      endpoints.CUSTOMER.CIBIL_SCORE,
       payload,
     );
     return response.data;
@@ -499,7 +505,7 @@ export const removeCustomerPan = async customerId => {
   }
   try {
     const response = await axiosInstance.patch(
-      `/v1/customers/removePan/${customerId}`,
+      endpoints.CUSTOMER.REMOVE_PAN(customerId),
     );
     return response.data;
   } catch (error) {
@@ -524,7 +530,7 @@ export const removeCustomerAadhaar = async customerId => {
   }
   try {
     const response = await axiosInstance.patch(
-      `/v1/customers/removeAadhar/${customerId}`,
+      endpoints.CUSTOMER.REMOVE_AADHAAR(customerId),
     );
     return response.data;
   } catch (error) {

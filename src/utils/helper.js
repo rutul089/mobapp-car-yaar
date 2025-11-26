@@ -36,34 +36,6 @@ export const formatIndianCurrency = (
   return showSign ? `₹${formatAmount}` : formatAmount;
 };
 
-// export const formatIndianCurrency = (
-//   value,
-//   showSign = true,
-//   showPlaceholder = false,
-// ) => {
-//   if (value === null || value === undefined || value === '') {
-//     return showPlaceholder ? '' : '-';
-//   }
-
-//   const [intPart, decimalPart] = value?.toString().split('.');
-//   let cleaned = intPart.replace(/[^0-9]/g, '');
-
-//   if (!cleaned) {
-//     return showPlaceholder ? '' : '-';
-//   }
-
-//   let lastThree = cleaned.slice(-3);
-//   let otherNumbers = cleaned.slice(0, -3);
-//   if (otherNumbers !== '') {
-//     lastThree = ',' + lastThree;
-//   }
-//   const formatted =
-//     otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
-
-//   let formatAmount = decimalPart ? `${formatted}.${decimalPart}` : formatted;
-//   return showSign ? `₹${formatAmount}` : formatAmount;
-// };
-
 export const formatAmount = text => {
   // Allow only numbers and one dot
   return text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
@@ -448,15 +420,6 @@ export const getCibilScoreStatus = score => {
 /**
  * Generate a random Indian PAN number.
  *
- * PAN format: 5 letters + 4 digits + 1 letter -> [A-Z]{5}[0-9]{4}[A-Z]
- *  - 4th character is the holder type (P, C, F, T, H, A, B, L, J, G, etc).
- *  - 5th character is usually the first letter of the holder's last name (for individuals).
- *
- * Usage:
- *   generateRandomPAN()                     // random person-like PAN
- *   generateRandomPAN({ type: 'C' })        // company PAN (4th char = C)
- *   generateRandomPAN({ initial: 'M' })     // uses 'M' as 5th char
- *
  * Returns uppercase PAN string.
  */
 export const generateRandomPAN = (options = {}) => {
@@ -508,10 +471,6 @@ export const generateRandomPAN = (options = {}) => {
 /**
  * Generate a masked Aadhaar string (default format: "XXXXXXXX1234").
  *
- * Options:
- *  - maskChar: character used for masking (default: 'X')
- *  - maskLength: number of mask characters (default: 8)
- *  - visibleDigits: number of trailing digits to show (default: 4)
  *
  * Returns a string like: "XXXXXXXX1234"
  */

@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Logs in a user based on type (e.g., admin, partner, customer).
@@ -13,7 +14,7 @@ import axiosInstance from '../networking/axiosInstance';
 export const loginWithType = async (type, payload) => {
   try {
     const response = await axiosInstance.post(
-      `/v1/user/login?type=${encodeURIComponent(type)}`,
+      endpoints.USER.LOGIN(type),
       payload,
       {
         skipAuth: true,
@@ -38,7 +39,7 @@ export const loginWithType = async (type, payload) => {
 export const updateUserProfile = async payload => {
   try {
     const response = await axiosInstance.put(
-      '/v1/user/update-profile',
+      endpoints.USER.UPDATE_PROFILE,
       payload,
     );
     return response.data;
@@ -60,7 +61,7 @@ export const updateUserProfile = async payload => {
 export const changeUserPassword = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/user/change-password',
+      endpoints.USER.CHANGE_PASSWORD,
       payload,
     );
     return response.data;
@@ -79,7 +80,7 @@ export const changeUserPassword = async payload => {
  */
 export const getUserProfile = async payload => {
   try {
-    const response = await axiosInstance.get('/v1/user/profile', payload);
+    const response = await axiosInstance.get(endpoints.USER.PROFILE, payload);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch user profile:', error);
@@ -97,7 +98,7 @@ export const getUserProfile = async payload => {
 export const completeUserRegistration = async registrationData => {
   try {
     const response = await axiosInstance.patch(
-      '/v1/user/complete-registration',
+      endpoints.USER.COMPLETE_REGISTRATION,
       registrationData,
     );
     return response.data;

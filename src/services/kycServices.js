@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Verify customer's PAN card.
@@ -12,7 +13,7 @@ import axiosInstance from '../networking/axiosInstance';
 export const verifyPanCard = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/verifyPan',
+      endpoints.CUSTOMER.VERIFY_PAN,
       payload,
       {
         baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
@@ -34,7 +35,7 @@ export const verifyPanCard = async payload => {
  */
 export const fetchVehicleDetails = async registerNumber => {
   try {
-    const response = await axiosInstance.get('/v1/vehicles/details', {
+    const response = await axiosInstance.get(endpoints.VEHICLE.DETAILS_BY_REG, {
       baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
       params: {registerNumber},
     });

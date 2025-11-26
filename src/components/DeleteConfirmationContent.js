@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {CommonModal, Text, theme} from '@caryaar/components';
-import React from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 
 const DeleteConfirmationContent = ({
   isVisible,
@@ -49,24 +48,3 @@ const DeleteConfirmationContent = ({
 };
 
 export default DeleteConfirmationContent;
-
-const styles = StyleSheet.create({
-  container: {
-    // marginBottom: 16,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  rowSpaceBetween: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: theme.sizes.spacing.smd,
-  },
-  halfWidth: {
-    width: '48%',
-    marginBottom: theme.sizes.spacing.smd,
-  },
-});

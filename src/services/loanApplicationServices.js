@@ -1,4 +1,6 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
+
 /**
  * Fetch paginated loan applications.
  *
@@ -16,7 +18,7 @@ export const fetchLoanApplications = async (
   payload = {},
 ) => {
   try {
-    const response = await axiosInstance.get('/v1/loan-applications', {
+    const response = await axiosInstance.get(endpoints.LOAN.LIST, {
       ...payload,
       params: {
         page,
@@ -44,7 +46,7 @@ export const fetchLoanApplicationById = async (applicationId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/${applicationId}`,
+      endpoints.LOAN.BY_ID(applicationId),
       config,
     );
     return response.data;
@@ -62,7 +64,7 @@ export const fetchLoanApplicationById = async (applicationId, config = {}) => {
 export const fetchLoanStatusStats = async (config = {}) => {
   try {
     const response = await axiosInstance.get(
-      '/v1/loan-applications/stats/status',
+      endpoints.LOAN.STATUS_STATS,
       config,
     );
     return response.data;
@@ -79,10 +81,7 @@ export const fetchLoanStatusStats = async (config = {}) => {
  */
 export const fetchLoanApplicationsOverview = async (config = {}) => {
   try {
-    const response = await axiosInstance.get(
-      '/v1/loan-applications/overview',
-      config,
-    );
+    const response = await axiosInstance.get(endpoints.LOAN.OVERVIEW, config);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch loan overview:', error);
@@ -99,7 +98,7 @@ export const fetchLoanApplicationsOverview = async (config = {}) => {
 export const createLoanApplication = async (payload, config = {}) => {
   try {
     const response = await axiosInstance.post(
-      '/v1/loan-applications',
+      endpoints.LOAN.LIST,
       payload,
       config,
     );
@@ -119,7 +118,7 @@ export const createLoanApplication = async (payload, config = {}) => {
 export const assignLoanToCreditOfficer = async (payload, config = {}) => {
   try {
     const response = await axiosInstance.post(
-      '/v1/loan-applications/assign-to-credit',
+      endpoints.LOAN.ASSIGN_TO_CREDIT,
       payload,
       config,
     );
@@ -150,7 +149,7 @@ export const postCustomerFinanceDetails = async (
 
   try {
     const response = await axiosInstance.post(
-      `/v1/loan-applications/financeDetails/${applicationId}`,
+      endpoints.LOAN.FINANCE_DETAILS(applicationId),
       financeDetails,
       config,
     );
@@ -175,7 +174,7 @@ export const fetchCustomerFinanceDetails = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/financeDetails/${applicationId}`,
+      endpoints.LOAN.FINANCE_DETAILS(applicationId),
       config,
     );
     return response.data;
@@ -206,7 +205,7 @@ export const fetchCustomerFinanceDocuments = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/financeDocuments/${applicationId}`,
+      endpoints.LOAN.FINANCE_DOCUMENTS(applicationId),
       config,
     );
     return response.data;
@@ -233,7 +232,7 @@ export const fetchCustomerMoreFinanceDetails = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/v1/customers/getCustomerMoreFinanceDetails/${customerId}`,
+      endpoints.LOAN.CUSTOMER_MORE_FINANCE_DETAILS(customerId),
       config,
     );
     return response.data;
@@ -264,7 +263,7 @@ export const postCustomerFinanceDocuments = async (
 ) => {
   try {
     const response = await axiosInstance.post(
-      `/v1/loan-applications/financeDocuments/${applicationId}`,
+      endpoints.LOAN.FINANCE_DOCUMENTS(applicationId),
       financeDocuments,
       config,
     );
@@ -296,7 +295,7 @@ export const postCustomerLenderDetails = async (
 ) => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/loan-applications/${applicationId}`,
+      endpoints.LOAN.LENDER_DETAILS(applicationId),
       lenderData,
       config,
     );
@@ -328,7 +327,7 @@ export const postCustomerReferenceDetails = async (
 ) => {
   try {
     const response = await axiosInstance.post(
-      `/v1/loan-applications/add-reference/${applicationId}`,
+      endpoints.LOAN.ADD_REFERENCE(applicationId),
       referenceData,
       config,
     );
@@ -358,7 +357,7 @@ export const getCustomerReferenceDetails = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/loan-references/${applicationId}`,
+      endpoints.LOAN.REFERENCE_DETAILS(applicationId),
       config,
     );
     return response.data;
@@ -389,7 +388,7 @@ export const editCustomerReferenceDetails = async (
 ) => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/loan-applications/loan-references/${applicationId}`,
+      endpoints.LOAN.REFERENCE_DETAILS(applicationId),
       referenceData,
       config,
     );
@@ -419,7 +418,7 @@ export const deleteLoanApplicationById = async (applicationId, config = {}) => {
 
   try {
     const response = await axiosInstance.delete(
-      `/v1/loan-applications/${applicationId}`,
+      endpoints.LOAN.DELETE(applicationId),
       config,
     );
     return response.data;

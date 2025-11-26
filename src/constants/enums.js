@@ -45,13 +45,17 @@ export const customerIndividualType = Object.freeze({
   OTHERS: 'OTHERS',
   RETIRED: 'RETIRED',
   SALARIED: 'SALARIED',
-  SELFEMPLOYED: 'SELFEMPLOYED',
+  SELF_EMPLOYED: 'SELFEMPLOYED',
   STUDENT: 'STUDENT',
 });
 
 export const customerIndividualTypeOptions = [
   {id: '1', label: 'Salaried', value: customerIndividualType.SALARIED},
-  {id: '2', label: 'Self Employed', value: customerIndividualType.SELFEMPLOYED},
+  {
+    id: '2',
+    label: 'Self Employed',
+    value: customerIndividualType.SELF_EMPLOYED,
+  },
   {id: '3', label: 'Business', value: customerIndividualType.BUSINESS},
   {id: '4', label: 'Retired', value: customerIndividualType.RETIRED},
   {id: '5', label: 'Student', value: customerIndividualType.STUDENT},
@@ -60,7 +64,7 @@ export const customerIndividualTypeOptions = [
 
 export const customerIndividualTypeValue = {
   [customerIndividualType.SALARIED]: 'Salaried',
-  [customerIndividualType.SELFEMPLOYED]: 'Self Employed',
+  [customerIndividualType.SELF_EMPLOYED]: 'Self Employed',
   [customerIndividualType.BUSINESS]: 'Business',
   [customerIndividualType.RETIRED]: 'Retired',
   [customerIndividualType.STUDENT]: 'Student',
@@ -268,7 +272,7 @@ export const gender = Object.freeze({
 export const loanType = {
   addVehicle: 9,
   externalBT: 'EXTERNAL_BALANCE_TRANSFER',
-  internalBT: 'INTERNAL_BALACE_TRANSFER',
+  internalBT: 'INTERNAL_BALANCE_TRANSFER',
   lease: 7,
   loan: 6,
   purchase: 'OLD_CAR_SALE_PURCHASE',

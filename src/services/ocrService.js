@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Uploads Aadhaar or PAN images for OCR processing.
@@ -17,8 +18,8 @@ import axiosInstance from '../networking/axiosInstance';
 export const uploadAadhaarForOcr = async (formData, type) => {
   const endpoint =
     type === 'aadharFrontPhoto' || type === 'aadharBackphoto'
-      ? '/v1/customers/uploadAadhaarForOcr'
-      : '/v1/customers/uploadPanForOcr';
+      ? endpoints.OCR.AADHAAR
+      : endpoints.OCR.PAN;
   try {
     const response = await axiosInstance.post(endpoint, formData, {
       headers: {

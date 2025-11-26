@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Initiate a new loan application.
@@ -10,7 +11,7 @@ import axiosInstance from '../networking/axiosInstance';
 export const initiateLoanApplication = async applicationData => {
   try {
     const response = await axiosInstance.post(
-      '/v1/loan-applications/initiate',
+      endpoints.LOAN.INITIATE,
       applicationData,
     );
     return response.data;
@@ -29,11 +30,11 @@ export const initiateLoanApplication = async applicationData => {
  */
 export const fetchCustomerLoanAmount = async (applicationId, config = {}) => {
   if (!applicationId) {
-    throw new Error('Customer ID is required');
+    throw new Error('Application ID is required');
   }
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/customerLoanAmount/${applicationId}`,
+      endpoints.LOAN.CUSTOMER_LOAN_AMOUNT(applicationId),
       config,
     );
     return response.data;
@@ -53,7 +54,7 @@ export const fetchCustomerLoanAmount = async (applicationId, config = {}) => {
 export const sendOtpForCibil = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/sendOtpForCibil',
+      endpoints.CUSTOMER.SEND_OTP_CIBIL,
       payload,
     );
     return response.data;
@@ -73,7 +74,7 @@ export const sendOtpForCibil = async payload => {
 export const verifyOtpForCibil = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/v1/customers/verifyOtpForCibil',
+      endpoints.CUSTOMER.VERIFY_OTP_CIBIL,
       payload,
     );
     return response.data;
@@ -93,7 +94,7 @@ export const verifyOtpForCibil = async payload => {
 export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/loan-applications/customerLoanAmount/${applicationId}`,
+      endpoints.LOAN.CUSTOMER_LOAN_AMOUNT(applicationId),
       loanAmountData,
     );
     return response.data;
@@ -114,7 +115,7 @@ export const addCustomerLoanAmount = async (loanAmountData, applicationId) => {
 export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
   try {
     const response = await axiosInstance.patch(
-      `/v1/loan-applications/set-partner-and-sales-executive/${applicationId}`,
+      endpoints.LOAN.SET_PARTNER_SALES(applicationId),
       payload,
     );
     return response.data;
@@ -127,7 +128,7 @@ export const setPartnerAndSalesExecutive = async (applicationId, payload) => {
 export const fetchLoanTrackingDetailsByAppId = async applicationId => {
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-applications/tracking/${applicationId}`,
+      endpoints.LOAN.TRACKING(applicationId),
     );
     return response.data;
   } catch (error) {
@@ -146,7 +147,7 @@ export const fetchLoanTrackingDetailsByAppId = async applicationId => {
 export const submitLoanApplication = async applicationId => {
   try {
     const response = await axiosInstance.post(
-      `/v1/loan-applications/submit/${applicationId}`,
+      endpoints.LOAN.SUBMIT(applicationId),
     );
     return response.data;
   } catch (error) {
@@ -166,10 +167,7 @@ export const submitLoanApplication = async applicationId => {
  */
 export const fetchEmiPlans = async payload => {
   try {
-    const response = await axiosInstance.post(
-      '/v1/loan-applications/emi/plan',
-      payload,
-    );
+    const response = await axiosInstance.post(endpoints.LOAN.EMI_PLAN, payload);
     return response.data;
   } catch (error) {
     console.error('Error fetching EMI plans:', error);
@@ -197,7 +195,7 @@ export const fetchLoanDocumentsByCategory = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/v1/loan-documents/documents/${category}/${customerType}`,
+      endpoints.LOAN_DOCUMENTS.BY_CATEGORY(category, customerType),
       {
         params: {document_required: documentRequired},
       },
@@ -225,7 +223,7 @@ export const fetchAllLenders = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/v1/lenders?principalAmount=${principalAmount}&tenure=60`,
+      endpoints.LENDER.LIST(principalAmount),
       {
         ...payload,
         params: {
