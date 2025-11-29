@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import strings from '../../locales/strings';
-import {goBack} from '../../navigation/NavigationUtils';
+import {getScreenParam, goBack} from '../../navigation/NavigationUtils';
 import {postCustomerLenderDetailsThunk} from '../../redux/actions';
 import {fetchEmiPlanThunk} from '../../redux/actions/emiPlanActions';
 import {showToast} from '../../utils/helper';
@@ -23,6 +23,8 @@ class CustomizeLoanOffer extends Component {
   }
 
   componentDidMount() {
+    let route = this.props.route;
+    let loanDetail = route?.params;
     const {selectedLoanApplication} = this.props;
 
     let interestRate = selectedLoanApplication?.interesetRate;

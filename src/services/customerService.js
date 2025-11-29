@@ -1,5 +1,6 @@
 import axiosInstance from '../networking/axiosInstance';
 import axios from 'axios';
+import {endpoints} from './endpoints';
 const DIGILOCKER_BASE_URL = 'https://kyc-api.surepass.app/api/v1/digilocker';
 /**
  * Fetches all customers from the backend.
@@ -13,7 +14,7 @@ const DIGILOCKER_BASE_URL = 'https://kyc-api.surepass.app/api/v1/digilocker';
 export const fetchAllCustomers = async (page = 1, limit = 10, payload = {}) => {
   try {
     //customers/all
-    const response = await axiosInstance.get('/partners/customers', {
+    const response = await axiosInstance.get(endpoints.CUSTOMER.LIST, {
       ...payload,
       params: {
         page,
@@ -27,8 +28,6 @@ export const fetchAllCustomers = async (page = 1, limit = 10, payload = {}) => {
     throw error;
   }
 };
-
-// await fetchAllCustomers(2, 10, { params: { search: 'John Doe' } });
 
 /**
  * Fetches detailed information for a specific customer by ID.
@@ -45,7 +44,7 @@ export const fetchCustomerDetailsById = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/customers/customerDetails/${customerId}`,
+      endpoints.CUSTOMER.BASE_DETAILS(customerId),
       config,
     );
 
@@ -74,7 +73,7 @@ export const fetchCustomerDocuments = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `loan-applications/customerDocuments/${customerId}`,
+      endpoints.CUSTOMER.CUSTOMER_DOCS(customerId),
       config,
     );
     return response.data;
@@ -102,7 +101,7 @@ export const fetchCustomerById = async (customerId, config = {}) => {
 
   try {
     const response = await axiosInstance.get(
-      `/customers/${customerId}`,
+      endpoints.CUSTOMER.BASE_DETAILS(customerId),
       config,
     );
     return response.data;
@@ -120,7 +119,10 @@ export const fetchCustomerById = async (customerId, config = {}) => {
  */
 export const createCustomer = async customerData => {
   try {
-    const response = await axiosInstance.post('/customers', customerData);
+    const response = await axiosInstance.post(
+      endpoints.CUSTOMER.CREATE,
+      customerData,
+    );
     return response.data;
   } catch (error) {
     console.error('Error creating customer:', error);
@@ -137,7 +139,10 @@ export const createCustomer = async customerData => {
  */
 export const verifyCustomerOtp = async otpData => {
   try {
-    const response = await axiosInstance.post('/customers/verifyOtp', otpData);
+    const response = await axiosInstance.post(
+      endpoints.CUSTOMER.VERIFY_OTP,
+      otpData,
+    );
     return response.data;
   } catch (error) {
     console.error('Error verifying customer OTP:', error);
@@ -155,7 +160,7 @@ export const verifyCustomerOtp = async otpData => {
 export const submitCustomerDetails = async detailsData => {
   try {
     const response = await axiosInstance.post(
-      '/customers/customerDetails',
+      endpoints.CUSTOMER.SUBMIT_DETAILS,
       detailsData,
     );
     return response.data;
@@ -175,7 +180,7 @@ export const submitCustomerDetails = async detailsData => {
 export const submitCustomerLoanAmount = async loanAmountData => {
   try {
     const response = await axiosInstance.post(
-      '/customers/customerLoanAmount',
+      endpoints.CUSTOMER.SUBMIT_LOAN_AMOUNT,
       loanAmountData,
     );
     return response.data;
@@ -195,7 +200,7 @@ export const submitCustomerLoanAmount = async loanAmountData => {
 export const addCustomerReference = async (applicationId, referenceData) => {
   try {
     const response = await axiosInstance.post(
-      `loan-applications/customers/add-reference/${applicationId}`,
+      endpoints.CUSTOMER.ADD_REFERENCE(applicationId),
       referenceData,
     );
     return response.data;
@@ -215,7 +220,7 @@ export const addCustomerReference = async (applicationId, referenceData) => {
 export const submitFinanceDetails = async financeDetailsData => {
   try {
     const response = await axiosInstance.post(
-      '/customers/financeDetails',
+      endpoints.CUSTOMER.FINANCE_DETAILS,
       financeDetailsData,
     );
     return response.data;
@@ -235,7 +240,7 @@ export const submitFinanceDetails = async financeDetailsData => {
 export const uploadFinanceDocuments = async documentsData => {
   try {
     const response = await axiosInstance.post(
-      '/customers/financeDocuments',
+      endpoints.CUSTOMER.FINANCE_DOCUMENTS,
       documentsData,
     );
     return response.data;
@@ -255,7 +260,7 @@ export const uploadFinanceDocuments = async documentsData => {
 export const uploadCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.post(
-      `/loan-applications/customerDocuments/${customerId}`,
+      endpoints.CUSTOMER.CUSTOMER_DOCS(customerId),
       documentsData,
     );
     return response.data;
@@ -275,7 +280,7 @@ export const uploadCustomerDocuments = async (documentsData, customerId) => {
 export const updateCustomerDetails = async detailsData => {
   try {
     const response = await axiosInstance.patch(
-      `/customers/customerDetails/${detailsData.customerId}`,
+      endpoints.CUSTOMER.UPDATE_DETAILS(detailsData.customerId),
       detailsData,
     );
     return response.data;
@@ -295,7 +300,7 @@ export const updateCustomerDetails = async detailsData => {
 export const updateCustomerDocuments = async (documentsData, customerId) => {
   try {
     const response = await axiosInstance.patch(
-      `/loan-applications/customerDocuments/${customerId}`,
+      endpoints.CUSTOMER.CUSTOMER_DOCS(customerId),
       documentsData,
     );
     return response.data;
@@ -315,7 +320,7 @@ export const updateCustomerDocuments = async (documentsData, customerId) => {
 export const updateCustomerReference = async referenceData => {
   try {
     const response = await axiosInstance.patch(
-      '/customers/add-reference',
+      endpoints.CUSTOMER.UPDATE_REFERENCE,
       referenceData,
     );
     return response.data;
@@ -336,7 +341,7 @@ export const updateCustomerReference = async referenceData => {
 export const updateCustomerEnvelope = async (envelopeId, envelopeData) => {
   try {
     const response = await axiosInstance.patch(
-      `/customers/customer-envelope/${envelopeId}`,
+      endpoints.CUSTOMER.UPDATE_ENVELOPE(envelopeId),
       envelopeData,
     );
     return response.data;
@@ -358,7 +363,9 @@ export const updateCustomerEnvelope = async (envelopeId, envelopeData) => {
  */
 export const deleteCustomer = async customerId => {
   try {
-    const response = await axiosInstance.delete(`/customers/${customerId}`);
+    const response = await axiosInstance.delete(
+      endpoints.CUSTOMER.DELETE(customerId),
+    );
     return response.data;
   } catch (error) {
     console.error(`Error deleting customer with ID ${customerId}:`, error);
@@ -374,7 +381,7 @@ export const deleteCustomer = async customerId => {
 export const verifyAadhar = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/customers/verifyAadhar',
+      endpoints.CUSTOMER.VERIFY_AADHAAR,
       payload,
     );
     return response.data;
@@ -393,7 +400,7 @@ export const verifyAadhar = async payload => {
 export const initiateAadharDigilocker = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/customers/initiateAadharDigilocker',
+      endpoints.CUSTOMER.INITIATE_AADHAAR_DIGILOCKER,
       payload,
     );
     return response.data;
@@ -403,42 +410,24 @@ export const initiateAadharDigilocker = async payload => {
   }
 };
 
-// /**
-//  * Verifies customer's PAN number.
-//  * @param {Object} payload - PAN verification payload.
-//  * @returns {Promise<Object>} - Response data from the server.
-//  * @throws {Error} - Throws an error if the request fails.
-//  */
+/**
+ * Verifies customer's PAN number.
+ * @param {Object} payload - PAN verification payload.
+ * @returns {Promise<Object>} - Response data from the server.
+ * @throws {Error} - Throws an error if the request fails.
+ */
 export const verifyPan = async payload => {
   try {
-    const response = await axiosInstance.post('/customers/verifyPan', payload);
+    const response = await axiosInstance.post(
+      endpoints.CUSTOMER.VERIFY_PAN,
+      payload,
+    );
     return response.data;
   } catch (error) {
     console.error('Error verifying PAN:', error);
     throw error;
   }
 };
-
-// /**
-//  * Verify customer's PAN card.
-//  *
-//  * @param {Object} payload - The details required for PAN verification.
-//  * @param {string} payload.customerId - The unique ID of the customer.
-//  * @param {string} payload.panCardNumber - The PAN card number to verify.
-//  * @returns {Promise<Object>} - The PAN verification response from the server.
-//  * @throws Will throw an error if the API request fails.
-//  */
-// export const verifyPan = async payload => {
-//   try {
-//     const response = await axiosInstance.post('/customers/verifyPan', payload, {
-//       baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error verifying PAN:', JSON.stringify(error));
-//     throw error;
-//   }
-// };
 
 /**
  * Fetch CIBIL score for a customer.
@@ -455,7 +444,7 @@ export const verifyPan = async payload => {
 export const fetchCibilScore = async payload => {
   try {
     const response = await axiosInstance.post(
-      '/customers/fetchCibilScore',
+      endpoints.CUSTOMER.CIBIL_SCORE,
       payload,
     );
     return response.data;
@@ -466,7 +455,19 @@ export const fetchCibilScore = async payload => {
 };
 
 /**
- * Fetch Aadhaar details from Surepass DigiLocker API
+ * Fetches Aadhaar data from DigiLocker for a given client ID.
+ *
+ * This function sends a GET request to the DigiLocker API to download the
+ * Aadhaar document associated with the provided client ID. It includes the
+ * required authorization token in the request headers.
+ *
+ * @async
+ * @function fetchAadhaarFromDigilocker
+ * @param {string} clientId - The unique DigiLocker client identifier used to fetch Aadhaar data.
+ * @returns {Promise<Object>} The Aadhaar data returned by the DigiLocker service.
+ *
+ * @throws {Error} Throws an error if the request fails or the server returns an error response.
+ *
  */
 export const fetchAadhaarFromDigilocker = async clientId => {
   try {
@@ -504,7 +505,7 @@ export const removeCustomerPan = async customerId => {
   }
   try {
     const response = await axiosInstance.patch(
-      `/customers/removePan/${customerId}`,
+      endpoints.CUSTOMER.REMOVE_PAN(customerId),
     );
     return response.data;
   } catch (error) {
@@ -529,7 +530,7 @@ export const removeCustomerAadhaar = async customerId => {
   }
   try {
     const response = await axiosInstance.patch(
-      `/customers/removeAadhar/${customerId}`,
+      endpoints.CUSTOMER.REMOVE_AADHAAR(customerId),
     );
     return response.data;
   } catch (error) {

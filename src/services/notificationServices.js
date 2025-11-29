@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Retrieves the count of unread notifications for the authenticated user.
@@ -8,7 +9,7 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const getNotificationCounts = async () => {
   try {
-    const response = await axiosInstance.get('/notifications/counts');
+    const response = await axiosInstance.get(endpoints.NOTIFICATIONS.COUNTS);
     return response.data;
   } catch (error) {
     console.error('Error fetching notification counts:', error);
@@ -24,7 +25,7 @@ export const getNotificationCounts = async () => {
  */
 export const getNotifications = async () => {
   try {
-    const response = await axiosInstance.get('/notifications');
+    const response = await axiosInstance.get(endpoints.NOTIFICATIONS.LIST);
     return response.data;
   } catch (error) {
     console.error('Error fetching notifications:', error);
@@ -40,7 +41,9 @@ export const getNotifications = async () => {
  */
 export const markAllNotificationsAsRead = async () => {
   try {
-    const response = await axiosInstance.patch('/notifications/read-all');
+    const response = await axiosInstance.patch(
+      endpoints.NOTIFICATIONS.READ_ALL,
+    );
     return response.data;
   } catch (error) {
     console.error('Error marking all notifications as read:', error);
@@ -58,7 +61,7 @@ export const markAllNotificationsAsRead = async () => {
 export const markNotificationAsRead = async notificationId => {
   try {
     const response = await axiosInstance.patch(
-      `/notifications/${notificationId}/read`,
+      endpoints.NOTIFICATIONS.READ_ONE(notificationId),
     );
     return response.data;
   } catch (error) {

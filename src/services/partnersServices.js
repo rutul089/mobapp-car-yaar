@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Fetch dashboard stats for a specific partner by ID.
@@ -7,7 +8,7 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const fetchPartnerStats = async () => {
   try {
-    const response = await axiosInstance.get('/partners/dashboard-stats/');
+    const response = await axiosInstance.get(endpoints.PARTNER.DASHBOARD_STATS);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch partner dashboard stats:', error);
@@ -25,7 +26,7 @@ export const fetchPartnerEmployeeById = async (employeeId, params = null) => {
   try {
     const config = params ? {params} : {};
     const response = await axiosInstance.get(
-      `/partners/partner-employees/${employeeId}`,
+      endpoints.PARTNER.EMPLOYEE_BY_ID(employeeId),
       config,
     );
     return response.data;

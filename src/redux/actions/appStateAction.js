@@ -1,7 +1,8 @@
+import {SET_NETWORK_STATUS} from './actionType';
 import types from './types';
 
 export const setNetworkStatus = status => ({
-  type: types.SET_NETWORK_STATUS,
+  type: SET_NETWORK_STATUS.SUCCESS,
   payload: status,
 });
 

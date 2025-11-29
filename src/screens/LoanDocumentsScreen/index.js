@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 import ScreenNames from '../../constants/ScreenNames';
@@ -9,7 +9,6 @@ import {
   loanCategory,
   loanType,
   occupationLabelMap,
-  occupationType,
 } from '../../constants/enums';
 import {loan_document_requirements} from '../../constants/loan_document_requirements';
 import strings from '../../locales/strings';
@@ -29,6 +28,7 @@ import {
 import {getPresignedDownloadUrl} from '../../services';
 import {
   generateImageUploadPayload,
+  getDocumentRequirements,
   handleFileSelection,
   transformDocumentData,
   validateRequiredDocuments,
@@ -76,6 +76,7 @@ class LoanDocumentsScreen extends Component {
       showAcceptedDocModal: false,
       acceptedDocModalTitle: '',
       showExitConfirmation: false,
+      isAadhaar: false,
     };
     this.onNextPress = this.onNextPress.bind(this);
   }
@@ -96,38 +97,6 @@ class LoanDocumentsScreen extends Component {
       this.fetchCustomerDocuments();
     }
   }
-
-  getDocumentRequirements = (loanProduct, typeOfIndividual) => {
-    if (!loanProduct || !typeOfIndividual) {
-      return [
-        documentImageType.ID_PROOF,
-        documentImageType.ADDRESS_PROOF,
-        documentImageType.PERMANENT_ADDRESS,
-        documentImageType.INCOME_PROOF,
-        documentImageType.BANKING_PROOF,
-        documentImageType.BUSINESS_PROOF,
-        documentImageType.INSURANCE,
-        documentImageType.OTHER_DOCUMENTS,
-      ];
-    }
-
-    // Step 1: Get matching items
-    const filtered = loan_document_requirements.filter(
-      item =>
-        item.loanProduct === loanProduct &&
-        item.typeOfIndividual === typeOfIndividual,
-    );
-
-    // Step 2: Extract just documentType list
-    const types = filtered.map(item => item.documentType);
-
-    // Step 3: Sort based on your enum order
-    const order = Object.values(documentImageType);
-
-    const sorted = types.sort((a, b) => order.indexOf(a) - order.indexOf(b));
-
-    return sorted;
-  };
 
   backHandler = () => {
     return this.props.isCreatingLoanApplication;
@@ -185,69 +154,71 @@ class LoanDocumentsScreen extends Component {
     }
   };
 
-  handleUploadMedia = async type => {
+  handleUploadMedia = async documentType => {
     try {
       const {selectedLoanApplication} = this.props;
       this.setState({isLoadingDocument: true});
 
-      const typeOfIndividual =
+      // Extract customer & loan info
+      const occupationTypeValue =
         selectedLoanApplication?.customer?.customerDetails?.occupation;
-      const loanProduct = selectedLoanApplication?.loanType;
-      const documentType = type;
+      const loanTypeValue = selectedLoanApplication?.loanType;
 
-      const matched = loan_document_requirements.find(
+      // Match locally stored requirement
+      const matchedRequirement = loan_document_requirements.find(
         item =>
-          item.loanProduct === loanProduct &&
-          item.typeOfIndividual === typeOfIndividual &&
+          item.loanProduct === loanTypeValue &&
+          item.typeOfIndividual === occupationTypeValue &&
           item.documentType === documentType,
       );
 
+      // Default accepted docs if API fails
       const defaultAcceptedDocs =
-        matched?.acceptedDocuments?.map(doc => ({document_accepted: doc})) ||
-        [];
+        matchedRequirement?.acceptedDocuments?.map(doc => ({
+          document_accepted: doc,
+        })) || [];
 
-      const _typeOfIndividual = occupationLabelMap[typeOfIndividual];
-      const _documentType = documentImageMap[documentType];
-      const _loanProduct = loanCategory[loanProduct];
+      // Proper readable variables
+      const occupationLabel = occupationLabelMap[occupationTypeValue];
+      const documentCategory = documentImageMap[documentType];
+      const loanCategoryLabel = loanCategory[loanTypeValue];
 
+      // Common method to update state after success/error
+      const updateStateAfterFetch = (acceptedDocs, prevState) => ({
+        isLoadingDocument: false,
+        showFilePicker: acceptedDocs.length === 0,
+        showAcceptedDocModal: acceptedDocs.length > 0,
+        selectedDocType: documentType,
+        acceptedDocuments: acceptedDocs,
+        selectedAcceptedDocument:
+          prevState.selectedDocType === documentType
+            ? prevState.selectedAcceptedDocument
+            : '',
+        acceptedDocModalTitle: documentImageLabelMap[documentType],
+      });
+
+      // API call
       this.props.fetchLoanDocumentsByCategoryThunk(
-        _loanProduct,
-        _typeOfIndividual,
-        _documentType,
-        async response => {
-          const acceptedDocuments = response?.data || [];
+        loanCategoryLabel,
+        occupationLabel,
+        documentCategory,
 
-          this.setState(prev => ({
-            isLoadingDocument: false,
-            showFilePicker: acceptedDocuments.length === 0,
-            showAcceptedDocModal: acceptedDocuments.length > 0,
-            selectedDocType: type,
-            acceptedDocuments,
-            selectedAcceptedDocument:
-              prev.selectedDocType === type
-                ? prev.selectedAcceptedDocument
-                : '',
-            acceptedDocModalTitle: documentImageLabelMap[type],
-          }));
+        // SUCCESS callback
+        response => {
+          const acceptedDocs = response?.data || [];
+          this.setState(prev => updateStateAfterFetch(acceptedDocs, prev));
         },
-        error => {
-          this.setState(prev => ({
-            isLoadingDocument: false,
-            showFilePicker: defaultAcceptedDocs.length === 0,
-            showAcceptedDocModal: defaultAcceptedDocs.length > 0,
-            selectedDocType: type,
-            acceptedDocuments: defaultAcceptedDocs,
-            selectedAcceptedDocument:
-              prev.selectedDocType === type
-                ? prev.selectedAcceptedDocument
-                : '',
-            acceptedDocModalTitle: documentImageLabelMap[type],
-          }));
+
+        // ERROR callback → fallback to local list
+        () => {
+          this.setState(prev =>
+            updateStateAfterFetch(defaultAcceptedDocs, prev),
+          );
         },
       );
     } catch (err) {
-      this.setState({isLoadingDocument: false});
       console.error('Unexpected error in handleUploadMedia:', err);
+      this.setState({isLoadingDocument: false});
     }
   };
 
@@ -264,28 +235,10 @@ class LoanDocumentsScreen extends Component {
           asset,
           this.state.selectedDocType,
         );
-
-        const {data} = await getPresignedDownloadUrl({objectKey: presignedKey});
-
-        const docObj = {
-          uri: data?.url,
-          uploadedUrl: presignedKey,
-          uploadKey: presignedKey,
-          selectedDocType: this.state.selectedAcceptedDocument,
-        };
-
-        this.setState(prev => ({
-          documents: {
-            ...prev.documents,
-            [this.state.selectedDocType]: docObj,
-          },
-          selectedDocType: '',
-          showFilePicker: false,
-        }));
+        await this.uploadAndSetDocument(presignedKey);
       } catch (error) {
-        showToast('error', 'Something went wrong please try again..');
-      } finally {
         this.setState({isLoadingDocument: false, showFilePicker: false});
+        showToast('error', 'Something went wrong please try again..');
       }
     });
   };
@@ -382,48 +335,34 @@ class LoanDocumentsScreen extends Component {
   };
 
   setSelectedAcceptedDocument = async item => {
+    const selectedAcceptedDocument = item?.document_accepted || '';
+    const isAadhaar = selectedAcceptedDocument
+      .toLowerCase()
+      .includes('aadhaar');
+
     this.setState(
       {
-        selectedAcceptedDocument: item?.document_accepted,
+        selectedAcceptedDocument,
         showAcceptedDocModal: false,
+        isAadhaar,
+        isLoadingDocument: isAadhaar,
       },
       async () => {
         await new Promise(resolve => setTimeout(resolve, 330));
-        this.setState({
-          showAcceptedDocModal: false,
-          showFilePicker: true,
-        });
+
+        this.setState(
+          {
+            showAcceptedDocModal: false,
+            showFilePicker: !isAadhaar,
+          },
+          () => {
+            if (isAadhaar) {
+              this.autoUploadAadharCard();
+            }
+          },
+        );
       },
     );
-  };
-
-  /**
-   * Transforms document response to formatted file objects with presigned URL
-   * @param {Object} responseData - Original API response's `data` object
-   * @returns {Promise<Object>} - Transformed object with file metadata and presigned URLs
-   */
-  transformDocumentData12 = async responseData => {
-    const formattedData = {};
-    const fileKeys = Object.keys(responseData).filter(key =>
-      key.endsWith('Image'),
-    );
-
-    for (const key of fileKeys) {
-      const uri = responseData[key];
-      if (uri) {
-        const downloadUrlResponse = await getPresignedDownloadUrl({
-          objectKey: uri,
-        });
-
-        formattedData[key] = {
-          uploadKey: uri,
-          uploadedUrl: uri,
-          uri: downloadUrlResponse?.data?.url || null, // Add downloaded URL here
-        };
-      }
-    }
-
-    return formattedData;
   };
 
   onModalHide = () => {
@@ -439,6 +378,45 @@ class LoanDocumentsScreen extends Component {
     await new Promise(resolve => setTimeout(resolve, 200));
     navigateToTab(ScreenNames.Applications);
     this.props.setIsCreatingLoanApplication(false);
+  };
+
+  autoUploadAadharCard = async () => {
+    const {selectedLoanApplication} = this.props;
+
+    let aadharKey =
+      selectedLoanApplication?.customer?.customerDetails?.aadharFrontPhoto;
+
+    await this.uploadAndSetDocument(aadharKey);
+  };
+
+  uploadAndSetDocument = async objectKey => {
+    try {
+      const {data} = await getPresignedDownloadUrl({objectKey});
+
+      const docObj = {
+        uri: data?.url,
+        uploadedUrl: objectKey,
+        uploadKey: objectKey,
+        selectedDocType: this.state.selectedAcceptedDocument,
+      };
+
+      this.setState(prev => ({
+        documents: {
+          ...prev.documents,
+          [prev.selectedDocType]: docObj,
+        },
+        selectedDocType: '',
+        showFilePicker: false,
+      }));
+    } catch (error) {
+      showToast('error', 'Something went wrong please try again..');
+    } finally {
+      this.setState({
+        isLoadingDocument: false,
+        showFilePicker: false,
+        isAadhaar: false,
+      });
+    }
   };
 
   render() {
@@ -467,7 +445,11 @@ class LoanDocumentsScreen extends Component {
       selectedLoanApplication?.customer?.customerDetails?.occupation;
     const loanProduct = selectedLoanApplication?.loanType;
 
-    const docs = this.getDocumentRequirements(loanProduct, typeOfIndividual);
+    const docs = getDocumentRequirements(
+      loanProduct,
+      typeOfIndividual,
+      loanDocuments,
+    );
 
     return (
       <Loan_Documents_Component

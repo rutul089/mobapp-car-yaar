@@ -2,11 +2,10 @@ import axios from 'axios';
 import {logApiEvent} from './apiLogger';
 import {getCachedToken} from '../utils/storage';
 import {store} from '../redux';
-import {logoutUser, setLogoutUser} from '../redux/actions';
+import {logoutUser} from '../redux/actions';
 
 const axiosInstance = axios.create({
-  // baseURL: 'https://caryaar.onrender.com/api/v1',
-  baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz/api/v1',
+  baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -42,8 +41,6 @@ axiosInstance.interceptors.request.use(
     try {
       if (!config?.skipAuth) {
         const token = await getCachedToken();
-        // const token =
-        //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NjUyYzg3LWRlNjYtNDU2Zi1hNmZhLWNhYjc3ZmNjOGQxMCIsInJvbGVJZCI6Ijk4ZDk3ZGZmLTNhODYtNDVhNy1iYmE2LWY3ZDU4NzA2YzMwNiIsInJvbGUiOiJQQVJUTkVSIiwiaWF0IjoxNzQ3MDU4MzA3LCJleHAiOjE3NDk2NTAzMDd9.Zcj7eGgH4jallSUZPmK3RskjVxHnexnNKgbk6r3BUVU';
         if (token) {
           config.headers = {
             ...config.headers,

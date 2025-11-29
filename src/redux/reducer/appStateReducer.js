@@ -1,4 +1,5 @@
 import {types} from '../actions';
+import {SET_NETWORK_STATUS} from '../actions/actionType';
 
 const initialState = {
   loading: false,
@@ -14,7 +15,7 @@ const appStateReducer = (state = initialState, action) => {
     case types.STOP_LOADING:
       return {...state, loading: false};
 
-    case types.SET_NETWORK_STATUS:
+    case SET_NETWORK_STATUS.SUCCESS:
       return {
         ...state,
         isInternetConnected: action.payload,

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {getLabelFromEnum, occupationLabelMap} from '../../constants/enums';
 import ScreenNames from '../../constants/ScreenNames';
+import strings from '../../locales/strings';
 import {
   getScreenParam,
   goBack,
@@ -11,7 +12,10 @@ import {
   deleteCustomerThunk,
   fetchCustomerDetailsThunk,
   initiateLoanApplicationThunk,
+  submitLoanApplicationThunk,
 } from '../../redux/actions';
+import {getPresignedDownloadUrl} from '../../services';
+import {viewDocumentHelper} from '../../utils/documentUtils';
 import {
   capitalizeFirstLetter,
   formatDate,
@@ -20,9 +24,6 @@ import {
   showToast,
 } from '../../utils/helper';
 import Customer_Info_Component from './Customer_Info_Component';
-import {viewDocumentHelper} from '../../utils/documentUtils';
-import strings from '../../locales/strings';
-import {getPresignedDownloadUrl} from '../../services';
 
 class CustomerInfoScreen extends Component {
   constructor(props) {
@@ -106,7 +107,7 @@ class CustomerInfoScreen extends Component {
     return safeGet(this.props.loading && !onNextPress, obj, path, '-');
   };
 
-  createLoanApplication = () => {
+  createLoanApplication = async () => {
     const {
       vehicleId,
       loanType,
@@ -135,7 +136,7 @@ class CustomerInfoScreen extends Component {
 
     this.props.initiateLoanApplicationThunk(
       payload,
-      success => {
+      response => {
         navigate(ScreenNames.LoanDocument);
       },
       error => {},
@@ -338,6 +339,7 @@ const mapActionCreators = {
   fetchCustomerDetailsThunk,
   initiateLoanApplicationThunk,
   deleteCustomerThunk,
+  submitLoanApplicationThunk,
 };
 const mapStateToProps = ({customerData, loanData, vehicleData}) => {
   return {

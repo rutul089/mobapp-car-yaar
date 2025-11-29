@@ -1,4 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
+import {endpoints} from './endpoints';
 
 /**
  * Fetches the list of all banks from the backend API.
@@ -10,7 +11,7 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const getBankList = async () => {
   try {
-    const response = await axiosInstance.get('/banks');
+    const response = await axiosInstance.get(endpoints.BANK.LIST);
     return response.data;
   } catch (error) {
     throw error;
@@ -29,8 +30,7 @@ export const getBankList = async () => {
  */
 export const getBankBySearchCode = async (bankName, searchCode) => {
   try {
-    const encodedBankName = encodeURIComponent(bankName); // Safe for URL path
-    const response = await axiosInstance.get(`/banks/${encodedBankName}`, {
+    const response = await axiosInstance.get(endpoints.BANK.BY_NAME(bankName), {
       params: {search: searchCode},
     });
     return response.data;
@@ -46,7 +46,7 @@ export const getBankBySearchCode = async (bankName, searchCode) => {
  */
 export const searchBanks = async query => {
   try {
-    const response = await axiosInstance.get(`/banks?search=${query}`);
+    const response = await axiosInstance.get(endpoints.BANK.SEARCH(query));
     return response.data;
   } catch (error) {
     console.error('Failed to search banks:', error);
@@ -66,9 +66,8 @@ export const searchBanks = async query => {
  */
 export const verifyBankIFSC = async (bankName, ifscCode) => {
   try {
-    const encodedBankName = encodeURIComponent(bankName);
     const response = await axiosInstance.get(
-      `/banks/verify-ifsc?bankName=${encodedBankName}&ifscCode=${ifscCode}`,
+      endpoints.BANK.VERIFY_IFSC(bankName, ifscCode),
     );
     return response.data;
   } catch (error) {

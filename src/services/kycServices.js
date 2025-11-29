@@ -1,32 +1,5 @@
 import axiosInstance from '../networking/axiosInstance';
-
-/**
- * Fetch CIBIL score for a customer.
- *
- * @param {Object} payload - The customer details required for CIBIL check.
- * @param {string} payload.mobile - Customer's mobile number.
- * @param {string} payload.pan - Customer's PAN card number.
- * @param {string} payload.name - Customer's full name.
- * @param {string} payload.gender - Customer's gender.
- * @param {string} payload.consent - Consent flag (Y/N).
- * @returns {Promise<Object>} - The CIBIL score response from the server.
- * @throws Will throw an error if the API request fails.
- */
-// export const fetchCibilScore = async payload => {
-//   try {
-//     const response = await axiosInstance.post(
-//       '/customers/fetchCibilScore',
-//       payload,
-//       {
-//         baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
-//       },
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching CIBIL score:', error);
-//     throw error;
-//   }
-// };
+import {endpoints} from './endpoints';
 
 /**
  * Verify customer's PAN card.
@@ -39,9 +12,13 @@ import axiosInstance from '../networking/axiosInstance';
  */
 export const verifyPanCard = async payload => {
   try {
-    const response = await axiosInstance.post('/customers/verifyPan', payload, {
-      baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
-    });
+    const response = await axiosInstance.post(
+      endpoints.CUSTOMER.VERIFY_PAN,
+      payload,
+      {
+        baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
+      },
+    );
     return response.data;
   } catch (error) {
     console.error('Error verifying PAN:', error);
@@ -58,7 +35,7 @@ export const verifyPanCard = async payload => {
  */
 export const fetchVehicleDetails = async registerNumber => {
   try {
-    const response = await axiosInstance.get('/vehicles/details', {
+    const response = await axiosInstance.get(endpoints.VEHICLE.DETAILS_BY_REG, {
       baseURL: 'https://caryaar-dev-api.pedalsupclients.xyz', // override baseURL
       params: {registerNumber},
     });

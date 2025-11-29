@@ -10,3 +10,4 @@ export * from './imageUploadServices';
 export * from './salesExecutiveService';
 export * from './kycServices';
 export * from './ocrService';
+export * from './endpoints';

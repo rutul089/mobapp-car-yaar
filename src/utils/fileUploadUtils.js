@@ -1,12 +1,11 @@
-import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
+import {Image as ImageCompressor} from 'react-native-compressor';
+import RNFS from 'react-native-fs';
 import {
   getPresignedUploadUrl,
   uploadAadhaarForOcr,
   uploadFileWithFormData,
 } from '../services';
-import {Image as ImageCompressor} from 'react-native-compressor';
-import {showApiErrorToast} from './helper';
 
 /**
  * Uploads a photo using multipart/form-data.
