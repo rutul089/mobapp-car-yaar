@@ -25,6 +25,7 @@ import {
   customerCategoryValue,
   customerIndividualTypeOptions,
   loanType,
+  occupationOptions,
 } from '../../constants/enums';
 
 const Customer_Detail_Component = ({
@@ -131,6 +132,7 @@ const Customer_Detail_Component = ({
       <DropdownModal
         visible={showModal}
         data={customerIndividualTypeOptions}
+        // data={occupationOptions}
         selectedItem={customerType}
         onSelect={(item, index) => {
           onChangeUserTypeOption?.(item, index);

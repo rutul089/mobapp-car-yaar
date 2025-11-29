@@ -61,11 +61,6 @@ class ThankYouScreen extends Component {
   render() {
     const {selectedLoanApplication, loading} = this.props;
 
-    console.log(
-      'selectedLoanApplication',
-      JSON.stringify(selectedLoanApplication),
-    );
-
     const {
       loanApplicationId,
       createdAt,

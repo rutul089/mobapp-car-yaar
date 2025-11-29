@@ -2,16 +2,16 @@ import {
   FilePickerModal,
   FormFooterButtons,
   Header,
+  Loader,
   SafeAreaWrapper,
   Text,
   VehicleImageCard,
   images,
   theme,
-  Loader,
-  Spacing,
 } from '@caryaar/components';
-import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
+import {FullLoader} from '../../components';
 import strings from '../../locales/strings';
 import {getFileType} from '../../utils/documentUtils';
 
@@ -79,11 +79,8 @@ const Vehicle_Images_Component = ({
           // {label: 'Documents', value: 'document', icon: images.file_documents},
         ]}
       />
-      {isLoadingDocument && (
-        <View style={styles.loaderStyle}>
-          <ActivityIndicator size={'large'} />
-        </View>
-      )}
+
+      {isLoadingDocument && <FullLoader visible={isLoadingDocument} />}
 
       {loading && <Loader visible={loading} />}
     </SafeAreaWrapper>

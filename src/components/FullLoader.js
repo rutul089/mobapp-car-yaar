@@ -13,24 +13,29 @@ const FullLoader = ({visible = false}) => {
     return null;
   }
 
-  if (Platform.OS === 'android') {
-    return (
-      <Modal
-        transparent
-        visible={visible}
-        animationType="fade"
-        statusBarTranslucent>
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-        </View>
-      </Modal>
-    );
-  }
+  // if (Platform.OS === 'android') {
+  //   return (
+  //     <Modal
+  //       transparent
+  //       visible={visible}
+  //       animationType="fade"
+  //       statusBarTranslucent>
+  //       <View style={styles.loaderContainer}>
+  //         <ActivityIndicator size="large" color={theme.colors.primary} />
+  //       </View>
+  //     </Modal>
+  //   );
+  // }
 
   return (
-    <View style={styles.iosLoader}>
-      <ActivityIndicator size="large" color={theme.colors.primary} />
+    <View style={styles.iosLoader} pointerEvents="auto">
+      <View style={styles.loaderBox}>
+        <ActivityIndicator size="large" color="#ffffff" />
+      </View>
     </View>
+    // <View style={styles.iosLoader}>
+    //   <ActivityIndicator size="large" color={theme.colors.primary} />
+    // </View>
   );
 };
 
@@ -44,14 +49,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iosLoader: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    // flex: 1,
+    // backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
+  },
+  loaderBox: {
+    height: 80,
+    width: 80,
+    borderRadius: 10,
+    backgroundColor: '#333',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

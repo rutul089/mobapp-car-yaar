@@ -15,11 +15,13 @@ const DocumentGroup = ({
       <Text>{title}</Text>
       <View style={styles.rowSpaceBetween}>
         {documents &&
-          documents.map(doc => {
+          documents.map((doc, index) => {
             const fileUri = doc?.docObject?.uri;
             const fileType = getMimeFromUrl(fileUri);
             return (
-              <View key={`${title}-${doc.label}`} style={styles.halfWidth}>
+              <View
+                key={`${title}-${doc.label} ${index}`}
+                style={styles.halfWidth}>
                 <VehicleImageCard
                   label={doc.label + `${doc?.isRequired ? ' *' : ''} `}
                   image={fileUri}

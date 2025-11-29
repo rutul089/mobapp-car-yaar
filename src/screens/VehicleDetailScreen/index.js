@@ -105,11 +105,7 @@ class VehicleDetail extends Component {
     const {isCreatingLoanApplication, selectedLoanType, selectedVehicle} =
       this.props;
     let isDraft = selectedVehicle?.isDraft;
-    // navigate(ScreenNames.EditVehicleDetailScreen, {
-    //   params: {isEdit: true},
-    // });
-    // return;
-    // // Removed vehicle is in draft state Alert based on the discussion 30 Oct 2025
+    // Removed vehicle is in draft state Alert based on the discussion 30 Oct 2025
     if (isDraft && isCreatingLoanApplication) {
       navigate(ScreenNames.EditVehicleDetailScreen, {
         params: {isEdit: true},

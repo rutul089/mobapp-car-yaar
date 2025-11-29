@@ -32,11 +32,6 @@ class CustomizeLoanOffer extends Component {
     let processingFee = selectedLoanApplication?.processingFee;
     let principalAmount = selectedLoanApplication?.principalAmount;
 
-    console.log(
-      'selectedLoanApplication',
-      JSON.stringify(selectedLoanApplication),
-    );
-
     this.setState({
       tenureMonths: String(tenureMonths),
       interestRate: String(interestRate),
