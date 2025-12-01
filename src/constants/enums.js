@@ -188,8 +188,8 @@ export const occupationType = Object.freeze({
 
 export const occupationLabelMap = {
   [occupationType.SALARIED]: 'Salaried',
-  [occupationType.SELF_EMPLOYED]: 'Self Employed',
-  [occupationType.SELF_EMPLOYED_PROFESSIONAL]: 'Self Employed Professional',
+  [occupationType.SELF_EMPLOYED]: 'Self-Employed',
+  [occupationType.SELF_EMPLOYED_PROFESSIONAL]: 'Self-Employed Professional',
   [occupationType.AGRICULTURE]: 'Agriculture',
   [occupationType.OTHER]: 'Other',
 };
@@ -272,7 +272,7 @@ export const gender = Object.freeze({
 export const loanType = {
   addVehicle: 9,
   externalBT: 'EXTERNAL_BALANCE_TRANSFER',
-  internalBT: 'INTERNAL_BALANCE_TRANSFER',
+  internalBT: 'INTERNAL_BALACE_TRANSFER',
   lease: 7,
   loan: 6,
   purchase: 'OLD_CAR_SALE_PURCHASE',

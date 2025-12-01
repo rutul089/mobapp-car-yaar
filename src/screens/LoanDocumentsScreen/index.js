@@ -451,6 +451,8 @@ class LoanDocumentsScreen extends Component {
       loanDocuments,
     );
 
+    // console.log(loanProduct, typeOfIndividual);
+
     return (
       <Loan_Documents_Component
         isOnboard={isOnboard || isEdit}

@@ -22,8 +22,6 @@ export const fetchAllLendersThunk = (
       );
       const lenders = response.data || [];
 
-      console.log('response------>', JSON.stringify(response));
-
       dispatch({
         type: FETCH_LENDERS.SUCCESS,
         payload: {

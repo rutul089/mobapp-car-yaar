@@ -67,6 +67,7 @@ class VehicleHypothecationScreen extends Component {
       () => {
         this.setState({isLoading: false});
       },
+      true,
     );
   };
 

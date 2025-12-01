@@ -110,7 +110,13 @@ export const fetchVehicleFromIdThunk = (id, onSuccess, onFailure) => {
   };
 };
 
-export const updateVehicleByIdThunk = (id, payload, onSuccess, onFailure) => {
+export const updateVehicleByIdThunk = (
+  id,
+  payload,
+  onSuccess,
+  onFailure,
+  skip = false,
+) => {
   return async dispatch => {
     dispatch({type: UPDATE.REQUEST});
 
@@ -123,7 +129,7 @@ export const updateVehicleByIdThunk = (id, payload, onSuccess, onFailure) => {
         payload: data,
       });
 
-      if (success && data?.vehicleId) {
+      if (success && data?.vehicleId && !skip) {
         await dispatch(fetchVehicleFromIdThunk(data.vehicleId));
       }
 

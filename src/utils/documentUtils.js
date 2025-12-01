@@ -7,6 +7,7 @@ import {
   documentImageLabelMap,
   documentImageType,
   documentType,
+  occupationType,
   vehicleImageLabelMap,
 } from '../constants/enums';
 import {getPresignedDownloadUrl} from '../services';
@@ -408,6 +409,10 @@ export const getDocumentRequirements = (
   orderList,
 ) => {
   if (!loanProduct || !typeOfIndividual) {
+    return orderList;
+  }
+
+  if (typeOfIndividual === occupationType.OTHER) {
     return orderList;
   }
 

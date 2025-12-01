@@ -497,7 +497,7 @@ class CustomerPersonalDetails extends Component {
       }
 
       this.setState({showFilePicker: false, isLoadingDocument: true});
-      // await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 300));
       const fileName = asset.name || asset.fileName || 'upload';
       const mimeType = asset.type || 'application/octet-stream';
 
@@ -518,9 +518,14 @@ class CustomerPersonalDetails extends Component {
           );
         }
       } catch (error) {
+        this.setState({isLoadingDocument: false});
         showToast('error', 'Upload failed');
       } finally {
-        this.setState({showFilePicker: false, isLoadingDocument: false});
+        this.setState({
+          showFilePicker: false,
+          // isLoadingDocument: false,
+          // isLoadingDocument: selectionType === 'applicantPhoto' && false,
+        });
       }
     });
   };
@@ -797,10 +802,10 @@ class CustomerPersonalDetails extends Component {
 
     const config = uploadTypes[type];
     if (!config) {
-      return;
+      return this._safeSetState({isLoadingDocument: false});
     }
 
-    this._safeSetState({isLoadingDocument: true});
+    // this._safeSetState({isLoadingDocument: true});
 
     try {
       const response = await uploadMedia(asset, config.uploadKey);
