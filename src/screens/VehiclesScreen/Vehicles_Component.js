@@ -117,7 +117,7 @@ const Vehicles_Component = ({
               activeFilterOption === vehicleFilterOption.DRAFT
                 ? 'Draft'
                 : 'Saved'
-            } Vehicles`}
+            }`}
             onRemove={handleClearFilter}
           />
         </View>
@@ -217,7 +217,7 @@ const Vehicles_Component = ({
         title="Filter by">
         <View style={{paddingVertical: 10, marginBottom: -12}}>
           <RadioButton
-            label={'Saved Vehicles'}
+            label={'Saved'}
             selected={localActiveFilterOption === vehicleFilterOption.SAVED}
             onPress={() =>
               setLocalActiveFilterOption(vehicleFilterOption.SAVED)
@@ -225,7 +225,7 @@ const Vehicles_Component = ({
           />
           <Spacing />
           <RadioButton
-            label={'Draft Vehicles'}
+            label={'Draft'}
             selected={localActiveFilterOption === vehicleFilterOption.DRAFT}
             onPress={() =>
               setLocalActiveFilterOption(vehicleFilterOption.DRAFT)

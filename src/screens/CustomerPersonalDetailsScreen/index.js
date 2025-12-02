@@ -423,6 +423,7 @@ class CustomerPersonalDetails extends Component {
       aadharBackphoto: {required: false},
       aadharNumber: {required: true},
       panCardNumber: {required: true},
+      cibilScore: {required: false},
     };
 
     const fields = fetchCibil

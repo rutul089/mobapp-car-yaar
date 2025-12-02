@@ -28,7 +28,7 @@ const FullLoader = ({visible = false}) => {
   // }
 
   return (
-    <View style={styles.iosLoader} pointerEvents="auto">
+    <View style={styles.iosLoader} pointerEvents="none">
       <View style={styles.loaderBox}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
