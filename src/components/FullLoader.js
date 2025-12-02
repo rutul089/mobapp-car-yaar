@@ -28,7 +28,7 @@ const FullLoader = ({visible = false}) => {
   // }
 
   return (
-    <View style={styles.iosLoader} pointerEvents="auto">
+    <View style={styles.iosLoader} pointerEvents="none">
       <View style={styles.loaderBox}>
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 10,
+    alignItems: 'center',
     backgroundColor: '#333',
     justifyContent: 'center',
-    alignItems: 'center',
   },
 });

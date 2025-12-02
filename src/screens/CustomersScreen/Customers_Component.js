@@ -109,7 +109,7 @@ const Customers_Component = ({
               activeFilterOption === vehicleFilterOption.DRAFT
                 ? 'Draft'
                 : 'Saved'
-            } Customer`}
+            }`}
             onRemove={handleClearFilter}
           />
         </View>

@@ -114,10 +114,11 @@ class VehiclePricingScreen extends Component {
     let payload = {
       estimatedPrice: Number(estimatedPrice),
       salePrice: Number(salePrice),
-      trueValuePrice: trueValuePrice ? Number(trueValuePrice) : '',
+      trueValuePrice: trueValuePrice ? Number(trueValuePrice) : null,
       additionalNotes,
       valueReportUrl,
     };
+
     this.props.updateVehicleByIdThunk(vehicleId, payload, () => {
       if (selectedLoanType === loanType.refinance) {
         return navigate(ScreenNames.VehicleHypothecation);

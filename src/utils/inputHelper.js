@@ -281,11 +281,11 @@ export const validateField = (key, value, isOptional) => {
     case 'chassisNumber':
       return trimmedValue === ''
         ? 'Please enter the chassis number.'
-        : !/^[A-Z0-9]+$/i.test(trimmedValue)
-          ? 'Chassis number should contain only letters and numbers.'
-          : // : trimmedValue.length !== 17
-            //   ? 'Chassis number must be 17 characters long.'
-            '';
+        : // : !/^[A-Z0-9]+$/i.test(trimmedValue)
+          //   ? 'Chassis number should contain only letters and numbers.'
+          // : trimmedValue.length !== 17
+          //   ? 'Chassis number must be 17 characters long.'
+          '';
 
     case 'emissionNorm':
       return trimmedValue === '' ? 'Please enter the engine number.' : '';
