@@ -12,6 +12,7 @@ import {
   theme,
   DropdownModal,
   Button,
+  DatePicker,
 } from '@caryaar/components';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -25,7 +26,6 @@ import {
   sanitizeAmount,
 } from '../../utils/inputHelper';
 import {useInputRefs} from '../../utils/useInputRefs';
-import {DatePicker} from '../../components';
 
 const defaultTenure = Array(60)
   .fill(0)

@@ -12,10 +12,10 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  FullLoader,
 } from '@caryaar/components';
 import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {FullLoader} from '../../components';
 import strings from '../../locales/strings';
 
 const Vehicle_Odometer_Component = ({

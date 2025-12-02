@@ -18,9 +18,11 @@ import {
   Spacing,
   Text,
   theme,
+  DatePicker,
+  FullLoader,
 } from '@caryaar/components';
 // import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {DatePicker, FullLoader} from '../../components';
+// import {DatePicker, FullLoader} from '../../components';
 import {
   currentLoanTypes,
   genderTypes,

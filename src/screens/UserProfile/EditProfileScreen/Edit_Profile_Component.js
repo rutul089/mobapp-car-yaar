@@ -11,6 +11,7 @@ import {
   theme,
   FilePickerModal,
   Loader,
+  FullLoader,
 } from '@caryaar/components';
 import React, {useRef} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
@@ -18,7 +19,6 @@ import {Image, StyleSheet, View} from 'react-native';
 import {goBack} from '../../../navigation/NavigationUtils';
 
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {FullLoader} from '../../../components';
 import {photoSourceOptions} from '../../../utils/helper';
 import {
   dealershipTypeLabels,

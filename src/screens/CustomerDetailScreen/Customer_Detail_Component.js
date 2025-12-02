@@ -7,6 +7,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   Button,
   DropdownModal,
+  FullLoader,
   GroupWrapper,
   Header,
   images,
@@ -19,13 +20,11 @@ import {
   theme,
 } from '@caryaar/components';
 
-import {FullLoader} from '../../components';
 import {
   customerCategory,
   customerCategoryValue,
   customerIndividualTypeOptions,
   loanType,
-  occupationOptions,
 } from '../../constants/enums';
 
 const Customer_Detail_Component = ({

@@ -15,10 +15,10 @@ import {
   images,
   Loader,
   FilePickerModal,
+  FullLoader,
 } from '@caryaar/components';
 import strings from '../../locales/strings';
 import {formatIndianCurrency} from '../../utils/helper';
-import {FullLoader} from '../../components';
 import {sanitizeAmount} from '../../utils/inputHelper';
 
 const Vehicle_Pricing_Component = ({

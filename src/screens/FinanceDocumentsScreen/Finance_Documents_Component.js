@@ -6,10 +6,11 @@ import {
   Spacing,
   Loader,
   DropdownModal,
+  FullLoader,
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView} from 'react-native';
-import {DocumentGroup, FullLoader} from '../../components';
+import {DocumentGroup} from '../../components';
 import strings from '../../locales/strings';
 import {styles} from '../../styles/Vehicle.Image.style';
 

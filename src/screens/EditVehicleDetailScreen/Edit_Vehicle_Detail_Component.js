@@ -10,6 +10,7 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  DatePicker,
 } from '@caryaar/components';
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
@@ -18,7 +19,6 @@ import {currentLoanTypes, fuelTypeOptions} from '../../constants/enums';
 import {formatDate} from '../../utils/helper';
 import {useInputRefs} from '../../utils/useInputRefs';
 import moment from 'moment';
-import {DatePicker} from '../../components';
 
 const Edit_Vehicle_Detail_Component = ({
   headerProp,

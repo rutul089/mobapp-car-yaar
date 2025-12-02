@@ -9,11 +9,12 @@ import {
   SafeAreaWrapper,
   Spacing,
   theme,
+  FullLoader,
 } from '@caryaar/components';
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
-import {DeleteConfirmationContent, FullLoader} from '../../components';
+import {DeleteConfirmationContent} from '../../components';
 import strings from '../../locales/strings';
 import {goBack} from '../../navigation/NavigationUtils';
 import {

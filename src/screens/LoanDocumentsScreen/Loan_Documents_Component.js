@@ -10,12 +10,13 @@ import {
   DropdownModal,
   CommonModal,
   Text,
+  FullLoader,
 } from '@caryaar/components';
 import {ScrollView, View} from 'react-native';
 
 import strings from '../../locales/strings';
 
-import {DocumentGroup, FullLoader} from '../../components';
+import {DocumentGroup} from '../../components';
 import {styles} from '../../styles/Vehicle.Image.style';
 
 const Loan_Documents_Component = ({

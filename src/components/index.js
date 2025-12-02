@@ -5,4 +5,3 @@ export {default as DocumentGroup} from './DocumentGroup';
 export {default as FullLoader} from './FullLoader';
 export {default as DeleteConfirmationContent} from './DeleteConfirmationContent';
 export {default as RNSpeedometer} from './RNSpeedometer';
-export {default as DatePicker} from './DatePicker';

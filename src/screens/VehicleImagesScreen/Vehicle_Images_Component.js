@@ -8,10 +8,9 @@ import {
   VehicleImageCard,
   images,
   theme,
+  FullLoader,
 } from '@caryaar/components';
 import {ScrollView, StyleSheet, View} from 'react-native';
-
-import {FullLoader} from '../../components';
 import strings from '../../locales/strings';
 import {getFileType} from '../../utils/documentUtils';
 
