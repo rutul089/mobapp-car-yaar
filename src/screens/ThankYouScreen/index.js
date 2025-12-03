@@ -291,3 +291,29 @@ const mapStateToProps = ({loanData}) => {
   };
 };
 export default connect(mapStateToProps, mapActionCreators)(ThankYouScreen);
+
+// componentDidMount() {
+//   const { selectedApplicationId, isReadOnlyLoanApplication, navigation } = this.props;
+
+//   this.props.fetchLoanApplicationFromIdThunk(selectedApplicationId);
+
+//   // Set gesture behaviour for iOS
+//   navigation.setOptions({
+//     gestureEnabled: isReadOnlyLoanApplication,
+//   });
+
+//   // Hardware back press handler (Android)
+//   this.backHandler = BackHandler.addEventListener(
+//     'hardwareBackPress',
+//     () => {
+//       if (isReadOnlyLoanApplication) {
+//         return false; // allow back
+//       }
+//       return true; // block back
+//     }
+//   );
+// }
+
+// componentWillUnmount() {
+//   this.backHandler?.remove();
+// }

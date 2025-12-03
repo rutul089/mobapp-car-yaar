@@ -500,7 +500,7 @@ export const validateReferences = references => {
   const [homeRef, officeRef] = references;
 
   // Fields to compare
-  const fieldsToCheck = ['referenceName', 'mobileNumber', 'address', 'pincode'];
+  const fieldsToCheck = ['referenceName', 'mobileNumber'];
 
   for (const field of fieldsToCheck) {
     if (
