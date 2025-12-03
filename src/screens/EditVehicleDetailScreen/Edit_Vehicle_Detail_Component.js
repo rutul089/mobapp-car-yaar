@@ -210,7 +210,6 @@ const Edit_Vehicle_Detail_Component = ({
             onFocus={() => !isEdit && scrollToInput('engineNumber')}
             value={state?.chassisNumber}
             onChangeText={onChassisNumberChange}
-            maxLength={17}
             {...(restInputProps?.chassisNumber || {})}
           />
           <Spacing size="md" />

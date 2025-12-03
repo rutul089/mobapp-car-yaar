@@ -548,7 +548,7 @@ const Customer_Personal_Details_Component = ({
             onBlur={() => setFieldEditing('avgMonthlyBankBalance', false)}
             {...(restInputProps?.avgMonthlyBankBalance || {})}
           />
-          <Spacing size="md" />
+          {/* <Spacing size="md" />
           <Input
             placeholder="XXX"
             isLeftIconVisible
@@ -560,7 +560,7 @@ const Customer_Personal_Details_Component = ({
             rightIconName={images.successCheck}
             label="CIBIL Score"
             {...(restInputProps?.cibilScore || {})}
-          />
+          /> */}
         </GroupWrapper>
         <Spacing size="lg" />
         <Button
